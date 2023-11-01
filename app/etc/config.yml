@@ -1,0 +1,22 @@
+database:
+  database: ''
+  username: ''
+  password: ''
+  host: ''
+attlaz_api:
+  endpoint: ''
+  client_id: ''
+  client_secret: ''
+logger:
+  slack:
+    webhook: ''
+    channel: ''
+    usenrame: ''
+admin:
+  url_token: 'admin-x543k'
+app:
+  mode: 'develop'
+cache:
+  backend: redis
+  host: redis
+  port:

@@ -1,0 +1,80 @@
+@import "../variables";
+
+.faq {
+
+
+  .faq-item {
+
+    background-color: $background-aqua;
+    border-radius: 6px;
+    margin-bottom: $row-gap-normal;
+    @include transition(color .35s cubic-bezier(.4, 0, .2, 1), background-color .35s cubic-bezier(.4, 0, .2, 1));
+
+    &:hover:not(.open) {
+      background-color: $background-ocean;
+
+      color: $text-color-white;
+
+      .faq-question::after {
+        filter: brightness(0) invert(1);
+      }
+    }
+
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .faq-question {
+      font-weight: $font-weight-semibold;
+      margin-bottom: 0;
+      font-size: $font-size-title;
+      cursor: pointer;
+      padding: 32px 28px;
+      position: relative;
+      @include transition(margin-bottom .35s cubic-bezier(.4, 0, .2, 1));
+
+      &::after {
+        @include transition(transform 0.35s, filter 0.35s);
+
+        content: "";
+        //noinspection CssUnknownTarget
+        background: url("../asset/icons/shape/chevron.svg") no-repeat center bottom;
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+        outline: none;
+        user-select: none;
+        cursor: pointer;
+        position: absolute;
+        right: 28px;
+      }
+    }
+
+    .faq-answer-wrapper {
+
+      @include transition(overflow .35s cubic-bezier(.4, 0, .2, 1), height .35s cubic-bezier(.4, 0, .2, 1), visibility .35s cubic-bezier(.4, 0, .2, 1), opacity .35s cubic-bezier(.4, 0, .2, 1));
+      overflow: hidden;
+      opacity: 0;
+      height: 0;
+
+      .faq-answer-text {
+        padding-left: 32px;
+        padding-right: 32px;
+        padding-bottom: 28px;
+      }
+    }
+
+    &.open {
+      .faq-question {
+        margin-bottom: $row-gap-normal;
+
+        &::after {
+
+          transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(180deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+          transform-style: preserve-3d;
+        }
+      }
+    }
+  }
+}

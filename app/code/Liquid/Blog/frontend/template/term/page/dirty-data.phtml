@@ -1,0 +1,81 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Term;
+
+assert($this instanceof Term);
+$term = $this->getTerm()
+?>
+<div class="row">
+    <div class="column">
+        <p>
+            Dirty data negatively affects workflows, marketing efforts, and your customers’ experience. It can even get you into legal trouble.
+        </p>
+        <copy-block title="What is Dirty Data?" types="new">
+            <div>
+                Dirty or unclean data needs to be fixed: it might contain duplicates or be outdated, insecure, incomplete, inaccurate, or inconsistent.
+                Examples of dirty data include misspelt addresses, missing field values, outdated phone numbers, and duplicate customer records.
+            </div>
+            <div>
+                When ignored, dirty data can cause severe issues for your business.
+                It can jeopardise the customer experience, misrepresent business results, and negatively impact strategic decisions.
+            </div>
+            <div>
+                Regular data cleansing is essential to avoid the risks of poor data quality.
+            </div>
+            <div>
+                Data can get dirty when it’s entered, stored, or misused. Often, this comes down to human error or a lack of standardisation rules for data entry, but technical issues can also lead to dirty data.
+            </div>
+        </copy-block>
+        <copy-block title="How data gets dirty" types="new">
+            <div>
+                In addition to incorrect data entry, dirty data can be generated due to improper data management and storage methods. Some dirty data types:
+            </div>
+            <div>
+                <h3>Duplicate data</h3>
+                <p>Duplicate data refers to records that partially or fully share the same information. They come when the same information is entered multiple times, sometimes in different formats. A typical duplicate dirty data example is
+                    when one customer exists in your CRM multiple times. This often happens because the customer’s name is written slightly differently each time (Ellie H. Rhodes, Ellie Hannah Rhodes, Eleanor H. Rhodes, Eleanor Hannah
+                    Rhodes)</p>
+
+                <p>Because customer information is scattered across different records, duplicate customer data leads to:</p>
+                <ul class="list-marker">
+                    <li>Poor customer service</li>
+                    <li>Incorrect tracking and reporting</li>
+                    <li>Duplicate marketing targeting</li>
+                </ul>
+
+
+                <h3>Insecure data</h3>
+                <p>Data that is not encrypted or access controlled is considered insecure. This means that it can be accessed by anyone within your company, and in some cases, even by third parties. Insecure data poses a risk to privacy and
+                    can also result in legal issues, as companies may be non-compliant with laws such as GDPR and CCPA.</p>
+                <h3>Incomplete data</h3>
+                <p>An example of dirty data that’s incomplete would be if your newsletter sign-up form has a field for the lead’s first name, but the field isn’t a required field. Leads can then sign up without leaving their name, rendering
+                    your personalised email campaigns less effective.</p>
+                <h3>Inaccurate data</h3>
+                <p>Inaccurate data is data that has errors or mistakes. For instance, if a customer makes a typo while entering their last name on one of your forms, the last name you have in your records is inaccurate. This is considered a
+                    dirty record.</p>
+                <h3>Outdated data</h3>
+                <p>Outdated data is inaccurate not because it was entered incorrectly but because it used to be accurate, and now it isn’t anymore. For instance, if your CRM still shows a customer's old address even after they have
+                    moved.</p>
+
+                <p>Other examples of outdated data are:</p>
+                <ul class="list-marker">
+                    <li>Phone numbers or email addresses that are no longer in use</li>
+                    <li>Titles of people who have since switched jobs</li>
+                    <li>Out-of-date email segments</li>
+                </ul>
+                <h3>Incorrect data</h3>
+                <p>Incorrect data refers to data that does not meet previously defined parameters. It is easier to prevent than to correct. For instance, if a customer uses a dropdown menu to enter their birthdate, the system will only
+                    permit
+                    them to choose one out of 12 months and one out of 31 days and does not allow them to select a birth year that would make them older than 120 years.</p>
+                <h3>Inconsistent data</h3>
+                <p>For example, inconsistent data or data redundancy happens when companies store the same information in different places without syncing it. This can be seen when a company stores customer information in both its CRM and
+                    email marketing tool.</p>
+
+                <p>To increase the data quality and prevent dirty data, organisations should incorporate methodologies to ensure the data's completeness, validity, consistency, and correctness.</p>
+
+            </div>
+        </copy-block>
+    </div>
+
+</div>

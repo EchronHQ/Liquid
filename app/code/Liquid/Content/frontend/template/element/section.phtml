@@ -1,0 +1,22 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Element\Section;
+
+assert($this instanceof Section);
+
+
+?>
+<section>
+    <div class="container">
+        <div class="wrapper">
+            <?php
+            foreach ($this->getChildNames() as $childName) {
+                $child = $this->getChildBlock($childName);
+                echo $child->toHtml();
+            }
+            ?>
+
+        </div>
+    </div>
+</section>

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Model;
 
-use Liquid\Content\Model\Locale;
 use Echron\Tools\StringHelper;
+use Liquid\Content\Model\Locale;
 use Symfony\Component\Yaml\Yaml;
 
 class AppConfig
@@ -20,7 +20,7 @@ class AppConfig
 
     public function load(): void
     {
-        $configPath = \ROOT . 'config.yml';
+        $configPath = \ROOT . 'app/etc/config.yml';
         $this->data = Yaml::parseFile($configPath);
 
         $this->data['site_url'] = $this->automaticallyDetectSiteUrl();

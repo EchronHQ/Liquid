@@ -36,12 +36,12 @@ use Liquid\Core\Router\Admin;
 use Liquid\Core\Router\Base;
 use Psr\Log\LoggerInterface;
 
-//use Liquid\Connector\Controller\Category\View as ConnectorCategoryView;
-//use Liquid\Connector\Controller\Connector\ConnectView;
-//use Liquid\Connector\Controller\Connector\Overview as ConnectorOverviewView;
-//use Liquid\Connector\Controller\Connector\PlatformView as ConnectorView;
-//use Liquid\Connector\Controller\Type\View as ConnectorTypeView;
-//use Liquid\Connector\Repository\PlatformRepository;
+//use Attlaz\Connector\Controller\Category\View as ConnectorCategoryView;
+//use Attlaz\Connector\Controller\Connector\ConnectView;
+//use Attlaz\Connector\Controller\Connector\Overview as ConnectorOverviewView;
+//use Attlaz\Connector\Controller\Connector\PlatformView as ConnectorView;
+//use Attlaz\Connector\Controller\Type\View as ConnectorTypeView;
+//use Attlaz\Connector\Repository\PlatformRepository;
 
 class Router
 {

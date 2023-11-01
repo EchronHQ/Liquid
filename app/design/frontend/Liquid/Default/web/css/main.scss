@@ -1,0 +1,372 @@
+@use "sass:list";
+@use "sass:math";
+
+@import "normalize";
+
+@import "variables";
+
+@import "button";
+@import "background";
+
+@import "grid";
+@import "card";
+@import "copy";
+@import "font";
+//@import "parts/header";
+@import "parts/footer";
+@import "parts/form";
+@import "parts/layout";
+@import "parts/navigation";
+@import "parts/cookies";
+@import "parts/tags";
+//@import "parts/trustedby";
+@import "parts/customerquotes";
+@import "parts/platformslider";
+@import "parts/faq";
+
+@import "pages/blog";
+@import "pages/case-studies";
+@import "pages/connector";
+@import "pages/demo";
+@import "pages/features";
+@import "pages/home";
+@import "pages/legal";
+@import "pages/plans";
+
+@import "node_modules/css.gg/icons/scss/check";
+@import "node_modules/css.gg/icons/scss/menu";
+
+
+a, .link {
+  color: $text-color-link;
+  //font-weight: $font-weight-semibold;
+
+  //&.arrow {
+  //  @include arrow();
+  //}
+
+  .arrow-icon {
+    vertical-align: top;
+    transform: translateY(6px);
+    margin-left: 12px;
+  }
+
+
+  &.intext {
+    color: inherit;
+    border-bottom: 1px solid $highlight_attlaz;
+  }
+
+  &.term {
+    color: inherit;
+    border-bottom: 1px dashed $highlight_attlaz;
+
+    &::after {
+      content: "";
+      // TODO add icon with question mark
+    }
+  }
+
+
+}
+
+.back-yellow {
+  background-color: $yellow;
+}
+
+.back-pink {
+  background-color: $pink;
+}
+
+.back-green {
+  background-color: $green;
+}
+
+.back-blue {
+  background-color: $blue;
+}
+
+.back-purple {
+  background-color: $purple;
+}
+
+
+.placeholder {
+  display: none;
+  border: 1px dotted $text-color-white;
+
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: $text-color-white;
+}
+
+main {
+  //min-height: calc(100vh - 560px);
+
+}
+
+//
+//main {
+//  //position: relative;
+//  //z-index: 2;
+//  //width: 100%;
+//  //background-color: #fff;
+//  display: block;
+//  position: absolute;
+//  left: 50%;
+//  top: 50%;
+//  margin-left: -255px;
+//  pointer-events: none;
+//  max-width: 100%;
+//
+//}
+//
+//section {
+//  //padding-top: 120px;
+//  //padding-bottom: 120px;
+//  //overflow: hidden;
+//  //line-height: 32px;
+//
+//}
+//
+//section .wrapper, footer .wrapper {
+//  max-width: 800px;
+//  margin-left: auto;
+//  margin-right: auto;
+//  padding-left: 40px;
+//  padding-right: 40px;
+//
+//  @media only screen and (max-width: 720px) {
+//    padding-left: 30px;
+//    padding-right: 30px;
+//  }
+//  @media only screen and (max-width: 480px) {
+//    padding-left: 20px;
+//    padding-right: 20px;
+//  }
+//}
+
+ul.list-dot {
+  li {
+    position: relative;
+    margin-bottom: $row-gap-normal;
+    padding-left: 30px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    ul {
+      margin-top: $row-gap-normal;
+      margin-left: $row-gap-normal;
+    }
+
+    &:before {
+      content: "";
+      display: inline-block;
+      //top: 11px;
+      //left: 14px;
+      height: 5px;
+      width: 5px;
+      background-color: rgb(191, 191, 191);
+      border-radius: 50%;
+      @include transform(translate(-50%, -50%));
+
+      position: absolute;
+      left: 7px;
+      top: 16px;
+    }
+  }
+}
+
+.list-marker {
+  li {
+    margin-bottom: $row-gap-small;
+    position: relative;
+    padding-left: 30px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &::before {
+
+      $w: 0.5em;
+      content: "";
+      display: inline-block;
+      width: 0.7rem;
+      height: 0.2rem;
+      border-right: 2px solid $highlight_attlaz;
+      border-top: 2px solid $highlight_attlaz;
+
+      @include transform(translate(-50%, -50%) rotate(135deg));
+      margin-right: $row-gap-normal;
+
+      position: absolute;
+      left: 7px;
+      top: 13px;
+
+
+    }
+  }
+}
+
+.flex-medium {
+  display: inline-flex;
+  //flex-wrap: wrap;
+  flex-wrap: unset;
+  gap: $row-gap-medium;
+
+  margin-left: auto;
+  margin-right: auto;
+  @include tablet-and-wider {
+    margin-left: initial;
+    margin-right: initial;
+  }
+}
+
+
+.tick {
+  background: $highlight_background_light;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  @include border-radius(50%);
+  position: relative;
+  top: 2px;
+  margin-right: 8px;
+  @include tablet-and-wider {
+    margin-right: 16px;
+    width: 14px;
+    height: 14px;
+  }
+  @include desktop-and-wider {
+    margin-right: 20px;
+    width: 16px;
+    height: 16px;
+  }
+
+
+  &::before {
+
+
+    position: absolute;
+    /* top: 3pt; Uncomment this to lower the icons as requested in comments*/
+    content: "";
+    display: inline-block;
+    /* By using an em scale, the arrows will size with the font */
+    width: 40%;
+    height: 10%;
+    border-right: 2px solid $highlight_attlaz;
+    border-top: 2px solid $highlight_attlaz;
+
+    top: 50%;
+    left: 50%;
+    @include transform(translate(-50%, -50%) rotate(135deg));
+
+
+  }
+
+  &.light {
+    background: transparent;
+    @include border-radius(0);
+
+    &::before {
+      border-right-color: #ffffff;
+      border-top-color: #ffffff;
+      //width: 10px;
+      //height: 5px;
+
+    }
+  }
+}
+
+.draft {
+  opacity: 0.5;
+
+  &::before {
+    content: "[ ";
+  }
+
+  &::after {
+    content: " ]";
+  }
+}
+
+.loading-placeholder {
+  position: relative;
+  overflow: hidden;
+  background: $highlight_attlaz;
+  opacity: 0.2;
+
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -150px;
+    top: 0;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(to right, transparent 0%, #E8E8E8 50%, transparent 100%);
+    animation: load 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes load {
+  from {
+    left: -150px;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+//img {
+//  max-width: 100%;
+//}
+
+
+.right {
+  text-align: right;
+}
+
+//
+.grecaptcha-badge {
+  visibility: hidden;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+table.basic {
+  border: 1px solid black;
+  width: 100%;
+
+  thead {
+    background: $text-color-dark;
+    color: #ffffff;
+  }
+
+  td {
+    padding: 20px 30px;
+    width: 25%;
+  }
+}
+
+
+/**
+Block
+ */
+
+
+.light {
+  color: $text-color-light;
+}
+
+.padding-medium {
+  padding: $row-gap-medium;
+}

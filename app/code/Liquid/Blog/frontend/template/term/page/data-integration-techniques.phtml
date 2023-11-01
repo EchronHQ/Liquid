@@ -1,0 +1,20 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Term;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Term);
+$term = $this->getTerm()
+?>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('');
+        $c->addContentLine('Modern data firms need data siloed away at different locations to be in an analysis-ready form in a unified data repository. This approach of combining data from multiple applications into a single source of truth is called data integration.');
+        echo $c->toHtml();
+        ?>
+    </div>
+
+</div>

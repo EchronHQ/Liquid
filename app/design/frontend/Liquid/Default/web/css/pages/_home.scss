@@ -1,0 +1,362 @@
+@use "sass:list";
+@use "sass:math";
+@import "../variables";
+//
+@mixin placeOnCircle($rot, $circle-size) {
+  //transform: translate(-50%, -50%) rotate($rot * 1deg) translate($circle-size) rotate($rot * -1deg);
+}
+
+body.page-home {
+  //.col-1-1-1-1 .copy-icon svg {
+  //  width: 105px;
+  //  height: 105px;
+  //}
+
+  //.hero {
+  //  max-width: 650px;
+  //  //min-height: 650px;
+  //  width: 100%;
+  //  margin-left: auto;
+  //  margin-right: auto;
+  //  overflow: hidden;
+  //
+  //  aspect-ratio: 1/1;
+  //
+  //  user-select: none;
+  //  -moz-user-select: none;
+  //  -khtml-user-select: none;
+  //  -webkit-user-select: none;
+  //  -o-user-select: none;
+  //  position: relative;
+  //
+  //  .canvas-wrapper {
+  //    width: 100%;
+  //    //padding-bottom: 100%;
+  //    //position: relative;
+  //    height: auto;
+  //    aspect-ratio: 1/1;
+  //
+  //
+  //    position: absolute;
+  //    top: 50%;
+  //    left: 50%;
+  //    @include transform(translate(-50%, -50%));
+  //
+  //    .canvas {
+  //      position: relative;
+  //      width: 100%;
+  //      height: 100%;
+  //
+  //      .symbols-pulse {
+  //
+  //        position: absolute;
+  //        top: 50%;
+  //        left: 50%;
+  //        @include transform(translate(-50%, -50%));
+  //        z-index: -1;
+  //
+  //        width: 100%;
+  //        height: 100%;
+  //
+  //
+  //        & > div {
+  //          position: absolute;
+  //          top: 50%;
+  //          left: 50%;
+  //
+  //          @include transform(translate(-50%, -50%));
+  //
+  //
+  //          width: 48%;
+  //          height: 48%;
+  //          @include border-radius(50%);
+  //
+  //          $x: rgba(227, 221, 246, .05);
+  //          $y: rgba(227, 221, 246, .02);
+  //
+  //          background-image: -webkit-gradient(linear, left top, left bottom, from($x), color-stop(65%, $y), to($x));
+  //          background-image: -webkit-linear-gradient(top, $x 0, $y 65%, $x 100%);
+  //          background-image: -o-linear-gradient(top, $x 0, $y 65%, $x 100%);
+  //          background-image: linear-gradient(-180deg, $x 0, $y 65%, $x 100%);
+  //          z-index: -1;
+  //        }
+  //
+  //        .pulse-1 {
+  //          @include transform(translate(-50%, -50%) scale(.67));
+  //        }
+  //
+  //        .pulse-2 {
+  //          @include transform(translate(-50%, -50%) scale(1.05));
+  //        }
+  //
+  //        .pulse-3 {
+  //          @include transform(translate(-50%, -50%) scale(1.63));
+  //        }
+  //
+  //        .pulse-4 {
+  //          @include transform(translate(-50%, -50%) scale(2.1));
+  //        }
+  //
+  //        .pulse-x {
+  //          @include transform(translate(-50%, -50%) scale(0.1));
+  //          will-change: transform, opacity;
+  //          @include animation(pulsate 3s infinite);
+  //
+  //        }
+  //
+  //      }
+  //
+  //
+  //      .center-icon {
+  //
+  //        position: absolute;
+  //        top: 50%;
+  //        left: 50%;
+  //
+  //        @include transform(translate(-50%, -50%));
+  //        fill: $highlight_attlaz;
+  //
+  //        border: 0 solid rgba(93, 88, 247, .14);
+  //        border-radius: 50%;
+  //        background-color: #fff;
+  //
+  //        -webkit-box-shadow: 0 30px 60px 0 rgba(0, 11, 40, 0.10);
+  //        box-shadow: 0 30px 60px 0 rgba(0, 11, 40, 0.10);
+  //
+  //        width: 19%;
+  //        height: 19%;
+  //
+  //        @include display-flex();
+  //
+  //        -webkit-box-align: center;
+  //        -ms-flex-align: center;
+  //        align-items: center;
+  //        -webkit-box-pack: center;
+  //        -ms-flex-pack: center;
+  //        justify-content: center;
+  //
+  //
+  //        svg {
+  //          width: 65%;
+  //          height: 65%;
+  //
+  //
+  //        }
+  //
+  //      }
+  //
+  //      .dots {
+  //        z-index: 0;
+  //        width: 100%;
+  //        height: 100%;
+  //        position: absolute;
+  //
+  //        .dot {
+  //          position: absolute;
+  //          width: 4px;
+  //          height: 4px;
+  //          //border: 2px solid rgba(255, 255, 255, 0.3);
+  //          background: $highlight_attlaz;
+  //          transition: top 1s linear, left 1s linear;
+  //          border-radius: 50%;
+  //          opacity: 1;
+  //        }
+  //      }
+  //
+  //      .logos {
+  //        width: 100%;
+  //        height: 100%;
+  //        position: absolute;
+  //        pointer-events: none;
+  //
+  //        .logo_item {
+  //          pointer-events: auto;
+  //          position: absolute;
+  //          border: 0 solid rgba(93, 88, 247, .14);
+  //          border-radius: 50%;
+  //          background-color: #fff;
+  //
+  //          -webkit-box-shadow: 0 30px 60px 0 rgba(0, 11, 40, 0.10);
+  //          box-shadow: 0 30px 60px 0 rgba(0, 11, 40, 0.10);
+  //
+  //          text-align: center;
+  //
+  //          width: 11%;
+  //          height: 11%;
+  //
+  //          & > img {
+  //            width: 50%;
+  //            height: 50%;
+  //          }
+  //
+  //          &.animate {
+  //            transition: top 1s linear, left 1s linear;
+  //          }
+  //
+  //          @include display-flex();
+  //
+  //          -webkit-box-align: center;
+  //          -ms-flex-align: center;
+  //          align-items: center;
+  //          -webkit-box-pack: center;
+  //          -ms-flex-pack: center;
+  //          justify-content: center;
+  //
+  //          top: 50%;
+  //          left: 50%;
+  //
+  //          @include transform(translate(-50%, -50%));
+  //
+  //
+  //          $item-count: 10;
+  //          $circle-size: 340%;
+  //
+  //          $angle: math.div(360, $item-count);
+  //          $rot: 0;
+  //          @for $i from 1 through $item-count {
+  //            &:nth-of-type(#{$i}) {
+  //              @include placeOnCircle($rot, $circle-size);
+  //            }
+  //
+  //            $rot: $rot + $angle;
+  //          }
+  //
+  //        }
+  //
+  //
+  //        &.random .logo_item {
+  //          &.item_one {
+  //            left: 50%;
+  //            top: 21%;
+  //          }
+  //
+  //          &.item_two {
+  //            left: 12%;
+  //            top: 46%;
+  //          }
+  //
+  //          &.item_three {
+  //            left: 31%;
+  //            top: 27%;
+  //          }
+  //
+  //
+  //          &.item_four {
+  //            left: 69%;
+  //            top: 35%;
+  //          }
+  //
+  //          &.item_five {
+  //            left: 84%;
+  //            top: 50%
+  //          }
+  //
+  //          &.item_six {
+  //            top: 73%;
+  //            left: 26%;
+  //          }
+  //
+  //          &.item_seven {
+  //            top: 70%;
+  //            left: 71%
+  //          }
+  //
+  //          &.item_eight {
+  //            top: 84%;
+  //            left: 47%;
+  //          }
+  //
+  //          &.item_nine {
+  //            left: 3%;
+  //            top: 65%
+  //          }
+  //
+  //          &.item_ten {
+  //            left: 6%;
+  //            top: 65%
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
+  //
+  //
+  //}
+
+}
+
+@keyframes pulsate {
+  0% {
+    @include transform(translate(-50%, -50%) scale(0.1));
+    opacity: 1;
+  }
+  100% {
+    @include transform(translate(-50%, -50%) scale(3));
+    opacity: 0;
+  }
+}
+
+/**
+https://gist.github.com/kamikat/c4d472ce3c61feec6376
+ */
+
+
+//$pi: 3.14159265359;
+//$_precision: 10;
+//
+//@function pow($base, $exp) {
+//  $value: $base;
+//  @if $exp > 1 {
+//    @for $i from 2 through $exp {
+//      $value: $value * $base;
+//    }
+//  }
+//  @if $exp < 1 {
+//    @for $i from 0 through -$exp {
+//      $value: $value / $base;
+//    }
+//  }
+//  @return $value;
+//}
+//
+//@function fact($num) {
+//  $fact: 1;
+//  @if $num > 0 {
+//    @for $i from 1 through $num {
+//      $fact: $fact * $i;
+//    }
+//  }
+//  @return $fact;
+//}
+//
+//@function _to_unitless_rad($angle) {
+//  @if unit($angle) == "deg" {
+//    $angle: $angle / 180deg * $pi;
+//  }
+//  @if unit($angle) == "rad" {
+//    $angle: $angle / 1rad;
+//  }
+//  @return $angle;
+//}
+//
+//@function sin($angle) {
+//  $a: _to_unitless_rad($angle);
+//  $sin: $a;
+//  @for $n from 1 through $_precision {
+//    $sin: $sin + (pow(-1, $n) / fact(2 * $n + 1) ) * pow($a, (2 * $n + 1));
+//  }
+//  @return $sin;
+//}
+//
+//@function cos($angle) {
+//  $a: _to_unitless_rad($angle);
+//  $cos: 1;
+//  @for $n from 1 through $_precision {
+//    $cos: $cos + ( pow(-1,$n) / fact(2*$n) ) * pow($a,2*$n);
+//  }
+//  @return $cos;
+//}
+//
+//@function tan($angle) {
+//  @return sin($angle) / cos($angle);
+//}

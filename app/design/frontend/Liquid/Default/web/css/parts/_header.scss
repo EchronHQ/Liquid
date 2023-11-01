@@ -1,0 +1,143 @@
+@import "../variables";
+
+
+.site-header {
+  @include debug(red, 'Site header');
+
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+
+  background-color: rgba(255, 255, 255, 1);
+  @include transition(background-color 0.3s, box-shadow 0.3s);
+
+  body.theme-ocean & {
+    background-color: $background-ocean;
+  }
+
+  body.theme-midnight & {
+    background-color: $background-dark-blue;
+  }
+
+  body.theme-desert & {
+    background-color: $background-desert;
+  }
+
+  body.theme-aqua & {
+    background-color: $background-aqua;
+  }
+
+
+  body.scroll & {
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px #2b385712;
+  }
+
+
+  .container {
+    & > .wrapper {
+      @include display-flex();
+      justify-content: space-between;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      @include tablet-and-wider {
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+    }
+
+    .logo {
+
+      @include display-flex();
+      align-items: center;
+      justify-content: center;
+
+      a {
+        //padding: 20px 10px 20px 10px;
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        display: inline-block;
+
+        cursor: pointer;
+        fill: $text-color-white;
+
+        svg {
+          height: 23px;
+        }
+      }
+    }
+
+    .links {
+      display: block;
+
+      .signin, .try, .menu-button {
+        padding: 8px 16px;
+        color: $highlight_attlaz;
+        font-size: 16px;
+        font-weight: $font-weight-bold;
+        font-family: $font;
+        appearance: none;
+        border: 2px solid $highlight_attlaz;
+        outline: none;
+        display: inline-block;
+        line-height: 20px;
+        cursor: pointer;
+        @include border-radius($button-border-radius);
+
+        img {
+          filter: grayscale(100%);
+        }
+      }
+
+      .signin {
+        margin-right: $row-gap-small;
+      }
+
+      .try {
+        background-color: $highlight_attlaz;
+        color: $text-color-white;
+      }
+
+      .signin, .try {
+
+
+        @include tablet-and-wider {
+          display: inline-block;
+        }
+        display: none;
+      }
+
+      .menu-button {
+        //display: block;
+        @include desktop-and-wider {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+body {
+  .logo-light {
+    display: none;
+  }
+
+  .logo-dark {
+    display: block;
+  }
+
+  &.theme-ocean:not(.scroll), &.theme-midnight:not(.scroll) {
+    .logo-light {
+      display: block;
+    }
+
+    .logo-dark {
+      display: none;
+    }
+  }
+}
+

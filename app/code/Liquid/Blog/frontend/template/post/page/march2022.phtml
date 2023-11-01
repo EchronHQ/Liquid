@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Post;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Post);
+
+
+?>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('Storage', 'h2', 'storage');
+        $c->addContentLine("We have done a major upgrade to our storage functionalities.");
+
+        $c->addContentLine('In your project you can now select 3 different types of storage:');
+        $c->addContentList([
+            'Cache: Storage with a limited expiration date, by default this limit is maximum 1 week',
+            'Persistent: Store data that needs to persist. There is no limit to how long this data will be stored',
+            'Vault: extra secure storage, meant for storing sensitive information. Because of the extra security layer this storage is the slowest and not suited for big amounts of data'
+        ]);
+
+        $c->addContentLine('These can be managed from the app (starting with version 1.6.0) as well.');
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('Deprecation and end-of-life support policies', 'h2', 'deprecation-and-end-of-life-support-policies');
+        $c->addContentLine("We distinguish between 'end of support' and 'end of life':");
+        $c->addContentLine('End of support: ', 'h3');
+        $c->addContentLine("We no longer support the platform version but you can still run your projects. Please be aware that this  platform won't receive quality or security updates.");
+        $c->addContentLine('End of life:  ', 'h3');
+        $c->addContentLine('you can no longer run the version on our platform');
+        $c->addContentLine('We will notify customers using platforms that are planned for "End of life" ahead of time, with clear instructions of how to avoid any disruption and a reasonable time window to implement any necessary changes.
+[Attlaz makes no guarantees of supporting products which have reached their End of Life. Behaviors and APIs relating to End of Life products may be removed entirely. Future releases will not include support for end-of-life features. Platform SLAs do not apply to features that have reached the end of their life.]');
+
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('PHP 7.2', 'h2', 'php-72');
+        $c->addContentLine("As PHP 7.2 had its end of life (EOL) on the 30th November 2020, starting from 30th of April 2022 we will no longer support it. We suggest you upgrade your projects to PHP 7.4, PHP 8.0 or PHP 8.1");
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>

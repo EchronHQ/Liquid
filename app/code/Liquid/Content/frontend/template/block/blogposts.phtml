@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\PostList;
+use Liquid\Content\Block\Element\CopyBlock;
+use Liquid\Content\Block\RelatedBlogPostsBlock;
+
+assert($this instanceof RelatedBlogPostsBlock);
+
+$blogPosts = $this->getBlogPosts();
+?>
+<page-section>
+    <div class="row rowGapLarge">
+        <div class="column col-1">
+            <?php
+            $header = $this->getLayout()->createBlock(CopyBlock::class, '', ['types' => '']);
+            $header->setHeaderTitle($this->title, 'h3');
+            echo $header;
+            ?>
+        </div>
+        <?php
+        $postListBlock = $this->getLayout()->createBlock(PostList::class);
+        $postListBlock->setPosts($blogPosts);
+        echo $postListBlock->toHtml();
+        ?>
+    </div>
+
+</page-section>

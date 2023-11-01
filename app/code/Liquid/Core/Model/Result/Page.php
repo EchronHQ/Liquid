@@ -25,7 +25,7 @@ use Psr\Log\LoggerInterface;
 
 class Page extends Result
 {
-    private string $template = 'Content::root.phtml';
+    private string $template = 'Liquid_Content::root.phtml';
     private array $viewVars = [];
 
     public function __construct(

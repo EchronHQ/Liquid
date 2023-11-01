@@ -1,0 +1,53 @@
+@import "../variables";
+
+.platforms-list-page {
+
+
+  .connector-list .connector {
+    .copy-header {
+      .img-wrapper {
+        text-align: center;
+        margin-top: $row-gap-medium;
+
+        img {
+          height: 70px;
+          min-height: 70px;
+        }
+      }
+    }
+
+    .copy-title {
+      height: calc(32px * 1);
+    }
+
+    .copy-content-description {
+      height: calc(28.8px * 6);
+    }
+
+    .categories {
+      .category {
+        background-color: #ecfbfa;
+        color: #3edbd1;
+        font-size: $font-size-small;
+        display: inline-block;
+        padding: 2px 10px;
+      }
+    }
+
+  }
+}
+
+.platforms-connect-page {
+  header .logos {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 3fr 1fr 3fr;
+    column-gap: 0;
+    text-align: center;
+
+    .plus {
+      color: $text-color-dark;
+      font-size: 150px;
+    }
+  }
+}

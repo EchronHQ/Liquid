@@ -30,12 +30,12 @@ class CacheHelper
 
     private function setItem(string $key, mixed $value, \DateInterval|null $ttl = null): bool
     {
-        $userFriends = $this->cache->getItem($key);
-        $userFriends->set($value);
+        $cacheItem = $this->cache->getItem($key);
+        $cacheItem->set($value);
         if ($ttl !== null) {
-            $userFriends->expiresAfter($ttl);
+            $cacheItem->expiresAfter($ttl);
         }
-        return $this->cache->save($userFriends);
+        return $this->cache->save($cacheItem);
     }
 
     public function getItem(string $key): CacheItemInterface

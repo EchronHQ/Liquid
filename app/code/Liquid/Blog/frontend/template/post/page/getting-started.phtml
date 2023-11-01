@@ -1,0 +1,70 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Post;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Post);
+
+?>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('What is Attlaz?');
+        $c->addContentLine('Attlaz is a tool that helps you integrate data between two or more platforms, automate repetitive tasks and help you monitor any data stream or platform. ');
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('What should/can I integrate with Attlaz?');
+        $c->addContentList([
+            '<b>Anything where you have to move information from one platform to another.</b> Example: updating your catalogue with new prices'
+        ]);
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('What should/can I automate with Attlaz?');
+        $c->addContentList([
+            '<b>Tasks you have to do frequently</b>. Example: Sending a weekly reminder to your team to fill out a meeting agenda.',
+            '<b>Anything where you have to move information from one platform to another.</b> Example: Creating an order in your ERP system as soon as a customer places an order.',
+            "<b>Tasks that don't require much thinking.</b> Example: Copying the emails of event attendees to a spreadsheet."
+        ]);
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('What should/can I monitor with Attlaz?');
+        $c->addContentList([
+            '<b>Any data transaction between platforms.</b> Example: make sure there are no issues when creating a new customer ',
+            '<b>Any platform in our outside your organization that might need maintenance.</b> Example: make sure there are no unknown errors with your ecommerce platform'
+        ]);
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('What is a flow?');
+        $c->addContentLine('A flow is a workflow that tells your apps what actions to take.');
+        $c->addContentLine('Every Flow has one or more triggers and one or more actions. A trigger as an event that start a Flow, and an action is what your Flow does for you.');
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>

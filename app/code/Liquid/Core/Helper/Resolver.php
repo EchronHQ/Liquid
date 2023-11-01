@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
+use Echron\Tools\FileSystem;
 use Liquid\Content\Helper\ImageHelper;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Locale;
 use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\FrontendFileUrl;
-use Echron\Tools\FileSystem;
+use Liquid\Framework\Component\ComponentRegistrarInterface;
+use Liquid\Framework\Component\ComponentType;
 use Psr\Log\LoggerInterface;
 
 class Resolver
@@ -18,11 +20,13 @@ class Resolver
     private array $randomImageUsed = [];
 
     public function __construct(
-        private readonly AppConfig       $configuration,
-        private readonly FileHelper      $fileHelper,
-        private readonly ImageHelper     $imageHelper,
-        private readonly LoggerInterface $logger
-    ) {
+        private readonly AppConfig                   $configuration,
+        private readonly FileHelper                  $fileHelper,
+        private readonly ImageHelper                 $imageHelper,
+        private readonly ComponentRegistrarInterface $componentRegistrar,
+        private readonly LoggerInterface             $logger
+    )
+    {
     }
 
     private function isUrl(string $url): bool
@@ -147,24 +151,76 @@ class Resolver
             // TODO: show placeholder
             return null;
         }
-        return $this->configuration->getValueString('site_url') . 'pub/frontend/' . $file;
+        return $this->configuration->getValueString('site_url') . '/static/v011120232224/' . $file;
     }
 
+    public const FILE_ID_SEPARATOR = '::';
+
+    public static function extractModule(string $fileId): array
+    {
+        if (!$fileId || strpos($fileId, self::FILE_ID_SEPARATOR) === false) {
+            return ['', $fileId];
+        }
+        $result = explode(self::FILE_ID_SEPARATOR, $fileId, 2);
+        if (empty($result[0])) {
+            throw new \Exception('Scope separator "::" cannot be used without scope identifier.');
+        }
+        return [$result[0], $result[1]];
+    }
 
     //ToDo: split this method for static files and images as they return different data
     public function getFrontendFileImageUrl(string $file, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
     {
 
 
-        // Validates if image
-        // $type = AssetSizeInstructionType::fromFile($file);
+        [$module, $filePath] = self::extractModule($file);
 
-        $localFilePath = $this->getDiskFilePath($file);
 
-        if (!$this->fileHelper->fileExist($localFilePath)) {
-            $this->logger->error('Frontend file "' . $file . '" does not exists', ['locale path' => $localFilePath]);
-            // TODO: show placeholder
-            return null;
+        // Test theme
+        $themes = $this->componentRegistrar->getPaths(ComponentType::Theme);
+
+        $inDevMode = true;
+        foreach ($themes as $themePath) {
+
+
+            $fileInTheme = $themePath . '/web/' . $filePath;
+            if ($this->fileHelper->fileExist($fileInTheme, !$inDevMode)) {
+                return $this->getX($file, $fileInTheme, $size, $forseResizing);
+            }
+            if ($module !== null) {
+                $fileInTheme = $themePath . '/' . $module . '/web/' . $filePath;
+                if ($this->fileHelper->fileExist($fileInTheme, !$inDevMode)) {
+                    return $this->getX($file, $fileInTheme, $size, $forseResizing);
+                }
+            }
+
+        }
+
+        if ($module !== null) {
+            // TODO: implement further
+            $x = $this->componentRegistrar->getPath(ComponentType::Module, $module);
+        }
+//        die('---');
+
+
+//        $localFilePath = $this->getDiskFilePath($file);
+//
+//        if (!$this->fileHelper->fileExist($localFilePath)) {
+        $this->logger->error('Frontend file "' . $file . '" does not exists', ['locale path' => $file]);
+        // TODO: show placeholder
+        return null;
+//        }
+
+    }
+
+    private function getX(string $file, string $localFilePath, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
+    {
+
+
+        $publicMediaFolder = 'pub/media/';
+        $cacheLocation = \ROOT . $publicMediaFolder . 'cache/';
+        if (!FileSystem::dirExists($cacheLocation)) {
+            FileSystem::createDir($cacheLocation);
         }
 
         $canResize = $this->imageHelper->canResize($localFilePath);
@@ -172,10 +228,7 @@ class Resolver
 
 
             $resizedLocalFileName = $this->imageHelper->getResizedFileName($localFilePath, $size);
-            $cacheLocation = \ROOT . 'pub/frontend/cache/';
-            if (!FileSystem::dirExists($cacheLocation)) {
-                FileSystem::createDir($cacheLocation);
-            }
+
 
             $resizedLocalFilePath = $cacheLocation . $resizedLocalFileName;
             $hasResized = $this->fileHelper->fileExist($resizedLocalFilePath, false);
@@ -184,7 +237,7 @@ class Resolver
             $resizedImageInfo = null;
 
             if ($hasResized) {
-                $resizedImageInfo = $this->fileHelper->getImageDimensions($resizedLocalFilePath);
+                $resizedImageInfo = $this->fileHelper->getImageDimensions($resizedLocalFilePath, true);
             }
 
 
@@ -204,7 +257,7 @@ class Resolver
             //                $this->logger->error('Unable to get image dimensions', ['path' => $resizedLocalFilePath]);
             //                return null;
             //            }
-            return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'pub/frontend/cache/' . $resizedLocalFileName, $resizedImageInfo['width'], $resizedImageInfo['height']);
+            return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'media/cache/' . $resizedLocalFileName, $resizedImageInfo['width'], $resizedImageInfo['height']);
 
 
         }
@@ -218,13 +271,30 @@ class Resolver
                 $dimension = $dimension2;
             }
         }
+        // Copy file to cache location so we can see it!
 
-        return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'pub/frontend/' . $file, $dimension['width'], $dimension['height']);
+//        var_dump($localFilePath);
+//        var_dump($cacheLocation . $file);
+//
+//
+//        var_dump($file);
+        $cacheLocation = \ROOT . $publicMediaFolder;
+        $fileDir = $cacheLocation . dirname($file);
+
+        if (!FileSystem::dirExists($fileDir)) {
+            FileSystem::createDir($fileDir);
+        }
+
+        $this->fileHelper->copyFile($localFilePath, $cacheLocation . $file);
+        //  die('--');
+        return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'media/' . $file, $dimension['width'], $dimension['height']);
+
     }
 
     public function getFrontendFilePath(string $file): string
     {
-        return \ROOT . 'pub/frontend/' . $file;
+        // TODO: read deploy version from file
+        return \ROOT . 'pub/static/v011120232224/' . $file;
     }
 
 

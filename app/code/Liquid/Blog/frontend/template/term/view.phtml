@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Term;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Term);
+$term = $this->getTerm();
+?>
+<page-header>
+    <div class="row">
+        <div class="column col-2-1">
+
+            <?php
+            $hero = new CopyBlock('header');
+            $hero->setHeaderTitle($term->termLong, 'h1');
+            //            $hero->setContent($term->metaDescription);
+            echo $hero->toHtml();
+            ?>
+            <div>
+                <?= $this->renderLazyLoad('hero_term.png', $term->term, null, false) ?>
+            </div>
+        </div>
+    </div>
+</page-header>
+<main>
+    <page-section>
+        <div class="row">
+            <?= $this->getChildBlock('content')->toHtml() ?>
+        </div>
+    </page-section>
+    <?= $this->getChildBlock('use_cases')->toHtml() ?>
+</main>

@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+
+/** @var $this Post */
+
+use Liquid\Blog\Block\Post;
+
+$postCategory = $this->getPostCategory();
+?>
+
+<section>
+    <div class="container">
+        <div class="wrapper">
+            <div class="row">
+                <div>
+                    <a href="<?= $this->getResolver()->getUrl($postCategory->getUrlPath()) ?>" class="link intext">Explore more <?= $postCategory->metaTitle ?> posts</a>
+                </div>
+                <div>
+                    <a href="<?= $this->getResolver()->getPageUrl('blog') ?>" class="link intext">All blog posts</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

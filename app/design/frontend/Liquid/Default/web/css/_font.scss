@@ -1,0 +1,52 @@
+$assetFontPath: '../asset/font';
+@font-face {
+  font-family: 'gilroy';
+  src: url($assetFontPath + '/Gilroy-ExtraBold.woff2') format('woff2'),
+  url($assetFontPath + '/Gilroy-ExtraBold.woff') format('woff'),
+  url($assetFontPath + '/Gilroy-ExtraBold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'gilroy';
+  src: url($assetFontPath + '/Gilroy-Bold.woff2') format('woff2'),
+  url($assetFontPath + '/Gilroy-Bold.woff') format('woff'),
+  url($assetFontPath + '/Gilroy-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'gilroy';
+  src: url($assetFontPath + '/Gilroy-Medium.woff2') format('woff2'),
+  url($assetFontPath + '/Gilroy-Medium.woff') format('woff'),
+  url($assetFontPath + '/Gilroy-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'gilroy';
+  src: url($assetFontPath + '/Gilroy-Regular.woff2') format('woff2'),
+  url($assetFontPath + '/Gilroy-Regular.woff') format('woff'),
+  url($assetFontPath + '/Gilroy-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'gilroy';
+  src: url($assetFontPath + '/Gilroy-Light.woff2') format('woff2'),
+  url($assetFontPath + '/Gilroy-Light.woff') format('woff'),
+  url($assetFontPath + '/Gilroy-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}

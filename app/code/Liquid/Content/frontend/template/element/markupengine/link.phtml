@@ -1,0 +1,25 @@
+<?php
+declare(strict_types=1);
+/** @var $this \Liquid\Content\Block\Element\MarkupEngine\LinkTag */
+$classes = [];
+if ($this->getType() === 'button') {
+    $classes[] = 'button button-color-highlight';
+} else {
+    $classes[] = 'link';
+}
+?>
+<a href="<?= $this->getHref() ?>" <?= count($classes) > 0 ? 'class="' . implode(' ', $classes) . '"' : '' ?>>
+    <span>
+        <?= $this->getContent() ?>
+    </span>
+    <?php
+    if ($this->showArrow()):
+        ?>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+            <path d="M10 13L15 8L10 3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+            <line x1="14" y1="8" x2="-8.74228e-08" y2="8" stroke="currentColor" stroke-width="2"></line>
+        </svg>
+    <?php
+    endif;
+    ?>
+</a>

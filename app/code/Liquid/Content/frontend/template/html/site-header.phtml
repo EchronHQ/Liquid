@@ -1,0 +1,111 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Element\Navigation;
+
+assert($this instanceof Navigation);
+
+$resolver = $this->getResolver();
+?>
+<header class="site-header">
+    <div class="container">
+        <div class="wrapper">
+            <div class="logo">
+                <a href="<?= $resolver->getPageUrl('home') ?>" aria-label="Attlaz">
+                    <img height="30px" width="130px" class="logo-light" src="<?= $resolver->getFrontendFileImageUrl('asset/logo-light.svg')->url ?>" alt="Attlaz">
+                    <img height="30px" width="130px" class="logo-dark" src="<?= $resolver->getFrontendFileImageUrl('asset/logo.svg')->url ?>" alt="Attlaz">
+                </a>
+            </div>
+
+            <nav class="navigation">
+                <?php foreach ($this->navigation as $navItem): ?>
+                    <div class="nav-item" <?= ($navItem['type'] === 'dropdown') ? 'aria-haspopup="true" aria-expanded="false"' : '' ?>>
+
+                        <?php if ($navItem['type'] === 'link'): ?>
+                            <div class="nav-item-link">
+                                <a href="<?= $navItem['link'] ?>">
+                                    <?= $navItem['title'] ?>
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div class="nav-item-toggle">
+                                <?= $navItem['title'] ?>
+                            </div>
+                        <?php endif ?>
+
+                        <?php if ($navItem['type'] === 'dropdown'): ?>
+                            <div class="nav-item-dropdown">
+                                <div class="sections">
+                                    <?php foreach ($navItem['subsections'] as $navItemSubSection): ?>
+                                        <div class="section">
+                                            <?php if (isset($navItemSubSection['title'])): ?>
+                                                <div class="title"><?= $navItemSubSection['title'] ?></div>
+                                            <?php endif; ?>
+
+                                            <nav class="items">
+                                                <?php foreach ($navItemSubSection['items'] as $navItemSubSectionItem): ?>
+                                                    <div class="item">
+                                                        <a class="item-link" href="<?= $navItemSubSectionItem['link'] ?>"
+                                                            <?= isset($navItemSubSectionItem['target']) ? 'target="' . $navItemSubSectionItem['target'] . '"' : '' ?>
+                                                            <?= isset($navItemSubSectionItem['rel']) ? 'rel="' . $navItemSubSectionItem['rel'] . '"' : '' ?>
+                                                        >
+                                                            <div class="item-icon">
+                                                                <img loading="lazy" src="<?= $navItemSubSectionItem['icon'] ?>" alt="<?= $navItemSubSectionItem['title'] ?>">
+                                                            </div>
+                                                            <div class="item-text">
+                                                                <div class="item-text-title"><?= $navItemSubSectionItem['title'] ?></div>
+                                                                <div class="item-text-description"><?= $navItemSubSectionItem['description'] ?></div>
+                                                            </div>
+
+                                                        </a>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            </nav>
+                                        </div>
+                                    <?php endforeach; ?>
+                                    <?php if (isset($navItem['footer'])): ?>
+                                        <div class="section">
+                                            <div class="items">
+                                                <div class="item">
+                                                    <a class="item-link" href="<?= $navItem['footer']['link'] ?>">
+                                                        <div class="item-icon large">
+                                                            <img loading="lazy" src="<?= $navItem['footer']['icon'] ?>" alt="<?= $navItem['footer']['title'] ?>">
+                                                        </div>
+                                                        <div class="item-text">
+                                                            <div class="item-text-title"><?= $navItem['footer']['title'] ?></div>
+                                                            <div class="item-text-description"><?= $navItem['footer']['description'] ?></div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+
+                            </div>
+                        <?php endif ?>
+                    </div>
+                <?php endforeach; ?>
+
+
+                <div class="sub-navigation">
+                    <div class="wrapper-container">
+                        <div class="wrapper">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="overlay"></div>
+            </nav>
+            <div class="links">
+                <a href="<?= $resolver->getPageUrl('app') ?>" target="_blank" rel="noopener" class="signin">Sign in</a>
+                <a href="<?= $resolver->getPageUrl('demo') ?>" class="try">Book a demo</a>
+                <div class="menu-button">
+                    <img width="24" height="24" loading="lazy" src="<?= $resolver->getFrontendFileImageUrl('asset/image/menu.svg')->url ?>" alt="Menu">
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>

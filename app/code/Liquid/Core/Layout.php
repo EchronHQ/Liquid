@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Liquid\Core;
 
+use DI\Container;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Liquid\Content\Block\Element\Navigation;
 use Liquid\Content\Block\Html\Script;
 use Liquid\Content\Block\Html\Stylesheet;
@@ -13,9 +16,6 @@ use Liquid\Content\Model\Layout\Structure;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Model\Layout\AbstractBlock;
 use Liquid\Core\Model\Layout\Block;
-use DI\Container;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 class Layout
@@ -35,7 +35,8 @@ class Layout
         private readonly Container       $diContainer,
         private readonly Profiler        $profiler,
         private readonly LoggerInterface $logger
-    ) {
+    )
+    {
         $this->structure = new Structure();
     }
 
@@ -292,9 +293,9 @@ class Layout
             /** @var HtmlHeadBlock $headBlock */
             $headBlock = $this->addBlock(HtmlHeadBlock::class, 'head');
 
-            $headBlock->addScript(new Script('vendor.js'));
-            $headBlock->addScript(new Script('main.js'));
-            $headBlock->addScript(new Script('hero.js'));
+            $headBlock->addScript(new Script('js/vendor.js'));
+            $headBlock->addScript(new Script('js/main.js'));
+            $headBlock->addScript(new Script('js/hero.js'));
 
             // Load Sentry over CDN
             //            $sentryCDN = new Script('https://browser.sentry-cdn.com/7.51.0/bundle.tracing.replay.min.js');
@@ -311,7 +312,7 @@ class Layout
             //$headBlock->addScript($sentryCDN);
 
 
-            $headBlock->addStyleSheet(new Stylesheet('main.css'));
+            $headBlock->addStyleSheet(new Stylesheet('css/styles.css'));
 
             /** @var Navigation $siteHeaderBlock */
             $siteHeaderBlock = $this->addBlock(Navigation::class, 'header', 'layout');

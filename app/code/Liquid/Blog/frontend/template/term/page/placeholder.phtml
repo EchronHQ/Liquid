@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Term;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Term);
+$term = $this->getTerm()
+?>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('Oops');
+        $c->addContentLine("Looks like we're still writing this article. Check back soon.");
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>

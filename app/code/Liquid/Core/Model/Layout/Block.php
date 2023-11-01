@@ -96,7 +96,8 @@ class Block extends AbstractBlock
 
     final protected function isValidTemplate(string $path): bool
     {
-        return $this->fileHelper->fileExist($path);
+        $inDevMode = true;
+        return $this->fileHelper->fileExist($path, !$inDevMode);
     }
 
     final protected function getFileContent(string $path): string

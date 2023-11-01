@@ -1,0 +1,97 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\TemplateBlock;
+use Liquid\Content\Model\Asset\AssetSizeInstruction;
+use Liquid\Content\Model\Asset\AssetSizeInstructionFilter;
+
+assert($this instanceof TemplateBlock);
+
+$quote1 = [
+    'text'   => 'Attlaz allowed us to connect to some legacy systems. Before, it was expensive and laborious to update data between those systems and our webshop. That has now changed, everything goes automatically and is up-to-date at any moment of the day.',
+    'author' => [
+        'name'  => 'Sophie Künzner',
+        'job'   => 'Technical project manager at Catlar',
+        'photo' => 'image/customerquote/sophie-kunzner.jpg'
+    ]
+];
+$quote2 = [
+    'text'   => 'Why we love Attlaz? It allows us to rely that the data on our ecommerce, sales and marketing platforms is synchronized and up to date. Simple, intuitive, and fast.',
+    'author' => [
+        'name'  => 'Bart Robins',
+        'job'   => 'VP Growth',
+        'photo' => 'image/customerquote/bart-robins.jpg'
+    ]
+];
+$quote3 = [
+    'text'   => 'Attlaz is way more than just an integrator. Together with the team we ' . $this->translate('optimised') . ' the way we deal with our suppliers and inventory. ',
+    'author' => [
+        'name'  => 'Cliff Murdock',
+        'job'   => 'Head of sales at GreenPatch',
+        'photo' => 'image/customerquote/cliff-murdock.jpg'
+    ]
+];
+$quote4 = [
+    'text'   => 'Because Liquid is flexible to use we are able to react to higher demands with immediacy.<br/>Their collection of components allows us to develop and go to production with ease and speed. ',
+    'author' => [
+        'name'  => 'Marc Christiaens',
+        'job'   => 'Global Director of Belwear',
+        'photo' => 'image/customerquote/marc-christiaens.jpg'
+    ]
+];
+
+$quotes = [
+    $quote1,
+    $quote2,
+    $quote3,
+    $quote4
+];
+
+$photoSizeInstruction = new AssetSizeInstruction(90, 90);
+$photoSizeInstruction->addFilter(AssetSizeInstructionFilter::GreyScale);
+?>
+
+<section class="customerquotes">
+    <div class="container">
+        <div class="wrapper">
+            <div class="row">
+                <div class="column columnGapNone rowGapNone">
+                    <ul class="quotes">
+                        <?php
+                        foreach ($quotes as $quote) {
+                            ?>
+                            <li class="quote">
+                                <div class="quote-text">
+                                    <?= $quote['text'] ?>
+                                </div>
+                                <div class="quote-author">
+
+                                    <div class="quote-author-photo">
+                                        <?= $this->renderLazyLoad($quote['author']['photo'], 'Picture of ' . $quote['author']['name'], $photoSizeInstruction) ?>
+                                    </div>
+                                    <div class="quote-author-name">
+                                        <?= $quote['author']['name'] ?>
+                                        <div class="quote-author-job">
+                                            <?= $quote['author']['job'] ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                    <div class="nav">
+                        <div class="prev">
+                            Prev
+                        </div>
+                        <div class="next">
+                            Next
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

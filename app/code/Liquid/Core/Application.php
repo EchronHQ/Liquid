@@ -14,6 +14,8 @@ use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\ApplicationMode;
+use Liquid\Framework\Component\ComponentRegistrar;
+use Liquid\Framework\Component\ComponentRegistrarInterface;
 use Monolog\ErrorHandler;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\SlackWebhookHandler;
@@ -129,6 +131,7 @@ class Application
             AppConfig::class => $this->config,
             CacheItemPoolInterface::class => $cachePool,
             Profiler::class => $this->profiler,
+            ComponentRegistrarInterface::class => \DI\create(ComponentRegistrar::class),
         ]);
         $this->diContainer = $containerBuilder->build();
     }

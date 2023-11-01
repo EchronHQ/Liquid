@@ -1,0 +1,62 @@
+<?php
+declare(strict_types=1);
+
+/** @var $this \Liquid\Content\Block\Element\MarkupEngine\PageSectionTag */
+
+$classes = [];
+if ($this->getBackground() !== null) {
+    $classes[] = $this->getBackground();
+}
+if ($this->getData('style') !== null) {
+    $style = $this->getData('style');
+    if ($style === 'no-padding') {
+        $classes[] = 'none';
+    }
+}
+
+?>
+<section <?= count($classes) > 0 ? 'class="' . implode(' ', $classes) . '"' : '' ?>>
+    <div class="content">
+        <div class="container">
+            <div class="wrapper <?= $this->getMaxWidth() ?? '' ?>">
+                <?php
+                $content = $this->getData('content');
+                if ($content !== null) {
+                    // TODO: should we log that the content is empty?
+                    echo $content;
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+    <?php
+    $archBottom = $this->getBottomArch();
+    if ($archBottom === 'round'):
+        ?>
+        <div class="background-after-arch">
+            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="30" width="100%" viewBox="0 0 1440 30" fill="none">
+                <path d="M1440 0H0C0 0 352.5 30 720 30C1087.5 30 1440 0 1440 0Z"></path>
+            </svg>
+        </div>
+    <?php
+    elseif ($archBottom):
+        ?>
+        <!--        <div class="background-after-arch">-->
+        <!--            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="30" width="100%" viewBox="0 0 1440 30" fill="none">-->
+        <!--                <path d="M0 0H1440V21C1440 21 1395.2 30 1324 30C1165 30 1108.33 1 959.5 1C824 1 717.152 23 580 23C460 23 350 1 230 1C139.468"></path>-->
+        <!--            </svg>-->
+        <!--        </div>-->
+        <!--    <div class="background-after-arch">-->
+        <!--        <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="30" width="100%" viewBox="0 0 1440 30" fill="none">-->
+        <!--            <path d="M1440 0H0C0 0 352.5 30 720 30C1087.5 30 1440 0 1440 0Z"></path>-->
+        <!--        </svg>-->
+        <!--    </div>-->
+        <!--        <div class="background-after-arch">-->
+        <!--            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="30" width="100%" viewBox="0 0 1440 30" fill="none">-->
+        <!--                <path d="M0 0H1440V21C1440 21 1395.2 30 1324 30C1165 30 1108.33 1 959.5 1C824 1 717.152 23 580 23C460 23 350 1 230 1C139.468"></path>-->
+        <!--            </svg>-->
+        <!--        </div>-->
+    <?php
+    endif;
+    ?>
+</section>

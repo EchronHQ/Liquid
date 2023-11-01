@@ -1,0 +1,23 @@
+@import "../variables";
+
+.columns-container {
+  overflow-y: hidden;
+  height: 100%;
+  @include display-flex();
+
+  .column-left {
+    width: 280px;
+    border-right: 1px solid $line-color-dark;
+    padding: 24px 20px 0 12px;
+
+    //background: red;
+
+
+  }
+
+  .column-main {
+    //background: pink;
+    position: relative;
+    width: 100%;
+  }
+}

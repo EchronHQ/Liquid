@@ -1,0 +1,191 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\HtmlHeadBlock;
+use Liquid\Content\Model\Asset\AssetSizeInstruction;
+use Liquid\Content\Model\View\Page\PageConfig;
+
+assert($this instanceof HtmlHeadBlock);
+
+$pageConfig = $this->getPageConfig();
+$escaper = $this->getOutputHelper();
+
+?>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="HandheldFriendly" content="true"/>
+
+    <meta charset="utf-8">
+
+    <title><?= $pageConfig->getSeoTitle() ?></title>
+    <meta name="description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
+    <meta name="keywords" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoKeywords()) ?>"/>
+    <link rel="canonical" href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getCurrentLocale())) ?>"/>
+
+    <?php
+    $locales = $this->getLocales();
+    foreach ($locales as $locale):
+        ?>
+        <link rel="alternate" hreflang="<?= $escaper->escapeHtmlAttribute($locale->langCode) ?>" href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($locale)) ?>"/>
+    <?php
+    endforeach;
+    $defaultLocale = $this->getDefaultLocale();
+    ?>
+    <link rel="alternate" hreflang="x-default" href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getDefaultLocale())) ?>"/>
+
+
+    <!--    Disable data format detection detection-->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="date=no">
+    <meta name="format-detection" content="address=no">
+    <meta name="format-detection" content="email=no">
+
+    <!-- Opengraph -->
+    <meta property="og:site_name" content="Attlaz">
+    <meta property="og:title" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoTitle()) ?>"/>
+    <meta property="og:url" content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
+
+
+    <meta property="og:description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
+    <meta property="og:image" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1200, 630))) ?>"/>
+    <!--    <meta property="og:image:width" content="442"/>-->
+    <!--    <meta property="og:image:height" content="315"/>-->
+
+    <!--    <meta property="og:locale" content="en_GB"/>-->
+
+    <meta property="og:type" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPageType()) ?>"/>
+
+
+    <?php
+    if ($pageConfig->getPageType() === PageConfig::PAGE_TYPE_ARTICLE) {
+        if ($pageConfig->getAuthor() === null) {
+            $this->getLogger()->warning('Article must have author defined');
+        } else {
+            ?>
+            <meta name="author" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getAuthor()->name) ?>">
+            <?php
+        }
+        if ($pageConfig->getPublisher() === null) {
+            $this->getLogger()->warning('Article must have publisher defined');
+        } else {
+            ?>
+            <meta property="article:publisher" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPublisher()) ?>"/>
+            <?php
+        }
+
+        if ($pageConfig->getPublishDate() instanceof DateTime) {
+            ?>
+            <meta property="article:published_time" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPublishDate()->format('c')) ?>"/>
+            <?php
+        } else {
+            $this->getLogger()->warning('Article must have publish date defined');
+        }
+        if ($pageConfig->getModifiedDate() instanceof DateTime) {
+            ?>
+            <meta property="article:modified_time" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getModifiedDate()->format('c')) ?>"/>
+            <?php
+        } else {
+            $this->getLogger()->warning('Article must have modification date defined');
+        }
+    }
+
+
+    ?>
+
+
+    <!-- Itemprop -->
+    <meta itemprop="name" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoTitle()) ?>"/>
+    <meta itemprop="url" content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
+    <meta itemprop="description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
+    <meta itemprop="thumbnailUrl" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
+    <meta itemprop="image" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
+
+    <!-- Twitter -->
+    <meta name="twitter:site" content="@AttlazHQ"/>
+    <meta name="twitter:creator" content="@AttlazHQ"/>
+    <meta name="twitter:title" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoTitle()) ?>"/>
+
+    <meta name="twitter:url" content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
+    <meta name="twitter:description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
+    <meta name="twitter:image" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
+    <?php
+    if ($pageConfig->getPageType() === PageConfig::PAGE_TYPE_ARTICLE) {
+        ?>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <?php
+
+    } else {
+        ?>
+        <meta name="twitter:card" content="summary"/>
+        <?php
+    }
+    ?>
+
+
+    <!-- Other -->
+    <link rel="image_src" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>"/>
+    <meta name="theme-color" content="#1ea3a8">
+
+    <!-- Apple -->
+    <link rel="apple-touch-icon" sizes="72x72" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-72x72.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="144x144" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-144x144.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="152x152" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-152x152.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="192x192" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>">
+
+    <!-- Icons -->
+    <link rel="icon" sizes="192x192" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>" type="image/png">
+    <link rel="icon" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>">
+    <?php
+    //    $icons = $this->getIcons();
+    //
+    //    foreach ($icons as $icon) {
+    //        $attributes = [];
+    //
+    //        $attributes[] = 'rel="' . $icon['rel'] . '"';
+    //        $attributes[] = 'sizes="' . $icon['sizes'] . '"';
+    //        $attributes[] = 'href="' . $this->getResolver()->getAssetUrl('asset/icon/icon-' . $icon['sizes'] . '.png') . '"';
+    //
+    //        if (isset($icon['type'])) {
+    //            $attributes[] = 'type="' . $icon['type'] . '"';
+    //        }
+    //        echo '<link ' . implode(' ', $attributes) . '>' . PHP_EOL;
+    //    }
+    ?>
+
+    <!-- MS -->
+    <meta name="msapplication-TileColor" content="#1ea3a8">
+    <meta name="msapplication-TileImage" content="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-144x144.png')->url) ?>">
+
+    <script type="application/ld+json"><?= $this->getOutputHelper()->jsonEncode($this->getLdData()) ?></script>
+    <?php
+    echo $this->renderCriticalCss();
+
+    $stylesheets = $this->getStyleSheets();
+    foreach ($stylesheets as $stylesheet) {
+        echo $this->renderStyleSheet($stylesheet);
+    }
+    ?>
+
+    <script type="text/javascript">
+        window.siteUrl = '<?= $this->getResolver()->getUrl() ?>';
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MMTP4XJ');
+    </script>
+    <!-- End Google Tag Manager -->
+
+
+</head>

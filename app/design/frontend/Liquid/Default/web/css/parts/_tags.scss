@@ -1,0 +1,58 @@
+@import "../variables";
+
+.tags-wrapper {
+
+  //border: 1px dashed orange;
+
+  .label {
+    font-weight: bold;
+    margin-bottom: $row-gap-small;
+  }
+
+  .tags {
+    @include display-flex();
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    //padding-top: $row-gap-small;
+
+    column-gap: $row-gap-small;
+    row-gap: $row-gap-small;
+
+    .tag {
+      color: $text-color-medium;
+      //background: #fff;
+      border: 0 none;
+      border-radius: 8px;
+      padding: 16px 24px;
+      background: #e9e9f0;
+      font-weight: $font-weight-semibold;
+      //
+      //
+      //color: $highlight_attlaz;
+      //cursor: pointer;
+      //font-size: $font-size-medium;
+      //font-weight: 500;
+      //line-height: 19px;
+      //margin-bottom: 8px;
+      //margin-right: 8px;
+      //padding: 4px 18px;
+      //text-align: center;
+
+      @include transition(color .2s ease, background-color 0.2s ease);
+      //
+      //
+      &.active {
+        background: #4f4fc8;
+        color: #fff;
+      }
+
+      &:hover {
+        color: #0f2133;
+        background: rgba(78, 78, 201, .2);
+      }
+    }
+  }
+
+
+}

@@ -1,0 +1,146 @@
+@import "variables";
+
+section {
+
+  padding-top: 36px;
+  padding-bottom: 36px;
+
+
+  position: relative;
+
+  @include tablet-and-wider {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+  @include desktop-and-wider {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  &.none {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &.narrow {
+
+  }
+
+  --section-background: none;
+  --section-text-color: #{$text-color-dark};
+
+  &.background-ocean {
+    --section-background: #{$background-ocean};
+    --section-text-color: #ffffff;
+  }
+
+  &.background-aqua {
+    --section-background: #{$background-aqua};
+  }
+
+  &.background-desert {
+    --section-background: #{$background-desert};
+  }
+
+  &.background-midnight, &.background-dark-blue {
+    --section-background: #{$background-dark-blue};
+    --section-text-color: #ffffff;
+  }
+
+  &.background-medium {
+    --section-background: #{$background-medium};
+  }
+
+  &.background-purple {
+
+    $background-purple: #413c85;
+    --section-background: #{$background-purple};
+    --section-text-color: #ffffff;
+  }
+
+
+  &.background-dark {
+    --section-background: #{$background-dark};
+    --section-text-color: #ffffff;
+  }
+
+
+  &.background-pink {
+    --section-background: #{$background-pink};
+  }
+
+  &.background-yellow {
+    --section-background: #{ $background-yellow};
+  }
+
+  &.background-green {
+    --section-background: #{$background-teal};
+  }
+
+
+  .background-after-arch {
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 0;
+    width: 100%;
+    z-index: 1;
+
+    svg {
+      fill: var(--section-background);
+    }
+  }
+
+
+  background-color: var(--section-background);
+  color: var(--section-text-color);
+
+}
+
+.masked {
+  overflow: hidden;
+}
+
+.container {
+  z-index: 1;
+  position: relative;
+  @include display-flex();
+  -webkit-box-pack: center;
+  justify-content: center;
+
+  & > .wrapper {
+
+    margin: auto;
+    width: calc(100% - 48px);
+    //width: 100%;
+    //max-width: 1220px;
+
+    //margin: 0 24px;
+    @include tablet-and-wider {
+      width: calc(100% - 96px);
+    }
+    @include desktop-and-wider {
+      width: calc(100% - 88px);
+    }
+    @include wider-than-1280 {
+      width: 1192px;
+    }
+    @include wider-than-1440 {
+      width: 1224px;
+    }
+    @include wider-than-1920 {
+      width: 1456px;
+    }
+
+    &.max-width-1600 {
+      max-width: 1600px;
+    }
+
+    &.max-width-800 {
+      max-width: 800px;
+    }
+
+    &.max-width-600 {
+      max-width: 600px;
+    }
+  }
+}

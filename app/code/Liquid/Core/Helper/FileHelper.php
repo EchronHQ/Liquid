@@ -43,21 +43,34 @@ readonly class FileHelper
      * @param string $path
      * @return array{width:int,height:int}|null
      */
-    public function getImageDimensions(string $path): array|null
+    public function getImageDimensions(string $path, bool $allowCache = true): array|null
     {
-        // TODO: cache this
+        $cacheKey = 'filedimensions-' . $path;
+        if ($allowCache && $this->cache->has($cacheKey)) {
+            $value = $this->cache->get($cacheKey);
+            if (is_array($value)) {
+                return $value;
+            }
+        }
+
+
         $size = getimagesize($path);
         if ($size === false) {
             return null;
         }
-        list($width, $height, $type, $attr) = $size;
-        return ['width' => $width, 'height' => $height];
+        [$width, $height, $type, $attr] = $size;
+        $value = ['width' => $width, 'height' => $height];
+        $this->logger->debug('[FileHelper] Get file dimensions ' . $path);
+        if ($allowCache) {
+            $saved = $this->cache->set($cacheKey, $value, new \DateInterval('P5D'));
+        }
+        return $value;
     }
 
-    public function getFileContent(string $path, bool $cache = true): string
+    public function getFileContent(string $path, bool $allowCache = true): string
     {
         $cacheKey = 'filecontent-' . $path;
-        if ($cache && $this->cache->has($cacheKey)) {
+        if ($allowCache && $this->cache->has($cacheKey)) {
             $value = $this->cache->get($cacheKey);
             if (is_string($value)) {
                 return $value;
@@ -66,7 +79,7 @@ readonly class FileHelper
         $value = \file_get_contents($path);
 
         $this->logger->debug('[FileHelper] Get file content ' . $path);
-        if ($cache) {
+        if ($allowCache) {
             $saved = $this->cache->set($cacheKey, $value, new \DateInterval('P5D'));
         }
         return $value;
@@ -95,6 +108,21 @@ readonly class FileHelper
             return \DateTime::createFromFormat('U', $rawResult . '');
         }
         return null;
+    }
+
+    public function copyFile(string $source, string $destination): void
+    {
+
+        if (!$this->fileExist($source)) {
+            throw new \Error('Source file does not exist');
+        }
+        if ($this->fileExist($destination)) {
+            // Should we do something?
+        }
+        $copied = copy($source, $destination);
+        if (!$copied) {
+            throw new \Error('File not copied');
+        }
     }
 
 

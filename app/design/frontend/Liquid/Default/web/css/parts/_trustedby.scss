@@ -1,0 +1,43 @@
+section.trusted-by {
+  .container {
+    padding-top: $row_gap-medium;
+    padding-bottom: $row_gap-medium;
+  }
+
+  .logos {
+
+    column-gap: $row-gap-large;
+    row-gap: $row-gap-normal;
+
+
+    display: flex;
+    flex-wrap: wrap;
+    @include align-items(center);
+    @include justify-content(center);
+
+    @include desktop-and-wider {
+      justify-content: space-between;
+    }
+
+    & > div {
+
+      display: flex;
+
+      @include align-items(center);
+      @include justify-content(center);
+
+      img {
+        width: 6rem;
+        opacity: .5;
+        filter: grayscale(100%);
+        @include tablet-and-wider {
+          width: 7rem;
+        }
+      }
+    }
+  }
+
+
+}
+
+

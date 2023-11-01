@@ -1,0 +1,31 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Element\TagBar;
+
+assert($this instanceof TagBar);
+
+$tags = $this->getTags();
+if (count($tags) > 0):
+    ?>
+    <div class="tags-wrapper">
+        <?php if ($this->getLabel()): ?>
+            <div class="label"><?= $this->getLabel() ?></div>
+        <?php endif; ?>
+        <div class="tags">
+            <?php if (!empty($this->getAllTarget())): ?>
+                <a class="tag <?= $this->hasSelected() ? '' : 'active' ?>" href="<?= $this->getAllTarget() ?>">
+                    All
+                </a>
+            <?php
+            endif;
+            foreach ($tags as $tag): ?>
+                <a class="tag <?= $this->isSelectedTag($tag) ? 'active' : '' ?>"
+                   href="<?= $this->getResolver()->getUrl($tag->getUrlPath()) ?>">
+                    <?= $this->getTagLabel($tag) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php
+endif;

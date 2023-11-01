@@ -1,0 +1,60 @@
+<?php
+declare(strict_types=1);
+
+use Attlaz\Connector\Model\PlatformDefinition;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Liquid\Blog\Block\Term, 'Instance must be ' . Liquid\Blog\Block\Term::class . ' ' . get_class($this) . ' instead');
+
+/** @var \Attlaz\Connector\Model\PlatformUseCase[] $useCases */
+$useCases = $this->getData('use_cases');
+/** @var PlatformDefinition $platform */
+$platform = $this->getData('platform');
+
+if (count($useCases) > 0):
+    ?>
+    <section>
+        <div class="container">
+            <div class="wrapper">
+                <div class="row rowGapLarge">
+                    <div class="column">
+                        <?php
+                        $hero = new CopyBlock('gap-large center');
+                        $hero->setHeaderTitle('Common ' . $platform->metaTitle . ' use-cases and workflows');
+                        echo $hero->toHtml();
+                        ?>
+                    </div>
+                    <div class="column col-1-1-1 column-fit">
+                        <?php
+                        $cardColors = ['yellow', 'blue', 'purple', 'pink', 'yellow', 'green', 'blue', 'purple', 'green', 'yellow', 'pink', 'blue'];
+
+                        $c = 0;
+                        foreach ($useCases as $useCase) {
+                            $color = $cardColors[$c];
+                            $a = new CopyBlock('detail ' . $color . ' card card--paddingMedium card--shadowNormal');
+
+                            $a->setHeaderTitle($useCase->getTitle($platform->metaTitle), 'div');
+                            $a->addContentLine($useCase->getDescription($platform->metaTitle));
+                            echo $a->toHtml();
+
+                            $c++;
+                            if ($c > count($cardColors) - 1) {
+                                $c = 0;
+                            }
+                        }
+                        ?>
+                    </div>
+                    <div class="column center">
+                        <div>
+                            <link type="button" page="case-studies">
+                            Discover more use-cases
+                            </link></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+<?php
+endif;
+

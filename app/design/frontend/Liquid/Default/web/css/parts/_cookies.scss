@@ -1,0 +1,41 @@
+@import "../variables";
+
+section.cookies {
+  position: fixed;
+  z-index: 100000;
+
+  background: white;
+
+  padding: $row-gap-medium;
+
+
+  display: none;
+
+  width: 100%;
+  bottom: 0;
+
+
+  @include box-shadow(0 0 18px rgb(0 0 0 / 20%));
+
+  .text {
+    margin-bottom: $row-gap-small;
+    font-size: $font-size-small;
+  }
+
+  @include tablet-and-wider {
+    left: 10px;
+    bottom: 10px;
+    width: 380px;
+
+    .buttons {
+      .button {
+        display: block;
+        margin-bottom: $row-gap-small;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}

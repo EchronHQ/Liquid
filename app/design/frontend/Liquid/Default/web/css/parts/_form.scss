@@ -1,0 +1,78 @@
+@import "../variables";
+
+form {
+
+  display: grid;
+  row-gap: $row-gap-medium;
+
+
+  .fields {
+    display: grid;
+    row-gap: $row-gap-normal;
+
+    .field {
+
+
+      label {
+        margin-bottom: 5px;
+        display: block;
+        //font-size: 20px;
+        font-weight: $font-weight-regular;
+      }
+
+      &.invalid {
+        label {
+          color: #f26969;
+        }
+
+        input, textarea, select {
+          border-color: #f26969;
+        }
+      }
+
+      .input {
+
+      }
+
+      .notification {
+        //text-align: right;
+        //color: #f26969;
+        display: none;
+      }
+
+      input, textarea, select {
+        //@include border-radius(4px);
+        //border: 1px solid $line-color-light;
+        width: 100%;
+
+        font-weight: $font-weight-semibold;
+
+        color: $text-color-dark;
+
+        @include border-radius(4px);
+        background-color: #fff;
+        box-shadow: 0 2px 4px 0 rgba(12, 0, 46, 0.04);
+        -webkit-box-shadow: 0 2px 4px 0 rgba(12, 0, 46, 0.04);
+
+        border: 1px solid #fff;
+        padding: 4px 4px 4px 30px;
+        line-height: 60px;
+      }
+    }
+
+    .buttons {
+      //margin-bottom: $row-gap-medium;
+
+      .button {
+        width: 100%;
+      }
+    }
+
+    .disclaimer {
+      color: $text-color-light;
+      font-size: $font-size-small;
+    }
+  }
+
+
+}

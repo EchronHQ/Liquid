@@ -1,0 +1,49 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Html\Picture;
+
+assert($this instanceof Picture);
+$default = $this->getDefaultSrc();
+if ($default === null) {
+    return;
+}
+if ($this->hasFormats()):
+    ?>
+    <picture>
+    <?php
+
+//$dimensions = [
+//        '25%'
+//        '50%'
+//        '100%'
+//];
+
+    $types = $this->getFormats();
+    foreach ($types as $type) {
+        /** @var \Liquid\Core\Model\FrontendFileUrl[] $sizes */
+        $sizes = $type['sizes'];
+
+        $strSizes = [];
+        $sizeQueries = [];
+        foreach ($sizes as $breakpoint => $size) {
+            $strSizes[] = $size->url . ' ' . $size->width . 'w';
+            $sizeQueries[] = $breakpoint . ' ' . $size->width . 'w';
+        }
+        ?>
+        <source srcset="<?= implode(', ', $strSizes) ?>" sizes="<?= implode(', ', $sizeQueries) ?>" type="<?= $type['type'] ?>"/>
+        <?php
+    }
+    // TODO: implement usage of low-res variant is default
+endif;
+
+
+?>
+    <img src="<?= $default->url ?>"
+         alt="<?= $this->getAlt() ?>" <?= $default->width ? 'width="' . $default->width . 'px"' : '' ?>        <?= $default->height ? 'height="' . $default->height . 'px"' : '' ?> <?= $this->lazyLoad ? 'loading="lazy"' : '' ?> />
+<?php
+if ($this->hasFormats()):
+    ?>
+    </picture>
+<?php
+endif;

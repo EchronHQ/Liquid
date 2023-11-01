@@ -1,0 +1,25 @@
+{
+  "name": "liquid/module-admin",
+  "description": "N/A",
+  "type": "liquid-module",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "config": {
+    "sort-packages": true
+  },
+  "version": "1.0.0",
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Liquid\\Admin\\": ""
+    }
+  }
+}
+

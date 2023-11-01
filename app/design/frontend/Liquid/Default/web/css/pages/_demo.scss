@@ -1,0 +1,63 @@
+@use "sass:list";
+@use "sass:math";
+@import "../variables";
+
+
+body.page-demo, body.page-contact {
+  .demo1 {
+    padding: $row-gap-normal;
+    background-color: white;
+    @include block();
+  }
+
+  .demo2 {
+    padding: $row-gap-large;
+    background-color: #fbfbfd;
+  }
+
+  @include smaller-than-tablet {
+    .form-wrapper {
+      order: -1;
+    }
+  }
+
+  .slide-wrapper {
+    overflow: hidden;
+
+    .slide {
+      width: 300%;
+      display: grid;
+      grid: auto/minmax(0,1fr);
+      grid-template-columns: repeat(3, 1fr);
+      transition: transform 300ms ease-in-out;
+      @include transform(translateX(math.div(-100%, 3)*1));
+
+      &.slide-error {
+        @include transform(translateX(math.div(-100%, 3 )* 0));
+
+      }
+
+
+      &.slide-success {
+        @include transform(translateX(math.div(-100%, 3 )* 2));
+      }
+    }
+  }
+
+  //.message-success, .message-error {
+  //  padding: $row-gap-normal;
+  //  color: $text-color-dark;
+  //  @include border-radius(4px);
+  //}
+  //
+  //.message-success {
+  //  background-color: #c7ecd8;
+  //
+  //}
+  //
+  //.message-error {
+  //  background-color: #f1c9c9;
+  //
+  //
+  //}
+}

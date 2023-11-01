@@ -1,0 +1,219 @@
+@charset "UTF-8";
+@import "variables";
+
+
+/*! Critical CSS */
+
+p, ul, ol, li, h1, h2, h3, html, body {
+  padding: 0;
+  margin: 0;
+}
+
+h1, h2, h3 {
+  font-weight: $font-weight-bold;
+  font-style: normal;
+  line-height: 1.2rem;
+}
+
+h1 {
+  font-size: 64px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+a, button, div {
+  &:focus {
+    outline: 0;
+  }
+}
+
+ul li {
+  list-style: none;
+}
+
+ol {
+  // TODO: how do we know how wide the numbering is?
+  margin-left: 22px;
+
+  li {
+    margin-bottom: $row-gap-normal;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+img {
+  max-width: 100%;
+  height: inherit;
+}
+
+*, body {
+  box-sizing: border-box;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+
+
+  background-color: $text-color-white;
+
+  font-size: 1rem;
+  line-height: 1.3rem;
+
+  color: $text-color-medium;
+
+  min-height: 100%;
+  @include display-flex;
+  flex-direction: column;
+
+}
+
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: $body-font-weight;
+  font-family: $font;
+
+  @include wider-than-1440 {
+    font-size: 18px;
+  }
+}
+
+button, input, optgroup, select, textarea {
+  font-weight: $font-weight-regular;
+  font-family: $font;
+  font-size: 1rem;
+  line-height: 1.3rem;
+  font-style: normal;
+  text-transform: none;
+  -webkit-appearance: none;
+  outline: 0;
+}
+
+select {
+  cursor: pointer;
+
+  option {
+    font-weight: $font-weight-regular;
+    font-family: $font;
+    font-size: 1rem;
+    color: $text-color-medium;
+  }
+}
+
+.global-content {
+  @include flex-grow(1);
+}
+
+.row, .column {
+
+  display: grid;
+  grid: auto/minmax(0,1fr);
+  row-gap: $row-gap-small;
+}
+
+.column {
+  -webkit-box-align: start;
+  align-items: start;
+
+  row-gap: $row-gap-medium;
+  column-gap: $row-gap-normal;
+}
+
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+
+header {
+  .navigation, .links {
+    display: none;
+  }
+}
+
+
+.copy {
+  align-content: baseline;
+  display: grid;
+  row-gap: 16px;
+
+  .copy-content, .copy-footer {
+    display: grid;
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: $font-weight-regular;
+    row-gap: 16px;
+  }
+
+  .copy-header .copy-title {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: $font-weight-bold;
+  }
+
+  &.header .copy-title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  &.gap-large {
+    row-gap: $row-gap-medium;
+  }
+}
+
+body.blog-post .blog-header-image {
+  height: 30.3125rem;
+  overflow: hidden;
+
+  img {
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
+.center {
+  text-align: center;
+
+  .copy-icon {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@import "parts/header";
+@import "section";
+@import "parts/hero";
+@import "parts/trustedby";

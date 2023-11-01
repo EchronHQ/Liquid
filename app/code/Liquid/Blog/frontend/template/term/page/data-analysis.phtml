@@ -1,0 +1,38 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Term;
+use Liquid\Content\Block\Element\CopyBlock;
+
+/**
+ * https://en.wikipedia.org/wiki/Data_analysis
+ */
+assert($this instanceof Term);
+$term = $this->getTerm()
+?>
+    <div class="row">
+        <div class="column">
+            <?php
+            $c = new CopyBlock();
+            $c->setHeaderTitle('What is data analysis?');
+            $c->addContentLine("Data analysis is a process of inspecting, cleansing, transforming, and modelling data with the goal of discovering useful information, informing conclusions, and supporting decision-making. Data analysis has multiple facets and approaches, encompassing diverse techniques under a variety of names, and is used in different business, science, and social science domains. In today's business world, data analysis plays a role in making decisions more scientific and helping businesses operate more effectively.");
+            echo $c->toHtml();
+            ?>
+        </div>
+    </div>
+<?php
+$showSection = false;
+if ($showSection):
+    ?>
+    <div class="row">
+        <div class="column">
+            <?php
+            $c = new CopyBlock();
+            $c->setHeaderTitle('How does Attlaz help with data analysis?');
+            //        $c->addContentLine('Data silos hinder business operations and the data analytics initiatives that support them. Silos limit the ability of executives to use data to manage business processes and make informed business decisions. They also prevent call center agents, sales reps and other operational workers from accessing relevant data about customers, products, supply chains and more.');
+            echo $c->toHtml();
+            ?>
+        </div>
+    </div>
+<?php
+endif;

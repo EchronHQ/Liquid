@@ -1,0 +1,51 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Term;
+
+assert($this instanceof Term);
+$term = $this->getTerm()
+?>
+<div class="row">
+    <div class="column">
+        <copy-block title="What is a CDP?">
+            A Customer Data Platform (CDP) is a software solution or technology that allows businesses to collect,
+            consolidate, and manage customer data from various sources into a single, unified customer profile. The
+            primary purpose of a CDP is to provide a comprehensive and 360-degree view of each customer, enabling
+            companies to better understand their customers, deliver personalized experiences, and make data-driven
+            marketing and business decisions.
+        </copy-block>
+        <copy-block title="What are the benefits of a CDP">
+            <ul class="list-dot">
+                <li>
+                    <b>Create unified customer profiles:</b><br/>CDPs don’t just collect and store data. They process it
+                    into customer profiles that can be used to create single customer views (SCVs). Also called
+                    360-customer views, SCVs are profiles created by a CDP from all the data gathered on a single
+                    customer. They provide marketers with a unified view of insights like their behaviors, information,
+                    purchase history, and interests.
+                    <br/>
+                    For example, each time a customer engages with a brand — whether it’s logging into a mobile app,
+                    reading a blog post, searching for a product, adding that product to a cart, leaving it in the cart,
+                    or buying a different product later — it’s all filtered into a SCV that acts as a summary of every
+                    way that customer has interacted with that brand. Using this clear and unified view, marketers can
+                    understand their customers better and deliver more personalized experiences.
+                </li>
+                <li>
+                    <b>Eliminate data silos</b>
+                    <br/>
+                    When different teams or departments each keep track of different sources of customer data, it
+                    creates data silos. One team might know a customer’s name and email address, while another has data
+                    on their purchase history and website clicks. While all this information is valuable when it’s
+                    combined, if different teams hold different pieces of information they can’t gain a full
+                    understanding of a customer’s needs and behaviors.
+                    <br/>
+                    A CDP gathers all your customer data into one place, even if data is streaming in from various
+                    sources. That way, a company can access all their online and offline data from every touchpoint all
+                    at once and create informed decisions on what experiences will resonate with their customers best.
+                </li>
+
+            </ul>
+        </copy-block>
+    </div>
+
+</div>

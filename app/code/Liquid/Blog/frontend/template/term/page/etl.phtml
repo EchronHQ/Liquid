@@ -1,0 +1,50 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * https://www.stitchdata.com/resources/what-is-elt/
+ */
+
+use Liquid\Blog\Block\Term;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Term);
+$term = $this->getTerm()
+?>
+    <div class="row">
+        <div class="column">
+            <?php
+            $c = new CopyBlock();
+            $c->setHeaderTitle('What is ETL?');
+            $c->addContentLine('Extract, transform, and load (ETL) is the process of combining data from multiple sources into a large, central repository called a data warehouse. ETL uses a set of business rules to clean and organize raw data and prepare it for for example storage, data analytics, machine learning (ML), etc');
+            echo $c->toHtml();
+            ?>
+        </div>
+        <div class="column col-1-1-1 columnGapExtraLarge">
+            <?php
+            $c = new CopyBlock('card card--paddingMedium');
+            $c->setHeaderTitle('Extract');
+            $c->addContentLine('the data from its original source, whether that is another database or an application');
+            echo $c->toHtml();
+
+            $c = new CopyBlock('card card--paddingMedium');
+            $c->setHeaderTitle('Transform');
+            $c->addContentLine('data by cleaning it up, deduplicating it, combining it, and otherwise getting ready to…');
+            echo $c->toHtml();
+
+            $c = new CopyBlock('card card--paddingMedium');
+            $c->setHeaderTitle('Load');
+            $c->addContentLine('the data into the target database or platform');
+            echo $c->toHtml();
+            ?>
+        </div>
+        <div class="column">
+            <?php
+            $c = new CopyBlock();
+            $c->addContentLine('Typically, one ETL tool does all three of these steps, and is a critical part of ensuring that data required for reporting, analytics, and, now, machine learning and artificial intelligence is complete and usable. But the nature of ETL, the data it handles, and where the process takes place has evolved tremendously over the last decade–and the right ETL software is more critical than ever.');
+            echo $c->toHtml();
+            ?>
+        </div>
+    </div>
+<?php
+// TODO: write how Attlaz works as an ETL

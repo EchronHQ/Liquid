@@ -1,0 +1,98 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\Post;
+use Liquid\Content\Block\Element\CopyBlock;
+
+assert($this instanceof Post);
+?>
+<div class="row highlight">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+
+        $c->setHeaderTitle('What is Black Friday', 'h2', 'what-is-black-friday');
+        $c->addContentLine("Black Friday is a tradition originating from the US taking place on the Friday after Thanksgiving, where stores offer super sales to boost Christmas shopping. ");
+        $c->addContentLine('Black Friday first appeared in the UK and Europe five years ago. The Friday after Thanksgiving was coined Black Friday in the 60s to kick off the shopping season. Back in the day, on accounting statements, black writing meant profit, while red writing meant a loss. Thus black ' . $this->translate('symbolises') . ' that a store is doing good.');
+        $c->addContentLine("Today, Black Friday is so popular that it is considered to be an indicator of yearly consumption. The day marks the beginning of the Christmas season and is seen as a good parameter to forecast the season's trends.");
+        $c->addContentLine('In 2005, marketing companies in the US coined the term Cyber Monday for the Monday following Black Friday. The idea was to give online retailers their own day to match the brick-and-mortar Black Friday sales. Eventually, from being a brick-and-mortar store event, Black Friday also became an online craze, boosting ecommerce purchases and making both Friday and Monday super sales days online.');
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->addContentLine('Here are some of the biggest challenges facing ecommerce companies during Black Friday and Cyber Monday, which you should be aware of:');
+        echo $c->toHtml();
+        ?>
+    </div>
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle($this->translate('Analyse') . ' the performance of the previous Black Friday', 'h2', 'analyse-previous-black-friday');
+        $c->addContentLine($this->translate('Analyse') . ' the previous Black Friday strategy to detect possible friction. Did you have monitoring in place, or did you keep a list of issues and bottlenecks that occurred? Did you notice people abandoning their purchases, or were customers unable to checkout? Was there an increase in support requests from customers indicating a not-so-smooth checkout? How were the orders handled, and were you able to ship all orders on time? ');
+        $c->addContentLine('Detecting what to improve in time and adjusting can help you ' . $this->translate('maximise') . ' your conversion by creating a better user experience.');
+        echo $c->toHtml();
+        ?>
+    </div>
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('Systems check', 'h2', 'systems-check');
+        $c->addContentLine("We are confident that if we made a list of any retailer's worst Black Friday nightmare scenarios, technical glitches would be high on that list.");
+        $c->addContentLine("Whether your customer is shopping on their phone or laptop, they want an uninterrupted and enjoyable experience.
+But when you're receiving high volumes of traffic and sales, issues can arise with the performance of your website. 
+It could result in slow load speeds, potentially pushing visitors away towards your competitors. Or, even worse, pages could crash, and your customers will be faced with an error message whilst trying to add items to their cart or checkout.");
+        $c->addContentLine('One of the best ways to combat this is to run as many tests as possible in the run-up to a peak sales period. And this is assisted even further by:');
+
+        $c->addContentList([
+            "Integrate a powerful BI or analytics tool, which has easy access to all of your data and can help you figure out what you need to improve to supercharge your website's performance just in time for Black Friday and Cyber Monday.",
+            "Have sufficient monitoring in place, which allows you to prevent issues before they happen or when issues happen to take faster action"
+        ]);
+        // TODO: add link to Attlaz monitoring solutions
+        echo $c->toHtml();
+        ?>
+    </div>
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('Make sure you can handle bulk orders', 'h2', 'make-sure-you-can-handle-bulk-orders');
+        $c->addContentLine('Website and platform performance is not only about load speeds and technical issues. It is also about ensuring your order processes are fit for the job. You need to effectively support your platform infrastructure so that all data can flow seamlessly from point to destination. ');
+        $c->addContentLine('This is a common challenge when the amount of data quickly increases, and there is more stress on the systems involved. That is why we advise companies to consult with an integration provider so that you can connect your platform with systems such as you {TERM}WMS{/TERM}, {TERM}ERP{/TERM}, and {TERM}CRM{/TERM}.
+With the right provider, you can scale faster and handle as many orders as you need.');
+        echo $c->toHtml();
+        ?>
+    </div>
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('Order fulfilment', 'h2', 'order-fulfilment');
+        $c->addContentLine("What is your chosen fulfilment method? Do you handle warehouse management and delivery, or do you outsource this to other companies? Integrating your ecommerce and inventory management is a practical solution to fulfilling orders and managing collections. 
+Simple solutions such as making sure your orders are automatically sending orders to your warehouse management system or printing out picking tickets can make a huge difference in the speed at which you can fulfil the orders. Manual actions might have worked well initially, as the number of orders was manageable. However, when sales ramp up, you want to be able to focus on your sales and customers and remove tedious manual tasks that can be automated.");
+        echo $c->toHtml();
+        ?>
+    </div>
+    <div class="column">
+        <?php
+        $c = new CopyBlock();
+        $c->setHeaderTitle('And finally ...', 'h2', 'and-finally');
+        $c->addContentLine("When this year's Black Friday is all over, do not forget to take time to " . $this->translate('analyse') . " your store's performance and review your processes. We know you will start preparing for the Christmas season, but these sales can give you all the insights you need through sales and stock reports, and putting in the effort now will ensure you are halfway ready to tackle any upcoming sales periods.");
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>
+<div class="column highlight">
+    <div class="column">
+        <?php
+        $c = new CopyBlock('center');
+        $c->setHeaderTitle('Get ready for Black Friday 2022 with Attlaz ');
+        $c->addContentLine("As experts in ecommerce and integrations, we have been helping thousands of customers " . $this->translate('optimise') . " and scale their online stores.
+If you are worried about issues as we approach Black Friday, <a class='link inline' href='" . $this->getResolver()->getPageUrl('contact') . "'>get in touch</a> with our team.
+We can offer a free consultation and guide you through a range of solutions based on more than a decade of experience within the industry.");
+
+        echo $c->toHtml();
+        ?>
+    </div>
+</div>

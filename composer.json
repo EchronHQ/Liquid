@@ -1,0 +1,66 @@
+{
+  "name": "echron/liquid",
+  "description": "Liquid",
+  "authors": [
+    {
+      "name": "Stijn Duynslaeger",
+      "email": "stijn@echron.com"
+    }
+  ],
+  "license": "proprietary",
+  "support": {
+    "email": "hello@echron.com",
+    "docs": "https://echron.com/"
+  },
+  "require": {
+    "php": ">=8.2",
+    "php-di/php-di": "^7.0.1",
+    "attlaz/attlaz-monolog": "^2.0.0",
+    "attlaz/adapter-base": "^1.4.0",
+    "laminas/laminas-servicemanager": "^3.20.0",
+    "laminas/laminas-mail": "^2.16",
+    "laminas/laminas-http": "^2.15",
+    "doctrine/annotations": "^2.0.1",
+    "symfony/yaml": "^6.0",
+    "symfony/console": "^v6.1.6",
+    "symfony/cache": "^v6.2.10",
+    "gumlet/php-image-resize": "^2.0.3",
+    "echron/tools": "^1.6.2",
+    "ext-redis": "*",
+    "ext-curl": "*",
+    "ext-dom": "*",
+    "ext-libxml": "*",
+    "ext-simplexml": "*",
+    "ext-gd": "*"
+  },
+  "replace": {
+    "illuminate/view": "^8.20",
+    "hansschouten/phpagebuilder": "v0.21.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.0.4",
+    "squizlabs/php_codesniffer": "^3.6.2",
+    "phpmd/phpmd": "^2.12.0",
+    "phpstan/phpstan": "^1.10.16",
+    "thecodingmachine/phpstan-safe-rule": "^v1.2.0",
+    "friendsofphp/php-cs-fixer": "^v3.17.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Liquid\\": "app/code/Liquid"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "process-timeout": 600,
+    "preferred-install": "source"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "lint:fix": " ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
+    "phpstan": " ./vendor/bin/phpstan analyse --memory-limit=512M",
+    "phpstan:generate-baseline": " ./vendor/bin/phpstan analyse --generate-baseline --memory-limit=512M",
+    "phpmd": "./vendor/bin/phpmd . text phpmd.xml"
+  }
+}

@@ -16,7 +16,7 @@
     "php": ">=8.2",
     "php-di/php-di": "^7.0.1",
     "attlaz/attlaz-monolog": "^2.0.0",
-    "attlaz/adapter-base": "^1.4.0",
+    "attlaz/adapter-base": "^1.5.0",
     "laminas/laminas-servicemanager": "^3.20.0",
     "laminas/laminas-mail": "^2.16",
     "laminas/laminas-http": "^2.15",
@@ -50,6 +50,12 @@
       "Liquid\\": "app/code/Liquid"
     }
   },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://repo.attlaz.com/"
+    }
+  ],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {

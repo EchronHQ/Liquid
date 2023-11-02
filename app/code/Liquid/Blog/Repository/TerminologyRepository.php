@@ -6,8 +6,9 @@ namespace Liquid\Blog\Repository;
 
 use Liquid\Blog\Model\TermDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
+use Liquid\Core\Repository\ViewableEntityRepository;
 
-class TerminologyRepository
+class TerminologyRepository implements ViewableEntityRepository
 {
     /** @var TermDefinition[] */
     private array $terms;
@@ -209,6 +210,11 @@ class TerminologyRepository
      * @return TermDefinition[]
      */
     public function getAll(): array
+    {
+        return $this->terms;
+    }
+
+    public function getEntities(): array
     {
         return $this->terms;
     }

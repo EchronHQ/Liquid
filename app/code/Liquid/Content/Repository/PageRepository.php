@@ -10,9 +10,10 @@ use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
 use Liquid\Core\Repository\BaseRepository;
 use Liquid\Core\Repository\UrlRepository;
+use Liquid\Core\Repository\ViewableEntityRepository;
 use Liquid\Core\Router;
 
-class PageRepository extends BaseRepository
+class PageRepository extends BaseRepository implements ViewableEntityRepository
 {
     /** @var PageDefinition[] */
     private array $pages;
@@ -363,5 +364,10 @@ class PageRepository extends BaseRepository
     public function getAll(): array
     {
         return $this->pages;
+    }
+
+    public function getEntities(): array
+    {
+        return $this->getAll();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Liquid\Blog\Controller\Blog\Category;
 use Liquid\Blog\Controller\Blog\Overview as BlogOverview;
@@ -14,4 +15,8 @@ $routes = [
         'tag/:tagId' => Tag::class,
         'term/:termId' => BlogTermView::class,
     ],
+];
+$viewableEntityRepositories = [
+    \Liquid\Blog\Repository\BlogRepository::class,
+    \Liquid\Blog\Repository\TerminologyRepository::class,
 ];

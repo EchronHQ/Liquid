@@ -60,6 +60,9 @@ class Base
             if (\is_numeric($actionName)) {
                 throw new \Exception('Numeric action names are no longer supported');
             }
+            if (!is_a($controller, AbstractAction::class, true)) {
+                throw new \Exception('Controller must extend abstract action');
+            }
 
             $formattedActions[$actionName] = $controller;
         }

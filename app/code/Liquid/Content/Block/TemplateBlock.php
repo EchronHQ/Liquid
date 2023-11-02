@@ -16,7 +16,8 @@ class TemplateBlock extends Block
         BlockContext                    $context,
         private readonly TemplateHelper $templateHelper,
         string|null                     $template = null
-    ) {
+    )
+    {
         parent::__construct($context);
         if ($template !== null) {
             $this->template = $template;

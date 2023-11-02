@@ -143,7 +143,11 @@ class Post extends TemplateBlock
     public function getPostContent(): string
     {
         if ($this->postContent === null) {
-            $this->postContent = $this->getChildBlock('content')->toHtml();
+            $contentBlock = $this->getChildBlock('content');
+            if ($contentBlock !== null) {
+                $this->postContent = $contentBlock->toHtml();
+            }
+
         }
         return $this->postContent;
     }

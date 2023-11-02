@@ -206,7 +206,6 @@ class HtmlHeadBlock extends TemplateBlock
     final public function getLdData(): array
     {
 
-        $x = new LdGenerator($this->pageConfig, $this->getResolver());
-        return $x->getData();
+        return (new LdGenerator($this->pageConfig, $this->getResolver()))->getData();
     }
 }

@@ -16,6 +16,7 @@ use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\ApplicationMode;
 use Liquid\Framework\Component\ComponentRegistrar;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
+use Liquid\Framework\Output\Error;
 use Monolog\ErrorHandler;
 use Monolog\Handler\BrowserConsoleHandler;
 use Monolog\Handler\SlackWebhookHandler;
@@ -178,6 +179,11 @@ class Application
             $response->sendHeaders()->sendContent();
         } catch (\Throwable $ex) {
             $this->logger->error('Unable to run application', ['ex' => $ex]);
+
+
+            $errorHtml = Error::toHtml($ex);
+
+            echo str_replace(ROOT, '', $errorHtml);
 
             throw $ex;
         } finally {

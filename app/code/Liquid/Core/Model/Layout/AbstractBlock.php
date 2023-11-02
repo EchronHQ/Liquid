@@ -104,6 +104,7 @@ abstract class AbstractBlock implements BlockInterface
             0,
             (int)strpos($className, '\\' . 'Block' . '\\')
         );
-        return str_replace(['Attlaz\\', '\\'], ['', '_'], $namespace);
+
+        return str_replace(['\\'], ['_'], $namespace);
     }
 }

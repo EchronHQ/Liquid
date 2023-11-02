@@ -9,10 +9,6 @@ try {
     $app = new Application();
     $app->run();
 } catch (Throwable $ex) {
-    // TODO: only show this in developer mode
-    echo '<div>' . $ex->getMessage() . '</div>';
-    echo '<pre>' . $ex->getTraceAsString() . '</pre>';
-
     http_response_code(500);
     exit(1);
 }

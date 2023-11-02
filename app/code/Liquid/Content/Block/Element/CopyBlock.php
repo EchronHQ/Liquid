@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element;
 
+use DI\Attribute\Inject;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\FrontendFileUrl;
 use Liquid\Core\Model\Layout\AbstractBlock;
-use DI\Attribute\Inject;
 use Psr\Log\LoggerInterface;
 
 class CopyBlock extends AbstractBlock
@@ -71,8 +71,6 @@ class CopyBlock extends AbstractBlock
             } else {
                 if ($this->logger !== null) {
                     $this->logger->error('Header icon not found', ['icon' => $icon, 'style' => $style]);
-                } else {
-                    var_dump($this->logger);
                 }
                 //  $icon = new FrontendFileUrl($icon);
                 return;

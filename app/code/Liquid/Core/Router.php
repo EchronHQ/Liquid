@@ -6,21 +6,12 @@ namespace Liquid\Core;
 
 use DI\Container;
 use Liquid\Admin\Controller\Admin\Editor\View as AdminEditorView;
-use Liquid\Blog\Controller\Blog\Category;
-use Liquid\Blog\Controller\Blog\Overview as BlogOverview;
-use Liquid\Blog\Controller\Blog\Tag;
-use Liquid\Blog\Controller\Post\View as BlogPostView;
-use Liquid\Blog\Controller\Term\View as BlogTermView;
 use Liquid\Blog\Repository\BlogRepository;
-use Liquid\Content\Controller\Contact\Submit as SubmitContact;
-use Liquid\Content\Controller\Demo\Submit as SubmitDemo;
 use Liquid\Content\Controller\Page\NotFound;
-use Liquid\Content\Controller\Page\View as PageViewController;
 use Liquid\Content\Model\Resource\UrlRewrite;
 use Liquid\Content\Model\Resource\UrlRewriteType;
 use Liquid\Content\Repository\LocaleRepository;
 use Liquid\Content\Repository\PageRepository;
-use Liquid\Core\Controller\PageNotFoundController;
 use Liquid\Core\Helper\AccessHelper;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
@@ -34,6 +25,8 @@ use Liquid\Core\Model\Result\Result;
 use Liquid\Core\Repository\UrlRepository;
 use Liquid\Core\Router\Admin;
 use Liquid\Core\Router\Base;
+use Liquid\Framework\Component\ComponentRegistrarInterface;
+use Liquid\Framework\Component\ComponentType;
 use Psr\Log\LoggerInterface;
 
 //use Attlaz\Connector\Controller\Category\View as ConnectorCategoryView;
@@ -56,33 +49,54 @@ class Router
     private bool $languageDetectionHasRan = false;
 
     public function __construct(
-        private readonly Resolver         $resolver,
-        private readonly AppConfig        $config,
-        private readonly Container        $diContainer,
-        private readonly LocaleRepository $localeRepository,
-        private readonly Profiler         $profiler,
-        private readonly LoggerInterface  $logger
+        private readonly Resolver                    $resolver,
+        private readonly AppConfig                   $config,
+        private readonly Container                   $diContainer,
+        private readonly LocaleRepository            $localeRepository,
+        private readonly Profiler                    $profiler,
+        private readonly ComponentRegistrarInterface $componentRegistrar,
+        private readonly LoggerInterface             $logger
     )
     {
 
-
         $frontendRoute = new Base($this->diContainer);
-        $frontendRoute->registerModule('content', [
-            'page/view' => PageViewController::class,
-        ]);
-        $frontendRoute->registerModule('blog', [
-            '' => BlogOverview::class,
-            ':postId' => BlogPostView::class,
-            'category/:categoryId' => Category::class,
-            'tag/:tagId' => Tag::class,
-            'term/:termId' => BlogTermView::class,
-        ]);
-        $frontendRoute->registerModule('demo', [
-            'submit' => SubmitDemo::class,
-        ]);
-        $frontendRoute->registerModule('contact', [
-            'submit' => SubmitContact::class,
-        ]);
+
+
+        $modules = $this->componentRegistrar->getPaths(ComponentType::Module);
+        foreach ($modules as $modulePath) {
+            $fullPath = $modulePath . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'routes.php';
+            if (file_exists($fullPath)) {
+
+                $routes = null;
+
+                include $fullPath;
+
+                if (is_array($routes)) {
+                    foreach ($routes as $route => $paths) {
+                        $frontendRoute->registerModule($route, $paths);
+                    }
+                }
+            }
+
+        }
+
+//
+//        $frontendRoute->registerModule('content', [
+//            'page/view' => PageViewController::class,
+//        ]);
+//        $frontendRoute->registerModule('blog', [
+//            '' => BlogOverview::class,
+//            ':postId' => BlogPostView::class,
+//            'category/:categoryId' => Category::class,
+//            'tag/:tagId' => Tag::class,
+//            'term/:termId' => BlogTermView::class,
+//        ]);
+//        $frontendRoute->registerModule('demo', [
+//            'submit' => SubmitDemo::class,
+//        ]);
+//        $frontendRoute->registerModule('contact', [
+//            'submit' => SubmitContact::class,
+//        ]);
         /**
          * Deprecated, redirect "connector" to "platforms" in url
          */
@@ -101,9 +115,9 @@ class Router
 //        $frontendRoute->registerModule('connect', [
 //            ':platformIdentifiers' => ConnectView::class,
 //        ]);
-        $frontendRoute->registerModule('pagenotfound', [
-            '' => PageNotFoundController::class,
-        ]);
+//        $frontendRoute->registerModule('pagenotfound', [
+//            '' => PageNotFoundController::class,
+//        ]);
         $this->routes['frontend'] = [$frontendRoute];
 
         /**

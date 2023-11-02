@@ -43,10 +43,12 @@ class GenerateSitemapHelper
 
                 foreach ($entry->getAlternatives() as $alternativeHreflang => $alternativeHref) {
                     $link = $url->addChild('xhtml:xhtml:link');
+                    if ($link !== null) {
+                        $link->addAttribute('rel', 'alternate');
+                        $link->addAttribute('hreflang', $alternativeHreflang);
+                        $link->addAttribute('href', $alternativeHref);
+                    }
 
-                    $link->addAttribute('rel', 'alternate');
-                    $link->addAttribute('hreflang', $alternativeHreflang);
-                    $link->addAttribute('href', $alternativeHref);
 
                 }
                 $url->addChild('priority', $entry->priority->value);

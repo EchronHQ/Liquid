@@ -118,10 +118,10 @@ module.exports = (env, argv) => {
         ],
         resolve: {
             alias: {
-                './components/form': path.resolve(__dirname, 'app/frontend/js/components/form.ts'),
-                './components/site': path.resolve(__dirname, 'app/frontend/js/components/site.ts'),
-                './site': path.resolve(__dirname, 'app/frontend/js/components/site.ts'),
-                './components/faq': path.resolve(__dirname, 'app/frontend/js/components/faq.ts'),
+                './components/form': path.resolve(__dirname, 'vendor/echron/liquid/app/design/frontend/Liquid/Default/web/js/components/form.ts'),
+                './components/site': path.resolve(__dirname, 'vendor/echron/liquid/app/design/frontend/Liquid/Default/web/js/components/site.ts'),
+                './site': path.resolve(__dirname, 'vendor/echron/liquid/app/design/frontend/Liquid/Default/web/js/components/site.ts'),
+                './components/faq': path.resolve(__dirname, 'vendor/echron/liquid/app/design/frontend/Liquid/Default/web/js/components/faq.ts'),
                 jquery: "jquery/dist/jquery.js",
                 '@sentry': false,
             },

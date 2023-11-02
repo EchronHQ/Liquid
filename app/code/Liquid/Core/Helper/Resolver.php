@@ -151,9 +151,26 @@ class Resolver
             // TODO: show placeholder
             return null;
         }
-        return $this->configuration->getValueString('site_url') . '/static/v011120232224/' . $file;
+        return $this->configuration->getValueString('site_url') . '/static/' . $this->getStaticDeployedVersion() . '/' . $file;
     }
 
+    private function getStaticDeployedVersion(): string
+    {
+        if ($this->staticContentDeployedVersion === null) {
+            $versionFile = ROOT . DIRECTORY_SEPARATOR . 'pub/static/deployed_version.txt';
+            if (!file_exists($versionFile)) {
+                throw new \Exception('Version file does not exists');
+            }
+            $version = \Safe\file_get_contents($versionFile);
+            $version = trim($version);
+            if ($version !== '') {
+                $this->staticContentDeployedVersion = 'v' . $version;
+            }
+        }
+        return $this->staticContentDeployedVersion;
+    }
+
+    private string|null $staticContentDeployedVersion = null;
     public const FILE_ID_SEPARATOR = '::';
 
     public static function extractModule(string $fileId): array
@@ -293,8 +310,7 @@ class Resolver
 
     public function getFrontendFilePath(string $file): string
     {
-        // TODO: read deploy version from file
-        return \ROOT . 'pub/static/v011120232224/' . $file;
+        return \ROOT . 'pub/static/' . $this->getStaticDeployedVersion() . '/' . $file;
     }
 
 

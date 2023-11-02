@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Helper;
 
+use DI\Container;
 use Liquid\Content\Model\MarkupEngine\BlockTag;
 use Liquid\Content\Model\MarkupEngine\CustomTag;
 use Liquid\Content\Model\MarkupEngine\CustomTagConcrete;
-use DI\Container;
 use Psr\Log\LoggerInterface;
 
 class MarkupEngine
@@ -24,7 +24,8 @@ class MarkupEngine
     public function __construct(
         private readonly Container       $container,
         private readonly LoggerInterface $logger
-    ) {
+    )
+    {
     }
 
     public function registerTag(string $tag, string $className, array $arguments = []): void
@@ -141,10 +142,7 @@ class MarkupEngine
         //
         //            //   echo json_encode($debug, JSON_PRETTY_PRINT);
         //        }
-        $renderedOutput = $this->renderTags($tags);
-
-
-        return $renderedOutput;
+        return $this->renderTags($tags);
     }
 
     /** @var  CustomTag[] */

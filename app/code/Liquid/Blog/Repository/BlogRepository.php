@@ -14,8 +14,9 @@ use Liquid\Content\Helper\TemplateHelper;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
 use Liquid\Core\Repository\BaseRepository;
+use Liquid\Core\Repository\ViewableEntityRepository;
 
-class BlogRepository extends BaseRepository
+class BlogRepository extends BaseRepository implements ViewableEntityRepository
 {
     /** @var PostDefinition[] */
     private array $posts = [];
@@ -35,13 +36,13 @@ class BlogRepository extends BaseRepository
 
         $this->pages = [
             PageDefinition::generate('blog', [
-                'url_key'         => 'blog',
+                'url_key' => 'blog',
                 //            'template'      => 'Liquid_Blog::blog.phtml',
-                'doc_css_class'   => 'theme-aqua',
-                'seo_title'       => 'Attlaz blog with latest news and best practices',
+                'doc_css_class' => 'theme-aqua',
+                'seo_title' => 'Attlaz blog with latest news and best practices',
                 'seo_description' => 'Discover the latest trends in data connectivity, automation and other Attlaz insights.',
-                'seo_keywords'    => '',
-                'priority'        => PageSitemapPriority::BASE
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::BASE,
             ]),
             //            PageDefinition::generate('resources', [
             //                'url_key'       => 'resources',
@@ -55,69 +56,69 @@ class BlogRepository extends BaseRepository
         ];
         $this->posts = [
             PostDefinition::generate('black-friday-2022-get-your-business-ready', [
-                'url_key'         => 'black-friday-2022-get-your-business-ready',
-                'template'        => 'Liquid_Blog::post/page/black-friday-2022-get-your-business-ready.phtml',
-                'seo_title'       => "Are you ready for this year's Black Friday?",
+                'url_key' => 'black-friday-2022-get-your-business-ready',
+                'template' => 'Liquid_Blog::post/page/black-friday-2022-get-your-business-ready.phtml',
+                'seo_title' => "Are you ready for this year's Black Friday?",
                 'seo_description' => "For ecommerce platforms, Black Friday is the day of the year with the most traffic and the run-up to Christmas sales, make sur eyou are well-prepared.",
-                'intro'           => "For ecommerce platforms, Black Friday is the day of the year with the most traffic and the run-up to Christmas sales. Being well-prepared is essential for your business. Next to profits, it is also about the reputation of your business. A well-thought-out strategy can differentiate your success from failure.",
-                'seo_keywords'    => '',
-                'published'       => '2022-11-14 15:16:17',
-                'modified'        => '2022-11-14 15:16:17',
-                'image'           => 'image/blog/black-friday-2022.jpg',
-                'category'        => 'insights',
-                'tags'            => ['attlaz-news']
+                'intro' => "For ecommerce platforms, Black Friday is the day of the year with the most traffic and the run-up to Christmas sales. Being well-prepared is essential for your business. Next to profits, it is also about the reputation of your business. A well-thought-out strategy can differentiate your success from failure.",
+                'seo_keywords' => '',
+                'published' => '2022-11-14 15:16:17',
+                'modified' => '2022-11-14 15:16:17',
+                'image' => 'image/blog/black-friday-2022.jpg',
+                'category' => 'insights',
+                'tags' => ['attlaz-news'],
             ]),
             PostDefinition::generate('how-digitization-can-help-your-business', [
-                'url_key'         => 'how-digitization-can-help-your-business',
-                'template'        => 'Liquid_Blog::post/page/why-data-connectivity.phtml',
-                'seo_title'       => 'How digitization can help your business',
+                'url_key' => 'how-digitization-can-help-your-business',
+                'template' => 'Liquid_Blog::post/page/why-data-connectivity.phtml',
+                'seo_title' => 'How digitization can help your business',
                 'seo_description' => 'How digitization can help your business.',
-                'intro'           => "In today's world, data is the crux of major business decisions used by " . $localeHelper->translate('organisations') . " all over the world. As such, it is imperative that the organizations have access to the right data and be able to " . $localeHelper->translate('analyse') . " and make business decisions proactively.",
-                'seo_keywords'    => '',
-                'published'       => '2021-12-01 15:16:17',
-                'modified'        => '2021-12-01 15:16:17',
-                'image'           => 'image/blog/how-digitization-can-help-your-business.jpg',
-                'category'        => 'insights',
-                'tags'            => ['attlaz-news']
+                'intro' => "In today's world, data is the crux of major business decisions used by " . $localeHelper->translate('organisations') . " all over the world. As such, it is imperative that the organizations have access to the right data and be able to " . $localeHelper->translate('analyse') . " and make business decisions proactively.",
+                'seo_keywords' => '',
+                'published' => '2021-12-01 15:16:17',
+                'modified' => '2021-12-01 15:16:17',
+                'image' => 'image/blog/how-digitization-can-help-your-business.jpg',
+                'category' => 'insights',
+                'tags' => ['attlaz-news'],
             ]),
             PostDefinition::generate('why-data-connectivity', [
-                'url_key'         => 'why-data-connectivity',
-                'template'        => 'Liquid_Blog::post/page/why-data-connectivity.phtml',
-                'seo_title'       => 'Why data connectivity matters',
+                'url_key' => 'why-data-connectivity',
+                'template' => 'Liquid_Blog::post/page/why-data-connectivity.phtml',
+                'seo_title' => 'Why data connectivity matters',
                 'seo_description' => 'Data connectivity allows businesses to drive relevant, personalised interactions with audiences everywhere.',
-                'intro'           => "In today's world, data is the crux of major business decisions used by " . $localeHelper->translate('organisations') . " all over the world. As such, it is imperative that the organizations have access to the right data and be able to " . $localeHelper->translate('analyse') . " and make business decisions proactively.",
-                'seo_keywords'    => '',
-                'published'       => '2021-12-01 15:16:17',
-                'modified'        => '2021-12-01 15:16:17',
-                'image'           => 'image/blog/why-data-connectivity.jpg',
-                'category'        => 'insights',
-                'tags'            => ['attlaz-news']
+                'intro' => "In today's world, data is the crux of major business decisions used by " . $localeHelper->translate('organisations') . " all over the world. As such, it is imperative that the organizations have access to the right data and be able to " . $localeHelper->translate('analyse') . " and make business decisions proactively.",
+                'seo_keywords' => '',
+                'published' => '2021-12-01 15:16:17',
+                'modified' => '2021-12-01 15:16:17',
+                'image' => 'image/blog/why-data-connectivity.jpg',
+                'category' => 'insights',
+                'tags' => ['attlaz-news'],
             ]),
             PostDefinition::generate('march2022-new-storage-engine', [
-                'url_key'         => 'march2022-new-storage-engine',
-                'template'        => 'Liquid_Blog::post/page/march2022.phtml',
-                'seo_title'       => 'New storage engine',
+                'url_key' => 'march2022-new-storage-engine',
+                'template' => 'Liquid_Blog::post/page/march2022.phtml',
+                'seo_title' => 'New storage engine',
                 'seo_description' => 'New storage engine + deprecation and end-of-life support policies',
-                'intro'           => 'In our March update we talk about the new storage engine, the deprecation and end-of-life support policies.',
-                'seo_keywords'    => '',
-                'published'       => '2022-03-30 19:01:13',
-                'modified'        => '2022-03-30 19:01:13',
-                'image'           => 'image/blog/march2022-new-storage-engine.jpg',
-                'category'        => 'product',
-                'tags'            => ['attlaz-news']
+                'intro' => 'In our March update we talk about the new storage engine, the deprecation and end-of-life support policies.',
+                'seo_keywords' => '',
+                'published' => '2022-03-30 19:01:13',
+                'modified' => '2022-03-30 19:01:13',
+                'image' => 'image/blog/march2022-new-storage-engine.jpg',
+                'category' => 'product',
+                'tags' => ['attlaz-news'],
             ]),
             PostDefinition::generate('improved-attlaz-status-page', [
-                'url_key'         => 'improved-attlaz-status-page',
-                'template'        => 'Liquid_Blog::post/page/improved-status-page.phtml',
-                'seo_title'       => 'Introducing the improved Attlaz status page',
+                'url_key' => 'improved-attlaz-status-page',
+                'template' => 'Liquid_Blog::post/page/improved-status-page.phtml',
+                'seo_title' => 'Introducing the improved Attlaz status page',
                 'seo_description' => "Introducing the improved Attlaz status page",
-                'intro'           => 'All Systems Operational!” is the kind of thing everyone loves to see and hear. Unfortunately failure is always lurking around the corner. During our outages in the past, we lacked a public facing way to inform our users and customers about potential issues on the platform, both for open source and private projects.',
-                'seo_keywords'    => '',
-                'published'       => '2022-04-06 09:37:18',
-                'modified'        => '2022-04-06 09:37:18',
-                'image'           => 'image/blog/improved-attlaz-status-page.jpg',
-                'category'        => 'product',
-                'tags'            => ['attlaz-news']
+                'intro' => 'All Systems Operational!” is the kind of thing everyone loves to see and hear. Unfortunately failure is always lurking around the corner. During our outages in the past, we lacked a public facing way to inform our users and customers about potential issues on the platform, both for open source and private projects.',
+                'seo_keywords' => '',
+                'published' => '2022-04-06 09:37:18',
+                'modified' => '2022-04-06 09:37:18',
+                'image' => 'image/blog/improved-attlaz-status-page.jpg',
+                'category' => 'product',
+                'tags' => ['attlaz-news'],
             ]),
             //            PostDefinition::generate('getting-smart', [
             //                'url_key'      => 'getting-smart',
@@ -170,28 +171,28 @@ class BlogRepository extends BaseRepository
         ];
         $this->categories = [
             CategoryDefinition::generate('insights', [
-                'url_key'         => 'insights',
-                'template'        => 'Liquid_Blog::category/view.phtml',
-                'seo_title'       => 'Insights',
-                'title_long'      => 'Attlaz curated insights, interests and technical opinions. View the latest today',
+                'url_key' => 'insights',
+                'template' => 'Liquid_Blog::category/view.phtml',
+                'seo_title' => 'Insights',
+                'title_long' => 'Attlaz curated insights, interests and technical opinions. View the latest today',
                 'seo_description' => 'Stay up-to-date with the most important new developments in software, integration, and automation.',
-                'seo_keywords'    => '',
+                'seo_keywords' => '',
             ]),
             CategoryDefinition::generate('product', [
-                'url_key'         => 'product',
-                'template'        => 'Liquid_Blog::category/view.phtml',
-                'seo_title'       => 'Product',
-                'title_long'      => 'What’s new with the Attlaz Platform',
+                'url_key' => 'product',
+                'template' => 'Liquid_Blog::category/view.phtml',
+                'seo_title' => 'Product',
+                'title_long' => 'What’s new with the Attlaz Platform',
                 'seo_description' => 'Here are the latest updates for the Attlaz Platform - learn how to become a better integration and automated workflow builder today.',
-                'seo_keywords'    => '',
+                'seo_keywords' => '',
             ]),
             CategoryDefinition::generate('guides', [
-                'url_key'         => 'guides',
-                'template'        => 'Liquid_Blog::category/view.phtml',
-                'seo_title'       => 'Guides',
-                'title_long'      => 'Learn how to integrate & automate on the Attlaz Platform',
+                'url_key' => 'guides',
+                'template' => 'Liquid_Blog::category/view.phtml',
+                'seo_title' => 'Guides',
+                'title_long' => 'Learn how to integrate & automate on the Attlaz Platform',
                 'seo_description' => 'Use the Attlaz Platform to connect and automate your tech stack.',
-                'seo_keywords'    => '',
+                'seo_keywords' => '',
             ]),
             //            CategoryDefinition::generate('events', [
             //                'url_key'      => 'how-to',
@@ -205,12 +206,12 @@ class BlogRepository extends BaseRepository
 
         $this->tags = [
             TagDefinition::generate('attlaz-news', [
-                'url_key'         => 'attlaz-news',
-                'template'        => 'Liquid_Blog::category/view.phtml',
-                'seo_title'       => 'Attlaz News',
+                'url_key' => 'attlaz-news',
+                'template' => 'Liquid_Blog::category/view.phtml',
+                'seo_title' => 'Attlaz News',
                 'seo_description' => 'Articles & Resources tagged Attlaz News',
-                'seo_keywords'    => '',
-                'title_long'      => 'Articles & Resources tagged Attlaz News',
+                'seo_keywords' => '',
+                'title_long' => 'Articles & Resources tagged Attlaz News',
             ]),
         ];
 
@@ -373,5 +374,10 @@ class BlogRepository extends BaseRepository
         $templateContent = $this->templateHelper->getTemplateFileContent($post->template);
         //        $templateContent = HtmlHelper::removeHtml($templateContent);
         return ReadingTime::estimateReadingTime($templateContent);
+    }
+
+    public function getEntities(): array
+    {
+        return [];
     }
 }

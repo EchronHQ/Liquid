@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use Liquid\Content\Controller\Contact\Submit as SubmitContact;
 use Liquid\Content\Controller\Demo\Submit as SubmitDemo;
@@ -19,4 +20,7 @@ $routes = [
     'pagenotfound' => [
         '' => PageNotFoundController::class,
     ],
+];
+$viewableEntityRepositories = [
+    \Liquid\Content\Repository\PageRepository::class,
 ];

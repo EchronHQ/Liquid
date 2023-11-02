@@ -6,7 +6,6 @@ namespace Liquid\Core;
 
 use DI\Container;
 use Liquid\Admin\Controller\Admin\Editor\View as AdminEditorView;
-use Liquid\Blog\Repository\BlogRepository;
 use Liquid\Content\Controller\Page\NotFound;
 use Liquid\Content\Model\Resource\UrlRewrite;
 use Liquid\Content\Model\Resource\UrlRewriteType;
@@ -23,6 +22,7 @@ use Liquid\Core\Model\Result\NoAccess;
 use Liquid\Core\Model\Result\Redirect;
 use Liquid\Core\Model\Result\Result;
 use Liquid\Core\Repository\UrlRepository;
+use Liquid\Core\Repository\ViewableEntityRepository;
 use Liquid\Core\Router\Admin;
 use Liquid\Core\Router\Base;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
@@ -68,12 +68,18 @@ class Router
             if (file_exists($fullPath)) {
 
                 $routes = null;
+                $viewableEntityRepositories = null;
 
                 include $fullPath;
 
                 if (is_array($routes)) {
                     foreach ($routes as $route => $paths) {
                         $frontendRoute->registerModule($route, $paths);
+                    }
+                }
+                if (is_array($viewableEntityRepositories)) {
+                    foreach ($viewableEntityRepositories as $viewableEntityRepository) {
+                        $this->viewableEntityRepositories[] = $viewableEntityRepository;
                     }
                 }
             }
@@ -152,6 +158,11 @@ class Router
 
     }
 
+    /**
+     * @var ViewableEntityRepository[]
+     */
+    private array $viewableEntityRepositories = [];
+
     private function initializeUrlRewrites(): void
     {
         /** @var UrlRepository $urlRepository */
@@ -160,6 +171,8 @@ class Router
         $pageRepository = $this->diContainer->get(PageRepository::class);
 
         //TODO: this should not happen here
+
+
         $pages = $pageRepository->getAll();
         foreach ($pages as $page) {
 
@@ -167,36 +180,19 @@ class Router
             $rewrite = new UrlRewrite('/' . $page->getUrlPath(), '/content/page/view/page-id/' . $escapedId, UrlRewriteType::INTERNAL);
             $urlRepository->addRewrite($rewrite);
 
-            $this->pageRoutes[$page->id] = $page->getUrlPath();
+            //$this->pageRoutes[$page->id] = $page->getUrlPath();
         }
 
-        /**
-         * Blog
-         */
-        /** @var BlogRepository $blogRepository */
-        $blogRepository = $this->diContainer->get(BlogRepository::class);
 
-        $pages = $blogRepository->getPages();
-        foreach ($pages as $page) {
-            $this->pageRoutes[$page->id] = $page->getUrlPath();
+        foreach ($this->viewableEntityRepositories as $viewableEntityRepository) {
+            /** @var ViewableEntityRepository $respository */
+            $respository = $this->diContainer->get($viewableEntityRepository);
+            $pages = $respository->getEntities();
+            foreach ($pages as $page) {
+                $this->pageRoutes[$page->id] = $page->getUrlPath();
+            }
         }
 
-        /**
-         * Connections
-         */
-//        /** @var PlatformRepository $platformRepository */
-//        $platformRepository = $this->diContainer->get(PlatformRepository::class);
-//
-//        $pages = $platformRepository->getPages();
-//
-//        foreach ($pages as $page) {
-//            $this->pageRoutes[$page->id] = $page->getUrlPath();
-//        }
-//
-//        $connectors = $platformRepository->getConnectors();
-//        foreach ($connectors as $connector) {
-//            $this->pageRoutes[$connector->id] = $connector->getUrlPath();
-//        }
 
     }
 

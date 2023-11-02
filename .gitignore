@@ -4,3 +4,7 @@ vendor
 *.iml
 auth.json
 .phpunit*
+pub
+!pub/static/.htaccess
+!pub/static/index.php
+.env

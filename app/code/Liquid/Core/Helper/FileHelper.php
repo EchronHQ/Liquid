@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
+use Liquid\Core\Model\AppConfig;
 use Psr\Log\LoggerInterface;
 
 readonly class FileHelper
 {
-    public function __construct(private CacheHelper $cache, private LoggerInterface $logger)
+    private bool $enableCache;
+
+    public function __construct(
+        private CacheHelper     $cache,
+        private AppConfig       $configuration,
+        private LoggerInterface $logger
+    )
     {
+        $this->enableCache = $this->configuration->getValueBoolean('cache.types.file');
 
     }
 
     public function fileExist(string $path, bool $allowCache = true): bool
     {
         $cacheKey = 'fileexist-' . $path;
-        if ($allowCache && $this->cache->has($cacheKey)) {
+        if ($allowCache && $this->enableCache && $this->cache->has($cacheKey)) {
             $x = $this->cache->get($cacheKey);
 
             if (is_bool($x)) {
@@ -27,7 +35,7 @@ readonly class FileHelper
         $value = !empty($path) && \file_exists($path) && \is_file($path);
 
         // Store for 5 days
-        if ($allowCache) {
+        if ($allowCache && $this->enableCache) {
             $saved = $this->cache->set($cacheKey, $value, new \DateInterval('P5D'));
         }
         return $value;
@@ -46,7 +54,7 @@ readonly class FileHelper
     public function getImageDimensions(string $path, bool $allowCache = true): array|null
     {
         $cacheKey = 'filedimensions-' . $path;
-        if ($allowCache && $this->cache->has($cacheKey)) {
+        if ($allowCache && $this->enableCache && $this->cache->has($cacheKey)) {
             $value = $this->cache->get($cacheKey);
             if (is_array($value)) {
                 return $value;
@@ -61,7 +69,7 @@ readonly class FileHelper
         [$width, $height, $type, $attr] = $size;
         $value = ['width' => $width, 'height' => $height];
         $this->logger->debug('[FileHelper] Get file dimensions ' . $path);
-        if ($allowCache) {
+        if ($allowCache && $this->enableCache) {
             $saved = $this->cache->set($cacheKey, $value, new \DateInterval('P5D'));
         }
         return $value;

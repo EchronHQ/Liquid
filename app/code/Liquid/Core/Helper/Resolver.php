@@ -196,17 +196,16 @@ class Resolver
         // Test theme
         $themes = $this->componentRegistrar->getPaths(ComponentType::Theme);
 
-        $inDevMode = true;
         foreach ($themes as $themePath) {
 
 
             $fileInTheme = $themePath . '/web/' . $filePath;
-            if ($this->fileHelper->fileExist($fileInTheme, !$inDevMode)) {
+            if ($this->fileHelper->fileExist($fileInTheme)) {
                 return $this->getX($file, $fileInTheme, $size, $forseResizing);
             }
             if ($module !== null) {
                 $fileInTheme = $themePath . '/' . $module . '/web/' . $filePath;
-                if ($this->fileHelper->fileExist($fileInTheme, !$inDevMode)) {
+                if ($this->fileHelper->fileExist($fileInTheme)) {
                     return $this->getX($file, $fileInTheme, $size, $forseResizing);
                 }
             }
@@ -248,13 +247,13 @@ class Resolver
 
 
             $resizedLocalFilePath = $cacheLocation . $resizedLocalFileName;
-            $hasResized = $this->fileHelper->fileExist($resizedLocalFilePath, false);
+            $hasResized = $this->fileHelper->fileExist($resizedLocalFilePath);
 
 
             $resizedImageInfo = null;
 
             if ($hasResized) {
-                $resizedImageInfo = $this->fileHelper->getImageDimensions($resizedLocalFilePath, true);
+                $resizedImageInfo = $this->fileHelper->getImageDimensions($resizedLocalFilePath);
             }
 
 

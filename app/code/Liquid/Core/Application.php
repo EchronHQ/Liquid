@@ -96,15 +96,23 @@ class Application
 
     private function buildCachePool(): CacheItemPoolInterface
     {
-        $cacheBackend = $this->config->getValue('cache.backend', '');
-        if ($cacheBackend === 'redis') {
-            $client = new \Redis();
-            $client->connect('redis');
+        $cacheBackend = $this->config->getValue('cache.storage.backend', 'cache');
+        switch ($cacheBackend) {
+            case 'redis':
+                $host = $this->config->getValueString('cache.storage.host');
 
-            return new RedisAdapter($client);
+                $client = new \Redis();
+                $client->connect($host);
+
+                return new RedisAdapter($client);
+                break;
+            case 'array':
+                return new ArrayAdapter();
+                break;
         }
+        throw new \Error('Invalid cache');
 
-        return new ArrayAdapter();
+
     }
 
     private function buildSQL(): SqlRemoteService

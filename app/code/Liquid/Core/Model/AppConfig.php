@@ -68,6 +68,15 @@ class AppConfig
         return $x . '';
     }
 
+    public function getValueBoolean(string $key, bool|null $default = null): bool
+    {
+        $x = $this->getValue($key, '');
+        if ($x === '') {
+            return $default;
+        }
+        return (bool)$x;
+    }
+
 
     public function getMode(): ApplicationMode
     {
@@ -83,6 +92,7 @@ class AppConfig
 
     private function automaticallyDetectSiteUrl(): string
     {
+        // TODO: this is not good as
         if ($this->isCLI()) {
             $path = getcwd();
             if ($path === '/var/www/html') {

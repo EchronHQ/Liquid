@@ -88,7 +88,6 @@ readonly class TemplateHelper
 
     private function isValidTemplate(string $path): bool
     {
-        $inDevMode = true;
-        return $this->fileHelper->fileExist($path, !$inDevMode);
+        return $this->fileHelper->fileExist($path);
     }
 }

@@ -15,7 +15,8 @@ class ShowCache extends Command
 {
     public function __construct(
         private readonly CacheHelper $cache
-    ) {
+    )
+    {
         parent::__construct('cache:show');
     }
 
@@ -50,6 +51,9 @@ class ShowCache extends Command
     {
         $value = $item->get();
         // TODO: get datatype
+        if (is_array($value)) {
+            $value = json_encode($value);
+        }
         $value = (string)$value;
         if (\strlen($value) > 100) {
             $value = \substr($value, 0, 100) . '...';

@@ -378,6 +378,6 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
 
     public function getEntities(): array
     {
-        return [];
+        return array_merge($this->pages, $this->posts, $this->categories);
     }
 }

@@ -1,0 +1,213 @@
+/**
+Transition
+@include transition(border-color 0.3s, color 0.3s);
+ */
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+@mixin transform($args...) {
+  -webkit-transform: $args;
+  -ms-transform: $args;
+  transform: $args;
+}
+
+@mixin animation($args...) {
+  -webkit-animation: $args; /* Safari 4+ */
+  -moz-animation: $args; /* Fx 5+ */
+  -o-animation: $args; /* Opera 12+ */
+  animation: $args; /* IE 10+, Fx 29+ */
+}
+
+// Flexbox display
+@mixin display-flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+// Inline flex display
+//noinspection CssInvalidPropertyValue
+@mixin inline-flex {
+  display: -webkit-inline-box;
+  display: -moz-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+// Flex Flow Direction
+// - applies to: flex containers
+// row (default) | row-reverse | column | column-reverse
+@mixin flex-direction($direction: row) {
+  @if $direction == row-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: horizontal;
+    -moz-box-direction: reverse;
+    -moz-box-orient: horizontal;
+  } @else if $direction == column {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: normal;
+    -moz-box-orient: vertical;
+  } @else if $direction == column-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-box-orient: vertical;
+    -moz-box-direction: reverse;
+    -moz-box-orient: vertical;
+  } @else {
+    -webkit-box-direction: normal;
+    -webkit-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -moz-box-orient: horizontal;
+  }
+  -webkit-flex-direction: $direction;
+  -ms-flex-direction: $direction;
+  flex-direction: $direction;
+}
+
+@mixin display-inline-flex() {
+  display: inline-flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+@mixin flex-grow($x:1) {
+  -webkit-box-flex: $x;
+  -ms-flex-positive: $x;
+  flex-grow: $x;
+}
+
+// Axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | space-between | space-around
+@mixin justify-content($value: flex-start) {
+  @if $value == flex-start {
+    -webkit-box-pack: start;
+    -moz-box-pack: start;
+    -ms-flex-pack: start;
+  } @else if $value == flex-end {
+    -webkit-box-pack: end;
+    -moz-box-pack: end;
+    -ms-flex-pack: end;
+  } @else if $value == space-between {
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
+  } @else if $value == space-around {
+    -ms-flex-pack: distribute;
+  } @else {
+    -webkit-box-pack: $value;
+    -moz-box-pack: $value;
+    -ms-flex-pack: $value;
+  }
+  -webkit-justify-content: $value;
+  justify-content: $value;
+}
+
+// Cross-axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | baseline | stretch
+@mixin align-items($value: stretch) {
+  @if $value == flex-start {
+    -webkit-box-align: start;
+    -moz-box-align: start;
+    -ms-flex-align: start;
+  } @else if $value == flex-end {
+    -webkit-box-align: end;
+    -moz-box-align: end;
+    -ms-flex-align: end;
+  } @else {
+    -webkit-box-align: $value;
+    -moz-box-align: $value;
+    -ms-flex-align: $value;
+  }
+  -webkit-align-items: $value;
+  align-items: $value;
+}
+
+@mixin debug($color:'purple',$label: '') {
+  $debug: false;
+  @if $debug {
+
+
+    border: 1px dashed $color;
+    position: relative;
+    &::before {
+      content: $label;
+      background-color: rgba(0, 0, 0, 0.83);
+      border: 2px solid $color;
+      position: absolute;
+      color: white;
+      padding: 5px;
+      font-size: 10px;
+      z-index: 1;
+      opacity: 0.5;
+    }
+    &:hover &::before {
+      opacity: 1;
+    }
+  }
+}
+
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
+
+@mixin border-radius($x) {
+  -webkit-border-radius: $x;
+  -moz-border-radius: $x;
+  border-radius: $x;
+}
+
+@mixin skew($x:0deg,$y:0deg) {
+  -moz-transform: skew($x, $y);
+  -webkit-transform: skew($x, $y);
+  -o-transform: skew($x, $y);
+  -ms-transform: skew($x, $y);
+  transform: skew($x, $y);
+}
+
+@mixin rotate($degrees) {
+  -moz-transform: rotate($degrees);
+  -webkit-transform: rotate($degrees);
+  -o-transform: rotate($degrees);
+  -ms-transform: rotate($degrees);
+  transform: rotate($degrees);
+}
+
+@mixin rotate-skew($x:0deg,$y:0deg,$degrees:0deg) {
+  -moz-transform: rotate($degrees) skew($x, $y);
+  -webkit-transform: rotate($degrees) skew($x, $y);
+  -o-transform: rotate($degrees) skew($x, $y);
+  -ms-transform: rotate($degrees) skew($x, $y);
+  transform: rotate($degrees) skew($x, $y);
+}
+
+
+/**
+Form
+ */
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+  &::placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+}

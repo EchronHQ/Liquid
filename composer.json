@@ -26,6 +26,7 @@
     "symfony/cache": "^v6.3",
     "gumlet/php-image-resize": "^2.0",
     "echron/tools": "^1.6",
+    "thecodingmachine/safe": "^2.5",
     "ext-redis": "*",
     "ext-curl": "*",
     "ext-dom": "*",

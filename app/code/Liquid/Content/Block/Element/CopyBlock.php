@@ -46,6 +46,7 @@ class CopyBlock extends AbstractBlock
             'detail', 'center', 'right', 'gap-normal', 'gap-large',
             'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua',
             'green', 'blue', 'yellow', 'purple', 'pink', 'new', 'header',
+            'col--4',
 
         ];
 

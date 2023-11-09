@@ -137,7 +137,7 @@ readonly class ImageHelper
             $string = '[' . $result->getDestWidth() . 'x' . $result->getDestHeight() . ' ' . $type->value . '] x';
 
 
-            $font = ROOT . 'pub/frontend/asset/font/Gilroy-Regular.ttf';
+            $font = ROOT . 'pub/frontend/asset/font/Gilroy/Gilroy-Regular.ttf';
 
             if (!file_exists($font)) {
                 die('nope');

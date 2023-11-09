@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 readonly class FileHelper
 {
     private bool $enableCache;
+    private const KEY_PREFIX_FILE_EXIST = 'file-exist';
 
     public function __construct(
         private CacheHelper     $cache,
@@ -23,7 +24,7 @@ readonly class FileHelper
 
     public function fileExist(string $path, bool $allowCache = true): bool
     {
-        $cacheKey = 'fileexist-' . $path;
+        $cacheKey = $this->cleanupPathForKey($path, self::KEY_PREFIX_FILE_EXIST);
         if ($allowCache && $this->enableCache && $this->cache->has($cacheKey)) {
             $x = $this->cache->get($cacheKey);
 
@@ -43,8 +44,20 @@ readonly class FileHelper
 
     public function setFileExist(string $path, bool $exist): void
     {
-        $cacheKey = 'fileexist-' . $path;
+        $cacheKey = $this->cleanupPathForKey($path, self::KEY_PREFIX_FILE_EXIST);
         $saved = $this->cache->set($cacheKey, $exist, new \DateInterval('P5D'));
+    }
+
+    public function clearFileExists(string $path): void
+    {
+        $cacheKey = $this->cleanupPathForKey($path, self::KEY_PREFIX_FILE_EXIST);
+        $unset = $this->cache->unset($cacheKey);
+    }
+
+
+    private function cleanupPathForKey(string $path, string $prefix = ''): string
+    {
+        return $prefix . '-' . str_replace(['.'], [''], strtolower($path));
     }
 
     /**

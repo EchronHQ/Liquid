@@ -300,8 +300,18 @@ class Resolver
         if (!FileSystem::dirExists($fileDir)) {
             FileSystem::createDir($fileDir);
         }
+        $cachedFileLocation = $cacheLocation . $file;
 
-        $this->fileHelper->copyFile($localFilePath, $cacheLocation . $file);
+        // TODO: in dev mode we should test if the file is newer
+        if (!$this->fileHelper->fileExist($cachedFileLocation)) {
+            $this->logger->info('[Resolver] copy ' . $localFilePath . ' to ' . $cachedFileLocation);
+
+            $this->fileHelper->copyFile($localFilePath, $cachedFileLocation);
+
+            $this->fileHelper->clearFileExists($cachedFileLocation);
+        }
+
+
         //  die('--');
         return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'media/' . $file, $dimension['width'], $dimension['height']);
 

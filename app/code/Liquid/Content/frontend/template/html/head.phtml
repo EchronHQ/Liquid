@@ -22,19 +22,22 @@ $escaper = $this->getOutputHelper();
     <title><?= $pageConfig->getSeoTitle() ?></title>
     <meta name="description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
     <meta name="keywords" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoKeywords()) ?>"/>
-    <link rel="canonical" href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getCurrentLocale())) ?>"/>
+    <link rel="canonical"
+          href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getCurrentLocale())) ?>"/>
 
     <?php
     $locales = $this->getLocales();
     foreach ($locales as $locale):
         ?>
-        <link rel="alternate" hreflang="<?= $escaper->escapeHtmlAttribute($locale->langCode) ?>" href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($locale)) ?>"/>
+        <link rel="alternate" hreflang="<?= $escaper->escapeHtmlAttribute($locale->langCode) ?>"
+              href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($locale)) ?>"/>
     <?php
     endforeach;
     $defaultLocale = $this->getDefaultLocale();
     ?>
-    <link rel="alternate" hreflang="x-default" href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getDefaultLocale())) ?>"/>
-
+    <link rel="alternate" hreflang="x-default"
+          href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getDefaultLocale())) ?>"/>
+    <link rel="stylesheet" href="https://use.typekit.net/tqr2kqf.css">
 
     <!--    Disable data format detection detection-->
     <meta name="format-detection" content="telephone=no">
@@ -45,11 +48,13 @@ $escaper = $this->getOutputHelper();
     <!-- Opengraph -->
     <meta property="og:site_name" content="Attlaz">
     <meta property="og:title" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoTitle()) ?>"/>
-    <meta property="og:url" content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
+    <meta property="og:url"
+          content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
 
 
     <meta property="og:description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
-    <meta property="og:image" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1200, 630))) ?>"/>
+    <meta property="og:image"
+          content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1200, 630))) ?>"/>
     <!--    <meta property="og:image:width" content="442"/>-->
     <!--    <meta property="og:image:height" content="315"/>-->
 
@@ -71,20 +76,23 @@ $escaper = $this->getOutputHelper();
             $this->getLogger()->warning('Article must have publisher defined');
         } else {
             ?>
-            <meta property="article:publisher" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPublisher()) ?>"/>
+            <meta property="article:publisher"
+                  content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPublisher()) ?>"/>
             <?php
         }
 
         if ($pageConfig->getPublishDate() instanceof DateTime) {
             ?>
-            <meta property="article:published_time" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPublishDate()->format('c')) ?>"/>
+            <meta property="article:published_time"
+                  content="<?= $escaper->escapeHtmlAttribute($pageConfig->getPublishDate()->format('c')) ?>"/>
             <?php
         } else {
             $this->getLogger()->warning('Article must have publish date defined');
         }
         if ($pageConfig->getModifiedDate() instanceof DateTime) {
             ?>
-            <meta property="article:modified_time" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getModifiedDate()->format('c')) ?>"/>
+            <meta property="article:modified_time"
+                  content="<?= $escaper->escapeHtmlAttribute($pageConfig->getModifiedDate()->format('c')) ?>"/>
             <?php
         } else {
             $this->getLogger()->warning('Article must have modification date defined');
@@ -97,19 +105,24 @@ $escaper = $this->getOutputHelper();
 
     <!-- Itemprop -->
     <meta itemprop="name" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoTitle()) ?>"/>
-    <meta itemprop="url" content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
+    <meta itemprop="url"
+          content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
     <meta itemprop="description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
-    <meta itemprop="thumbnailUrl" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
-    <meta itemprop="image" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
+    <meta itemprop="thumbnailUrl"
+          content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
+    <meta itemprop="image"
+          content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
 
     <!-- Twitter -->
     <meta name="twitter:site" content="@AttlazHQ"/>
     <meta name="twitter:creator" content="@AttlazHQ"/>
     <meta name="twitter:title" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoTitle()) ?>"/>
 
-    <meta name="twitter:url" content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
+    <meta name="twitter:url"
+          content="<?= $escaper->escapeHtmlAttribute($this->getConfiguration()->getValue('current_url')) ?>"/>
     <meta name="twitter:description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
-    <meta name="twitter:image" content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
+    <meta name="twitter:image"
+          content="<?= $escaper->escapeHtmlAttribute($this->getSeoImage(new AssetSizeInstruction(1024, 512))) ?>"/>
     <?php
     if ($pageConfig->getPageType() === PageConfig::PAGE_TYPE_ARTICLE) {
         ?>
@@ -125,18 +138,26 @@ $escaper = $this->getOutputHelper();
 
 
     <!-- Other -->
-    <link rel="image_src" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>"/>
+    <link rel="image_src"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>"/>
     <meta name="theme-color" content="#1ea3a8">
 
     <!-- Apple -->
-    <link rel="apple-touch-icon" sizes="72x72" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-72x72.png')->url) ?>">
-    <link rel="apple-touch-icon" sizes="144x144" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-144x144.png')->url) ?>">
-    <link rel="apple-touch-icon" sizes="152x152" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-152x152.png')->url) ?>">
-    <link rel="apple-touch-icon" sizes="192x192" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="72x72"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-72x72.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="144x144"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-144x144.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="152x152"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-152x152.png')->url) ?>">
+    <link rel="apple-touch-icon" sizes="192x192"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>">
 
     <!-- Icons -->
-    <link rel="icon" sizes="192x192" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>" type="image/png">
-    <link rel="icon" href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>">
+    <link rel="icon" sizes="192x192"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>"
+          type="image/png">
+    <link rel="icon"
+          href="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-192x192.png')->url) ?>">
     <?php
     //    $icons = $this->getIcons();
     //
@@ -156,7 +177,8 @@ $escaper = $this->getOutputHelper();
 
     <!-- MS -->
     <meta name="msapplication-TileColor" content="#1ea3a8">
-    <meta name="msapplication-TileImage" content="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-144x144.png')->url) ?>">
+    <meta name="msapplication-TileImage"
+          content="<?= $escaper->escapeHtmlAttribute($this->getResolver()->getAssetUrl('icon/icon-144x144.png')->url) ?>">
 
     <script type="application/ld+json"><?= $this->getOutputHelper()->jsonEncode($this->getLdData()) ?></script>
     <?php

@@ -72,8 +72,12 @@ class AppConfig
     {
         $x = $this->getValue($key, '');
         if ($x === '') {
+            if ($default === null) {
+                throw new \Exception('Config value "' . $key . '" not found');
+            }
             return $default;
         }
+
         return (bool)$x;
     }
 

@@ -71,12 +71,13 @@ class HtmlHeadBlock extends TemplateBlock
         $filePath = $this->frontendFileHelper->getFilePath('css/critical.css');
 
 
-        if (\is_null($filePath)) {
+        if ($filePath === null) {
             $this->logger->warning('No critical css found');
             return '';
         }
 
-        $criticalCss = $this->getFileContent($filePath);
+        $inDevMode = true;
+        $criticalCss = $this->getFileContent($filePath, !$inDevMode);
         // Remove comments
         $criticalCss = str_replace(["/*", "*/"], ["_COMSTART", "COMEND_"], $criticalCss);
         $criticalCss = preg_replace("/_COMSTART.*?COMEND_/s", "", $criticalCss);

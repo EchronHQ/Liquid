@@ -99,14 +99,14 @@ class Block extends AbstractBlock
         return $this->fileHelper->fileExist($path);
     }
 
-    final protected function getFileContent(string $path): string
+    final protected function getFileContent(string $path, bool $allowCache = true): string
     {
         if (!$this->fileHelper->fileExist($path)) {
             $this->logger->error('Unable to get file content, file does not exist', ['path' => $path]);
             //            throw new \Exception('Path does not exist: ' . $path);
             return '';
         }
-        return $this->fileHelper->getFileContent($path);
+        return $this->fileHelper->getFileContent($path, $allowCache);
     }
 
     public function renderSVG(string $path): string

@@ -268,6 +268,16 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
                 'priority' => PageSitemapPriority::IGNORE,
                 'modified' => '2022-10-23 15:49:06',
             ]),
+            PageDefinition::generate('use-cases/ai', [
+                'url_key' => 'use-cases/ai',
+                'template' => 'page/use-cases/ai.phtml',
+                'doc_css_class' => 'theme-aqua',
+                'seo_title' => 'Attlaz use case: AI',
+                'seo_description' => 'Attlaz use case: AI',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::IGNORE,
+                'modified' => '2023-11-05 12:41:03',
+            ]),
 
 
             PageDefinition::generate('case-studies', [

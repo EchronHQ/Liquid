@@ -13,12 +13,10 @@ error_reporting(E_ALL);
 
 use Liquid\Core\Cli;
 
-const ROOT = __DIR__ . DIRECTORY_SEPARATOR;
-
-require ROOT . 'vendor/autoload.php';
-
 try {
-    $app = new Cli();
+    require __DIR__ . '/app/bootstrap.php';
+
+    $app = new Cli(\ROOT);
     $app->run();
 } catch (Throwable $ex) {
     // TODO: only show this in developer mode

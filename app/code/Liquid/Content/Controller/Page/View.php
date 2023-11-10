@@ -24,7 +24,8 @@ class View extends AbstractAction
         private readonly Layout         $layout,
         private readonly PageConfig     $pageConfig,
         private readonly PageRepository $pageRepository
-    ) {
+    )
+    {
         parent::__construct($context);
     }
 
@@ -37,10 +38,10 @@ class View extends AbstractAction
         $headBlock = $this->layout->getBlock('head');
 
         if ($page->id === 'contact') {
-            $headBlock->addScript(new Script('contact.js'));
+            $headBlock->addScript(new Script('js/contact.js'));
         }
         if ($page->id === 'demo') {
-            $headBlock->addScript(new Script('demo.js'));
+            $headBlock->addScript(new Script('js/demo.js'));
         }
 
 

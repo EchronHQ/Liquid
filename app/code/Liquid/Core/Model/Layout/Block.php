@@ -77,7 +77,7 @@ class Block extends AbstractBlock
     {
         $this->logger->error('Unable to render block', ['name' => $this->getNameInLayout(), 'class' => \get_class($this), 'error' => $ex->getMessage(), 'file' => $ex->getFile() . ':' . $ex->getLine()]);
         if ($this->configuration->getMode() === ApplicationMode::DEVELOP) {
-            return '<div style="background:red;padding: 10px;position: absolute;z-index: 999">Unable to render block "' . $this->getNameInLayout() . '" class: ' . \get_class($this) . ' ' . $ex->getMessage() . '</div>';
+            return '<div style="background:rgb(255 255 255 / 80%);border:2px dashed red;padding: 10px;margin:10px;position: absolute;z-index: 999;border-radius: 6px"><div>Unable to render block "' . $this->getNameInLayout() . '"</div><div>Class: "' . \get_class($this) . '</div><div>Msg: ' . $ex->getMessage() . '</div></div>';
         }
 
         return '';

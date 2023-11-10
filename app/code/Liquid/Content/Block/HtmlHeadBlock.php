@@ -14,6 +14,7 @@ use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\Repository\LocaleRepository;
 use Liquid\Core\Model\ApplicationMode;
 use Liquid\Core\Model\BlockContext;
+use Liquid\Framework\Output\Html;
 use Liquid\Seo\Helper\LdGenerator;
 
 class HtmlHeadBlock extends TemplateBlock
@@ -78,9 +79,14 @@ class HtmlHeadBlock extends TemplateBlock
 
         $inDevMode = true;
         $criticalCss = $this->getFileContent($filePath, !$inDevMode);
+
+        if ($this->configuration->getValueBoolean('dev.minifycss', true)) {
+            $criticalCss = Html::minifyCss($criticalCss);
+        }
+
         // Remove comments
-        $criticalCss = str_replace(["/*", "*/"], ["_COMSTART", "COMEND_"], $criticalCss);
-        $criticalCss = preg_replace("/_COMSTART.*?COMEND_/s", "", $criticalCss);
+//        $criticalCss = str_replace(["/*", "*/"], ["_COMSTART", "COMEND_"], $criticalCss);
+//        $criticalCss = preg_replace("/_COMSTART.*?COMEND_/s", "", $criticalCss);
 
 
         if ($this->configuration->getMode() === ApplicationMode::DEVELOP) {

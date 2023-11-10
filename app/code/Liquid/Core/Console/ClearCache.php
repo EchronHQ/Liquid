@@ -14,6 +14,7 @@ class ClearCache extends Command
     public function __construct(private readonly CacheHelper $cache)
     {
         parent::__construct('cache:clear');
+        $this->setAliases(['cache:flush', 'cache:clean']);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

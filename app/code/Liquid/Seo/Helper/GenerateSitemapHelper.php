@@ -69,23 +69,23 @@ class GenerateSitemapHelper
         return $xml;
     }
 
-    public static function getModificationDate(): \DateTime|null
+    public static function getModificationDate(string $filePath): \DateTime|null
     {
-        if (!\file_exists(\ROOT . 'sitemap.xml')) {
+        if (!\file_exists($filePath)) {
             return null;
         }
-        $time = \filemtime(\ROOT . 'sitemap.xml');
+        $time = \filemtime($filePath);
         if ($time === false) {
             return null;
         }
         return \DateTime::createFromFormat('U', (string)$time);
     }
 
-    public static function store(\SimpleXMLElement $sitemapXml): void
+    public static function store(\SimpleXMLElement $sitemapXml, string $filePath): void
     {
         $result = new Xml();
 
-        $sitemapXml->asXML(\ROOT . 'sitemap.xml');
+        $sitemapXml->asXML($filePath);
         $result->setData($sitemapXml->asXML());
     }
 }

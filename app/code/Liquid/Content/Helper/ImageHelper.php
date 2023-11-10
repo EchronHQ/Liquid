@@ -136,9 +136,10 @@ readonly class ImageHelper
 
             $string = '[' . $result->getDestWidth() . 'x' . $result->getDestHeight() . ' ' . $type->value . '] x';
 
-
-            $font = ROOT . 'pub/frontend/asset/font/Gilroy/Gilroy-Regular.ttf';
-
+// TODO: is this path correct? this might need to go to the vendor dir and default liquid theme
+            // Don't add image resolve because of circular dependencies
+            // $font = $this->resolver->getPubPath() . 'frontend/asset/font/Gilroy/Gilroy-Regular.ttf';
+            $font = '';
             if (!file_exists($font)) {
                 die('nope');
             }
@@ -215,7 +216,12 @@ readonly class ImageHelper
         }
 
         // TODO: add crop method + background to hash
-        return $fileName . '-' . str_replace(':', '-', implode('-', $arrHash)) . '.' . $ext;
+        $hash = '';
+        if (count($arrHash) > 0) {
+            $hash = '-' . str_replace(':', '-', implode('-', $arrHash));
+        }
+
+        return $fileName . $hash . '.' . $ext;
     }
 
     public function canResize(string $source): bool

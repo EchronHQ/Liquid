@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace Liquid\Content\Console;
 
 use Echron\Tools\FileSystem;
+use Liquid\Core\Helper\Resolver;
+use Liquid\Framework\Filesystem\Path;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ClearAssetCache extends Command
 {
-    public function __construct()
+    public function __construct(private Resolver $resolver)
     {
         //assets:clear-cache|assets:clearcache
         parent::__construct('assets:clear-cache');
@@ -21,7 +23,7 @@ class ClearAssetCache extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $cacheLocation = \ROOT . 'pub/frontend/cache/';
+        $cacheLocation = $this->resolver->getPath(Path::MEDIA, 'cache');
         if (!FileSystem::dirExists($cacheLocation)) {
             $output->writeln('Cache directory "' . $cacheLocation . '" does not exists');
             return Command::SUCCESS;

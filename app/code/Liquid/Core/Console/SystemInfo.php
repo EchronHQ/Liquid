@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Console;
 
-use Liquid\Core\Model\AppConfig;
-use Liquid\Seo\Helper\GenerateSitemapHelper;
 use Echron\Tools\Bytes;
 use Echron\Tools\FileSystem;
+use Liquid\Core\Helper\Resolver;
+use Liquid\Core\Model\AppConfig;
+use Liquid\Framework\Filesystem\Path;
+use Liquid\Seo\Helper\GenerateSitemapHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,8 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SystemInfo extends Command
 {
     public function __construct(
-        private readonly AppConfig $appConfig
-    ) {
+        private readonly AppConfig $appConfig, private readonly Resolver $resolver
+    )
+    {
         parent::__construct('system:info');
     }
 
@@ -25,12 +28,13 @@ class SystemInfo extends Command
     {
         $assetFileInfo = $this->getAssetCacheFileInfo();
         $data = [
-            'Root directory' => ROOT,
+            'Root directory' => $this->resolver->getPath(Path::ROOT),
+            'Pub directory' => $this->resolver->getPath(Path::PUB),
             'Mode' => $this->appConfig->getMode()->name,
             'Site url' => $this->appConfig->getValue('site_url'),
             'Sitemap generation date' => $this->getSitemapGenerationDate(),
             'Asset cache files count' => $assetFileInfo['count'],
-            'Asset cache files size' => Bytes::readable($assetFileInfo['size'], 2)
+            'Asset cache files size' => Bytes::readable($assetFileInfo['size'], 2),
         ];
 
 
@@ -48,13 +52,13 @@ class SystemInfo extends Command
 
     private function getSitemapGenerationDate(): string
     {
-        $sitemapAge = GenerateSitemapHelper::getModificationDate();
+        $sitemapAge = GenerateSitemapHelper::getModificationDate($this->resolver->getPath(Path::PUB, 'sitemap.xml'));
         return $sitemapAge === null ? 'not generated' : $sitemapAge->format("Y-m-d H:i:s");
     }
 
     private function getAssetCacheFileInfo(): array
     {
-        $cacheLocation = \ROOT . 'pub/frontend/cache/';
+        $cacheLocation = $this->resolver->getPath(Path::MEDIA, 'cache');
         if (!FileSystem::dirExists($cacheLocation)) {
             return ['count' => 0, 'size' => 0];
         }

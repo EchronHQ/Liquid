@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Liquid\Blog\Controller\Term;
 
+use Attlaz\Connector\Model\PlatformDefinition;
+use Attlaz\Connector\Repository\PlatformRepository;
+use Attlaz\Connector\Repository\UseCaseRepository;
 use Liquid\Blog\Block\Term;
 use Liquid\Blog\Model\TermDefinition;
 use Liquid\Blog\Repository\TerminologyRepository;
-use Attlaz\Connector\Model\PlatformDefinition;
-use Attlaz\Connector\Repository\PlatformRepository;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
 use Liquid\Content\Block\Element\SectionBlock;
 use Liquid\Content\Block\Element\TagBar;
@@ -34,7 +35,9 @@ class View extends FrontendAction
         PageConfig                             $pageConfig,
         private readonly TerminologyRepository $terminologyRepository,
         private readonly PlatformRepository    $platformRepository,
-    ) {
+        private readonly UseCaseRepository     $useCaseRepository,
+    )
+    {
         parent::__construct($context, $layout, $pageConfig);
     }
 
@@ -98,7 +101,7 @@ class View extends FrontendAction
 
         $useCaseCategories = $term->getUseCaseCategories();
 
-        $useCases = $this->platformRepository->getUseCasesByTypes($useCaseCategories);
+        $useCases = $this->useCaseRepository->getUseCasesByTypes($useCaseCategories);
 
 
         $useCasesBlock = $this->layout->createBlock(Term::class, 'term-use-cases');

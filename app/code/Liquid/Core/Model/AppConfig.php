@@ -18,9 +18,12 @@ class AppConfig
         return PHP_SAPI === 'cli';
     }
 
-    public function load(): void
+    public function load(string $configDirPath): void
     {
-        $configPath = \ROOT . 'app/etc/config.yml';
+        $configPath = $configDirPath . '/config.yml';
+        if (!file_exists($configPath)) {
+            throw new \Exception('Config file not found');
+        }
         $this->data = Yaml::parseFile($configPath);
 
         $this->data['site_url'] = $this->automaticallyDetectSiteUrl();
@@ -84,8 +87,8 @@ class AppConfig
 
     public function getMode(): ApplicationMode
     {
-        if (\is_null($this->mode)) {
-            if ($this->getValue('app.mode') === 'develop') {
+        if ($this->mode === null) {
+            if ($this->getValue('app.mode', ApplicationMode::PRODUCTION->name) === 'develop') {
                 $this->mode = ApplicationMode::DEVELOP;
             } else {
                 $this->mode = ApplicationMode::PRODUCTION;

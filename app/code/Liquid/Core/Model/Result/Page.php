@@ -19,7 +19,6 @@ use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Layout;
 use Liquid\Core\Model\AppConfig;
-use Liquid\Core\Model\ApplicationMode;
 use Liquid\Core\Model\Request\Response;
 use Psr\Log\LoggerInterface;
 
@@ -39,7 +38,8 @@ class Page extends Result
         private readonly MarkupEngine      $markupEngine,
         private readonly Profiler          $profiler,
         private readonly LoggerInterface   $logger,
-    ) {
+    )
+    {
     }
 
 
@@ -97,34 +97,37 @@ class Page extends Result
         return $this;
     }
 
-    private function sanitizeHtml(string $content): string
+    private function sanitizeHtml(string $html): string
     {
-
-        if ($this->appConfig->getMode() === ApplicationMode::PRODUCTION) {
-            $search = [
-                '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
-                '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-                '/(\s)+/s',         // shorten multiple whitespace sequences
-                '/<!--(.|\s)*?-->/' // Remove HTML comments
-            ];
-        } else {
-            $search = [
+        if ($this->appConfig->getValueBoolean('dev.minifyhtml', true)) {
+            return \Liquid\Framework\Output\Html::minify($html);
+        }
+//
+//        if ($this->appConfig->getMode() === ApplicationMode::PRODUCTION) {
+//            $search = [
 //                '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
 //                '/[^\S ]+\</s',     // strip whitespaces before tags, except space
-// '/(\s)+/s',         // shorten multiple whitespace sequences
+//                '/(\s)+/s',         // shorten multiple whitespace sequences
 //                '/<!--(.|\s)*?-->/' // Remove HTML comments
-            ];
-        }
-
-
-        $replace = [
-            '>',
-            '<',
-            '\\1',
-            ''
-        ];
-
-        return preg_replace($search, $replace, $content);
+//            ];
+//        } else {
+//            $search = [
+////                '/\>[^\S ]+/s',     // strip whitespaces after tags, except space
+////                '/[^\S ]+\</s',     // strip whitespaces before tags, except space
+//// '/(\s)+/s',         // shorten multiple whitespace sequences
+////                '/<!--(.|\s)*?-->/' // Remove HTML comments
+//            ];
+//        }
+//
+//
+//        $replace = [
+//            '>',
+//            '<',
+//            '\\1',
+//            ''
+//        ];
+//
+//        return preg_replace($search, $replace, $content);
     }
 
     private function renderElementAttributes(string $elementType): string

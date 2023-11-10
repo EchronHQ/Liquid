@@ -37,6 +37,10 @@ class AppConfig
         $this->data['documentation_url'] = 'https://docs.attlaz.com/';
         $this->data['api_reference_url'] = 'https://app.swaggerhub.com/apis-docs/Echron/attlaz-api/';
         $this->data['signup_url'] = 'https://app.attlaz.com/signup';
+        $this->data['dev'] = [
+            'minifyhtml' => true,
+            'minifycss' => true,
+        ];
     }
 
     public function setValue(string $key, mixed $value): void

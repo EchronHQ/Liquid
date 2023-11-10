@@ -41,6 +41,7 @@ class AppConfig
             'minifyhtml' => true,
             'minifycss' => true,
         ];
+
     }
 
     public function setValue(string $key, mixed $value): void

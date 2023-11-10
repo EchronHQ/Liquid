@@ -57,8 +57,9 @@ class Application
         $slackHook = $this->config->getValue('logger.slack.webhook');
         $slackChannel = $this->config->getValue('logger.slack.webhook');
         $slackUsername = $this->config->getValue('logger.slack.webhook');
+        $slackMinLogLevel = $this->config->getValue('logger.slack.minloglevel', Level::Info->name);
         $slackHandler = new SlackWebhookHandler($slackHook, $slackChannel, $slackUsername, true, null, false, true);
-        $slackHandler->setLevel(Level::Info);
+        $slackHandler->setLevel($slackMinLogLevel);
         if ($this->config->getMode() !== ApplicationMode::DEVELOP) {
             $this->logger->pushHandler($slackHandler);
         }
@@ -67,8 +68,12 @@ class Application
 
 
         if (!$this->config->isCLI() && $this->config->getMode() === ApplicationMode::DEVELOP) {
-            $chromeHandler = new BrowserConsoleHandler();
-            $this->logger->pushHandler($chromeHandler);
+
+            $browserMinLogLevel = $this->config->getValue('logger.browser.minloglevel', Level::Debug->name);
+
+            $browserConsoleHandler = new BrowserConsoleHandler();
+            $browserConsoleHandler->setLevel($browserMinLogLevel);
+            $this->logger->pushHandler($browserConsoleHandler);
         }
 
         //        $cliHandler = new StreamHandler(fopen('php://stdout', 'wb'), Level::Debug);
@@ -77,13 +82,21 @@ class Application
         //        $this->logger->pushHandler($cliHandler);
 
 
-        $attlazClientId = $this->config->getValue('attlaz_api.client_id');
-        $attlazClientSecret = $this->config->getValue('attlaz_api.client_secret');
-        $attlazApiEndpoint = $this->config->getValue('attlaz_api.endpoint');
-        $client = new Client($attlazClientId, $attlazClientSecret, true);
-        $client->setEndPoint($attlazApiEndpoint);
-        $attlazHandler = new AttlazHandler($client, new LogStreamId('Vt9HtWRee'), Level::Info);
-        $this->logger->pushHandler($attlazHandler);
+        $attlazLogStreamId = $this->config->getValue('logger.attlaz.logstream_id', '');
+        if ($attlazLogStreamId !== '') {
+            $attlazClientId = $this->config->getValue('logger.attlaz.client_id');
+            $attlazClientSecret = $this->config->getValue('logger.attlaz.client_secret');
+            $attlazApiEndpoint = $this->config->getValue('logger.attlaz.endpoint');
+
+            $attlazMinLogLevel = $this->config->getValue('logger.attlaz.minloglevel', Level::Info->name);
+
+            $client = new Client($attlazClientId, $attlazClientSecret, true);
+            $client->setEndPoint($attlazApiEndpoint);
+            $attlazHandler = new AttlazHandler($client, new LogStreamId($attlazLogStreamId));
+            $attlazHandler->setLevel($attlazMinLogLevel);
+            $this->logger->pushHandler($attlazHandler);
+        }
+
 
         if ($this->config->isCLI()) {
             //Stream handler

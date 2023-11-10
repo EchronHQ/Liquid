@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Liquid\Content\Block\HtmlHeadBlock;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\View\Page\PageConfig;
+use Liquid\Framework\Output\Html;
 
 assert($this instanceof HtmlHeadBlock);
 
@@ -196,6 +197,11 @@ $escaper = $this->getOutputHelper();
 
     <!-- Google Tag Manager -->
     <script>
+        <?php
+        $gtmEnabled = $this->getConfiguration()->getValueBoolean('seo.googletagmanager.enabled');
+        if ($gtmEnabled):
+            $gtmCode = $this->getConfiguration()->getValue('seo.googletagmanager.code');
+            $gtmJs = <<<HTML
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
@@ -205,7 +211,11 @@ $escaper = $this->getOutputHelper();
             j.async = true;
             j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-MMTP4XJ');
+        })(window, document, 'script', 'dataLayer', '{$gtmCode}');
+        HTML;
+            echo Html::minifyJs($gtmJs);
+        endif;
+        ?>
     </script>
     <!-- End Google Tag Manager -->
 

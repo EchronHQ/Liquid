@@ -18,10 +18,10 @@ class DirectoryList
 
         // Set system temp directory
         $sysTmpPath = get_cfg_var('upload_tmp_dir') ?: sys_get_temp_dir();
-        $this->directories[PATH::SYS_TMP->name] = [self::PATH => realpath($sysTmpPath)];
+        $this->directories[Path::SYS_TMP->name] = [self::PATH => realpath($sysTmpPath)];
 
         //Set root directory
-        $this->directories[PATH::ROOT->name] = [self::PATH => $root];
+        $this->directories[Path::ROOT->name] = [self::PATH => $root];
 
         //Make paths absolute
         foreach ($this->directories as $code => $dir) {
@@ -40,7 +40,7 @@ class DirectoryList
     private static function getDefaultConfig(): array
     {
         return [
-            PATH::SYS_TMP->name => [self::PATH => ''],
+            Path::SYS_TMP->name => [self::PATH => ''],
 
             Path::ROOT->name => [self::PATH => ''],
             Path::APP->name => [self::PATH => ''],

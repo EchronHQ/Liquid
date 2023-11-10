@@ -27,6 +27,7 @@
     "gumlet/php-image-resize": "^2.0",
     "echron/tools": "^1.6",
     "thecodingmachine/safe": "^2.5",
+    "wyrihaximus/html-compress": "^4.2.1",
     "ext-redis": "*",
     "ext-curl": "*",
     "ext-dom": "*",

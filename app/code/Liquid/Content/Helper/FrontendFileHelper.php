@@ -45,7 +45,7 @@ class FrontendFileHelper
 
         $url = $this->resolver->getFrontendFileUrl($filePath);
         if ($url === null) {
-            throw new \Exception('Url not found');
+            throw new \Exception('Url not found for file `' . $filePath . '`');
         }
         return $url;
     }

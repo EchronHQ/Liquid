@@ -102,6 +102,7 @@ class Page extends Result
         if ($this->appConfig->getValueBoolean('dev.minifyhtml', true)) {
             return \Liquid\Framework\Output\Html::minify($html);
         }
+        return $html;
 //
 //        if ($this->appConfig->getMode() === ApplicationMode::PRODUCTION) {
 //            $search = [

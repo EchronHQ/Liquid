@@ -147,6 +147,7 @@ class Resolver
     {
         $file = $this->cleanupPath($file);
 
+
         $localFilePath = $this->getDiskFilePath($file);
 
         if (!$this->fileHelper->fileExist($localFilePath)) {
@@ -154,7 +155,7 @@ class Resolver
             // TODO: show placeholder
             return null;
         }
-        return $this->configuration->getValueString('site_url') . '/static/' . $this->getStaticDeployedVersion() . '/' . $file;
+        return $this->configuration->getValueString('site_url') . 'static/' . $this->getStaticDeployedVersion() . '/' . $file;
     }
 
     private function getStaticDeployedVersion(): string

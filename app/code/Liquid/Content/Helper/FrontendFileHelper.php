@@ -39,6 +39,7 @@ class FrontendFileHelper
             return $fileName;
         }
         $filePath = $this->getFilePath($fileName);
+
         if ($filePath === null) {
             throw new \Exception('Unable to load file "' . $fileName . '"');
         }

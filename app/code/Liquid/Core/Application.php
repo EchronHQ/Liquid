@@ -16,6 +16,8 @@ use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\ApplicationMode;
 use Liquid\Framework\Component\ComponentRegistrar;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
+use Liquid\Framework\Filesystem\DirectoryList;
+use Liquid\Framework\Filesystem\Path;
 use Liquid\Framework\Output\Error;
 use Monolog\ErrorHandler;
 use Monolog\Handler\BrowserConsoleHandler;
@@ -38,7 +40,7 @@ class Application
 
     private readonly Profiler $profiler;
 
-    public function __construct()
+    public function __construct(private readonly string $rootDir)
     {
         $this->profiler = new Profiler();
     }
@@ -141,6 +143,7 @@ class Application
             CacheItemPoolInterface::class => $cachePool,
             Profiler::class => $this->profiler,
             ComponentRegistrarInterface::class => \DI\create(ComponentRegistrar::class),
+            DirectoryList::class => new \Liquid\Framework\Filesystem\DirectoryList($this->rootDir),
         ]);
         $this->diContainer = $containerBuilder->build();
     }
@@ -150,7 +153,10 @@ class Application
         $this->profiler->profilerStart('Application:beforeRun');
 
         $this->config = new AppConfig();
-        $this->config->load();
+
+
+        $x = new \Liquid\Framework\Filesystem\DirectoryList($this->rootDir);
+        $this->config->load($x->getPath(Path::CONFIG));
 
 
         $this->initLogger();
@@ -165,9 +171,9 @@ class Application
     {
         $this->profiler->profilerStart('Application:run');
 
-        $this->beforeRun();
 
         try {
+            $this->beforeRun();
             /** @var Router $router */
             $router = $this->diContainer->get(Router::class);
 
@@ -186,14 +192,26 @@ class Application
 
             $response->sendHeaders()->sendContent();
         } catch (\Throwable $ex) {
-            $this->logger->error('Unable to run application', ['ex' => $ex]);
+            if ($this->logger !== null) {
+                $this->logger->error('Unable to run application', ['ex' => $ex]);
+            }
 
 
             $errorHtml = Error::toHtml($ex);
 
-            echo str_replace(ROOT, '', $errorHtml);
+            // Safe to file?
+            if ($this->config->getMode() === ApplicationMode::DEVELOP) {
+                echo str_replace($resolver->getPath(Path::ROOT), '', $errorHtml);
+                http_response_code(500);
+                exit(1);
+//                die('xxx');
+//                return;
+            } else {
+                throw $ex;
+            }
 
-            throw $ex;
+
+            //throw $ex;
         } finally {
             $this->profiler->profilerFinish('Application:run');
             if ($this->logger !== null && $this->config->getMode() === ApplicationMode::DEVELOP) {

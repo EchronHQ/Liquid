@@ -7,6 +7,7 @@ namespace Liquid\Seo\Console;
 use Liquid\Content\Model\SitemapUrlEntry;
 use Liquid\Content\Repository\LocaleRepository;
 use Liquid\Core\Helper\Resolver;
+use Liquid\Framework\Filesystem\Path;
 use Liquid\Seo\Helper\GatherPages;
 use Liquid\Seo\Helper\GenerateSitemapHelper;
 use Symfony\Component\Console\Command\Command;
@@ -19,7 +20,8 @@ class SitemapGenerateCommand extends Command
         private readonly LocaleRepository $localeRepository,
         private readonly Resolver         $resolver,
         private readonly GatherPages      $gatherPages
-    ) {
+    )
+    {
         parent::__construct('seo:generate-sitemap');
         $this->setAliases(['seo:sitemap-generate']);
     }
@@ -55,7 +57,7 @@ class SitemapGenerateCommand extends Command
         $sitemapHelper = new GenerateSitemapHelper();
         $sitemapXml = $sitemapHelper->generate($entries);
 
-        GenerateSitemapHelper::store($sitemapXml);
+        GenerateSitemapHelper::store($sitemapXml, $this->resolver->getPath(Path::PUB,'sitemap.xml'));
 
         $output->writeln('Sitemap generated (' . count($entries) . ') entries');
         return Command::SUCCESS;

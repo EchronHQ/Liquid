@@ -12,6 +12,8 @@ use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\FrontendFileUrl;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
 use Liquid\Framework\Component\ComponentType;
+use Liquid\Framework\Filesystem\DirectoryList;
+use Liquid\Framework\Filesystem\Path;
 use Psr\Log\LoggerInterface;
 
 class Resolver
@@ -23,6 +25,7 @@ class Resolver
         private readonly AppConfig                   $configuration,
         private readonly FileHelper                  $fileHelper,
         private readonly ImageHelper                 $imageHelper,
+        private readonly DirectoryList               $directoryList,
         private readonly ComponentRegistrarInterface $componentRegistrar,
         private readonly LoggerInterface             $logger
     )
@@ -157,7 +160,7 @@ class Resolver
     private function getStaticDeployedVersion(): string
     {
         if ($this->staticContentDeployedVersion === null) {
-            $versionFile = ROOT . DIRECTORY_SEPARATOR . 'pub/static/deployed_version.txt';
+            $versionFile = $this->getPath(Path::STATIC_VIEW, 'deployed_version.txt');
             if (!file_exists($versionFile)) {
                 throw new \Exception('Version file does not exists');
             }
@@ -188,7 +191,6 @@ class Resolver
     //ToDo: split this method for static files and images as they return different data
     public function getFrontendFileImageUrl(string $file, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
     {
-
 
         [$module, $filePath] = self::extractModule($file);
 
@@ -232,9 +234,9 @@ class Resolver
     private function getX(string $file, string $localFilePath, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
     {
 
+        $cacheLocation = $this->getPath(Path::MEDIA, 'cache');
 
-        $publicMediaFolder = 'pub/media/';
-        $cacheLocation = \ROOT . $publicMediaFolder . 'cache/';
+
         if (!FileSystem::dirExists($cacheLocation)) {
             FileSystem::createDir($cacheLocation);
         }
@@ -246,7 +248,7 @@ class Resolver
             $resizedLocalFileName = $this->imageHelper->getResizedFileName($localFilePath, $size);
 
 
-            $resizedLocalFilePath = $cacheLocation . $resizedLocalFileName;
+            $resizedLocalFilePath = $cacheLocation . '/' . $resizedLocalFileName;
             $hasResized = $this->fileHelper->fileExist($resizedLocalFilePath);
 
 
@@ -273,7 +275,8 @@ class Resolver
             //                $this->logger->error('Unable to get image dimensions', ['path' => $resizedLocalFilePath]);
             //                return null;
             //            }
-            return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'media/cache/' . $resizedLocalFileName, $resizedImageInfo['width'], $resizedImageInfo['height']);
+
+            return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, 'cache/' . $resizedLocalFileName), $resizedImageInfo['width'], $resizedImageInfo['height']);
 
 
         }
@@ -289,18 +292,12 @@ class Resolver
         }
         // Copy file to cache location so we can see it!
 
-//        var_dump($localFilePath);
-//        var_dump($cacheLocation . $file);
-//
-//
-//        var_dump($file);
-        $cacheLocation = \ROOT . $publicMediaFolder;
-        $fileDir = $cacheLocation . dirname($file);
+        $fileDir = $cacheLocation . '/' . dirname($file);
 
         if (!FileSystem::dirExists($fileDir)) {
             FileSystem::createDir($fileDir);
         }
-        $cachedFileLocation = $cacheLocation . $file;
+        $cachedFileLocation = $cacheLocation . '/' . $file;
 
         // TODO: in dev mode we should test if the file is newer
         if (!$this->fileHelper->fileExist($cachedFileLocation)) {
@@ -313,13 +310,13 @@ class Resolver
 
 
         //  die('--');
-        return new FrontendFileUrl($this->configuration->getValueString('site_url') . 'media/' . $file, $dimension['width'], $dimension['height']);
+        return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, $file), $dimension['width'], $dimension['height']);
 
     }
 
     public function getFrontendFilePath(string $file): string
     {
-        return \ROOT . 'pub/static/' . $this->getStaticDeployedVersion() . '/' . $file;
+        return $this->getPath(Path::STATIC_VIEW, $this->getStaticDeployedVersion() . '/' . $file);
     }
 
 
@@ -328,5 +325,26 @@ class Resolver
         $this->pageRoutes = $routes;
     }
 
+    public function getPath(Path $path, string|null $x = null): string
+    {
+        $fullPath = $this->directoryList->getPath($path);
+        if ($x !== null) {
+            // TODO: cleanup if x already starts with slash
+            $fullPath = $fullPath . '/' . $x;
+        }
+        return $fullPath;
+    }
+
+    public function getUrlPath(Path $path, string|null $x = null): string
+    {
+        $siteUrl = $this->configuration->getValueString('site_url');
+        $fullUrlPath = $this->directoryList->getUrlPath($path);
+        if ($x !== null) {
+            // TODO: cleanup if x already starts with slash
+            $fullUrlPath = $fullUrlPath . '/' . $x . '';
+        }
+
+        return $siteUrl . (str_ends_with($siteUrl, '/') ? '' : '/') . $fullUrlPath;
+    }
 
 }

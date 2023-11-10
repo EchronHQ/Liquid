@@ -131,14 +131,14 @@ readonly class FileHelper
         return null;
     }
 
-    public function copyFile(string $source, string $destination): void
+    public function copyFile(string $source, string $destination, bool $overWriteIfExists = false): void
     {
 
         if (!$this->fileExist($source)) {
             throw new \Error('Source file does not exist');
         }
-        if ($this->fileExist($destination)) {
-            // Should we do something?
+        if (!$overWriteIfExists && $this->fileExist($destination)) {
+            throw new \Exception('Unable to copy file, destination already exist');
         }
         $copied = copy($source, $destination);
         if (!$copied) {

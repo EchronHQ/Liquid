@@ -35,7 +35,7 @@
   --background-color: #{$text-color-white};
   --background-color-hover: #{$background-aqua};
 
-  @include display-flex();
+  display: flex;
   @include flex-direction(column);
   @include border-radius($radius);
 
@@ -91,7 +91,7 @@
   }
 
   .blog-content-wrapper {
-    @include display-flex();
+    display: flex;
     @include flex-direction(column);
     //border: 1px solid #e4e7ec;
 
@@ -209,7 +209,7 @@ body.blog-post {
 
 
   .blog-card-tags-wrapper {
-    @include display-flex();
+    display: flex;
     @include align-items(flex-start);
   }
 

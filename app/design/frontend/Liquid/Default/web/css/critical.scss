@@ -87,7 +87,7 @@ body {
   color: $text-color-medium;
 
   min-height: 100%;
-  @include display-flex;
+  display: flex;
   flex-direction: column;
 
 }

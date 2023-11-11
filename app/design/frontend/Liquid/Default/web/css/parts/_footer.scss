@@ -113,7 +113,7 @@ footer {
 
 
     .newsletter {
-      @include display-flex;
+      display: flex;
 
       input {
         outline: none;

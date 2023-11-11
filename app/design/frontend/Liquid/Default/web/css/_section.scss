@@ -103,7 +103,7 @@ section {
 .container {
   z-index: 1;
   position: relative;
-  @include display-flex();
+  display: flex;
   -webkit-box-pack: center;
   justify-content: center;
 

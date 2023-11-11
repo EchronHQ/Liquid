@@ -71,7 +71,7 @@ header .navigation {
   display: none;
 
   @include desktop-and-wider {
-    @include display-flex;
+    display: flex;
     position: initial;
     height: 100%;
     width: auto;
@@ -297,7 +297,7 @@ header .navigation {
             }
 
             .item-link {
-              @include display-flex;
+              display: flex;
               grid-column-gap: 0.75rem;
 
               padding: 12px;
@@ -311,7 +311,7 @@ header .navigation {
                 background-color: #d4fdec;
                 width: 30px;
                 height: 30px;
-                @include display-flex();
+                display: flex;
                 justify-content: center;
                 align-items: center;
                 @include transition(background-color 0.5s);

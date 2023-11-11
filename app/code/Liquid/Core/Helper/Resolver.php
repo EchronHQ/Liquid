@@ -220,7 +220,10 @@ class Resolver
     private function getX(string $file, string $localFilePath, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
     {
 
-        $cacheLocation = $this->getPath(Path::MEDIA, 'cache');
+        // Change this to cache/ to add additional depth in pub/media/
+        $mediaCacheSuffix = '';
+
+        $cacheLocation = $this->getPath(Path::MEDIA, $mediaCacheSuffix);
 
 
         if (!FileSystem::dirExists($cacheLocation)) {
@@ -262,7 +265,7 @@ class Resolver
             //                return null;
             //            }
 
-            return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, 'cache/' . $resizedLocalFileName), $resizedImageInfo['width'], $resizedImageInfo['height']);
+            return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, $mediaCacheSuffix . $resizedLocalFileName), $resizedImageInfo['width'], $resizedImageInfo['height']);
 
 
         }
@@ -296,7 +299,7 @@ class Resolver
 
 
         //  die('--');
-        return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, $file), $dimension['width'], $dimension['height']);
+        return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, $mediaCacheSuffix . $file), $dimension['width'], $dimension['height']);
 
     }
 

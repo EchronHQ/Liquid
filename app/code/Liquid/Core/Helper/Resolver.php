@@ -302,7 +302,7 @@ class Resolver
 
     public function getFrontendFilePath(string $file): string
     {
-        return $this->getPath(Path::STATIC_VIEW, $this->getStaticDeployedVersion() . '/' . $file);
+        return $this->getPath(Path::STATIC_VIEW, $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file);
     }
 
 

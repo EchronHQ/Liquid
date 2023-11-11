@@ -1,4 +1,3 @@
-
 $text-color-dark: #1c1e47;
 $text-color-medium: #4d6175;
 $text-color-light: #c5c8d9; //old 8898AAFF
@@ -22,7 +21,6 @@ $font-size-title: 1.3rem;
 $font-size-large: 3.1rem;
 
 
-
 /**
 Body
  */
@@ -33,11 +31,11 @@ $line-color-light: #ebedf5;
 $line-color-dark: #b9d0e5;
 
 
-$row-gap-small: 8px;
-$row-gap-normal: 16px;
-$row-gap-medium: 32px;
-$row-gap-large: 64px;
-$row-gap-extra-large: 96px;
+$row-gap-small: 8px; //0.5rem
+$row-gap-normal: 16px; //1rem
+$row-gap-medium: 32px; //2rem
+$row-gap-large: 64px; //4rem
+$row-gap-extra-large: 96px; //6rem
 
 $button-border-radius: 5px;
 

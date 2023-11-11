@@ -12,17 +12,18 @@ class CopyBlockTag extends Block
     public const PROP_TITLE = 'title';
     public const PROP_TYPES = 'types';
     public const PROP_TITLE_TAG = 'title-tag';
+//    public const PROP_CLASSES = 'classes';
 
     public const PROPERTIES = [
         self::PROP_TITLE,
         self::PROP_TYPES,
-        self::PROP_TITLE_TAG
+        self::PROP_TITLE_TAG,
+//        self::PROP_CLASSES,
     ];
 
 
     public function getTypes(): string|null
     {
-
         return $this->getData(self::PROP_TYPES);
     }
 
@@ -39,11 +40,11 @@ class CopyBlockTag extends Block
     public function toHtml(): string
     {
         $data = [];
+
         $types = $this->getTypes();
         if ($types !== null) {
             $data['types'] = $types;
         }
-
 
         $block = $this->getLayout()->createBlock(CopyBlock::class, '', $data);
 

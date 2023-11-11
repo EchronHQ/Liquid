@@ -6,6 +6,7 @@ namespace Liquid\Core\Helper;
 
 use Echron\Tools\FileSystem;
 use Liquid\Content\Helper\ImageHelper;
+use Liquid\Content\Helper\StaticContentHelper;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Locale;
 use Liquid\Core\Model\AppConfig;
@@ -27,6 +28,7 @@ class Resolver
         private readonly ImageHelper                 $imageHelper,
         private readonly DirectoryList               $directoryList,
         private readonly ComponentRegistrarInterface $componentRegistrar,
+        private readonly StaticContentHelper         $staticContentHelper,
         private readonly LoggerInterface             $logger
     )
     {
@@ -155,26 +157,9 @@ class Resolver
             // TODO: show placeholder
             return null;
         }
-        return $this->configuration->getValueString('site_url') . 'static/' . $this->getStaticDeployedVersion() . '/' . $file;
+        return $this->configuration->getValueString('site_url') . 'static/' . $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file;
     }
 
-    private function getStaticDeployedVersion(): string
-    {
-        if ($this->staticContentDeployedVersion === null) {
-            $versionFile = $this->getPath(Path::STATIC_VIEW, 'deployed_version.txt');
-            if (!file_exists($versionFile)) {
-                throw new \Exception('Version file does not exists');
-            }
-            $version = \Safe\file_get_contents($versionFile);
-            $version = trim($version);
-            if ($version !== '') {
-                $this->staticContentDeployedVersion = 'v' . $version;
-            }
-        }
-        return $this->staticContentDeployedVersion;
-    }
-
-    private string|null $staticContentDeployedVersion = null;
     public const FILE_ID_SEPARATOR = '::';
 
     public static function extractModule(string $fileId): array

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Core;
 
+use Liquid\Content\Console\BuildStatic;
 use Liquid\Content\Console\ClearAssetCache;
 use Liquid\Content\Repository\LocaleRepository;
 use Liquid\Core\Console\ClearCache;
@@ -37,6 +38,7 @@ class Cli extends Application
         $consoleApplication->add($this->getContainer()->get(TestCache::class));
 
         $consoleApplication->add($this->getContainer()->get(ClearAssetCache::class));
+        $consoleApplication->add($this->getContainer()->get(BuildStatic::class));
 
         $consoleApplication->add($this->getContainer()->get(SystemInfo::class));
 

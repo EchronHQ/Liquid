@@ -3,7 +3,7 @@
 .columns-container {
   overflow-y: hidden;
   height: 100%;
-  @include display-flex();
+  display: flex;
 
   .column-left {
     width: 280px;

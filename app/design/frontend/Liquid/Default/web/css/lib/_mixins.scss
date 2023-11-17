@@ -25,10 +25,10 @@ Transition
 
 // Flexbox display
 @mixin display-flex {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
+  //display: -webkit-box;
+  //display: -moz-box;
+  //display: -ms-flexbox;
+  //display: -webkit-flex;
   display: flex;
 }
 
@@ -210,4 +210,8 @@ Form
   &:-moz-placeholder {
     @content;
   }
+}
+
+@function hexToRGB($hex) {
+  @return red($hex), green($hex), blue($hex);
 }

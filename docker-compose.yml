@@ -1,0 +1,60 @@
+version: '3.8'
+services:
+
+  web:
+    container_name: liquid_devbox_web_${COMPOSE_PROJECT_NAME}
+    image: httpd:2.4
+    ports:
+      - ${DEV_PORT}:80
+    volumes:
+      - source2:/var/www/liquid
+      - ./vendor/echron/liquid/docker/nginx/site.conf:/etc/nginx/conf.d/default.conf
+      - ./vendor/echron/liquid/docker/apache/site.conf:/etc/apache2/sites-enabled/apache-default.conf
+      - ./vendor/echron/liquid/docker/apache/my-httpd.conf:/usr/local/apache2/conf/httpd.conf
+    links:
+      - php
+      - redis
+  php:
+    container_name: liquid_devbox_php_${COMPOSE_PROJECT_NAME}
+    build: ./vendor/echron/liquid/docker/php
+    volumes:
+      - ./profile:/var/profile
+    ports:
+      - "30${PROJECT_ID}5:5000"
+  redis:
+    container_name: liquid_devbox_redis_${COMPOSE_PROJECT_NAME}
+    image: redis:latest
+  #    composer:
+  #        image: hq.attlaz.com:2498/php8_1:1.0.0
+  #        volumes:
+  #            - .:/app
+  #            - ~/.composer/cache:/var/composer-cache
+  #            - ~/.ssh:/tmp/.ssh:ro
+  #        working_dir: /app
+  #docker run -it -v ${PWD}:/app -w /app --rm attlaz/php:8.2 composer update --ignore-platform-req=ext-redis
+  #Optimize:
+  #    docker run -it -v ${PWD}:/app -w /app --rm attlaz/php:8.1 composer dump-autoload --ignore-platform-req=ext-redis -o --apcu
+  phpunit:
+    container_name: liquid_devbox_phpunit_${COMPOSE_PROJECT_NAME}
+    image: attlaz/php:8.2
+    volumes:
+      - source2:/app
+    working_dir: /app
+    entrypoint: vendor/bin/phpunit
+    #docker-compose run --rm phpunit -c /app/phpunit.xml
+
+
+
+#        docker run --rm --mount type=bind,source=.,destination='/app',volume-opt='type=ext4' hq.attlaz.com:2498/php8_1:1.0.0 df -T
+networks:
+  default:
+    name: network_${COMPOSE_PROJECT_NAME}
+
+volumes:
+  source2:
+    name: volume_${COMPOSE_PROJECT_NAME}
+    driver: overlay2
+    driver_opts:
+      o: bind
+      type: none
+      device: .

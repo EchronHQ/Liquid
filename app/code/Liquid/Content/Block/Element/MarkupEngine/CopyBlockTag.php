@@ -12,12 +12,16 @@ class CopyBlockTag extends Block
     public const PROP_TITLE = 'title';
     public const PROP_TYPES = 'types';
     public const PROP_TITLE_TAG = 'title-tag';
+    public const PROP_ICON = 'icon';
+    public const PROP_ICON_STYLE = 'icon-style';
 //    public const PROP_CLASSES = 'classes';
 
     public const PROPERTIES = [
         self::PROP_TITLE,
         self::PROP_TYPES,
         self::PROP_TITLE_TAG,
+        self::PROP_ICON,
+        self::PROP_ICON_STYLE,
 //        self::PROP_CLASSES,
     ];
 
@@ -37,8 +41,20 @@ class CopyBlockTag extends Block
         return $content;
     }
 
+    private function validateData(): void
+    {
+        $dataKeys = $this->getDataKeys();
+        foreach ($dataKeys as $dataKey) {
+            if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
+                $this->logger->warning('ContentBlockTag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey)]);
+            }
+        }
+    }
+
     public function toHtml(): string
     {
+        $this->validateData();
+
         $data = [];
 
         $types = $this->getTypes();
@@ -56,6 +72,14 @@ class CopyBlockTag extends Block
             } else {
                 $block->setHeaderTitle($title, $titleTag);
             }
+        }
+
+        if ($this->hasData(self::PROP_ICON)) {
+            $style = $this->getData(self::PROP_ICON_STYLE);
+            if ($style === null) {
+                $style = 'round size-50 back-pink front-white';
+            }
+            $block->setHeaderIcon($this->getData(self::PROP_ICON), $style);
         }
 
         $block->setContent($this->getContent());

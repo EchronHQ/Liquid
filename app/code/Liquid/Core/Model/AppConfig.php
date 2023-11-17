@@ -38,7 +38,7 @@ class AppConfig
         $this->data['api_reference_url'] = 'https://app.swaggerhub.com/apis-docs/Echron/attlaz-api/';
         $this->data['signup_url'] = 'https://app.attlaz.com/signup';
         $this->data['dev'] = [
-            'minifyhtml' => false,
+            'minifyhtml' => true,
             'minifycss' => true,
         ];
 

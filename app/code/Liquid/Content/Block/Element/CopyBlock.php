@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Liquid\Content\Block\Element;
 
 use DI\Attribute\Inject;
+use Echron\Tools\StringHelper;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\FrontendFileUrl;
 use Liquid\Core\Model\Layout\AbstractBlock;
+use Liquid\Framework\Filesystem\Path;
 use Psr\Log\LoggerInterface;
 
 class CopyBlock extends AbstractBlock
 {
     private string|null $types = null;
 
-    private FrontendFileUrl|null $headerIcon = null;
+    private FrontendFileUrl|string|null $headerIcon = null;
     private string|null $headerIconStyle = null;
 
     private string|null $headerTitle = null;
@@ -71,7 +73,21 @@ class CopyBlock extends AbstractBlock
             if (str_starts_with($icon, 'http')) {
                 $icon = new FrontendFileUrl($icon);
             } else if ($this->resolver !== null) {
-                $icon = $this->resolver->getAssetUrl($icon);
+
+                if ($this->embedIcon && StringHelper::contains($icon, '.svg')) {
+
+                    $path = $this->resolver->getPath(Path::MEDIA, $icon);
+
+                    if (file_exists($path)) {
+                        $icon = file_get_contents($path);
+                    } else {
+                        $icon = $this->resolver->getAssetUrl($icon);
+                    }
+                } else {
+                    $icon = $this->resolver->getAssetUrl($icon);
+                }
+
+
             } else {
                 if ($this->logger !== null) {
                     $this->logger->error('Header icon not found', ['icon' => $icon, 'style' => $style]);
@@ -138,6 +154,8 @@ class CopyBlock extends AbstractBlock
         $this->footer = $footer;
     }
 
+    private bool $embedIcon = true;
+
     public function toHtml(): string
     {
         //        if ($this->profiler !== null) {
@@ -154,7 +172,14 @@ class CopyBlock extends AbstractBlock
 
             if ($this->headerIcon !== null) {
                 $output .= '<div class="copy-icon ' . (\is_null($this->headerIconStyle) ? '' : $this->headerIconStyle) . '">';
-                $output .= '    <img loading="lazy" src="' . $this->headerIcon->url . '" alt="' . $this->headerTitle . '">';
+
+                if (is_string($this->headerIcon)):
+                    $output .= $this->headerIcon;
+                else:
+                    $output .= '    <img loading="lazy" src="' . $this->headerIcon->url . '" alt="' . $this->headerTitle . '">';
+                endif;
+
+
                 $output .= '</div>';
             }
             if ($this->headerCaption !== null) {

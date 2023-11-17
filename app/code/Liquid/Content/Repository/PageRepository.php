@@ -228,6 +228,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             /**
              * Solutions - Use cases
              */
+            // TODO: make overview page with all use cases
             PageDefinition::generate('use-cases/data-migration', [
                 'url_key' => 'use-cases/data-migration',
                 'template' => 'page/use-cases/data-migration.phtml',
@@ -279,6 +280,23 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
                 'modified' => '2023-11-05 12:41:03',
             ]),
 
+            /**
+             * Industries
+             */
+            // TODO: make overview page with all industries
+            PageDefinition::generate('industries/startups', [
+                'url_key' => 'industries/startups',
+                'template' => 'page/industries/startups.phtml',
+                'doc_css_class' => 'theme-aqua',
+                'seo_title' => 'Attlaz for startups',
+                'seo_description' => 'Attlaz for startups',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::IGNORE,
+                'modified' => '2023-11-17 12:41:03',
+            ]),
+            /**
+             * Case studies
+             */
 
             PageDefinition::generate('case-studies', [
                 'url_key' => 'case-studies',

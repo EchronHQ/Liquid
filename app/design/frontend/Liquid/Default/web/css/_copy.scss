@@ -106,7 +106,7 @@
 
 
       &.round {
-        @include display-flex();
+        display: flex;
         @include align-items(center);
         @include justify-content(center);
       }

@@ -1,8 +1,17 @@
 // Sections
 // ==========================================================================
 
+*, body {
+  box-sizing: border-box;
+}
 
-body {
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body, p, ul, ol, li, h1, h2, h3 {
   // Remove the margin in all browsers (opinionated).
   margin: 0;
   padding: 0;

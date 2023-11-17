@@ -88,6 +88,11 @@ abstract class AbstractBlock implements BlockInterface
         return $this->data[$key] ?? null;
     }
 
+    public function getDataKeys(): array
+    {
+        return array_keys($this->data);
+    }
+
     public function hasData(string $key): bool
     {
         return \array_key_exists($key, $this->data);

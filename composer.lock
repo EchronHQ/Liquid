@@ -131,16 +131,16 @@
         },
         {
             "name": "attlaz/client",
-            "version": "1.9.7",
+            "version": "1.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Attlaz-Platform/PHP-Client.git",
-                "reference": "abb721dba149d8aad0fd59a98fc6e5d08b987a09"
+                "reference": "85a87246d2b1c732f157790c5a0e256f52f76ed8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Attlaz-Platform/PHP-Client/zipball/abb721dba149d8aad0fd59a98fc6e5d08b987a09",
-                "reference": "abb721dba149d8aad0fd59a98fc6e5d08b987a09",
+                "url": "https://api.github.com/repos/Attlaz-Platform/PHP-Client/zipball/85a87246d2b1c732f157790c5a0e256f52f76ed8",
+                "reference": "85a87246d2b1c732f157790c5a0e256f52f76ed8",
                 "shasum": ""
             },
             "require": {
@@ -163,7 +163,7 @@
             "license": [
                 "MIT"
             ],
-            "description": "Attlaz PHP Client | Attlaz iPaas solutions & tools for cloud connected businesses, automation and scaling",
+            "description": "Attlaz PHP Client | Attlaz - solutions & tools for cloud connected businesses, automation and scaling",
             "homepage": "https://attlaz.com",
             "keywords": [
                 "Connection",
@@ -173,9 +173,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Attlaz-Platform/PHP-Client/issues",
-                "source": "https://github.com/Attlaz-Platform/PHP-Client/tree/1.9.7"
+                "source": "https://github.com/Attlaz-Platform/PHP-Client/tree/1.9.8"
             },
-            "time": "2023-02-16T16:17:26+00:00"
+            "time": "2023-11-13T12:26:00+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -332,22 +332,22 @@
         },
         {
             "name": "echron/datatypes",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Echron/DataTypes.git",
-                "reference": "40bbca06d4b8bec663ca2fc54d46baa093c4076a"
+                "url": "https://github.com/EchronHQ/DataTypes.git",
+                "reference": "899e0a3c45c6e4da3acc974361adebd6c9e58a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Echron/DataTypes/zipball/40bbca06d4b8bec663ca2fc54d46baa093c4076a",
-                "reference": "40bbca06d4b8bec663ca2fc54d46baa093c4076a",
+                "url": "https://api.github.com/repos/EchronHQ/DataTypes/zipball/899e0a3c45c6e4da3acc974361adebd6c9e58a6b",
+                "reference": "899e0a3c45c6e4da3acc974361adebd6c9e58a6b",
                 "shasum": ""
             },
             "require": {
-                "echron/tools": "^1.1",
+                "echron/tools": "^1.6",
                 "ext-json": "*",
-                "php": ">=7.4 || >=8.0"
+                "php": ">=8.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5.13"
@@ -364,30 +364,32 @@
             ],
             "authors": [
                 {
-                    "name": "Stijn Duynslaeger"
+                    "name": "Stijn Duynslaeger",
+                    "email": "stijn@echron.com",
+                    "homepage": "https://echron.com"
                 }
             ],
             "description": "Extra basic datatypes and helper classes",
-            "homepage": "https://github.com/echron/datatypes",
+            "homepage": "https://github.com/EchronHQ/DataTypes",
             "support": {
-                "issues": "https://github.com/Echron/DataTypes/issues",
-                "source": "https://github.com/Echron/DataTypes/tree/1.4.1"
+                "issues": "https://github.com/EchronHQ/DataTypes/issues",
+                "source": "https://github.com/EchronHQ/DataTypes/tree/1.5.0"
             },
-            "time": "2022-09-16T12:26:09+00:00"
+            "time": "2023-11-12T19:26:00+00:00"
         },
         {
             "name": "echron/io",
-            "version": "1.5.4",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
-                "url": "git@bitbucket.org:Echron/io.git",
-                "reference": "30ed8eedafd6db7a834b4406c7a02b1cf2245264"
+                "url": "https://github.com/EchronHQ/IO.git",
+                "reference": "a145ec27dc3633a7b51b8473a9d8106c8fef0374"
             },
             "dist": {
-                "type": "tar",
-                "url": "https://packagist.echron.be/dist/echron/io/echron-io-1.5.4-eabad1.tar",
-                "reference": "30ed8eedafd6db7a834b4406c7a02b1cf2245264",
-                "shasum": "d28b231e79a7c868804807322cdaf460fb0a0388"
+                "type": "zip",
+                "url": "https://api.github.com/repos/EchronHQ/IO/zipball/a145ec27dc3633a7b51b8473a9d8106c8fef0374",
+                "reference": "a145ec27dc3633a7b51b8473a9d8106c8fef0374",
+                "shasum": ""
             },
             "require": {
                 "echron/datatypes": "^1.4.1",
@@ -421,17 +423,7 @@
                     "Echron\\IO\\": "src/Echron/IO"
                 }
             },
-            "scripts": {
-                "lint:fix": [
-                    " ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php"
-                ],
-                "phpstan": [
-                    " ./vendor/bin/phpstan analyse --memory-limit=512M"
-                ],
-                "phpstan:generate-baseline": [
-                    " ./vendor/bin/phpstan analyse --generate-baseline --memory-limit=512M"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -442,19 +434,23 @@
             ],
             "description": "IO library for PHP",
             "homepage": "https://github.com/echron/io",
-            "time": "2023-09-08T22:37:02+00:00"
+            "support": {
+                "issues": "https://github.com/EchronHQ/IO/issues",
+                "source": "https://github.com/EchronHQ/IO/tree/1.6.0"
+            },
+            "time": "2023-11-12T16:53:14+00:00"
         },
         {
             "name": "echron/tools",
             "version": "1.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Echron/Tools.git",
+                "url": "https://github.com/EchronHQ/Tools.git",
                 "reference": "d83769d69d7f77d1b7ea49806f908eda6f4e765d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Echron/Tools/zipball/d83769d69d7f77d1b7ea49806f908eda6f4e765d",
+                "url": "https://api.github.com/repos/EchronHQ/Tools/zipball/d83769d69d7f77d1b7ea49806f908eda6f4e765d",
                 "reference": "d83769d69d7f77d1b7ea49806f908eda6f4e765d",
                 "shasum": ""
             },
@@ -492,8 +488,8 @@
             "description": "Tools library for PHP",
             "homepage": "https://github.com/echron/tools",
             "support": {
-                "issues": "https://github.com/Echron/Tools/issues",
-                "source": "https://github.com/Echron/Tools/tree/1.6.2"
+                "issues": "https://github.com/EchronHQ/Tools/issues",
+                "source": "https://github.com/EchronHQ/Tools/tree/1.6.2"
             },
             "time": "2023-06-12T14:34:40+00:00"
         },
@@ -1137,7 +1133,7 @@
         },
         {
             "name": "laminas/laminas-mail",
-            "version": "2.25.0",
+            "version": "2.25.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-mail.git",
@@ -1564,16 +1560,16 @@
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v1.3.2",
+            "version": "v1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "076fe2cf128bd54b4341cdc6d49b95b34e101e4c"
+                "reference": "3dbf8a8e914634c48d389c1234552666b3d43754"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/076fe2cf128bd54b4341cdc6d49b95b34e101e4c",
-                "reference": "076fe2cf128bd54b4341cdc6d49b95b34e101e4c",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/3dbf8a8e914634c48d389c1234552666b3d43754",
+                "reference": "3dbf8a8e914634c48d389c1234552666b3d43754",
                 "shasum": ""
             },
             "require": {
@@ -1620,7 +1616,7 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2023-10-17T13:38:16+00:00"
+            "time": "2023-11-08T14:08:06+00:00"
         },
         {
             "name": "league/flysystem",
@@ -3038,16 +3034,16 @@
         },
         {
             "name": "symfony/cache-contracts",
-            "version": "v3.3.0",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache-contracts.git",
-                "reference": "ad945640ccc0ae6e208bcea7d7de4b39b569896b"
+                "reference": "1d74b127da04ffa87aa940abe15446fa89653778"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/ad945640ccc0ae6e208bcea7d7de4b39b569896b",
-                "reference": "ad945640ccc0ae6e208bcea7d7de4b39b569896b",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/1d74b127da04ffa87aa940abe15446fa89653778",
+                "reference": "1d74b127da04ffa87aa940abe15446fa89653778",
                 "shasum": ""
             },
             "require": {
@@ -3094,7 +3090,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -3110,7 +3106,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-23T14:45:45+00:00"
+            "time": "2023-09-25T12:52:38+00:00"
         },
         {
             "name": "symfony/console",
@@ -3269,7 +3265,7 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.3.0",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
@@ -3316,7 +3312,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.4.0"
             },
             "funding": [
                 {
@@ -4709,16 +4705,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.38.0",
+            "version": "v3.38.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "7e6070026e76aa09d77a47519625c86593fb8e31"
+                "reference": "d872cdd543797ade030aaa307c0a4954a712e081"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/7e6070026e76aa09d77a47519625c86593fb8e31",
-                "reference": "7e6070026e76aa09d77a47519625c86593fb8e31",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/d872cdd543797ade030aaa307c0a4954a712e081",
+                "reference": "d872cdd543797ade030aaa307c0a4954a712e081",
                 "shasum": ""
             },
             "require": {
@@ -4790,7 +4786,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.38.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.38.2"
             },
             "funding": [
                 {
@@ -4798,7 +4794,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-07T08:44:54+00:00"
+            "time": "2023-11-14T00:19:22+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5175,16 +5171,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.41",
+            "version": "1.10.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c6174523c2a69231df55bdc65b61655e72876d76"
+                "reference": "fc2316508de5453140b5cb3d3f8683a33e92f26a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c6174523c2a69231df55bdc65b61655e72876d76",
-                "reference": "c6174523c2a69231df55bdc65b61655e72876d76",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/fc2316508de5453140b5cb3d3f8683a33e92f26a",
+                "reference": "fc2316508de5453140b5cb3d3f8683a33e92f26a",
                 "shasum": ""
             },
             "require": {
@@ -5233,20 +5229,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-05T12:57:57+00:00"
+            "time": "2023-11-17T15:26:57+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "10.1.7",
+            "version": "10.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "355324ca4980b8916c18b9db29f3ef484078f26e"
+                "reference": "84838eed9ded511f61dc3e8b5944a52d9017b297"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/355324ca4980b8916c18b9db29f3ef484078f26e",
-                "reference": "355324ca4980b8916c18b9db29f3ef484078f26e",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/84838eed9ded511f61dc3e8b5944a52d9017b297",
+                "reference": "84838eed9ded511f61dc3e8b5944a52d9017b297",
                 "shasum": ""
             },
             "require": {
@@ -5303,7 +5299,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.7"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.8"
             },
             "funding": [
                 {
@@ -5311,7 +5307,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-04T15:34:17+00:00"
+            "time": "2023-11-15T13:31:15+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -6917,7 +6913,7 @@
         },
         {
             "name": "symfony/event-dispatcher-contracts",
-            "version": "v3.3.0",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher-contracts.git",
@@ -6973,7 +6969,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.3.0"
+                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.4.0"
             },
             "funding": [
                 {

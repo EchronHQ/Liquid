@@ -15,9 +15,9 @@ class TermDefinition extends PageDefinition
 
     private const URL_PATH_PREFIX = 'blog/term';
 
-    public static function generate(int|string $id, array $data): self
+    public static function generate(int|string $id, array $data): static
     {
-        $term = new self($id);
+        $term = new static($id);
 
         $data['seo_description'] = $data['description'];
         $dataMapper = new DataMapper($data);

@@ -48,7 +48,7 @@ class CopyBlock extends AbstractBlock
             'detail', 'center', 'right', 'gap-normal', 'gap-large',
             'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua',
             'green', 'blue', 'yellow', 'purple', 'pink', 'new', 'header',
-            'col--3', 'col--4', 'col--6', 'col--12',
+            'col--3', 'col--4', 'col--6', 'col--8', 'col--12',
             'sm:col--3', 'sm:col--4', 'sm:col--6', 'sm:col--12',
             'md:col--3', 'md:col--4', 'md:col--6', 'md:col--12',
             'lg:col--3', 'lg:col--4', 'lg:col--6', 'lg:col--12',
@@ -60,8 +60,9 @@ class CopyBlock extends AbstractBlock
             $arrTypes = \explode(' ', $types);
             foreach ($arrTypes as $type) {
                 if ($type !== '' && !\in_array($type, $allowedTypes)) {
-                    // TODO: log this
-                    throw new \Exception('Invalid content block type "' . $type . '"');
+                    if ($this->logger !== null) {
+                        $this->logger->error('Invalid content block type "' . $type . '"');
+                    }
                 }
             }
         }

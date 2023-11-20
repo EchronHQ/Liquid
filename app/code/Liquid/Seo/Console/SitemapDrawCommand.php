@@ -14,7 +14,8 @@ class SitemapDrawCommand extends Command
 {
     public function __construct(
         private readonly GatherPages $gatherPages
-    ) {
+    )
+    {
         parent::__construct('seo:draw-sitemap');
         $this->setAliases(['seo:sitemap-draw']);
     }
@@ -106,7 +107,7 @@ class SitemapDrawCommand extends Command
 
             $x = strlen($childSegment->pathSegment) + strlen($pre);
 
-            echo $pre . $childSegment->pathSegment . str_repeat(' ', 50 - $x) . ' ' . $childSegment->getTitle() . ' ' . $childSegment->getPath() . PHP_EOL;
+            echo $pre . $childSegment->pathSegment . str_repeat(' ', 50 - $x) . ' ' . $childSegment->getTitle() . ' [' . $childSegment->getPath() . ']' . PHP_EOL;
             $i++;
 
             $this->output($childSegment, $level + 1);

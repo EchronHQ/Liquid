@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace Liquid\Seo\Helper;
 
-use Liquid\Blog\Repository\BlogRepository;
-use Liquid\Blog\Repository\TerminologyRepository;
-use Attlaz\Connector\Repository\PlatformRepository;
+use DI\Container;
 use Liquid\Content\Helper\TemplateHelper;
 use Liquid\Content\Model\Resource\PageDefinition;
-use Liquid\Content\Repository\PageRepository;
+use Liquid\Content\Model\Resource\PageStatus;
 use Liquid\Core\Helper\FileHelper;
+use Liquid\Core\Repository\ViewableEntityRepository;
+use Liquid\Framework\Module\ModuleHelper;
+use Psr\Log\LoggerInterface;
 
 readonly class GatherPages
 {
     public function __construct(
-        private BlogRepository        $blogRepository,
-        private PageRepository        $pageRepository,
-        private TerminologyRepository $terminologyRepository,
-        private PlatformRepository    $platformRepository,
-        //        private PlatformHelper        $platformHelper,
-        private TemplateHelper        $templateHelper,
-        private FileHelper            $fileHelper,
-    ) {
+        private ModuleHelper       $moduleHelper,
+        private TemplateHelper     $templateHelper,
+        private FileHelper         $fileHelper,
+        private readonly Container $diContainer,
+        private LoggerInterface    $logger
+    )
+    {
     }
 
     /**
@@ -32,56 +32,61 @@ readonly class GatherPages
     {
         $result = [];
 
-        $pages = $this->pageRepository->getAll();
-        $result = \array_merge($result, $pages);
+        $modules = $this->moduleHelper->getModules();
+        foreach ($modules as $module) {
+            $moduleViewableEntityRepositories = $module['viewableEntityRepositories'];
+            foreach ($moduleViewableEntityRepositories as $viewableEntityRepository) {
+                $respository = $this->diContainer->get($viewableEntityRepository);
+                if ($respository instanceof ViewableEntityRepository) {
+                    $pages = $respository->getEntities();
+                    foreach ($pages as $page) {
+                        if ($page->status === PageStatus::ACTIVE) {
+                            $result[] = $page;
 
-        /**
-         * Blog
-         */
-        $blogPages = $this->blogRepository->getPages();
-        $result = array_merge($result, $blogPages);
+                            echo $page->getSeoTitle() . ' ' . $page->getUrlPath() . PHP_EOL;
+                        }
 
-        $blogCategories = $this->blogRepository->getCategories();
-        $result = \array_merge($result, $blogCategories);
-
-        $blogPosts = $this->blogRepository->getPosts();
-        $result = \array_merge($result, $blogPosts);
-
-        $terms = $this->terminologyRepository->getAll();
-        $result = \array_merge($result, $terms);
-
-        /**
-         * Platform pages
-         */
-        $platformPages = $this->platformRepository->getPages();
-        $result = array_merge($result, $platformPages);
-
-        $connectors = $this->platformRepository->getConnectors();
-        $result = \array_merge($result, $connectors);
-
-        $connectorCategories = $this->platformRepository->getCategories();
-        $result = \array_merge($result, $connectorCategories);
-
-        $connectorTypes = $this->platformRepository->getTypes();
-        $result = \array_merge($result, $connectorTypes);
+                    }
+                } else {
+                    $this->logger->error('Viewable repository must be instance of ViewableEntityRepository');
+                }
+            }
+        }
 
 
-        //        $addConnectPagesToSitemap = false;
-        //        if ($addConnectPagesToSitemap) {
-        //
-        //            /**
-        //             * For now, remove the connect pages from the sitemap
-        //             */
-        //            foreach ($connectors as $connectorA) {
-        //                $connectableConnectors = $this->platformHelper->getConnectablePlatforms($connectorA);
-        //                foreach ($connectableConnectors as $connectorB) {
-        //                    $result[] = PageDefinition::generate($connectorA->id . ' ' . $connectorB->id, [
-        //                        'url_key'  => 'connect/' . $connectorA->urlKey . '-to-' . $connectorB->urlKey,
-        //                        'priority' => PageSitemapPriority::LOW
-        //                    ]);
-        //                }
-        //            }
-        //        }
+//        $pages = $this->pageRepository->getAll();
+//        $result = \array_merge($result, $pages);
+//
+//        /**
+//         * Blog
+//         */
+//        $blogPages = $this->blogRepository->getPages();
+//        $result = array_merge($result, $blogPages);
+//
+//        $blogCategories = $this->blogRepository->getCategories();
+//        $result = \array_merge($result, $blogCategories);
+//
+//        $blogPosts = $this->blogRepository->getPosts();
+//        $result = \array_merge($result, $blogPosts);
+//
+//        $terms = $this->terminologyRepository->getAll();
+//        $result = \array_merge($result, $terms);
+//
+//        /**
+//         * Platform pages
+//         */
+//        $platformPages = $this->platformRepository->getPages();
+//        $result = array_merge($result, $platformPages);
+//
+//        $connectors = $this->platformRepository->getConnectors();
+//        $result = \array_merge($result, $connectors);
+//
+//        $connectorCategories = $this->platformRepository->getCategories();
+//        $result = \array_merge($result, $connectorCategories);
+//
+//        $connectorTypes = $this->platformRepository->getTypes();
+//        $result = \array_merge($result, $connectorTypes);
+
 
         // Sort pages by priority
         usort($result, static function (PageDefinition $a, PageDefinition $b) {

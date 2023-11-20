@@ -42,10 +42,10 @@ class PageDefinition
         $this->id = $id;
     }
 
-    public static function generate(int|string $id, array $data): self
+    public static function generate(int|string $id, array $data): static
     {
 
-        $page = new self($id);
+        $page = new static($id);
 
         self::appendData($page, new DataMapper($data));
         return $page;

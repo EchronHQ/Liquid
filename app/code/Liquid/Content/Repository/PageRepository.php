@@ -225,60 +225,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             //                'seo_description' => 'The digital solution for every business model',
             //                'seo_keywords'  => '',
             //            ]),
-            /**
-             * Solutions - Use cases
-             */
-            // TODO: make overview page with all use cases
-            PageDefinition::generate('use-cases/data-migration', [
-                'url_key' => 'use-cases/data-migration',
-                'template' => 'page/use-cases/data-migration.phtml',
-                'doc_css_class' => 'theme-aqua',
-                'seo_title' => 'Attlaz use case: Data migration',
-                'seo_description' => 'Attlaz use case: Data migration',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2022-10-23 15:49:06',
-            ]),
-            PageDefinition::generate('use-cases/ecommerce', [
-                'url_key' => 'use-cases/ecommerce',
-                'template' => 'page/use-cases/ecommerce.phtml',
-                'doc_css_class' => 'theme-aqua',
-                'seo_title' => 'Attlaz use case: Ecommerce',
-                'seo_description' => 'Attlaz use case: Ecommerce',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2022-10-23 15:49:06',
-            ]),
-            PageDefinition::generate('use-cases/marketing', [
-                'url_key' => 'use-cases/marketing',
-                'template' => 'page/use-cases/marketing.phtml',
-                'doc_css_class' => 'theme-aqua',
-                'seo_title' => 'Attlaz use case: Marketing',
-                'seo_description' => 'Attlaz use case: Marketing',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2022-10-23 15:49:06',
-            ]),
-            PageDefinition::generate('use-cases/inventory', [
-                'url_key' => 'use-cases/inventory',
-                'template' => 'page/use-cases/inventory-management.phtml',
-                'doc_css_class' => 'theme-aqua',
-                'seo_title' => 'Attlaz use case: Inventory Management',
-                'seo_description' => 'Attlaz use case: Inventory Management',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::IGNORE,
-                'modified' => '2022-10-23 15:49:06',
-            ]),
-            PageDefinition::generate('use-cases/ai', [
-                'url_key' => 'use-cases/ai',
-                'template' => 'page/use-cases/ai.phtml',
-                'doc_css_class' => 'theme-aqua',
-                'seo_title' => 'Attlaz use case: AI',
-                'seo_description' => 'Attlaz use case: AI',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::IGNORE,
-                'modified' => '2023-11-05 12:41:03',
-            ]),
+
 
             /**
              * Industries

@@ -7,6 +7,7 @@ use Liquid\Blog\Controller\Blog\Tag;
 use Liquid\Blog\Controller\Post\View as BlogPostView;
 use Liquid\Blog\Controller\Term\View as BlogTermView;
 
+$name = 'Liquid_Blog';
 $routes = [
     'blog' => [
         '' => BlogOverview::class,

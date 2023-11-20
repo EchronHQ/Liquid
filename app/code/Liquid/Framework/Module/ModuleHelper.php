@@ -25,26 +25,27 @@ class ModuleHelper
         $moduleData = null;
         if (file_exists($moduleConfigPath)) {
 
+            $name = null;
             $routes = null;
             $viewableEntityRepositories = null;
 
             include $moduleConfigPath;
 
-            // TODO: get module name
-            $moduleIdentifier = $moduleConfigPath;
+            $moduleIdentifier = $name ?? $moduleConfigPath;
             $moduleData = [
-                'name' => '',
+                'name' => $moduleIdentifier,
                 'order' => 999,
                 'routes' => [],
                 'viewableEntityRepositories' => [],
             ];
+
 
             if (is_array($routes)) {
 
                 $moduleData['routes'] = $routes;
                 foreach ($routes as $route => $paths) {
                     if (!is_array($paths)) {
-                        $this->logger->error('Route paths should be array', ['module' => $moduleConfigPath, 'paths' => $paths]);
+                        $this->logger->error('Route paths should be array', ['module' => $moduleIdentifier, 'paths' => $paths]);
                     }
                 }
             }

@@ -6,7 +6,7 @@ use Liquid\Content\Controller\Demo\Submit as SubmitDemo;
 use Liquid\Content\Controller\Page\View as PageViewController;
 use Liquid\Core\Controller\PageNotFoundController;
 
-$name = 'Liquid_Content';
+$name = 'Liquid_Seo';
 $routes = [
     'content' => [
         'page/view' => PageViewController::class,

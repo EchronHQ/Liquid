@@ -11,7 +11,7 @@ class TagDefinition extends PageDefinition
 {
     public string $title_long = '';
 
-    public static function generate(int|string $id, array $data): self
+    public static function generate(int|string $id, array $data): static
     {
         $article = new TagDefinition($id);
 

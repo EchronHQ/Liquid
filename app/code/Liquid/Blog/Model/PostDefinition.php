@@ -26,7 +26,7 @@ class PostDefinition extends PageDefinition
     public int $readDuration = 5;
 
 
-    public static function generate(int|string $id, array $data): self
+    public static function generate(int|string $id, array $data): static
     {
         $article = new PostDefinition($id);
 

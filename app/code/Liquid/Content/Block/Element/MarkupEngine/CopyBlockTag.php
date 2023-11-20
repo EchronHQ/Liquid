@@ -77,7 +77,7 @@ class CopyBlockTag extends Block
         if ($this->hasData(self::PROP_ICON)) {
             $style = $this->getData(self::PROP_ICON_STYLE);
             if ($style === null) {
-                $style = 'round size-50 back-pink front-white';
+                // $style = 'round size-50 back-pink front-white';
             }
             $block->setHeaderIcon($this->getData(self::PROP_ICON), $style);
         }

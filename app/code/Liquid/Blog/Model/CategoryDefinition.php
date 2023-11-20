@@ -13,7 +13,7 @@ class CategoryDefinition extends PageDefinition
 
     public const TITLE_PREFIX = 'Blog - ';
 
-    public static function generate(int|string $id, array $data): self
+    public static function generate(int|string $id, array $data): static
     {
         $article = new CategoryDefinition($id);
 

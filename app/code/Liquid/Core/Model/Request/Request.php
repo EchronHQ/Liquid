@@ -133,6 +133,11 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         return $this->params[$keyName] ?? $this->queryParams[$keyName] ?? $this->postParams[$keyName] ?? $default;
     }
 
+    final public function hasParam(string $key): bool
+    {
+        return $this->getParam($key) !== null;
+    }
+
     final public function getParams(): array
     {
         return $this->params;

@@ -25,16 +25,9 @@ use Liquid\Core\Repository\UrlRepository;
 use Liquid\Core\Repository\ViewableEntityRepository;
 use Liquid\Core\Router\Admin;
 use Liquid\Core\Router\Base;
-use Liquid\Framework\Component\ComponentRegistrarInterface;
-use Liquid\Framework\Component\ComponentType;
+use Liquid\Framework\Module\ModuleHelper;
 use Psr\Log\LoggerInterface;
 
-//use Attlaz\Connector\Controller\Category\View as ConnectorCategoryView;
-//use Attlaz\Connector\Controller\Connector\ConnectView;
-//use Attlaz\Connector\Controller\Connector\Overview as ConnectorOverviewView;
-//use Attlaz\Connector\Controller\Connector\PlatformView as ConnectorView;
-//use Attlaz\Connector\Controller\Type\View as ConnectorTypeView;
-//use Attlaz\Connector\Repository\PlatformRepository;
 
 class Router
 {
@@ -44,65 +37,49 @@ class Router
     /** @var Base[] */
     private array $routes = [];
 
+    /** @var array<string,string> */
     private array $pageRoutes = [];
 
     private bool $languageDetectionHasRan = false;
 
+    /**  @var ViewableEntityRepository[] */
+    private array $viewableEntityRepositories = [];
+
     public function __construct(
-        private readonly Resolver                    $resolver,
-        private readonly AppConfig                   $config,
-        private readonly Container                   $diContainer,
-        private readonly LocaleRepository            $localeRepository,
-        private readonly Profiler                    $profiler,
-        private readonly ComponentRegistrarInterface $componentRegistrar,
-        private readonly LoggerInterface             $logger
+        private readonly Resolver         $resolver,
+        private readonly AppConfig        $config,
+        private readonly Container        $diContainer,
+        private readonly LocaleRepository $localeRepository,
+        private readonly Profiler         $profiler,
+        private readonly ModuleHelper     $moduleHelper,
+        private readonly LoggerInterface  $logger
     )
     {
 
         $frontendRoute = new Base($this->diContainer);
 
 
-        $modules = $this->componentRegistrar->getPaths(ComponentType::Module);
-        foreach ($modules as $modulePath) {
-            $fullPath = $modulePath . DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'routes.php';
-            if (file_exists($fullPath)) {
+        $modules = $this->moduleHelper->getModules();
+        foreach ($modules as $module) {
 
-                $routes = null;
-                $viewableEntityRepositories = null;
+            $routes = $module['routes'];
+            $viewableEntityRepositories = $module['viewableEntityRepositories'];
 
-                include $fullPath;
 
-                if (is_array($routes)) {
-                    foreach ($routes as $route => $paths) {
-                        $frontendRoute->registerModule($route, $paths);
-                    }
-                }
-                if (is_array($viewableEntityRepositories)) {
-                    foreach ($viewableEntityRepositories as $viewableEntityRepository) {
-                        $this->viewableEntityRepositories[] = $viewableEntityRepository;
-                    }
-                }
+            foreach ($routes as $route => $paths) {
+                $frontendRoute->registerModule($route, $paths);
             }
+
+
+            foreach ($viewableEntityRepositories as $viewableEntityRepository) {
+
+                $this->viewableEntityRepositories[] = $viewableEntityRepository;
+            }
+
 
         }
 
-//
-//        $frontendRoute->registerModule('content', [
-//            'page/view' => PageViewController::class,
-//        ]);
-//        $frontendRoute->registerModule('blog', [
-//            '' => BlogOverview::class,
-//            ':postId' => BlogPostView::class,
-//            'category/:categoryId' => Category::class,
-//            'tag/:tagId' => Tag::class,
-//            'term/:termId' => BlogTermView::class,
-//        ]);
-//        $frontendRoute->registerModule('demo', [
-//            'submit' => SubmitDemo::class,
-//        ]);
-//        $frontendRoute->registerModule('contact', [
-//            'submit' => SubmitContact::class,
-//        ]);
+
         /**
          * Deprecated, redirect "connector" to "platforms" in url
          */
@@ -158,10 +135,6 @@ class Router
 
     }
 
-    /**
-     * @var ViewableEntityRepository[]
-     */
-    private array $viewableEntityRepositories = [];
 
     private function initializeUrlRewrites(): void
     {
@@ -185,19 +158,26 @@ class Router
 
 
         foreach ($this->viewableEntityRepositories as $viewableEntityRepository) {
-            /** @var ViewableEntityRepository $respository */
             $respository = $this->diContainer->get($viewableEntityRepository);
-            $pages = $respository->getEntities();
-            foreach ($pages as $page) {
-                $this->pageRoutes[$page->id] = $page->getUrlPath();
+            if ($respository instanceof ViewableEntityRepository) {
+                $pages = $respository->getEntities();
+                foreach ($pages as $page) {
+                    // TODO: validate that page route doesn't exist already
+                    $this->pageRoutes[$page->id] = $page->getUrlPath();
+
+//                    var_dump(get_class($page) . ' - ' . $page->id . ' - ' . $page->getUrlPath());
+                }
+            } else {
+                $this->logger->error('Viewable repository must be instance of ViewableEntityRepository');
             }
+
         }
 
 
     }
 
     /**
-     * @return string[]
+     * @return array<string,string>
      */
     public function getPageRoutes(): array
     {
@@ -288,7 +268,7 @@ class Router
         $urlRepository = $this->diContainer->get(UrlRepository::class);
 
         $rewrite = $urlRepository->getRewrite($request->getPathInfo());
-        if (!\is_null($rewrite)) {
+        if ($rewrite !== null) {
             if ($rewrite->statusCode === UrlRewriteType::INTERNAL) {
                 $request->setPathInfo($rewrite->target, $rewrite);
             } else {
@@ -319,9 +299,6 @@ class Router
 
         }
 
-
-        //        \var_dump($request->getPathInfo());
-        //        \var_dump($request->getParams());
         /** @var NotFound $notFoundAction */
         $notFoundAction = $this->diContainer->make(NotFound::class);
 

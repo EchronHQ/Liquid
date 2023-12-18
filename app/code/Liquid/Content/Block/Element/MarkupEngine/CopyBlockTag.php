@@ -46,7 +46,8 @@ class CopyBlockTag extends Block
         $dataKeys = $this->getDataKeys();
         foreach ($dataKeys as $dataKey) {
             if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
-                $this->logger->warning('ContentBlockTag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey)]);
+                $ex = new \Exception('');
+                $this->logger->warning('Copy Block Tag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey), 'info' => $this->getNameInLayout(), 'call stack' => $ex->getTraceAsString()]);
             }
         }
     }

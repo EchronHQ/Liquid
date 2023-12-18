@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Helper;
 
+use Echron\Tools\FileSystem;
 use Liquid\Framework\Filesystem\DirectoryList;
 use Liquid\Framework\Filesystem\Path;
 
@@ -13,7 +14,14 @@ class StaticContentHelper
 
     public function __construct(private readonly DirectoryList $directoryList)
     {
-        $this->versionFilePath = $this->directoryList->getPath(Path::STATIC_VIEW) . DIRECTORY_SEPARATOR . 'deployed_version.txt';
+        $dir = $this->directoryList->getPath(Path::STATIC_VIEW);
+        $this->versionFilePath = $dir . DIRECTORY_SEPARATOR . 'deployed_version.txt';
+
+        if (!FileSystem::dirExists($dir)) {
+            FileSystem::createDir($dir, true);
+        }
+
+
     }
 
     public function getStaticDeployedVersion(): string

@@ -15,6 +15,13 @@ $breakpoints: ('sm': $breakpoint-sm, 'md':$breakpoint-md, 'lg':$breakpoint-lg);
   grid-template-columns: repeat(12, 1fr);
   @include debug('orange');
   //border: 2px dashed orange;
+  &.reverse {
+    direction: rtl;
+
+    div {
+      direction: ltr;
+    }
+  }
 }
 
 

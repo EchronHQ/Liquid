@@ -20,15 +20,15 @@ class LocaleRepository
         $enUK->langCode = 'en';
         //        $enUK->openGraphCode = 'en_GB';
 
-        //        $enUS = new Locale();
-        //        $enUS->code = 'en-us';
-        //        $enUS->langCode = 'en-us';
+        $enUS = new Locale();
+        $enUS->code = 'en-us';
+        $enUS->langCode = 'en-us';
         //        $enUS->openGraphCode = 'en_US';
         //        $enUS->active = false;
 
         $this->locales = [
             $enUK,
-            //   $enUS
+            $enUS,
         ];
     }
 
@@ -53,7 +53,7 @@ class LocaleRepository
 
     public function getDefault(): Locale
     {
-        $default = $this->getByCode('en-uk');
+        $default = $this->getByCode('en-us');
         if ($default === null) {
             throw new \Exception('Unable to load default locale');
         }

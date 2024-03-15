@@ -84,13 +84,24 @@ class Application
 
         $attlazLogStreamId = $this->config->getValue('logger.attlaz.logstream_id', '');
         if ($attlazLogStreamId !== '') {
-            $attlazClientId = $this->config->getValue('logger.attlaz.client_id');
-            $attlazClientSecret = $this->config->getValue('logger.attlaz.client_secret');
+
+            $client = new Client();
+
+            $attlazClientToken = $this->config->getValue('logger.attlaz.client_token', '');
+            if ($attlazClientToken === '') {
+                $attlazClientId = $this->config->getValue('logger.attlaz.client_id');
+                $attlazClientSecret = $this->config->getValue('logger.attlaz.client_secret');
+                $client->authWithClient($attlazClientId, $attlazClientSecret);
+            } else {
+                $client->authWithToken($attlazClientToken);
+            }
+
+
             $attlazApiEndpoint = $this->config->getValue('logger.attlaz.endpoint');
 
             $attlazMinLogLevel = $this->config->getValue('logger.attlaz.minloglevel', Level::Info->name);
 
-            $client = new Client($attlazClientId, $attlazClientSecret, true);
+
             $client->setEndPoint($attlazApiEndpoint);
             $attlazHandler = new AttlazHandler($client, new LogStreamId($attlazLogStreamId));
             $attlazHandler->setLevel($attlazMinLogLevel);

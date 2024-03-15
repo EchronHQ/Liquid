@@ -37,8 +37,8 @@ class Error
 
             $output[] = [
                 'c' => $count,
-                'file' => $frame['file'],
-                'line' => $frame['line'],
+                'file' => $frame['file'] ?? '[nofile]',
+                'line' => $frame['line'] ?? '[noline]',
                 'class' => $frame['class'] ?? '',
                 'type' => $frame['type'] ?? '', // "->" or "::"
                 'function' => $frame['function'],

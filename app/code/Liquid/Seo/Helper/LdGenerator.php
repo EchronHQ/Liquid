@@ -25,7 +25,7 @@ class LdGenerator
 
         $ld = new LdData($domain);
 
-        $ld->addOrganisation('1', 'Attlaz', $this->resolver->getAssetUrl('icon/logo-980x253-white-green.png'));
+        $ld->addOrganization('1', 'Attlaz', $this->resolver->getAssetUrl('icon/logo-980x253-white-green.png'));
         $ld->addWebsite('1', 'Attlaz');
 
 

@@ -352,3 +352,7 @@ textarea {
   // Remove the default vertical scrollbar in IE.
   overflow: auto;
 }
+
+.align-center {
+  @include align-items(center);
+}

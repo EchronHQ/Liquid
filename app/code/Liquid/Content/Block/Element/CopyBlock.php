@@ -46,7 +46,7 @@ class CopyBlock extends AbstractBlock
     {
         $allowedTypes = [
             'detail', 'center', 'right', 'gap-normal', 'gap-large',
-            'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua',
+            'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua', 'card--theme-x',
             'green', 'blue', 'yellow', 'purple', 'pink', 'new', 'header',
             'col--3', 'col--4', 'col--6', 'col--8', 'col--12',
             'sm:col--3', 'sm:col--4', 'sm:col--6', 'sm:col--12',
@@ -106,9 +106,14 @@ class CopyBlock extends AbstractBlock
 
     public function setHeaderTitle(string $headerTitle, string $tag = 'h2', string|null $id = null): void
     {
-        $this->headerTitle = $headerTitle;
+        $this->headerTitle = self::replaceSpecialCharacters($headerTitle);
         $this->headerTitleTag = $tag;
         $this->headerTitleId = $id;
+    }
+
+    private static function replaceSpecialCharacters(string $input): string
+    {
+        return str_replace(['/n'], ['<br/>'], $input);
     }
 
     public function setHeaderCaption(string $headerCaption): void

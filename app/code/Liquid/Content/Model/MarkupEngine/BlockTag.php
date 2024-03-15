@@ -30,4 +30,9 @@ class BlockTag extends CustomTag
     {
         $this->_block = $block;
     }
+
+    public function getXBlock(): AbstractBlock
+    {
+        return $this->_block;
+    }
 }

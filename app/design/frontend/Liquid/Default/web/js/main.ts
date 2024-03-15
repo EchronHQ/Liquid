@@ -3,6 +3,7 @@ import * as $ from "jquery";
 import * as Sentry from '@sentry/browser';
 import Site from './components/site';
 import Faq from './components/faq';
+import Tabs from './components/tabs';
 import MouseEnterEvent = JQuery.MouseEnterEvent;
 import MouseLeaveEvent = JQuery.MouseLeaveEvent;
 import TriggeredEvent = JQuery.TriggeredEvent;
@@ -34,6 +35,35 @@ $(() => {
 
     const faq: Faq = new Faq();
     faq.init();
+
+    console.log('Init');
+    $('div[data-liquid-init]').each((index: number, element: HTMLElement): void => {
+
+        const initData: {
+            control: string | undefined; options: any | undefined
+        } | undefined = $(element).data('liquid-init');
+        if (initData === undefined) {
+            console.error('Init data undefined', {element});
+            return;
+        }
+
+
+        console.log('Init data', initData);
+        if (initData.hasOwnProperty('control') && initData.control !== undefined) {
+            const control: string = initData.control;
+            const options: any | null = initData.options === undefined ? null : initData.options;
+            switch (control) {
+                case 'tabs':
+
+                    const tabs: Tabs = new Tabs($(element), options);
+                    tabs.init();
+                    break;
+            }
+
+        }
+
+
+    });
 
 });
 
@@ -377,7 +407,6 @@ class Navigation {
     }
 
     private close(): void {
-
         if (this.closeTimeout !== null) {
             window.clearTimeout(this.closeTimeout);
         }

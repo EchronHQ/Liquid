@@ -12,14 +12,16 @@ use Psr\Log\LoggerInterface;
 
 class MarkupEngine
 {
-    private bool $debug = true;
+    public bool $debug = false;
     private static int $engineInstanceId = 0;
     private array $registeredTags = [];
     private bool $cacheTags = false;
     private bool $sniffForBuriedTags = true;
     private string|null $customCacheTagClass = null;
-    private string $_searchReg = '';
+    private string|null $_searchReg = null;
     private string $cacheDirectory = '';
+    /** @var  CustomTag[] */
+    private array $tags = [];
 
     public function __construct(
         private readonly Container       $container,
@@ -128,8 +130,6 @@ class MarkupEngine
     {
 
         ++self::$engineInstanceId;              // increment the parse count so it has unique identifiers
-
-        $this->buildReg();
         $tags = $this->processTags($source);    // Scrub for all tags
 
         //        $debug = [];
@@ -145,8 +145,6 @@ class MarkupEngine
         return $this->renderTags($tags);
     }
 
-    /** @var  CustomTag[] */
-    private array $tags = [];
 
     private function buildReg(): void
     {
@@ -166,21 +164,23 @@ class MarkupEngine
      * @param string $source The source to search for custom tags in.
      * @return CustomTag[] An array of found tags.
      */
-    private function processTags(string $source): array
+    public function processTags(string $source): array
     {
+        if ($this->_searchReg === null) {
+            $this->buildReg();
+        }
         /** @var CustomTag[] $tags */
         $tags = [];
 
         // Sets Open Pos to end of HTML ($source)
         $eot = strlen($source);
 
+
         while ($eot !== null) {
             $currentSource = substr($source, 0, $eot);    // Remaining HTML (moving Up)
             $lastTag = $this->getLastTag($currentSource);       // Position of "Opener"
 
             if ($lastTag === null) { // No More Tags found
-
-
                 $tag = new CustomTagConcrete($source, 'xxxxx', self::$engineInstanceId, count($tags));
                 $this->tags[self::$engineInstanceId . '-' . count($tags)] = $tag;
                 $tags[] = $tag;
@@ -192,40 +192,50 @@ class MarkupEngine
             $eot = $lastTag['pos'];
             $closer = "</$tagName>";
             $currentSource = substr($source, $eot); // HTML from Last occurence till end or Last processed Tag
-            $nextDom = strpos($currentSource, '<', 1); //Start of Next DOM Tag
-            $nextClosingTag = strpos($currentSource, '/' . '>'); //Close Bracket Loc
+            if ($currentSource !== '') {
 
-            if ($nextClosingTag !== false && $nextClosingTag < $nextDom) {
-                // Closing DOM is before the next DOM element (indicates <tag /> format)
-                $tagClosePosition = $nextClosingTag + 2; // Update TagClose to include />
+
+                $nextDom = strpos($currentSource, '<', 1); //Start of Next DOM Tag
+                $nextClosingTag = strpos($currentSource, '/' . '>'); //Close Bracket Loc
+
+                if ($nextClosingTag !== false && $nextClosingTag < $nextDom) {
+                    // Closing DOM is before the next DOM element (indicates <tag /> format)
+                    $tagClosePosition = $nextClosingTag + 2; // Update TagClose to include />
+                } else {
+                    // Traditional <tag></tag> format
+                    $tagCloseBeginning = strpos($currentSource, $closer);
+                    if ($tagCloseBeginning === false) {
+                        $this->logger->warning('[MarkupEngine] close position for tag `' . $tagName . '` not found in `' . $currentSource . '`');
+                        throw new \Exception('close position for tag `' . $tagName . '` not found.');
+                    }
+                    $tagClosePosition = strpos($currentSource, '>', $tagCloseBeginning) + 1;
+
+                }
+
+                $tag_source = substr($currentSource, 0, $tagClosePosition);
+
+
+                $tagData = $this->getTagData($tagName);
+                $tagClass = $tagData['class'];
+                if ($tagClass === null || !class_exists($tagClass) || !$this->container->has($tagClass)) {
+                    // TODO: is this desired behaviour?
+                    $tag = new CustomTagConcrete($tag_source, $tagName, self::$engineInstanceId, count($tags));
+
+                    $this->logger->warning('[MarkupEngine] class `' . $tagClass . '` not found for tag `' . $tagName . '`');
+                } else {
+                    $block = $this->container->make($tagClass, $tagData['arguments']);
+
+
+                    $tag = new BlockTag($tag_source, $tagName, self::$engineInstanceId, count($tags));
+                    $tag->setXBlock($block);
+                }
+
+                $this->tags[self::$engineInstanceId . '-' . count($tags)] = $tag;
+                $tags[] = $tag; // Append Tag (stdClass)
+                $source = substr($source, 0, $eot) . $tag->placeholder . substr($source, $eot + $tagClosePosition); // Update Source for next request
             } else {
-                // Traditional <tag></tag> format
-                $tagCloseBeginning = strpos($currentSource, $closer);
-                $tagClosePosition = strpos($currentSource, '>', $tagCloseBeginning) + 1;
+                $eot = null;
             }
-
-            $tag_source = substr($currentSource, 0, $tagClosePosition);
-
-            $tagData = $this->getTagData($tagName);
-            $tagClass = $tagData['class'];
-            if ($tagClass === null || !class_exists($tagClass) || !$this->container->has($tagClass)) {
-                // TODO: is this desired behaviour?
-                $tag = new CustomTagConcrete($tag_source, $tagName, self::$engineInstanceId, count($tags));
-
-                $this->logger->warning('[MarkupEngine] class `' . $tagClass . '` not found for tag `' . $tagName . '`');
-            } else {
-                $block = $this->container->make($tagClass, $tagData['arguments']);
-
-
-                $tag = new BlockTag($tag_source, $tagName, self::$engineInstanceId, count($tags));
-                $tag->setXBlock($block);
-            }
-
-            $this->tags[self::$engineInstanceId . '-' . count($tags)] = $tag;
-            $tags[] = $tag; // Append Tag (stdClass)
-
-
-            $source = substr($source, 0, $eot) . $tag->placeholder . substr($source, $eot + $tagClosePosition); // Update Source for next request
         }
         return $tags;
     }

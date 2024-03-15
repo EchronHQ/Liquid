@@ -44,12 +44,12 @@ class LdData
         return $this->ids['image:' . $key];
     }
 
-    public function addOrganisation(string $key, string $name, FrontendFileUrl $image): void
+    public function addOrganization(string $key, string $name, FrontendFileUrl $image): void
     {
         $this->addImage($image, '23931056685146');
 
         $id = $this->domain . "/#/schema/organization/" . $this->formatKey($key);
-        $this->ids['organisation:' . $key] = $id;
+        $this->ids['organization:' . $key] = $id;
 
         $this->sections[] = [
             "@type"  => "Organization",
@@ -73,9 +73,9 @@ class LdData
         ];
     }
 
-    public function getOrganisationId(string $key): string
+    public function getOrganizationId(string $key): string
     {
-        return $this->ids['organisation:' . $key];
+        return $this->ids['organization:' . $key];
     }
 
     public function addWebsite(string $key, string $name): void
@@ -94,7 +94,7 @@ class LdData
             //                "query-input" => "required name=search_term_string"
             //            ],
             "publisher"  => [
-                "@id" => $this->getOrganisationId('1')
+                "@id" => $this->getOrganizationId('1')
             ],
             "inLanguage" => "en"
         ];
@@ -128,7 +128,7 @@ class LdData
             "name"               => $name,
             "description"        => $description,
             "about"              => [
-                "@id" => $this->getOrganisationId('1')
+                "@id" => $this->getOrganizationId('1')
             ],
             "primaryImageOfPage" => [
                 "@id" => $this->getImageId('23931057111130')
@@ -203,7 +203,7 @@ class LdData
             "dataPublished"    => $published->format(\DateTimeInterface::ATOM),
             "dateModified"     => $modified->format(\DateTimeInterface::ATOM),
             "publisher"        => [
-                "@id" => $this->getOrganisationId('1')
+                "@id" => $this->getOrganizationId('1')
             ],
             "author"           => [
                 '@type' => 'Person',

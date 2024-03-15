@@ -7,6 +7,7 @@ namespace Liquid\Core\Model\Result;
 use Liquid\Content\Block\Element\MarkupEngine\CopyBlockTag;
 use Liquid\Content\Block\Element\MarkupEngine\LinkTag;
 use Liquid\Content\Block\Element\MarkupEngine\PageSectionTag;
+use Liquid\Content\Block\Element\MarkupEngine\TabsTag;
 use Liquid\Content\Block\HtmlHeadBlock;
 use Liquid\Content\Block\TemplateBlock;
 use Liquid\Content\Helper\LocaleHelper;
@@ -151,7 +152,7 @@ class Page extends Result
         $this->markupEngine->registerTag('page-section', PageSectionTag::class, ['template' => 'element/markupengine/page-section.phtml']);
         $this->markupEngine->registerTag('link', LinkTag::class);
         $this->markupEngine->registerTag('copy-block', CopyBlockTag::class);
-
+        $this->markupEngine->registerTag('tabs', TabsTag::class);
         $layoutOutput = $this->markupEngine->parse($layoutOutput);
 
         $this->profiler->profilerFinish();

@@ -121,6 +121,7 @@ class UrlRepository extends BaseRepository
 
 
             new UrlRewrite('/use-cases/e-commerce', '/use-cases/ecommerce', UrlRewriteType::PERMANENT),
+            new UrlRewrite('/products/visualise', '/products/visualize', UrlRewriteType::PERMANENT),
 
         ];
 

@@ -212,24 +212,29 @@ header .navigation {
       display: none;
       padding: 0 10px;
 
-      .sections .section {
-        .title {
-          margin-bottom: 1.25em;
-          margin-top: 1.25em;
-          color: $text-color-light;
-          font-size: .75rem;
-          line-height: 1;
-          font-weight: $font-weight-bold;
-          text-transform: uppercase;
-          white-space: nowrap;
+      .sections {
+        display: flex;
+
+        .section {
+          .title {
+            margin-bottom: 1.25em;
+            margin-top: 1.25em;
+            color: $text-color-light;
+            font-size: .75rem;
+            line-height: 1;
+            font-weight: $font-weight-bold;
+            text-transform: uppercase;
+            white-space: nowrap;
+          }
+        }
+
+        .section:first-child {
+          .title {
+            margin-top: 0;
+          }
         }
       }
 
-      .sections .section:first-child {
-        .title {
-          margin-top: 0;
-        }
-      }
     }
   }
 

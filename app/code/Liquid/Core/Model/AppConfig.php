@@ -155,7 +155,7 @@ class AppConfig
 
     final public function debugTranslations(): bool
     {
-        return false;
+        return true;
         // return $this->mode === ApplicationMode::DEVELOP;
     }
 

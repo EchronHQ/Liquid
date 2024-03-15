@@ -26,6 +26,7 @@ class TerminologyRepository implements ViewableEntityRepository
          * - Data Harmonization
          * - ETL
          * - ROAS
+         * - PLM (Product lifecycle management) https://www.ptc.com/en/technologies/plm
          */
         $this->terms = [
             /**

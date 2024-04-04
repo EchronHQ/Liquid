@@ -78,10 +78,10 @@ class Navigation extends TemplateBlock
                             ],
 
                             [
-                                'title' => 'Data migration',
-                                'description' => 'Synchronise all your data',
+                                'title' => 'Data management',
+                                'description' => 'Manage your data',
                                 'icon' => $this->getResolver()->getFrontendFileImageUrl('asset/icons/menu/data-migration.svg'),
-                                'link' => $this->getResolver()->getPageUrl('use-cases/data-migration'),
+                                'link' => $this->getResolver()->getPageUrl('use-cases/data-management'),
                             ],
                             [
                                 'title' => 'Marketing',
@@ -107,7 +107,7 @@ class Navigation extends TemplateBlock
                                 'title' => 'Shopify',
                                 'description' => '',
                                 'icon' => $this->getResolver()->getFrontendFileImageUrl('asset/icons/menu/data-migration.svg'),
-                                'link' => $this->getResolver()->getPageUrl('use-cases/data-migration'),
+                                'link' => $this->getResolver()->getPageUrl('use-cases/data-management'),
                             ],
 //                            [
 //                                'title' => 'Marketing',

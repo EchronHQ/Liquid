@@ -18,6 +18,14 @@ class TabsTag extends Block
         parent::__construct($context);
     }
 
+    private function isActive(BlockTag $subTag): bool
+    {
+        if (!array_key_exists('active', $subTag->attributes)) {
+            return true;
+        }
+        return $subTag->attributes['active'] === true || $subTag->attributes['active'] === 'true';
+    }
+
     public function toHtml(): string
     {
         $content = $this->getData('content');
@@ -33,7 +41,7 @@ class TabsTag extends Block
         $tabsControl->tabs = [];
         foreach ($subTags as $subTag) {
 
-            if ($subTag instanceof BlockTag && $subTag->tag === 'tab') {
+            if ($subTag instanceof BlockTag && $subTag->tag === 'tab' && $this->isActive($subTag)) {
                 $tabsControl->tabs[] = [
                     'title' => $subTag->attributes['title'],
                     'intro' => $subTag->attributes['intro'],

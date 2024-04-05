@@ -185,9 +185,9 @@ class HtmlHeadBlock extends TemplateBlock
     /**
      * @return Locale[]
      */
-    public function getLocales(): array
+    public function getActiveLocales(): array
     {
-        return $this->localeRepository->getAll();
+        return $this->localeRepository->getAll(true);
     }
 
     public function getDefaultLocale(): Locale

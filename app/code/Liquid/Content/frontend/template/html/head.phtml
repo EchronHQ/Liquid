@@ -23,21 +23,23 @@ $escaper = $this->getOutputHelper();
     <title><?= $pageConfig->getSeoTitle() ?></title>
     <meta name="description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
     <meta name="keywords" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoKeywords()) ?>"/>
-    <link rel="canonical"
-          href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getCurrentLocale())) ?>"/>
-
     <?php
-    $locales = $this->getLocales();
+    $canonicalUrlForCurrentLocale = $this->getCurrentUrlForLocale($this->getCurrentLocale());
+    $urlForDefaultLocale = $this->getCurrentUrlForLocale($this->getDefaultLocale());
+    ?>
+    <link rel="canonical" href="<?= $escaper->escapeHtmlAttribute($canonicalUrlForCurrentLocale) ?>"/>
+    <?php
+    $locales = $this->getActiveLocales();
     foreach ($locales as $locale):
+        $hrefLang = $escaper->escapeHtmlAttribute($locale->langCode);
+        $urlForLocale = $this->getCurrentUrlForLocale($locale);
         ?>
-        <link rel="alternate" hreflang="<?= $escaper->escapeHtmlAttribute($locale->langCode) ?>"
-              href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($locale)) ?>"/>
+        <link rel="alternate" hreflang="<?= $hrefLang ?>" href="<?= $escaper->escapeHtmlAttribute($urlForLocale) ?>"/>
     <?php
     endforeach;
     $defaultLocale = $this->getDefaultLocale();
     ?>
-    <link rel="alternate" hreflang="x-default"
-          href="<?= $escaper->escapeHtmlAttribute($this->getCurrentUrlForLocale($this->getDefaultLocale())) ?>"/>
+    <link rel="alternate" hreflang="x-default" href="<?= $escaper->escapeHtmlAttribute($urlForDefaultLocale) ?>"/>
     <!--    <link rel="stylesheet" href="https://use.typekit.net/tqr2kqf.css">-->
 
     <!--    Disable data format detection detection-->

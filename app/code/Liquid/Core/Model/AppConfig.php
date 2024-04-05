@@ -136,6 +136,12 @@ class AppConfig
         $this->data['current_locale_defined'] = $defined;
     }
 
+    public function hasLocales(): bool
+    {
+        /** TODO: determine if system has more than 1 locale enabled or if this is a single locale system */
+        return false;
+    }
+
     public function getLocale(): Locale
     {
         if (!isset($this->data['current_locale'])) {

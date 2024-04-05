@@ -124,6 +124,8 @@ class UrlRepository extends BaseRepository
             new UrlRewrite('/use-cases/data-migration', '/use-cases/data-management', UrlRewriteType::PERMANENT),
             new UrlRewrite('/products/visualise', '/products/visualize', UrlRewriteType::PERMANENT),
 
+            new UrlRewrite('/connect/:hmm', '/platforms', UrlRewriteType::PERMANENT),
+
         ];
 
         $this->urlRewrites = \array_merge($this->urlRewrites, $dbUrlRewrites);

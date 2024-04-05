@@ -191,7 +191,7 @@ class Router
             $this->logger->error('Language detection by request already ran');
             return;
         }
-        if (substr($request->getPathInfo(), 0, 2) === '//') {
+        if (str_starts_with($request->getPathInfo(), '//')) {
             // Redirect https://attlaz.com//partners to https://attlaz.com/partners
             $redirect = str_replace('://', '+****+', $request->getUriString());
             $redirect = str_replace('//', '/', $redirect);
@@ -201,11 +201,13 @@ class Router
             exit();
         }
 
-        $pathParts = explode('/', $request->getPathInfo());
+        $pathParts = $request->getPathSegments();
+
         $localeCode = reset($pathParts);
 
 
         if ($localeCode === 'en-us') {
+            // TODO: when languages are disabled, redirect all to the default/empty language
             $localeCode = 'en-uk';
 
             $redirect = str_replace('/en-us', '', $request->getUriString());

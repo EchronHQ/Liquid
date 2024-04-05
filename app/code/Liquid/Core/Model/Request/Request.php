@@ -71,6 +71,16 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         return $this->pathInfo;
     }
 
+    /**
+     * @return string[]
+     */
+    final public function getPathSegments(): array
+    {
+        $path = $this->getPathInfo();
+        $path = ltrim($path, '/');
+        return explode('/', $path);
+    }
+
 
     final public function setPathInfo(string|null $pathInfo = null, UrlRewrite|null $rewrite = null): self
     {

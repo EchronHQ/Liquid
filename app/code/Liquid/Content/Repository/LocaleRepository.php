@@ -18,11 +18,13 @@ class LocaleRepository
         $enUK = new Locale();
         $enUK->code = 'en-uk';
         $enUK->langCode = 'en';
+        $enUK->active = false;
         //        $enUK->openGraphCode = 'en_GB';
 
         $enUS = new Locale();
         $enUS->code = 'en-us';
         $enUS->langCode = 'en-us';
+        $enUS->active = true;
         //        $enUS->openGraphCode = 'en_US';
         //        $enUS->active = false;
 
@@ -35,8 +37,13 @@ class LocaleRepository
     /**
      * @return Locale[]
      */
-    public function getAll(): array
+    public function getAll(bool $activeOnly = false): array
     {
+        if ($activeOnly) {
+            return array_filter($this->locales, static function (Locale $locale) {
+                return $locale->active;
+            });
+        }
         return $this->locales;
     }
 

@@ -48,7 +48,8 @@ class Resolver
         if ($locale === null && $this->configuration->isLocaleDefined()) {
             $locale = $this->configuration->getLocale();
         }
-        if ($locale !== null && $locale->code === 'en-uk') {
+
+        if (!$this->configuration->hasLocales() || ($locale !== null && $locale->code === 'en-uk')) {
             $locale = null;
         }
 

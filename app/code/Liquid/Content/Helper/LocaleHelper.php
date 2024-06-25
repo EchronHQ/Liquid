@@ -42,8 +42,6 @@ class LocaleHelper
         'utilise' => ['en-uk' => 'utilise ', 'en-us' => 'utilize'],
         'visualise' => ['en-uk' => 'visualise ', 'en-us' => 'visualize'],
         'visualisations ' => ['en-uk' => 'visualisations ', 'en-us' => 'visualizations'],
-        'personalise' => ['en-uk' => 'personalise', 'en-us' => 'personalize'],
-        'personalised' => ['en-uk' => 'personalised', 'en-us' => 'personalized'],
     ];
 
     private function isCapital(string $character): bool

@@ -314,15 +314,15 @@ class Router
             }
 
         }
-        $debugRoutes = [];
-        foreach ($routes as $router) {
-            $x = [];
-            foreach ($routes as $route) {
-                $x[] = get_class($route);
-            }
-
-            $debugRoutes[get_class($router)] = $x;
-        }
+//        $debugRoutes = [];
+//        foreach ($routes as $router) {
+//            $x = [];
+//            foreach ($routes as $route) {
+//                $x[] = get_class($route);
+//            }
+//
+//            $debugRoutes[get_class($router)] = $x;
+//        }
         $this->logger->error('Page not found', [
             'path info' => $request->getPathInfo(),
             'params' => $request->getParams(),

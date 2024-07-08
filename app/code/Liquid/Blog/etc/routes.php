@@ -6,6 +6,8 @@ use Liquid\Blog\Controller\Blog\Overview as BlogOverview;
 use Liquid\Blog\Controller\Blog\Tag;
 use Liquid\Blog\Controller\Post\View as BlogPostView;
 use Liquid\Blog\Controller\Term\View as BlogTermView;
+use Liquid\Blog\Repository\BlogRepository;
+use Liquid\Blog\Repository\TerminologyRepository;
 
 $name = 'Liquid_Blog';
 $routes = [
@@ -18,6 +20,6 @@ $routes = [
     ],
 ];
 $viewableEntityRepositories = [
-    \Liquid\Blog\Repository\BlogRepository::class,
-    \Liquid\Blog\Repository\TerminologyRepository::class,
+    BlogRepository::class,
+    TerminologyRepository::class,
 ];

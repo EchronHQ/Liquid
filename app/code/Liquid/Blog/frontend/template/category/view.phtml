@@ -7,6 +7,7 @@ use Liquid\Blog\Block\PostList;
 use Liquid\Content\Block\Element\CopyBlock;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
 use Liquid\Content\Block\Element\TagBar;
+use Liquid\Content\Model\Asset\AssetSizeInstruction;
 
 assert($this instanceof Category);
 $category = $this->getCategory();
@@ -24,7 +25,7 @@ $posts = $this->getPosts();
             echo $hero->toHtml();
             ?>
             <div>
-                <?= $this->renderLazyLoad('hero_term.png', $category->title_long, new \Liquid\Content\Model\Asset\AssetSizeInstruction(520, 520)) ?>
+                <?= $this->renderLazyLoad('hero_term.png', $category->title_long, new AssetSizeInstruction(520, 520)) ?>
             </div>
         </div>
     </div>

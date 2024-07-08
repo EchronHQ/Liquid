@@ -22,28 +22,15 @@ enum PageSitemapPriority: string
 
     public static function fromValue(string $input): self
     {
-        switch ($input) {
-            case '1.0':
-                return self::HIGHEST;
-                // no break
-            case '0.9':
-                return self::HIGH;
-            case '0.8':
-                return self::MEDIUM;
-            case '0.7':
-            case '0.6':
-            case '0.5':
-                return self::BASE;
-            case '0.4':
-                return self::LOW;
-            case '0.3':
-            case '0.2':
-            case '0.1':
-                return self::LOWEST;
-            case '0.0':
-                return self::IGNORE;
-            default:
-                throw new \Exception('Unknown PageSitemapPriority `' . $input . '`');
-        }
+        return match ($input) {
+            '1.0' => self::HIGHEST,
+            '0.9' => self::HIGH,
+            '0.8' => self::MEDIUM,
+            '0.7', '0.6', '0.5' => self::BASE,
+            '0.4' => self::LOW,
+            '0.3', '0.2', '0.1' => self::LOWEST,
+            '0.0' => self::IGNORE,
+            default => throw new \Exception('Unknown PageSitemapPriority `' . $input . '`'),
+        };
     }
 }

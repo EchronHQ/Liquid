@@ -26,25 +26,15 @@ enum PageSitemapChangeFrequency: string
 
     public static function fromValue(string $input): self
     {
-        switch (\strtolower($input)) {
-            case 'always':
-                return self::ALWAYS;
-                // no break
-            case 'hourly':
-                return self::HOURLY;
-            case 'daily':
-                return self::DAILY;
-            case 'weekly':
-                return self::WEEKLY;
-            case 'montly':
-                return self::MONTHLY;
-            case 'yearly':
-                return self::YEARLY;
-            case 'never':
-                return self::NEVER;
-
-            default:
-                throw new \Exception('Unknown page sitemap change frequency "' . $input . '"');
-        }
+        return match (\strtolower($input)) {
+            'always' => self::ALWAYS,
+            'hourly' => self::HOURLY,
+            'daily' => self::DAILY,
+            'weekly' => self::WEEKLY,
+            'montly' => self::MONTHLY,
+            'yearly' => self::YEARLY,
+            'never' => self::NEVER,
+            default => throw new \Exception('Unknown page sitemap change frequency "' . $input . '"'),
+        };
     }
 }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Liquid\Content\Block\Html\Picture;
+use Liquid\Core\Model\FrontendFileUrl;
 
 assert($this instanceof Picture);
 $default = $this->getDefaultSrc();
@@ -21,7 +22,7 @@ if ($this->hasFormats()):
 
     $types = $this->getFormats();
     foreach ($types as $type) {
-        /** @var \Liquid\Core\Model\FrontendFileUrl[] $sizes */
+        /** @var FrontendFileUrl[] $sizes */
         $sizes = $type['sizes'];
 
         $strSizes = [];

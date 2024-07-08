@@ -57,13 +57,10 @@ class SitemapDrawCommand extends Command
                         }
                     }
 
+                } elseif ($level === count($pathSegments) - 1) {
+                    $currentEntrySegment->setChild($pathSegment, new Segment($pathSegment, $page));
                 } else {
-                    if ($level === count($pathSegments) - 1) {
-                        $currentEntrySegment->setChild($pathSegment, new Segment($pathSegment, $page));
-                    } else {
-                        $currentEntrySegment->setChild($pathSegment, new Segment($pathSegment));
-                    }
-                    //                    $currentEntrySegment['children'][$pathSegment] = ['title' => $page->title, 'url' => $page->getUrlPath(), 'children' => []];
+                    $currentEntrySegment->setChild($pathSegment, new Segment($pathSegment));
                 }
 
                 $currentEntrySegment = $currentEntrySegment->getChild($pathSegment);

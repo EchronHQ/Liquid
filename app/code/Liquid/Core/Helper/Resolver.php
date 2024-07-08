@@ -49,7 +49,8 @@ class Resolver
             $locale = $this->configuration->getLocale();
         }
 
-        if (!$this->configuration->hasLocales() || ($locale !== null && $locale->code === 'en-uk')) {
+        $defaultLocale = 'en-uk';
+        if (($locale !== null && $locale->code === $defaultLocale) || !$this->configuration->hasLocales()) {
             $locale = null;
         }
 
@@ -141,9 +142,7 @@ class Resolver
         $frontendDeployPath = $this->getFrontendFilePath('');
 
         $file = \ltrim($file, '\\');
-        $file = \str_replace($frontendDeployPath, '', $file);
-
-        return $file;
+        return \str_replace($frontendDeployPath, '', $file);
     }
 
     public function getFrontendFileUrl(string $file): string|null
@@ -165,7 +164,7 @@ class Resolver
 
     public static function extractModule(string $fileId): array
     {
-        if (!$fileId || strpos($fileId, self::FILE_ID_SEPARATOR) === false) {
+        if (!$fileId || !str_contains($fileId, self::FILE_ID_SEPARATOR)) {
             return ['', $fileId];
         }
         $result = explode(self::FILE_ID_SEPARATOR, $fileId, 2);
@@ -331,7 +330,7 @@ class Resolver
         $fullUrlPath = $this->directoryList->getUrlPath($path);
         if ($x !== null) {
             // TODO: cleanup if x already starts with slash
-            $fullUrlPath = $fullUrlPath . '/' . $x . '';
+            $fullUrlPath .= '/' . $x;
         }
 
         return $siteUrl . (str_ends_with($siteUrl, '/') ? '' : '/') . $fullUrlPath;

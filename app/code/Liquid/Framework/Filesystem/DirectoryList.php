@@ -77,7 +77,7 @@ class DirectoryList
 
     private function isAbsolute(string|null $path): bool
     {
-        $path = $path !== null ? str_replace('\\', '/', $path) : '';
+        $path = $path !== null ? str_replace('\\', '/', $path) . '' : '';
 
         if (str_starts_with($path, '/')) {
             //is UnixRoot

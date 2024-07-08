@@ -31,6 +31,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
+use function DI\create;
 
 class Application
 {
@@ -131,10 +132,8 @@ class Application
                 $client->connect($host);
 
                 return new RedisAdapter($client);
-                break;
             case 'array':
                 return new ArrayAdapter();
-                break;
         }
         throw new \Error('Invalid cache');
 
@@ -166,8 +165,8 @@ class Application
             AppConfig::class => $this->config,
             CacheItemPoolInterface::class => $cachePool,
             Profiler::class => $this->profiler,
-            ComponentRegistrarInterface::class => \DI\create(ComponentRegistrar::class),
-            DirectoryList::class => new \Liquid\Framework\Filesystem\DirectoryList($this->rootDir),
+            ComponentRegistrarInterface::class => create(ComponentRegistrar::class),
+            DirectoryList::class => new DirectoryList($this->rootDir),
         ]);
         $this->diContainer = $containerBuilder->build();
     }
@@ -179,7 +178,7 @@ class Application
         $this->config = new AppConfig();
 
 
-        $x = new \Liquid\Framework\Filesystem\DirectoryList($this->rootDir);
+        $x = new DirectoryList($this->rootDir);
         $this->config->load($x->getPath(Path::CONFIG));
 
 
@@ -230,10 +229,10 @@ class Application
                 exit(1);
 //                die('xxx');
 //                return;
-            } else {
-                // TODO: show error code + log error to file with same code
-                throw $ex;
             }
+
+            // TODO: show error code + log error to file with same code
+            throw $ex;
 
 
             //throw $ex;

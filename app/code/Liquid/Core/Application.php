@@ -221,16 +221,17 @@ class Application
             }
 
 
-            $errorHtml = Error::toHtml($ex);
-
             // Safe to file?
             if ($this->config->getMode() === ApplicationMode::DEVELOP) {
-                echo str_replace($resolver->getPath(Path::ROOT), '', $errorHtml);
+
+
+                echo Error::toHtml($ex);
                 http_response_code(500);
                 exit(1);
 //                die('xxx');
 //                return;
             } else {
+                // TODO: show error code + log error to file with same code
                 throw $ex;
             }
 

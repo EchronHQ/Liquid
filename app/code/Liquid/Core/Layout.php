@@ -296,7 +296,7 @@ class Layout
             $headBlock->addScript(new Script('js/vendor.js'));
             $headBlock->addScript(new Script('js/main.js'));
             $headBlock->addScript(new Script('js/hero.js'));
-
+            $headBlock->addScript(new Script('js/hero2.js'));
             // Load Sentry over CDN
             //            $sentryCDN = new Script('https://browser.sentry-cdn.com/7.51.0/bundle.tracing.replay.min.js');
             //            $sentryCDN->integrity = 'sha384-DulooquW3C+xZEn0I3jpaZGefuX4TQSKK9QIIODQaijckMg2g8P+n7k4PS7pY75o';

@@ -20,12 +20,14 @@ class LocaleHelper
     private array $translations = [
         'analyse' => ['en-uk' => 'analyse', 'en-us' => 'analyze'],
         'centralise' => ['en-uk' => 'centralise ', 'en-us' => 'centralize'],
+        'colour' => ['en-uk' => 'colour', 'en-us' => 'color'],
         'customisable' => ['en-uk' => 'customisable', 'en-us' => 'customizable'],
         'customise' => ['en-uk' => 'customise', 'en-us' => 'customize'],
-        'colour' => ['en-uk' => 'colour', 'en-us' => 'color'],
         'customised' => ['en-uk' => 'customised', 'en-us' => 'customized'],
+        'harmonise' => ['en-uk' => 'harmonise', 'en-us' => 'harmonize'],
         'maximise' => ['en-uk' => 'maximise', 'en-us' => 'maximize'],
-        'misspelt ' => ['en-uk' => 'misspelt ', 'en-us' => 'misspelled'],
+        'minimise' => ['en-uk' => 'minimise', 'en-us' => 'minimize'],
+        'misspelt' => ['en-uk' => 'misspelt', 'en-us' => 'misspelled'],
         'optimise' => ['en-uk' => 'optimise', 'en-us' => 'optimize'],
         'optimised' => ['en-uk' => 'optimised', 'en-us' => 'optimized'],
         'organization' => ['en-uk' => 'organisation', 'en-us' => 'organization'],
@@ -35,14 +37,21 @@ class LocaleHelper
         'personalised' => ['en-uk' => 'personalised', 'en-us' => 'personalized'],
         'prioritise' => ['en-uk' => 'prioritise', 'en-us' => 'prioritize'],
         'realise' => ['en-uk' => 'realise', 'en-us' => 'realize'],
+        'realisation' => ['en-uk' => 'realisation', 'en-us' => 'realization'],
         'recognise' => ['en-uk' => 'recognise', 'en-us' => 'recognize'],
         'standardisation' => ['en-uk' => 'standardisation ', 'en-us' => 'standardization'],
         'symbolises' => ['en-uk' => 'symbolises', 'en-us' => 'symbolizes'],
+        'synchronisation' => ['en-uk' => 'synchronisation ', 'en-us' => 'synchronization'],
+        'synchronize' => ['en-uk' => 'synchronise', 'en-us' => 'synchronize'],
         'unauthorised' => ['en-uk' => 'unauthorised', 'en-us' => 'unauthorized'],
-        'utilise' => ['en-uk' => 'utilise ', 'en-us' => 'utilize'],
-        'visualise' => ['en-uk' => 'visualise ', 'en-us' => 'visualize'],
-        'visualisations ' => ['en-uk' => 'visualisations ', 'en-us' => 'visualizations'],
+        'utilise' => ['en-uk' => 'utilise', 'en-us' => 'utilize'],
+        'visualisations' => ['en-uk' => 'visualisations', 'en-us' => 'visualizations'],
+        'visualisation' => ['en-uk' => 'visualisation', 'en-us' => 'visualization'],
+        'visualise' => ['en-uk' => 'visualise', 'en-us' => 'visualize'],
     ];
+
+    // ization isation
+    // ise ize
 
     private function isCapital(string $character): bool
     {
@@ -104,7 +113,7 @@ class LocaleHelper
     {
         $input = HtmlHelper::removeHtml($input);
         $input = \strtolower($input);
-        $defaultLocale = 'en-us';
+        $defaultLocale = $this->appConfig->getLocale();
         foreach ($this->translations as $key => $translations) {
 //            if (\str_contains($input, $key)) {
 //                $this->logger->warning('Non translated (term) "' . $key . '" found');
@@ -112,17 +121,18 @@ class LocaleHelper
             foreach ($translations as $locale => $translation) {
                 // Ignore if the word is already in the default locale
 
-                if ($locale !== $defaultLocale) {
+                //  if ($locale !== $defaultLocale || true) {
 
 
-                    $occurrences = StringHelper::getOccurrences($input, $translation);
+                $occurrences = StringHelper::getOccurrences($input, $translation);
 
-                    foreach ($occurrences as $occurrence) {
+                foreach ($occurrences as $occurrence) {
 
-                        $position = \substr($input, $occurrence - 20, $occurrence + \strlen($translation) + 20);
-                        $this->logger->warning('Non translated (' . $key . ' - ' . $locale . ') "' . $translation . '" found at "' . $position . '"');
-                    }
+
+                    $position = \substr($input, $occurrence - 50, 50 + \strlen($translation) + 50);
+                    $this->logger->warning('Non translated (' . $key . ' - ' . $locale . ') "' . $translation . '" found at "... ' . $position . ' ..."');
                 }
+                // }
 
             }
         }

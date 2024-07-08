@@ -44,7 +44,8 @@ assert($this instanceof Block);
                                         </li>
                                         <li><a href="<?= $this->getResolver()->getPageUrl('products/automate') ?>">Automate</a>
                                         </li>
-                                        <li><a href="<?= $this->getResolver()->getPageUrl('products/visualize') ?>">Visualize</a>
+                                        <li>
+                                            <a href="<?= $this->getResolver()->getPageUrl('products/visualize') ?>"><?= $this->translate('Visualize') ?></a>
                                         </li>
                                     </ul>
                                 </div>

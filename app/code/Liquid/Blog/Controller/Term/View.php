@@ -108,7 +108,8 @@ class View extends FrontendAction
         $useCasesBlock->setTemplate('Liquid_Blog::term/use_cases.phtml');
         $useCasesBlock->setData('use_cases', $useCases);
 
-        $platform = new PlatformDefinition(0);
+        // TODO: this is not correct
+        $platform = new PlatformDefinition('');
         $platform->metaTitle = 'CRM';
 
         $useCasesBlock->setData('platform', $platform);

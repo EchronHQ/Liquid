@@ -62,8 +62,8 @@ class Router
         $modules = $this->moduleHelper->getModules();
         foreach ($modules as $module) {
 
-            $routes = $module['routes'];
-            $viewableEntityRepositories = $module['viewableEntityRepositories'];
+            $routes = $module->routes;
+            $viewableEntityRepositories = $module->viewableEntityRepositories;
 
 
             foreach ($routes as $route => $paths) {
@@ -164,6 +164,16 @@ class Router
                 foreach ($pages as $page) {
                     // TODO: validate that page route doesn't exist already
                     $this->pageRoutes[$page->id] = $page->getUrlPath();
+
+                    $urlRewrites = $page->getUrlRewrites();
+                    if (count($urlRewrites) > 0) {
+                        foreach ($urlRewrites as $urlRewrite) {
+                            $rewrite = new UrlRewrite('/' . $page->getUrlPath(), $urlRewrite, UrlRewriteType::INTERNAL);
+
+                            // echo $urlRewrite . ' => ' . $page->getUrlPath() . '<br/>';
+                            $urlRepository->addRewrite($rewrite);
+                        }
+                    }
 
 //                    var_dump(get_class($page) . ' - ' . $page->id . ' - ' . $page->getUrlPath());
                 }
@@ -282,12 +292,16 @@ class Router
 
         $area = $this->detectArea($request);
 
-        $this->logger->debug('Incoming request', ['path info' => $request->getPathInfo(), 'params' => $request->getParams()]);
+        $this->logger->debug('Incoming request', [
+            'path info' => $request->getPathInfo(),
+            'params' => $request->getParams(),
+        ]);
         //        \var_dump($request->getPathInfo());
         //        \var_dump($request->getParams());
 
         /** @var Base[] $routes */
         $routes = $this->routes[$area === Area::Frontend ? 'frontend' : 'backend'];
+
 
         foreach ($routes as $router) {
             $action = $router->match($request);
@@ -300,7 +314,20 @@ class Router
             }
 
         }
+        $debugRoutes = [];
+        foreach ($routes as $router) {
+            $x = [];
+            foreach ($routes as $route) {
+                $x[] = get_class($route);
+            }
 
+            $debugRoutes[get_class($router)] = $x;
+        }
+        $this->logger->error('Page not found', [
+            'path info' => $request->getPathInfo(),
+            'params' => $request->getParams(),
+//            'routes' => $debugRoutes,
+        ]);
         /** @var NotFound $notFoundAction */
         $notFoundAction = $this->diContainer->make(NotFound::class);
 

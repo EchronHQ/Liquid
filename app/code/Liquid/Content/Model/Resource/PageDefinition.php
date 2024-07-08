@@ -10,6 +10,8 @@ class PageDefinition
 {
     public int|string $id;
 
+    public const ID_PREFIX = '';
+
     public string|null $urlKey = null;
 
     public string|null $template = null;
@@ -39,13 +41,13 @@ class PageDefinition
 
     public function __construct(int|string $id)
     {
-        $this->id = $id;
+        $this->id = self::generateId($id);
     }
 
     public static function generate(int|string $id, array $data): static
     {
 
-        $page = new static($id);
+        $page = new static(self::generateId($id));
 
         self::appendData($page, new DataMapper($data));
         return $page;
@@ -112,5 +114,19 @@ class PageDefinition
     public function getSeoTitle(): string
     {
         return self::TITLE_PREFIX . $this->metaTitle . self::TITLE_SUFFIX;
+    }
+
+
+    public static function generateId(string $id): string
+    {
+        if (self::ID_PREFIX === '') {
+            return $id;
+        }
+        return self::ID_PREFIX . '-' . $id;
+    }
+
+    public function getUrlRewrites(): array
+    {
+        return [];
     }
 }

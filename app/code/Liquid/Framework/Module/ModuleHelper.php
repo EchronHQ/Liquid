@@ -18,9 +18,12 @@ class ModuleHelper
     }
 
     private bool $dataLoaded = false;
+    /**
+     * @var ModuleData[]
+     */
     private array $data = [];
 
-    private function parseConfigFile(string $moduleConfigPath): array|null
+    private function parseConfigFile(string $moduleConfigPath): ModuleData|null
     {
         $moduleData = null;
         if (file_exists($moduleConfigPath)) {
@@ -32,17 +35,13 @@ class ModuleHelper
             include $moduleConfigPath;
 
             $moduleIdentifier = $name ?? $moduleConfigPath;
-            $moduleData = [
-                'name' => $moduleIdentifier,
-                'order' => 999,
-                'routes' => [],
-                'viewableEntityRepositories' => [],
-            ];
+
+            $moduleData = new ModuleData($moduleIdentifier);
 
 
             if (is_array($routes)) {
 
-                $moduleData['routes'] = $routes;
+                $moduleData->routes = $routes;
                 foreach ($routes as $route => $paths) {
                     if (!is_array($paths)) {
                         $this->logger->error('Route paths should be array', ['module' => $moduleIdentifier, 'paths' => $paths]);
@@ -50,12 +49,15 @@ class ModuleHelper
                 }
             }
             if (is_array($viewableEntityRepositories)) {
-                $moduleData['viewableEntityRepositories'] = $viewableEntityRepositories;
+                $moduleData->viewableEntityRepositories = $viewableEntityRepositories;
             }
         }
         return $moduleData;
     }
 
+    /**
+     * @return ModuleData[]
+     */
     public function getModules(): array
     {
         if (!$this->dataLoaded) {

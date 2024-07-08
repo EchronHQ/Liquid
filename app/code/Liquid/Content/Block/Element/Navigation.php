@@ -37,7 +37,7 @@ class Navigation extends TemplateBlock
                                 'link' => $this->getResolver()->getPageUrl('products/automate'),
                             ],
                             [
-                                'title' => 'Visualize',
+                                'title' => $this->translate('Visualize'),
                                 'description' => 'Monitor platforms, processes and data, identify issues and solve issues instantly.',
                                 'icon' => $this->getResolver()->getFrontendFileImageUrl('asset/icons/menu/visualize.svg'),
                                 'link' => $this->getResolver()->getPageUrl('products/visualize'),

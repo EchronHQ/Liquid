@@ -44,6 +44,8 @@ class PageSectionTag extends TemplateBlock
                 return 'background-medium';
             case   'desert':
                 return 'background-desert';
+            case   'swirl':
+                return 'background-swirl';
             case '':
                 break;
             default:

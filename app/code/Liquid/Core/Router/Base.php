@@ -7,6 +7,7 @@ namespace Liquid\Core\Router;
 use Liquid\Core\Helper\PathMatcher;
 use Liquid\Core\Model\Action\AbstractAction;
 use Liquid\Core\Model\Request\Request;
+use Liquid\Framework\Exception\ContextException;
 use Psr\Container\ContainerInterface;
 
 class Base
@@ -58,10 +59,10 @@ class Base
         $formattedActions = [];
         foreach ($actions as $actionName => $controller) {
             if (\is_numeric($actionName)) {
-                throw new \Exception('Numeric action names are no longer supported');
+                throw new ContextException('Numeric action names are no longer supported', ['module' => $moduleName, 'action' => $actionName]);
             }
             if (!is_a($controller, AbstractAction::class, true)) {
-                throw new \Exception('Controller must extend abstract action');
+                throw new ContextException('Controller must extend abstract action', ['module' => $moduleName, 'action' => $actionName]);
             }
 
             $formattedActions[$actionName] = $controller;
@@ -125,12 +126,12 @@ class Base
         foreach ($modules as $module) {
             $debug .= '    <div><b>Module "' . $module['moduleName'] . '" actions</b>:</div>';
             foreach ($module['actions'] as $name => $actionClass) {
-                $debug .= '    <div style="padding-left:10px">-<b>' . $name . '</b>:' . $actionClass . '</div>';
+                $debug .= '    <div style="padding-left:10px">- <b>' . $name . '</b>:' . $actionClass . '</div>';
             }
         }
 
         $debug .= '</div>';
-        //        echo $debug;
+        // echo $debug;
         foreach ($modules as $module) {
 
             $actionClassName = $this->getActionClassNew($module, $fullAction, $request);

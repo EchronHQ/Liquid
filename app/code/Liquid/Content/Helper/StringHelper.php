@@ -64,6 +64,6 @@ class StringHelper
 
     public static function mask(string $input): string
     {
-        return \implode('<span style="display: none">-</span>', \str_split($input));
+        return \implode('&shy;', \str_split($input));
     }
 }

@@ -57,6 +57,17 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
                 'modified' => '2022-10-23 15:49:06',
 
             ]),
+            PageDefinition::generate('why-attlaz', [
+                'url_key' => 'why-attlaz',
+                'template' => 'page/why-attlaz.phtml',
+                'doc_css_class' => 'theme-dark',
+                'seo_title' => 'Discover the Attlaz platform',
+                'seo_description' => 'Learn how Attlaz improve your internal data management',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::HIGH,
+                'modified' => '2024-07-02 15:49:06',
+
+            ]),
 
             //            Page::generate('solutions-use-case', ['template' => 'page/solutions/use-case.phtml', 'doc_css_class' => 'features']),
             //            Page::generate('solutions-role', ['template' => 'page/solutions/role.phtml', 'doc_css_class' => 'features']),

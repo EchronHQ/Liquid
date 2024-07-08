@@ -16,11 +16,11 @@ use Psr\Log\LoggerInterface;
 readonly class GatherPages
 {
     public function __construct(
-        private ModuleHelper       $moduleHelper,
-        private TemplateHelper     $templateHelper,
-        private FileHelper         $fileHelper,
-        private readonly Container $diContainer,
-        private LoggerInterface    $logger
+        private ModuleHelper    $moduleHelper,
+        private TemplateHelper  $templateHelper,
+        private FileHelper      $fileHelper,
+        private Container       $diContainer,
+        private LoggerInterface $logger
     )
     {
     }
@@ -33,8 +33,11 @@ readonly class GatherPages
         $result = [];
 
         $modules = $this->moduleHelper->getModules();
+
+
         foreach ($modules as $module) {
-            $moduleViewableEntityRepositories = $module['viewableEntityRepositories'];
+            echo '# ' . $module->name . PHP_EOL;
+            $moduleViewableEntityRepositories = $module->viewableEntityRepositories;
             foreach ($moduleViewableEntityRepositories as $viewableEntityRepository) {
                 $respository = $this->diContainer->get($viewableEntityRepository);
                 if ($respository instanceof ViewableEntityRepository) {
@@ -43,7 +46,7 @@ readonly class GatherPages
                         if ($page->status === PageStatus::ACTIVE) {
                             $result[] = $page;
 
-                            echo $page->getSeoTitle() . ' ' . $page->getUrlPath() . PHP_EOL;
+                            echo ' - ' . $page->getSeoTitle() . ' ' . $page->getUrlPath() . PHP_EOL;
                         }
 
                     }

@@ -323,11 +323,16 @@ class Router
 //
 //            $debugRoutes[get_class($router)] = $x;
 //        }
+        // TODO: ignore paths if url start with wp-admin
+        $pathInfo = $request->getPathInfo();
+        if (!str_starts_with($pathInfo, '/wp-admin') && !str_starts_with($pathInfo, '/wp-includes') && !str_starts_with($pathInfo, '/wp-content')) {
         $this->logger->error('Page not found', [
             'path info' => $request->getPathInfo(),
             'params' => $request->getParams(),
 //            'routes' => $debugRoutes,
         ]);
+        }
+
         /** @var NotFound $notFoundAction */
         $notFoundAction = $this->diContainer->make(NotFound::class);
 

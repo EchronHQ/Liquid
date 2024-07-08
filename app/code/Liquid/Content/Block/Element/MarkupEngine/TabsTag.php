@@ -33,7 +33,7 @@ class TabsTag extends Block
         $x = new MarkupEngine($this->container, $this->logger);
         $x->registerTag('tab', Block::class);
         // $x->debug = true;
-        /** @var \Liquid\Content\Model\MarkupEngine\BlockTag[] $subTags */
+        /** @var BlockTag[] $subTags */
         $subTags = $x->processTags('<div>' . $content . '</div>');
         // TODO: why is it needed to reverse the array to get the right order again?
         $subTags = array_reverse($subTags);

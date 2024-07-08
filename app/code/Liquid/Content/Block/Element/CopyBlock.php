@@ -73,7 +73,7 @@ class CopyBlock extends AbstractBlock
         if (!$icon instanceof FrontendFileUrl && !str_starts_with($icon, 'http')) {
             if (str_starts_with($icon, 'http')) {
                 $icon = new FrontendFileUrl($icon);
-            } else if ($this->resolver !== null) {
+            } elseif ($this->resolver !== null) {
 
                 if ($this->embedIcon && StringHelper::contains($icon, '.svg')) {
 

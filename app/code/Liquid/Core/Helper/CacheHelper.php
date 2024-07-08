@@ -6,6 +6,7 @@ namespace Liquid\Core\Helper;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheHelper
 {
@@ -84,7 +85,7 @@ class CacheHelper
 
     /**
      * @return string[]
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getKeys(): array
     {

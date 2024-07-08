@@ -2,11 +2,12 @@
 declare(strict_types=1);
 
 use Attlaz\Connector\Model\PlatformDefinition;
+use Attlaz\Connector\Model\PlatformUseCase;
 use Liquid\Content\Block\Element\CopyBlock;
 
 assert($this instanceof Liquid\Blog\Block\Term, 'Instance must be ' . Liquid\Blog\Block\Term::class . ' ' . get_class($this) . ' instead');
 
-/** @var \Attlaz\Connector\Model\PlatformUseCase[] $useCases */
+/** @var PlatformUseCase[] $useCases */
 $useCases = $this->getData('use_cases');
 /** @var PlatformDefinition $platform */
 $platform = $this->getData('platform');

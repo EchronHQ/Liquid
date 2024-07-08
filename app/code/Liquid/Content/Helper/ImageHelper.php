@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Liquid\Content\Helper;
 
 use Gumlet\ImageResize;
+use Gumlet\ImageResizeException;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Asset\AssetSizeInstructionCrop;
 use Liquid\Content\Model\Asset\AssetSizeInstructionFilter;
@@ -25,7 +26,7 @@ readonly class ImageHelper
      * @param string $destination
      * @param AssetSizeInstruction $sizeInstruction
      * @return array{width:int,height:int}
-     * @throws \Gumlet\ImageResizeException
+     * @throws ImageResizeException
      */
     public function resize(string $source, string $destination, AssetSizeInstruction $sizeInstruction, bool $showDebugInformation = false): array
     {
@@ -114,9 +115,8 @@ readonly class ImageHelper
 
 
         if ($showDebugInformation) {
-
             $this->addDebugInformation($destination, $result);
-        };
+        }
         return ['width' => $result->getDestWidth(), 'height' => $result->getDestHeight()];
     }
 

@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 
 use Liquid\Blog\Block\PostList;
+use Liquid\Blog\Block\Tag;
 use Liquid\Content\Block\Element\CopyBlock;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
 use Liquid\Content\Block\Element\TagBar;
 
-assert($this instanceof \Liquid\Blog\Block\Tag);
+assert($this instanceof Tag);
 $tag = $this->getTag();
 $posts = $this->getPosts();
 ?>

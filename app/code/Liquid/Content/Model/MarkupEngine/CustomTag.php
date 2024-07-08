@@ -57,7 +57,7 @@ abstract class CustomTag
             return;
         }
 
-        if (substr($strBody, 1, 1) === '/') {
+        if ($strBody[1] === '/') {
             $this->name = '---ERROR---';
             return;
         }

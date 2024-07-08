@@ -16,8 +16,7 @@ class Html
      */
     public static function minify(string $html): string
     {
-        $htmlMin = new HtmlMin();
-        return $htmlMin->minify($html);
+        return (new HtmlMin())->minify($html);
     }
 
     /**

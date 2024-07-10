@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element\MarkupEngine;
 
-use Attlaz\Product\Block\TabsControl;
+
 use DI\Container;
+use Liquid\Content\Block\Element\TabsControl;
 use Liquid\Content\Helper\MarkupEngine;
 use Liquid\Content\Model\MarkupEngine\BlockTag;
 use Liquid\Core\Model\BlockContext;

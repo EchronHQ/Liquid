@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Blog\Model;
 
-use Liquid\Content\Model\Resource\PageDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Core\Helper\DataMapper;
 
-class CategoryDefinition extends PageDefinition
+class CategoryDefinition extends AbstractViewableEntity
 {
     public string $title_long = '';
 
@@ -22,7 +22,7 @@ class CategoryDefinition extends PageDefinition
         return $article;
     }
 
-    protected static function appendData(self|PageDefinition $definition, DataMapper $data): void
+    protected static function appendData(self|AbstractViewableEntity $definition, DataMapper $data): void
     {
         parent::appendData($definition, $data);
         if ($definition instanceof self) {

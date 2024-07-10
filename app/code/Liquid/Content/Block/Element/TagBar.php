@@ -6,20 +6,20 @@ namespace Liquid\Content\Block\Element;
 
 use Liquid\Blog\Model\TermDefinition;
 use Liquid\Content\Block\TemplateBlock;
-use Liquid\Content\Model\Resource\PageDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 
 class TagBar extends TemplateBlock
 {
     protected string|null $template = 'Liquid_Content::element/tagbar.phtml';
 
 
-    private PageDefinition|null $current = null;
+    private AbstractViewableEntity|null $current = null;
     private array $tags = [];
     private string|null $label = null;
     private string|null $allTarget = null;
 
     /**
-     * @return PageDefinition[]
+     * @return AbstractViewableEntity[]
      */
     public function getTags(): array
     {
@@ -27,7 +27,7 @@ class TagBar extends TemplateBlock
     }
 
     /**
-     * @param PageDefinition[] $tags
+     * @param AbstractViewableEntity[] $tags
      * @return void
      */
     public function setTags(array $tags): void
@@ -35,7 +35,7 @@ class TagBar extends TemplateBlock
         $this->tags = $tags;
     }
 
-    public function isSelectedTag(PageDefinition $tag): bool
+    public function isSelectedTag(AbstractViewableEntity $tag): bool
     {
         if ($this->current === null) {
             return false;
@@ -48,7 +48,7 @@ class TagBar extends TemplateBlock
         return $this->current !== null;
     }
 
-    public function setCurrent(PageDefinition $current): void
+    public function setCurrent(AbstractViewableEntity $current): void
     {
         $this->current = $current;
     }
@@ -73,7 +73,7 @@ class TagBar extends TemplateBlock
         return $this->allTarget;
     }
 
-    public function getTagLabel(PageDefinition $tag): string
+    public function getTagLabel(AbstractViewableEntity $tag): string
     {
         if ($tag instanceof TermDefinition) {
             return $tag->termLong;

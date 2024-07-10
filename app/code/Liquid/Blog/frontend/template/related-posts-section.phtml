@@ -1,0 +1,22 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Block\PostList;
+use Liquid\Blog\Block\RelatedBlogPostsSection;
+
+assert($this instanceof RelatedBlogPostsSection);
+
+$blogPosts = $this->getBlogPosts();
+?>
+<page-section>
+    <div class="row rowGapLarge">
+        <div class="column col-1">
+            <copy-block types="header" title="<?= $this->title ?>" title-tag="h3"></copy-block>
+        </div>
+        <?php
+        $postListBlock = $this->getLayout()->createBlock(PostList::class);
+        $postListBlock->setPosts($blogPosts);
+        echo $postListBlock->toHtml();
+        ?>
+    </div>
+</page-section>

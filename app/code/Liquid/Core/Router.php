@@ -10,7 +10,6 @@ use Liquid\Content\Controller\Page\NotFound;
 use Liquid\Content\Model\Resource\UrlRewrite;
 use Liquid\Content\Model\Resource\UrlRewriteType;
 use Liquid\Content\Repository\LocaleRepository;
-use Liquid\Content\Repository\PageRepository;
 use Liquid\Core\Helper\AccessHelper;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
@@ -60,10 +59,12 @@ class Router
 
 
         $modules = $this->moduleHelper->getModules();
+
+        $viewableEntityRepositories = [];
         foreach ($modules as $module) {
 
             $routes = $module->routes;
-            $viewableEntityRepositories = $module->viewableEntityRepositories;
+            $moduleViewableEntityRepositories = $module->viewableEntityRepositories;
 
 
             foreach ($routes as $route => $paths) {
@@ -71,15 +72,15 @@ class Router
             }
 
 
-            foreach ($viewableEntityRepositories as $viewableEntityRepository) {
-
-                $this->viewableEntityRepositories[] = $viewableEntityRepository;
+            foreach ($moduleViewableEntityRepositories as $moduleViewableEntityRepository) {
+                if (in_array($moduleViewableEntityRepository, $viewableEntityRepositories, true)) {
+                    $this->logger->error('Viewable entity repository `' . $moduleViewableEntityRepository . '` is already loaded');
+                } else {
+                    $viewableEntityRepositories[] = $moduleViewableEntityRepository;
+                }
             }
-
-
         }
-
-
+        $this->viewableEntityRepositories = $viewableEntityRepositories;
         /**
          * Deprecated, redirect "connector" to "platforms" in url
          */
@@ -138,44 +139,33 @@ class Router
 
     private function initializeUrlRewrites(): void
     {
+
+
         /** @var UrlRepository $urlRepository */
         $urlRepository = $this->diContainer->get(UrlRepository::class);
-        /** @var PageRepository $pageRepository */
-        $pageRepository = $this->diContainer->get(PageRepository::class);
-
-        //TODO: this should not happen here
-
-
-        $pages = $pageRepository->getAll();
-        foreach ($pages as $page) {
-
-            $escapedId = UrlRepository::escapeId($page->id);
-            $rewrite = new UrlRewrite('/' . $page->getUrlPath(), '/content/page/view/page-id/' . $escapedId, UrlRewriteType::INTERNAL);
-            $urlRepository->addRewrite($rewrite);
-
-            //$this->pageRoutes[$page->id] = $page->getUrlPath();
-        }
-
 
         foreach ($this->viewableEntityRepositories as $viewableEntityRepository) {
-            $respository = $this->diContainer->get($viewableEntityRepository);
-            if ($respository instanceof ViewableEntityRepository) {
-                $pages = $respository->getEntities();
-                foreach ($pages as $page) {
-                    // TODO: validate that page route doesn't exist already
-                    $this->pageRoutes[$page->id] = $page->getUrlPath();
+            $repository = $this->diContainer->get($viewableEntityRepository);
+            if ($repository instanceof ViewableEntityRepository) {
 
-                    $urlRewrites = $page->getUrlRewrites();
-                    if (count($urlRewrites) > 0) {
-                        foreach ($urlRewrites as $urlRewrite) {
-                            $rewrite = new UrlRewrite('/' . $page->getUrlPath(), $urlRewrite, UrlRewriteType::INTERNAL);
+                $viewableEntities = $repository->getEntities();
+                foreach ($viewableEntities as $viewableEntity) {
 
-                            // echo $urlRewrite . ' => ' . $page->getUrlPath() . '<br/>';
-                            $urlRepository->addRewrite($rewrite);
+
+                    if (array_key_exists($viewableEntity->id, $this->pageRoutes)) {
+                        $this->logger->error('There is already a viewable entity with id `' . $viewableEntity->id . '`');
+                    } else {
+
+                        $this->pageRoutes[$viewableEntity->id] = $viewableEntity->getUrlPath();
+
+                        $urlRewrites = $viewableEntity->getUrlRewrites();
+                        if (count($urlRewrites) > 0) {
+                            foreach ($urlRewrites as $urlRewrite) {
+                                $rewrite = new UrlRewrite('/' . $viewableEntity->getUrlPath(), $urlRewrite, UrlRewriteType::INTERNAL);
+                                $urlRepository->addRewrite($rewrite);
+                            }
                         }
                     }
-
-//                    var_dump(get_class($page) . ' - ' . $page->id . ' - ' . $page->getUrlPath());
                 }
             } else {
                 $this->logger->error('Viewable repository must be instance of ViewableEntityRepository');
@@ -326,11 +316,11 @@ class Router
         // TODO: ignore paths if url start with wp-admin
         $pathInfo = $request->getPathInfo();
         if (!str_starts_with($pathInfo, '/wp-admin') && !str_starts_with($pathInfo, '/wp-includes') && !str_starts_with($pathInfo, '/wp-content')) {
-        $this->logger->error('Page not found', [
-            'path info' => $request->getPathInfo(),
-            'params' => $request->getParams(),
+            $this->logger->error('Page not found', [
+                'path info' => $request->getPathInfo(),
+                'params' => $request->getParams(),
 //            'routes' => $debugRoutes,
-        ]);
+            ]);
         }
 
         /** @var NotFound $notFoundAction */

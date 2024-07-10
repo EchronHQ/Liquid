@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Liquid\Blog\Controller\Post;
 
 use Liquid\Blog\Block\Post;
+use Liquid\Blog\Block\RelatedBlogPostsSection;
 use Liquid\Blog\Model\PostDefinition;
 use Liquid\Blog\Repository\BlogRepository;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
-use Liquid\Content\Block\RelatedBlogPostsBlock;
 use Liquid\Content\Helper\PageConfigHelper;
 use Liquid\Content\Model\FrontendAction;
-use Liquid\Content\Model\Resource\PageDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Core\Layout;
 use Liquid\Core\Model\Action\Context;
@@ -31,7 +31,8 @@ class View extends FrontendAction
         Layout                          $layout,
         PageConfig                      $pageConfig,
         private readonly BlogRepository $blogRepository
-    ) {
+    )
+    {
         parent::__construct($context, $layout, $pageConfig);
     }
 
@@ -58,7 +59,7 @@ class View extends FrontendAction
     }
 
 
-    private function renderPage(PageDefinition $articlePage): Result
+    private function renderPage(AbstractViewableEntity $articlePage): Result
     {
 
 
@@ -90,9 +91,9 @@ class View extends FrontendAction
 
         /**
          * Related posts
-         * @var RelatedBlogPostsBlock $resourcesBlock
+         * @var RelatedBlogPostsSection $resourcesBlock
          */
-        $resourcesBlock = $this->layout->addBlock(RelatedBlogPostsBlock::class, 'resources', 'content');
+        $resourcesBlock = $this->layout->addBlock(RelatedBlogPostsSection::class, 'resources', 'content');
         $resourcesBlock->setTitle('Related Posts');
 
         /**

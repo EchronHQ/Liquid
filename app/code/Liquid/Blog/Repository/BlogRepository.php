@@ -64,6 +64,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2022-11-14 15:16:17',
                 'modified' => '2022-11-14 15:16:17',
+                'draft' => false,
                 'image' => 'image/blog/black-friday-2022.jpg',
                 'category' => 'insights',
                 'tags' => ['attlaz-news'],
@@ -77,6 +78,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2021-12-01 15:16:17',
                 'modified' => '2021-12-01 15:16:17',
+                'draft' => false,
                 'image' => 'image/blog/how-digitization-can-help-your-business.jpg',
                 'category' => 'insights',
                 'tags' => ['attlaz-news'],
@@ -90,6 +92,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2021-12-01 15:16:17',
                 'modified' => '2021-12-01 15:16:17',
+                'draft' => false,
                 'image' => 'image/blog/why-data-connectivity.jpg',
                 'category' => 'insights',
                 'tags' => ['attlaz-news'],
@@ -103,6 +106,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2024-01-12 15:16:17',
                 'modified' => '2024-01-12 15:16:17',
+                'draft' => false,
                 'image' => 'image/blog/why-data-connectivity.jpg',
                 'category' => 'insights',
                 'tags' => ['attlaz-news'],
@@ -116,6 +120,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2022-03-30 19:01:13',
                 'modified' => '2022-03-30 19:01:13',
+                'draft' => false,
                 'image' => 'image/blog/march2022-new-storage-engine.jpg',
                 'category' => 'product',
                 'tags' => ['attlaz-news'],
@@ -129,6 +134,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2022-04-06 09:37:18',
                 'modified' => '2022-04-06 09:37:18',
+                'draft' => false,
                 'image' => 'image/blog/improved-attlaz-status-page.jpg',
                 'category' => 'product',
                 'tags' => ['attlaz-news'],
@@ -304,6 +310,11 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
         return $this->tags;
     }
 
+    private function isVisibleOnFrontend(PostDefinition $post): bool
+    {
+        return !$post->draft && ($post->publishDate !== null && $post->publishDate < new \DateTime('now'));
+    }
+
     /**
      * @return PostDefinition[]
      */
@@ -312,9 +323,10 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
 
         $result = [];
         foreach ($this->posts as $post) {
-            // if ($post->publishDate !== null && $post->publishDate < new \DateTime('now')) {
-            $result[] = $post;
-            //}
+
+            if ($this->isVisibleOnFrontend($post)) {
+                $result[] = $post;
+            }
         }
         /**
          * Sort by publish date (newest first)
@@ -382,15 +394,18 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
         return $this->pages;
     }
 
-    public function estimateReadingTime(PageDefinition $post): int
+    public function estimateReadingTime(PostDefinition $post): int
     {
         $templateContent = $this->templateHelper->getTemplateFileContent($post->template);
         //        $templateContent = HtmlHelper::removeHtml($templateContent);
         return ReadingTime::estimateReadingTime($templateContent);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getEntities(): array
     {
-        return array_merge($this->pages, $this->posts, $this->categories);
+        return array_merge($this->pages, $this->posts, $this->tags, $this->categories);
     }
 }

@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Liquid\Content\Helper;
 
 use Liquid\Blog\Model\PostDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
 
 class PageConfigHelper
 {
-    public static function append(PageDefinition $pageDefinition, PageConfig $pageConfig): void
+    public static function append(AbstractViewableEntity $pageDefinition, PageConfig $pageConfig): void
     {
         $pageConfig->setPageDefinition($pageDefinition);
 

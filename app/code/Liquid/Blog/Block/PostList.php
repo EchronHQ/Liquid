@@ -14,7 +14,7 @@ use Liquid\Core\Model\BlockContext;
 
 class PostList extends TemplateBlock
 {
-    protected string|null $template = 'Liquid_Blog::list.phtml';
+    protected string|null $template = 'Liquid_Blog::post/list.phtml';
 
     private array $posts = [];
 

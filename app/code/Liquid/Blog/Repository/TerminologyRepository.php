@@ -215,6 +215,9 @@ class TerminologyRepository implements ViewableEntityRepository
         return $this->terms;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getEntities(): array
     {
         return $this->terms;

@@ -6,6 +6,7 @@ namespace Liquid\Content\Repository;
 
 use Attlaz\Adapter\Base\RemoteService\SqlRemoteService;
 use Liquid\Content\Helper\LocaleHelper;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
 use Liquid\Core\Repository\BaseRepository;
@@ -31,7 +32,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
                 // TODO: improve SEO tags
                 'seo_title' => 'One platform to streamline all workflows',
                 'seo_description' => 'Attlaz is the platform to streamline all workflows with integrations, automation and visualisation',
-                'seo_keywords' => PageDefinition::DEFAULT_KEYWORDS,
+                'seo_keywords' => AbstractViewableEntity::DEFAULT_KEYWORDS,
                 'priority' => PageSitemapPriority::HIGHEST,
                 'modified' => '2022-10-23 15:49:06',
             ]),
@@ -352,6 +353,9 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
         return $this->pages;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getEntities(): array
     {
         return $this->getAll();

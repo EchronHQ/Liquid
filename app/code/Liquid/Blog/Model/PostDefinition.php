@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Blog\Model;
 
-use Liquid\Content\Model\Resource\PageDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Core\Helper\DataMapper;
 
-class PostDefinition extends PageDefinition
+class PostDefinition extends AbstractViewableEntity
 {
     public string|null $publisher = null;
     public PostAuthor|null $author = null;
@@ -24,6 +24,7 @@ class PostDefinition extends PageDefinition
     public array $tagIds = [];
 
     public int $readDuration = 5;
+    public bool $draft = true;
 
 
     public static function generate(int|string $id, array $data): static
@@ -43,6 +44,8 @@ class PostDefinition extends PageDefinition
         $article->categoryId = $dataMapper->getProperty('category', null);
         $article->tagIds = $dataMapper->getArrayProperty('tags', []);
         $article->image = $dataMapper->getProperty('image', null);
+
+        $article->draft = $dataMapper->getBooleanProperty('draft', true);
 
         parent::appendData($article, $dataMapper);
 

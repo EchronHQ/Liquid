@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Liquid\Blog\Block\PostList;
 use Liquid\Blog\Block\Posts;
-use Liquid\Content\Block\Element\CopyBlock;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
 
 assert($this instanceof Posts, 'Instance must be ' . Posts::class . ' ' . get_class($this) . ' instead');
@@ -14,12 +13,9 @@ $categories = $this->getCategories();
 <page-header>
     <div class="row">
         <div class="column">
-            <?php
-            $hero = new CopyBlock('header center');
-            $hero->setHeaderTitle('Blog', 'h1');
-            $hero->setContent('Ideas, practical tips and insider info - the Attlaz blog helps your team to streamline all workflows');
-            echo $hero->toHtml();
-            ?>
+            <copy-block title="The Attlaz blog" title-tag="h1">
+                <!--                Ideas, practical tips and insider info - the Attlaz blog helps your team to streamline all workflows-->
+            </copy-block>
         </div>
     </div>
 </page-header>

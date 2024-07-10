@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Blog\Model;
 
-use Liquid\Content\Model\Resource\PageDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Core\Helper\DataMapper;
 
-class TermDefinition extends PageDefinition
+class TermDefinition extends AbstractViewableEntity
 {
     public string $term;
     public string $termLong;

@@ -64,6 +64,18 @@ class DataMapper
         return $default;
     }
 
+    public function getBooleanProperty(string $property, bool|null $default = null): bool|null
+    {
+        $value = $this->getPropertyValue($property);
+        if ($value === true || $value === 1 || $value === 'true' || $value === '1') {
+            return true;
+        }
+        if ($value === false || $value === 0 || $value === 'false' || $value === '0') {
+            return false;
+        }
+        return $default;
+    }
+
     public function getNotUsedProperties(): array
     {
         $dataProperties = \array_keys($this->data);

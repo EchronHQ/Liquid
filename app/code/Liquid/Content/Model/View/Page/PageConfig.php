@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Liquid\Content\Model\View\Page;
 
 use Liquid\Blog\Model\PostAuthor;
-use Liquid\Content\Model\Resource\PageDefinition;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 
 class PageConfig
 {
@@ -47,14 +47,14 @@ class PageConfig
         return $this->breadCrumbPages;
     }
 
-    private PageDefinition|null $definition = null;
+    private AbstractViewableEntity|null $definition = null;
 
-    public function setPageDefinition(PageDefinition $definition): void
+    public function setPageDefinition(AbstractViewableEntity $definition): void
     {
         $this->definition = $definition;
     }
 
-    public function getPageDefinition(): PageDefinition
+    public function getPageDefinition(): AbstractViewableEntity
     {
         return $this->definition;
     }

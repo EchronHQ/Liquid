@@ -189,6 +189,19 @@ class Base
         return $modules;
     }
 
+    final public function getInfo(): array
+    {
+        $modules = [];
+
+        foreach ($this->modules as $module) {
+
+            $modules[] = $module;
+
+        }
+        return $modules;
+
+    }
+
     final protected function matchModuleFrontName(Request $request, string $param): string|null
     {
         // get module name

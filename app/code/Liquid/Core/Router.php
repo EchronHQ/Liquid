@@ -7,6 +7,7 @@ namespace Liquid\Core;
 use DI\Container;
 use Liquid\Admin\Controller\Admin\Editor\View as AdminEditorView;
 use Liquid\Content\Controller\Page\NotFound;
+use Liquid\Content\Helper\StringHelper;
 use Liquid\Content\Model\Resource\UrlRewrite;
 use Liquid\Content\Model\Resource\UrlRewriteType;
 use Liquid\Content\Repository\LocaleRepository;
@@ -155,7 +156,7 @@ class Router
                     if (array_key_exists($viewableEntity->id, $this->pageRoutes)) {
                         $this->logger->error('There is already a viewable entity with id `' . $viewableEntity->id . '`');
                     } else {
-
+                        // TODO: the page routes should be loaded elsewhere, they are not used in this class
                         $this->pageRoutes[$viewableEntity->id] = $viewableEntity->getUrlPath();
 
                         $urlRewrites = $viewableEntity->getUrlRewrites();
@@ -270,7 +271,10 @@ class Router
         $urlRepository = $this->diContainer->get(UrlRepository::class);
 
         $rewrite = $urlRepository->getRewrite($request->getPathInfo());
+
+//        echo $request->getPathInfo() . '<br/>';
         if ($rewrite !== null) {
+//            echo 'set rewrite ' . $rewrite->target . ' ' . $request->getPathInfo() . '<br/>';
             if ($rewrite->statusCode === UrlRewriteType::INTERNAL) {
                 $request->setPathInfo($rewrite->target, $rewrite);
             } else {
@@ -289,11 +293,11 @@ class Router
         //        \var_dump($request->getPathInfo());
         //        \var_dump($request->getParams());
 
-        /** @var Base[] $routes */
-        $routes = $this->routes[$area === Area::Frontend ? 'frontend' : 'backend'];
+        /** @var Base[] $routers */
+        $routers = $this->routes[$area === Area::Frontend ? 'frontend' : 'backend'];
 
 
-        foreach ($routes as $router) {
+        foreach ($routers as $router) {
             $action = $router->match($request);
             if ($action !== null) {
                 $result = $action->execute();
@@ -304,22 +308,23 @@ class Router
             }
 
         }
-//        $debugRoutes = [];
-//        foreach ($routes as $router) {
-//            $x = [];
-//            foreach ($routes as $route) {
-//                $x[] = get_class($route);
-//            }
-//
-//            $debugRoutes[get_class($router)] = $x;
-//        }
-        // TODO: ignore paths if url start with wp-admin
+
+        // TODO: make it possible to easily ignore certain paths
+        $ignoreIfPathStartsWith = [
+            '/wp', '/bk', '/bc', '/wordpress',
+        ];
+        // /packages/barryvdh/elfinder/js/elfinder.min.js
         $pathInfo = $request->getPathInfo();
-        if (!str_starts_with($pathInfo, '/wp-admin') && !str_starts_with($pathInfo, '/wp-includes') && !str_starts_with($pathInfo, '/wp-content')) {
+        if (!StringHelper::startsWith($pathInfo, $ignoreIfPathStartsWith)) {
+            $debugRoutes = [];
+            foreach ($routers as $router) {
+                $debugRoutes[get_class($router)] = $router->getInfo();
+            }
+            // TODO: add referer
             $this->logger->error('Page not found', [
                 'path info' => $request->getPathInfo(),
                 'params' => $request->getParams(),
-//            'routes' => $debugRoutes,
+                'routes' => $debugRoutes,
             ]);
         }
 

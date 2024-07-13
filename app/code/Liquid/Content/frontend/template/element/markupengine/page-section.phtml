@@ -15,7 +15,9 @@ if ($this->getData('style') !== null) {
         $classes[] = 'none';
     }
 }
-
+if ($this->getTypes() !== null) {
+    $classes[] = $this->getTypes();
+}
 ?>
 <section <?= count($classes) > 0 ? 'class="' . implode(' ', $classes) . '"' : '' ?>>
     <div class="content">
@@ -36,7 +38,8 @@ if ($this->getData('style') !== null) {
     if ($archBottom === 'round'):
         ?>
         <div class="background-after-arch">
-            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="30" width="100%" viewBox="0 0 1440 30" fill="none">
+            <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="30" width="100%"
+                 viewBox="0 0 1440 30" fill="none">
                 <path d="M1440 0H0C0 0 352.5 30 720 30C1087.5 30 1440 0 1440 0Z"></path>
             </svg>
         </div>

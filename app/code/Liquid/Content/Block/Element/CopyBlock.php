@@ -45,9 +45,11 @@ class CopyBlock extends AbstractBlock
     private function validateTypes(string|null $types): void
     {
         $allowedTypes = [
-            'detail', 'center', 'right', 'gap-normal', 'gap-large',
+            'center', 'right', 'gap-normal', 'gap-large',
             'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua', 'card--theme-x',
-            'green', 'blue', 'yellow', 'purple', 'pink', 'new', 'header',
+            'green', 'blue', 'yellow', 'purple', 'pink',
+            'detail', 'new', 'header',
+            'variant--section', 'variant--subsection', 'variant--detail',
             'col--3', 'col--4', 'col--6', 'col--8', 'col--12',
             'sm:col--3', 'sm:col--4', 'sm:col--6', 'sm:col--12',
             'md:col--3', 'md:col--4', 'md:col--6', 'md:col--12',

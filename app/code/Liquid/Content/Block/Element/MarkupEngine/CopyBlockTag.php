@@ -10,6 +10,7 @@ use Liquid\Core\Model\Layout\Block;
 class CopyBlockTag extends Block
 {
     public const PROP_TITLE = 'title';
+    public const PROP_CAPTION = 'caption';
     public const PROP_TYPES = 'types';
     public const PROP_TITLE_TAG = 'title-tag';
     public const PROP_ICON = 'icon';
@@ -18,6 +19,7 @@ class CopyBlockTag extends Block
 
     public const PROPERTIES = [
         self::PROP_TITLE,
+        self::PROP_CAPTION,
         self::PROP_TYPES,
         self::PROP_TITLE_TAG,
         self::PROP_ICON,
@@ -73,6 +75,9 @@ class CopyBlockTag extends Block
             } else {
                 $block->setHeaderTitle($title, $titleTag);
             }
+        }
+        if ($this->hasData(self::PROP_CAPTION)) {
+            $block->setHeaderCaption($this->getData(self::PROP_CAPTION));
         }
 
         if ($this->hasData(self::PROP_ICON)) {

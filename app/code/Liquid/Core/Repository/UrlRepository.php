@@ -134,11 +134,6 @@ class UrlRepository extends BaseRepository
 
     }
 
-    public static function escapeId(string $input): string
-    {
-        return \str_replace(['/', '//'], '_', $input);
-    }
-
     final public function addRewrite(UrlRewrite $rewrite): void
     {
         if (!$this->urlRewritesLoaded) {

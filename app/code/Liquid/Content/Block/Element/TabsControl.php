@@ -8,7 +8,7 @@ use Liquid\Content\Block\TemplateBlock;
 
 class TabsControl extends TemplateBlock
 {
-    public string|null $template = 'tabscontrol.phtml';
+    public string|null $template = 'Liquid_Content::element/tabscontrol.phtml';
 
     public int $selectedIndex = 0;
     public array $tabs = [

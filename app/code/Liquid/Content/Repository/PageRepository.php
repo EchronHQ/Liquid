@@ -9,8 +9,8 @@ use Liquid\Content\Helper\LocaleHelper;
 use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
+use Liquid\Core\Helper\IdHelper;
 use Liquid\Core\Repository\BaseRepository;
-use Liquid\Core\Repository\UrlRepository;
 use Liquid\Core\Repository\ViewableEntityRepository;
 use Liquid\Core\Router;
 
@@ -28,7 +28,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('home', [
                 'url_key' => '',
                 'template' => 'page/home.phtml',
-                'doc_css_class' => 'theme-aqua',
+                'doc_css_class' => 'theme--light palette--wintergreen accent--green',
                 // TODO: improve SEO tags
                 'seo_title' => 'One platform to streamline all workflows',
                 'seo_description' => 'Attlaz is the platform to streamline all workflows with integrations, automation and visualisation',
@@ -39,7 +39,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('plans', [
                 'url_key' => 'plans',
                 'template' => 'page/plans.phtml',
-                'doc_css_class' => 'header-dark',
+                'doc_css_class' => 'theme--light palette--wintergreen accent--green',
                 'seo_title' => 'Pricing plans and editions',
                 'seo_description' => 'See what Attlaz plan fits to your needs',
                 'seo_keywords' => '',
@@ -50,7 +50,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('platform', [
                 'url_key' => 'platform',
                 'template' => 'page/platform.phtml',
-                'doc_css_class' => 'platform',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Discover the Attlaz platform',
                 'seo_description' => 'Learn how Attlaz improve your internal data management',
                 'seo_keywords' => '',
@@ -61,7 +61,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('why-attlaz', [
                 'url_key' => 'why-attlaz',
                 'template' => 'page/why-attlaz.phtml',
-                'doc_css_class' => 'theme-dark',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Discover the Attlaz platform',
                 'seo_description' => 'Learn how Attlaz improve your internal data management',
                 'seo_keywords' => '',
@@ -84,7 +84,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('contact', [
                 'url_key' => 'contact',
                 'template' => 'page/contact.phtml',
-                'doc_css_class' => 'contact',
+                'doc_css_class' => 'contact theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Get in touch with us',
                 'seo_description' => "Contact us for support or if you're interested in learning more about which Attlaz products meet your needs.",
                 'seo_keywords' => '',
@@ -94,7 +94,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('demo', [
                 'url_key' => 'demo',
                 'template' => 'page/demo.phtml',
-                'doc_css_class' => 'demo',
+                'doc_css_class' => 'demo theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Request a demo or schedule a meeting',
                 'seo_description' => "Book a demo if you're interested in learning more about how Attlaz can improve your organization.",
                 'seo_keywords' => '',
@@ -106,7 +106,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('about', [
                 'url_key' => 'about',
                 'template' => 'page/about.phtml',
-                'doc_css_class' => '',
+                'doc_css_class' => 'theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Our company',
                 'seo_description' => "Attlaz is on a mission to make any platform connect and make all data available across your organization",
                 'seo_keywords' => '',
@@ -116,7 +116,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('partners', [
                 'url_key' => 'partners',
                 'template' => 'page/partners.phtml',
-                'doc_css_class' => 'theme-aqua',
+                'doc_css_class' => 'theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Find our become an Attlaz partner',
                 'seo_description' => "Partner with the world’s leading system integrators and technology innovators",
                 'seo_keywords' => '',
@@ -126,7 +126,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('careers', [
                 'url_key' => 'careers',
                 'template' => 'page/careers.phtml',
-                'doc_css_class' => '',
+                'doc_css_class' => 'theme--light palette--wintergreen accent--green',
                 'seo_title' => 'Careers - Join our fast growing team',
                 'seo_description' => 'Careers - Join our fast growing team',
                 'seo_keywords' => '',
@@ -146,6 +146,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
                 'url_key' => 'environment',
                 'path' => 'environment',
                 'template' => 'page/environment.phtml',
+                'doc_css_class' => 'theme--light palette--lemonlime accent--green',
                 'seo_title' => 'Environment and sustainability',
                 'seo_description' => 'Attlaz empower companies to improve their carbon footprint and be more sustainable',
                 'seo_keywords' => '',
@@ -154,7 +155,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('support', [
                 'url_key' => 'support',
                 'template' => 'page/support.phtml',
-                'doc_css_class' => 'header-light support',
+                'doc_css_class' => 'theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Support Center',
                 'seo_description' => 'Everything you need to know right here at your fingertips. Ask questions, browse around for answers, or submit your feature requests.',
                 'seo_keywords' => '',
@@ -166,7 +167,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('legal/privacy', [
                 'url_key' => 'legal/privacy',
                 'template' => 'page/legal/privacy.phtml',
-                'doc_css_class' => 'legal header-dark',
+                'doc_css_class' => 'legal theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Privacy Policy',
                 'seo_description' => 'This privacy policy has been compiled to better serve those who are concerned with how their ‘Personally Identifiable Information’ is being used online.',
                 'seo_keywords' => '',
@@ -176,7 +177,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('legal/cookies', [
                 'url_key' => 'legal/cookies',
                 'template' => 'page/legal/cookies.phtml',
-                'doc_css_class' => 'legal header-dark',
+                'doc_css_class' => 'legal theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Cookie Policy',
                 'seo_description' => 'Learn everything about how we manage cookies',
                 'seo_keywords' => '',
@@ -186,7 +187,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('legal/terms', [
                 'url_key' => 'legal/terms',
                 'template' => 'page/legal/terms.phtml',
-                'doc_css_class' => 'legal header-dark',
+                'doc_css_class' => 'legal theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Terms and Conditions',
                 'seo_description' => 'These terms and conditions (the “contract”) are a legally obligatory agreement between the “User” who receives the services described in this document and Attlaz.',
                 'seo_keywords' => '',
@@ -199,7 +200,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('products/integrate', [
                 'url_key' => 'products/integrate',
                 'template' => 'page/products/integrate.phtml',
-                'doc_css_class' => 'theme-ocean',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Integrations made easy',
                 'seo_description' => 'Integrations made easy',
                 'seo_keywords' => '',
@@ -209,7 +210,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('products/automate', [
                 'url_key' => 'products/automate',
                 'template' => 'page/products/automate.phtml',
-                'doc_css_class' => 'theme-ocean',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Powerful automation',
                 'seo_description' => 'Powerful automation',
                 'seo_keywords' => '',
@@ -219,7 +220,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('products/visualize', [
                 'url_key' => 'products/visualize',
                 'template' => 'page/products/visualize.phtml',
-                'doc_css_class' => 'theme-ocean',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Visualization and monitoring',
                 'seo_description' => 'Visualization and monitoring',
                 'seo_keywords' => '',
@@ -246,7 +247,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('industries/startups', [
                 'url_key' => 'industries/startups',
                 'template' => 'page/industries/startups.phtml',
-                'doc_css_class' => 'theme-aqua',
+                'doc_css_class' => 'theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Attlaz for startups',
                 'seo_description' => 'Attlaz for startups',
                 'seo_keywords' => '',
@@ -260,7 +261,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('case-studies', [
                 'url_key' => 'case-studies',
                 'template' => 'page/case-studies.phtml',
-                'doc_css_class' => 'theme-ocean',
+                'doc_css_class' => 'theme--light palette--overcast accent--blue',
                 'seo_title' => 'Case studies',
                 'seo_description' => 'Case studies',
                 'seo_keywords' => '',
@@ -313,7 +314,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate(Router::PAGE_NOT_FOUND_IDENTIFIER, [
                 'url_key' => Router::PAGE_NOT_FOUND_IDENTIFIER,
                 'template' => 'page/notfound.phtml',
-                'doc_css_class' => 'header-dark',
+                'doc_css_class' => 'theme--light palette--overcast accent--blue',
                 'seo_title' => 'Page not found',
                 'seo_description' => 'Page not found',
                 'seo_keywords' => '',
@@ -327,7 +328,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
     public function getById(int|string $id): PageDefinition|null
     {
         foreach ($this->pages as $page) {
-            $escapedId = UrlRepository::escapeId($page->id);
+            $escapedId = IdHelper::escapeId($page->id);
             if ($escapedId === $id) {
                 return $page;
             }

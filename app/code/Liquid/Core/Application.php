@@ -192,6 +192,7 @@ class Application
 
     public function run(): void
     {
+        ini_set('memory_limit', '2048M');
         $this->profiler->profilerStart('Application:run');
 
 

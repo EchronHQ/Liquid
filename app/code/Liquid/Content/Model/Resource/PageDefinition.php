@@ -6,8 +6,9 @@ namespace Liquid\Content\Model\Resource;
 
 class PageDefinition extends AbstractViewableEntity
 {
-    public function getUrlRewrites(): array
+    public function __construct(int|string $id)
     {
-        return ['/content/page/view/page-id/' . $this->id];
+        parent::__construct($id);
+        $this->urlRewrites = ['/content/page/view/page-id/' . $this->id];
     }
 }

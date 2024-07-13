@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Controller\Admin\Content;
 
+use Laminas\Http\Response as ResponseAlias;
 use Liquid\Content\Block\HtmlHeadBlock;
 use Liquid\Content\Block\TemplateBlock;
 use Liquid\Content\Helper\PageConfigHelper;
@@ -16,7 +17,6 @@ use Liquid\Core\Model\Action\Context;
 use Liquid\Core\Model\Result\Page;
 use Liquid\Core\Model\Result\Result;
 use Liquid\Core\Router;
-use Laminas\Http\Response as ResponseAlias;
 
 class Layout extends AbstractAction
 {
@@ -38,9 +38,12 @@ class Layout extends AbstractAction
 
         PageConfigHelper::append($page, $this->pageConfig);
         $this->pageConfig->addBodyClass('header-dark');
+        $this->pageConfig->addBodyClass('theme--light');
+        $this->pageConfig->addBodyClass('palette--chroma');
+        $this->pageConfig->addBodyClass('accent--blurple');
 
         $pageBlock = $this->layout->addBlock(TemplateBlock::class, 'page', 'content');
-        $pageBlock->setTemplate('Liquid_Content::page/layout.phtml');
+        $pageBlock->setTemplate('Liquid_Content::page/layout/layout.phtml');
         $pageBlock->setData('page', $page);
 
 

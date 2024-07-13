@@ -33,7 +33,6 @@ class TabsTag extends Block
 
         $x = new MarkupEngine($this->container, $this->logger);
         $x->registerTag('tab', Block::class);
-        // $x->debug = true;
         /** @var BlockTag[] $subTags */
         $subTags = $x->processTags('<div>' . $content . '</div>');
         // TODO: why is it needed to reverse the array to get the right order again?
@@ -43,9 +42,16 @@ class TabsTag extends Block
         foreach ($subTags as $subTag) {
 
             if ($subTag instanceof BlockTag && $subTag->tag === 'tab' && $this->isActive($subTag)) {
+
+                $title = '[No title]';
+                if (isset($subTag->attributes['title'])) {
+                    $title = $subTag->attributes['title'];
+                } else {
+                    // TODO: log this
+                    $this->logger->warning('No title defined for tab', ['tab' => $subTag]);
+                }
                 $tabsControl->tabs[] = [
-                    'title' => $subTag->attributes['title'],
-                    'intro' => $subTag->attributes['intro'],
+                    'title' => $title,
                     'content' => $subTag->contentHtml,
                 ];
             }

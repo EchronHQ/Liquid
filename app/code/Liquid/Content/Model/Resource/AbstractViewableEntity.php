@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Content\Model\Resource;
 
 use Liquid\Core\Helper\DataMapper;
+use Liquid\Core\Helper\IdHelper;
 
 abstract class AbstractViewableEntity
 {
@@ -47,8 +48,37 @@ abstract class AbstractViewableEntity
     {
 
         $page = new static(self::generateId($id));
-
         self::appendData($page, new DataMapper($data));
+
+        // Validate that doc_css_class as theme, palette and accent variables
+        $classes = explode(' ', $page->docCssClass);
+        $hasTheme = false;
+        $hasPalette = false;
+        $hasAccent = false;
+        foreach ($classes as $class) {
+            if (str_starts_with($class, 'theme--')) {
+                $hasTheme = true;
+            }
+            if (str_starts_with($class, 'palette--')) {
+                $hasPalette = true;
+            }
+            if (str_starts_with($class, 'accent--')) {
+                $hasAccent = true;
+            }
+        }
+        if (!$hasTheme) {
+            var_dump($classes);
+            throw new \Error('Theme is missing for `' . $id . '`');
+        }
+        if (!$hasPalette) {
+            var_dump($classes);
+            throw new \Error('Palette is missing for `' . $id . '`');
+        }
+        if (!$hasAccent) {
+            var_dump($classes);
+            throw new \Error('Accent is missing for `' . $id . '`');
+        }
+
         return $page;
     }
 
@@ -118,11 +148,29 @@ abstract class AbstractViewableEntity
 
     public static function generateId(string $id): string
     {
-        return self::ID_PREFIX === '' ? $id : self::ID_PREFIX . '-' . $id;
+        return self::_generateId($id, self::ID_PREFIX);
     }
+
+    final protected static function _generateId(string $id, string $prefix): string
+    {
+        $id = IdHelper::escapeId($id);
+        return $prefix === '' ? $id : $prefix . '-' . $id;
+    }
+
+    protected array $urlRewrites = [];
 
     public function getUrlRewrites(): array
     {
-        return [];
+        return $this->urlRewrites;
+    }
+
+    public function setUrlRewrites(array $urlRewrites): void
+    {
+        $this->urlRewrites = $urlRewrites;
+    }
+
+    public function isVisibleOnFront(): bool
+    {
+        return $this->status === PageStatus::ACTIVE;
     }
 }

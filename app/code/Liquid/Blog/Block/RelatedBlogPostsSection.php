@@ -37,6 +37,10 @@ class RelatedBlogPostsSection extends TemplateBlock
         return \array_slice($result, 0, 4);
     }
 
+    public function filterByCategory(string $category):void{
+
+    }
+
     public function setTitle(string $title): void
     {
         $this->title = $title;

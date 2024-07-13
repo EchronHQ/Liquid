@@ -34,16 +34,19 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
     {
         parent::__construct($remoteService, $localeHelper);
 
+        $blogOverviewPage = PageDefinition::generate('blog', [
+            'url_key' => 'blog',
+            //            'template'      => 'Liquid_Blog::blog.phtml',
+            'doc_css_class' => 'theme--light palette--wintergreen accent--green',
+            'seo_title' => 'Attlaz blog with latest news and best practices',
+            'seo_description' => 'Discover the latest trends in data connectivity, automation and other Attlaz insights.',
+            'seo_keywords' => '',
+            'priority' => PageSitemapPriority::BASE,
+        ]);
+        $blogOverviewPage->setUrlRewrites(['blog']);
+
         $this->pages = [
-            PageDefinition::generate('blog', [
-                'url_key' => 'blog',
-                //            'template'      => 'Liquid_Blog::blog.phtml',
-                'doc_css_class' => 'theme-aqua',
-                'seo_title' => 'Attlaz blog with latest news and best practices',
-                'seo_description' => 'Discover the latest trends in data connectivity, automation and other Attlaz insights.',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::BASE,
-            ]),
+            $blogOverviewPage,
             //            PageDefinition::generate('resources', [
             //                'url_key'       => 'resources',
             //                //            'template'      => 'Liquid_Blog::blog.phtml',

@@ -70,13 +70,20 @@ class Resolver
             $this->logger->error('[Resolver] Unable to get page url: page routes not defined');
             return null;
         }
+        $pageIdentifier = IdHelper::escapeId($pageIdentifier);
+
         if ($pageIdentifier === 'home') {
             return $this->getUrl();
         }
+        if ($pageIdentifier === 'contact-sales') {
+            // TODO: rebrand demo to 'contact-sales'
+            $pageIdentifier = 'demo';
+        }
+        // TODO: make list with special page id leading to configuration values
         if ($pageIdentifier === 'docs') {
             return $this->configuration->getValueString('documentation_url');
         }
-        if ($pageIdentifier === 'docs/api') {
+        if ($pageIdentifier === 'docs-api') {
             return $this->configuration->getValueString('api_reference_url');
         }
         if ($pageIdentifier === 'status') {

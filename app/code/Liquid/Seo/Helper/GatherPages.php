@@ -6,6 +6,7 @@ namespace Liquid\Seo\Helper;
 
 use DI\Container;
 use Liquid\Content\Helper\TemplateHelper;
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageStatus;
 use Liquid\Core\Helper\FileHelper;
@@ -46,7 +47,7 @@ readonly class GatherPages
                         if ($page->status === PageStatus::ACTIVE) {
                             $result[] = $page;
 
-                            echo ' - ' . $page->getSeoTitle() . ' ' . $page->getUrlPath() . PHP_EOL;
+                            echo ' - ' . $page->getUrlPath() . ' (' . $page->getSeoTitle() . ') ' . PHP_EOL;
                         }
 
                     }
@@ -92,7 +93,7 @@ readonly class GatherPages
 
 
         // Sort pages by priority
-        usort($result, static function (PageDefinition $a, PageDefinition $b) {
+        usort($result, static function (AbstractViewableEntity $a, AbstractViewableEntity $b) {
             return strcmp($b->priority->value, $a->priority->value);
         });
 
@@ -106,7 +107,7 @@ readonly class GatherPages
         return $result;
     }
 
-    private function appendModificationDateBasedOnTemplate(PageDefinition $page): void
+    private function appendModificationDateBasedOnTemplate(AbstractViewableEntity $page): void
     {
         if ($page->template !== null) {
             try {

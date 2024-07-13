@@ -12,11 +12,14 @@ class PageSectionTag extends TemplateBlock
     public const PROP_BACKGROUND = 'background';
     public const PROP_ARCH_TOP = 'arch-top';
     public const PROP_ARCH_BOTTOM = 'arch-bottom';
+    public const PROP_TYPES = 'types';
+
     public const PROPERTIES = [
         self::PROP_MAX_WIDTH,
         self::PROP_BACKGROUND,
         self::PROP_ARCH_TOP,
         self::PROP_ARCH_BOTTOM,
+        self::PROP_TYPES,
     ];
 
 
@@ -62,5 +65,10 @@ class PageSectionTag extends TemplateBlock
     public function getBottomArch(): string|null
     {
         return $this->getData(self::PROP_ARCH_BOTTOM);
+    }
+
+    public function getTypes(): string|null
+    {
+        return $this->getData(self::PROP_TYPES);
     }
 }

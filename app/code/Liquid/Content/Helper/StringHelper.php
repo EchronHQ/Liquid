@@ -66,4 +66,14 @@ class StringHelper
     {
         return \implode('&shy;', \str_split($input));
     }
+
+    public static function startsWith(string $needle, array $haystacks): bool
+    {
+        foreach ($haystacks as $haystack) {
+            if (str_starts_with($haystack, $needle)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

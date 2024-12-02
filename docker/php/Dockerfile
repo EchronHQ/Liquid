@@ -1,4 +1,4 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 RUN apt-get update -y \
   && apt-get install -y --no-install-recommends \
     libxml2-dev \
@@ -23,7 +23,8 @@ RUN apt-get update -y \
 
 RUN docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype && docker-php-ext-install gd
 
-RUN curl -L https://github.com/bcpierce00/unison/releases/download/v2.53.2/unison-v2.53.2+ocaml-4.14.1+x86_64.linux.tar.gz | tar zxv -C /tmp && \
+
+RUN curl -L https://github.com/bcpierce00/unison/releases/download/v2.53.7/unison-2.53.7-ubuntu-x86_64.tar.gz | tar zxv -C /tmp && \
              cd /tmp/bin && \
              cp unison unison-fsmonitor /usr/local/bin && \
              cd /root && rm -rf /tmp/bin
@@ -82,7 +83,7 @@ COPY conf/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xde
 
 RUN mkdir /windows \
  && cd /windows \
- && curl -L -o unison-windows.zip https://github.com/bcpierce00/unison/releases/download/v2.53.2/unison-v2.53.2+ocaml-4.14.0+mingw64c+x86_64.windows.zip \
+ && curl -L -o unison-windows.zip https://github.com/bcpierce00/unison/releases/download/v2.53.7/unison-2.53.7-windows-x86_64.zip \
  && unzip unison-windows.zip \
  && rm unison-windows.zip \
  && mv 'bin/unison.exe' unison.exe \

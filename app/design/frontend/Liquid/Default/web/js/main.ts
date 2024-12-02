@@ -8,7 +8,7 @@ import MouseEnterEvent = JQuery.MouseEnterEvent;
 import MouseLeaveEvent = JQuery.MouseLeaveEvent;
 import TriggeredEvent = JQuery.TriggeredEvent;
 
-$(() => {
+$((): void => {
 
     const scroll: Scroll = new Scroll();
     const mobileMenu: MobileMenu = new MobileMenu();
@@ -36,7 +36,7 @@ $(() => {
     const faq: Faq = new Faq();
     faq.init();
 
-    console.log('Init');
+    console.log('[Framework] Init components');
     $('div[data-liquid-init]').each((index: number, element: HTMLElement): void => {
 
         const initData: {
@@ -48,7 +48,7 @@ $(() => {
         }
 
 
-        console.log('Init data', initData);
+        console.log('[Framework] Init component', {element, initData});
         if (initData.hasOwnProperty('control') && initData.control !== undefined) {
             const control: string = initData.control;
             const options: any | null = initData.options === undefined ? null : initData.options;

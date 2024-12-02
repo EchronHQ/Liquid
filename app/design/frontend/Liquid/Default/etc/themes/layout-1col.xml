@@ -1,0 +1,29 @@
+<container name="root" label="Root">
+    <container name="layout" label="Layout" html_tag="div" html_class="layout">
+
+        <block name="head" class="Liquid\Content\Block\HtmlHeadBlock">
+            <addScript>js/vendor.js</addScript>
+            <addScript>js/main.js</addScript>
+            <addScript>js/hero.js</addScript>
+            <addScript>js/hero2.js</addScript>
+
+            <addStyleSheet>css/styles.css</addStyleSheet>
+        </block>
+        <block name="header" class="Liquid\Content\Block\Element\Navigation" template="html/site-header.phtml"/>
+
+        <container name="global-content" label="Content" html_tag="div" html_class="global-content">
+            <container name="content" label="Content">
+
+            </container>
+        </container>
+
+        <block name="footer" label="Footer" class="Liquid\Framework\View\Element\Template" template="html/footer.phtml">
+
+        </block>
+
+        <block name="after-footer" label="After Footer" class="Liquid\Framework\View\Element\Template"
+               template="html/after-footer.phtml">
+
+        </block>
+    </container>
+</container>

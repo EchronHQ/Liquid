@@ -8,7 +8,7 @@ use Liquid\Content\Helper\LocaleHelper;
 use Liquid\Core\Helper\FileHelper;
 use Liquid\Core\Helper\Output;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Core\Layout;
+use Liquid\Framework\View\Layout\Layout;
 use Psr\Log\LoggerInterface;
 
 readonly class BlockContext

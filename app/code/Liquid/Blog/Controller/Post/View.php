@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace Liquid\Blog\Controller\Post;
 
-use Liquid\Blog\Block\Post;
-use Liquid\Blog\Block\RelatedBlogPostsSection;
 use Liquid\Blog\Model\PostDefinition;
+use Liquid\Blog\Model\ViewModel\PostViewModel;
+use Liquid\Blog\Model\ViewModel\RelatedBlogPostsSection;
 use Liquid\Blog\Repository\BlogRepository;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
 use Liquid\Content\Helper\PageConfigHelper;
 use Liquid\Content\Model\FrontendAction;
-use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\View\Page\PageConfig;
-use Liquid\Core\Layout;
-use Liquid\Core\Model\Action\Context;
-use Liquid\Core\Model\Result\Page;
-use Liquid\Core\Model\Result\Result;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\App\Route\Attribute\Route;
+use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Exception\NotFoundException;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\Layout\Layout;
+use Liquid\Framework\View\Result\Page;
 
+#[Route('blog/post/view/post-id/:post-id', name: 'blog-post-view')]
 class View extends FrontendAction
 {
     /**
@@ -27,22 +32,23 @@ class View extends FrontendAction
 
 
     public function __construct(
-        Context                         $context,
-        Layout                          $layout,
-        PageConfig                      $pageConfig,
-        private readonly BlogRepository $blogRepository
+        Context                                 $context,
+        Layout                                  $layout,
+        PageConfig                              $pageConfig,
+        private readonly BlogRepository         $blogRepository,
+        private readonly ObjectManagerInterface $objectManager,
     )
     {
         parent::__construct($context, $layout, $pageConfig);
     }
 
 
-    public function execute(): Result|null
+    public function execute(): Result
     {
         $articlePage = $this->getArticleByRequest();
         if (\is_null($articlePage)) {
             $this->logger->error('Unable to show blog post, post not found', ['request' => $this->getRequest()->getParams()]);
-            return null;
+            throw new NotFoundException('Page not found');
 
         }
         return $this->renderPage($articlePage);
@@ -51,7 +57,7 @@ class View extends FrontendAction
 
     private function getArticleByRequest(): PostDefinition|null
     {
-        $postIdentifier = $this->getRequest()->getParam('postId');
+        $postIdentifier = $this->getRequest()->getParam('post-id');
         if (\is_null($postIdentifier)) {
             return null;
         }
@@ -59,10 +65,10 @@ class View extends FrontendAction
     }
 
 
-    private function renderPage(AbstractViewableEntity $articlePage): Result
+    private function renderPage(PostDefinition $articlePage): Result
     {
 
-
+        $result = $this->getResultFactory()->create(Page::class);
         $this->layout->runHandle('layout-1col');
         //        $this->layout->runHandle('layout-2col-left');
 
@@ -76,25 +82,42 @@ class View extends FrontendAction
         /**
          * Content
          */
-        $pageBlock = $this->layout->addBlock(Post::class, 'page', 'content');
+        $pageBlock = $this->layout->addBlock(Template::class, 'page', 'content');
         $pageBlock->setTemplate('Liquid_Blog::post/view.phtml');
         $pageBlock->setData('post', $articlePage);
 
+        $pageBlock->setViewModel($this->objectManager->get(BaseViewModel::class), 'base');
+
+
+        $blogPostViewModel = $this->objectManager->get(PostViewModel::class);
+        $blogPostViewModel->setData('post', $articlePage);
+        $pageBlock->setViewModel($blogPostViewModel);
         /**
          * Content
          */
-        $contentBlock = $this->layout->createBlock(Post::class, 'blog-content');
+        $contentBlock = $this->layout->createBlock(Template::class, 'blog-content');
         $contentBlock->setTemplate($articlePage->template);
+
+        $contentBlock->setViewModel($this->objectManager->get(BaseViewModel::class), 'base');
         $contentBlock->setData('post', $articlePage);
 
-        $pageBlock->setChild('content', $contentBlock);
+        $blogPostViewModel->setPostContent($contentBlock->toHtml());
+
+
+        // $pageBlock->setChild('content', $contentBlock);
 
         /**
          * Related posts
-         * @var RelatedBlogPostsSection $resourcesBlock
          */
-        $resourcesBlock = $this->layout->addBlock(RelatedBlogPostsSection::class, 'resources', 'content');
-        $resourcesBlock->setTitle('Related Posts');
+        $relatedBlogPosts = $this->layout->createBlock(Template::class, 'related-posts', ['data' => ['template' => 'Liquid_Blog::related-posts-section.phtml']]);
+        $this->layout->setChild('content', 'related-posts');
+
+        $relatedBlogPostsViewModel = $this->objectManager->create(RelatedBlogPostsSection::class);
+        $relatedBlogPostsViewModel->setTitle('Related Posts');
+
+        $relatedBlogPosts->setViewModel($relatedBlogPostsViewModel);
+        $relatedBlogPosts->setViewModel($this->objectManager->get(BaseViewModel::class), 'base');
+
 
         /**
          * Explore more
@@ -104,12 +127,16 @@ class View extends FrontendAction
         //        $exploreBlock->setData('post', $articlePage);
 
         /**
-         * Demo
-         * @var DemoCallToActionBlock $callToAction
+         * Add call to action block
          */
-        $callToAction = $this->layout->addBlock(DemoCallToActionBlock::class, 'call-to-action', 'content');
-        $callToAction->setDescription("Let's talk about what Attlaz can do for your business.");
-        return $this->getResultFactory()->create(Page::class);
+        $callToAction = $this->layout->addBlock(Template::class, 'call-to-action', 'content');
+
+        $viewModel = $this->objectManager->create(DemoCallToActionBlock::class);
+        $viewModel->setDescription("Let's talk about what Attlaz can do for your business.");
+
+        $callToAction->setViewModel($viewModel);
+
+        return $result;
     }
 
 

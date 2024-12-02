@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
-use Liquid\Core\Model\Request\Request;
+use Liquid\Framework\App\Request\Request;
 
 class AccessHelper
 {

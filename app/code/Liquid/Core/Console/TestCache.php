@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Console;
 
-use Liquid\Core\Helper\CacheHelper;
 use Echron\Tools\StringHelper;
+use Liquid\Framework\Cache\CachePool;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,8 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TestCache extends Command
 {
     public function __construct(
-        private readonly CacheHelper $cache
-    ) {
+        private readonly CachePool $cache
+    )
+    {
         parent::__construct('cache:test');
     }
 
@@ -24,10 +25,10 @@ class TestCache extends Command
         $key = 'test-' . StringHelper::generateGuid();
         $value = StringHelper::generateRandom(2048);
 
-        $has = $this->cache->has($key);
+        $has = $this->cache->get('default')->test($key);
         $output->writeln('Cache has: ' . ($has ? 'Error' : 'Ok'));
 
-        $set = $this->cache->set($key, $value);
+        $set = $this->cache->get('default')->save($key, $value);
         $output->writeln('Cache set: ' . ($set ? 'Ok' : 'Error'));
 
 

@@ -10,13 +10,6 @@ use Psr\Log\LoggerInterface;
 
 class LocaleHelper
 {
-    public function __construct(
-        private readonly AppConfig       $appConfig,
-        private readonly LoggerInterface $logger
-    )
-    {
-    }
-
     private array $translations = [
         'analyse' => ['en-uk' => 'analyse', 'en-us' => 'analyze'],
         'categorise' => ['en-uk' => 'categorise', 'en-us' => 'categorize'],
@@ -56,20 +49,24 @@ class LocaleHelper
         'visualise' => ['en-uk' => 'visualise', 'en-us' => 'visualize'],
     ];
 
+    public function __construct(
+        private readonly AppConfig       $appConfig,
+        private readonly LoggerInterface $logger
+    )
+    {
+    }
+
     // ization isation
     // ise ize
-
-    private function isCapital(string $character): bool
-    {
-        return \strtoupper($character) === $character;
-    }
 
     public function translate(string $input): string
     {
 
-
-        $locale = $this->appConfig->getLocale();
-
+// Todo:get locale correctly from view or config
+//        $locale = $this->appConfig->getValue('locale', 'en-us');
+        $locale = new Locale('en-us');
+        $locale->code = 'en-us';
+        $locale->langCode = 'en-us';
         $translation = $this->getTranslation(\strtolower($input), $locale);
 
 
@@ -113,6 +110,11 @@ class LocaleHelper
             }
         }
         return null;
+    }
+
+    private function isCapital(string $character): bool
+    {
+        return \strtoupper($character) === $character;
     }
 
     public function findMissingTranslations(string $input): void

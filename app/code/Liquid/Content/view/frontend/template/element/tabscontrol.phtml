@@ -1,0 +1,55 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Element\TabsControl;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
+/**
+ * @var TemplateEngine $this
+ * @var Template $block
+ */
+
+
+$viewModel = $block->getViewModel('', TabsControl::class);
+$tabs = $viewModel->tabs;
+$id = $block->getNameInLayout();
+$selectedKey = $viewModel->selectedIndex;
+?>
+<div class="tabs" data-liquid-init='{"control":"tabs","option": "value"}'>
+    <div class="tab-list-wrapper">
+        <div class="tab-list" role="tablist">
+            <?php
+            foreach ($tabs as $key => $tab) {
+                ?>
+                <a href="#"
+                   data-tab="<?= $key ?>"
+                   role="tab"
+                   id="<?= $id . '-tab-' . $key ?>"
+                   class="tab <?= $selectedKey === $key ? 'selected' : '' ?>"
+                    <?= $selectedKey === $key ? 'aria-selected="true"' : '' ?>
+                >
+                    <?= $tab['title'] ?>
+                </a>
+                <?php
+            }
+            ?>
+        </div>
+    </div>
+    <div class="tab-content">
+        <?php
+        foreach ($tabs as $key => $tab) {
+            ?>
+            <div
+                    class="tab-panel"
+                    data-tab="<?= $key ?>"
+                    role="tabpanel"
+                    id="<?= $id . '-panel-' . $key ?>"
+                    aria-labelledby="<?= $id . '-tab-' . $key ?>">
+                <?= $tab['content'] ?>
+            </div>
+            <?php
+        } ?>
+
+    </div>
+</div>

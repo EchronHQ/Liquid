@@ -36,4 +36,5 @@ class PathMatcherTest extends TestCase
         $this->assertFalse(PathMatcher::matches('/page/:id', '/page'));
         $this->assertTrue(PathMatcher::matches('/page/:id', '/page/home'));
     }
+
 }

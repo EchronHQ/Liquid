@@ -6,43 +6,13 @@ namespace Liquid\Core\Model;
 
 use Echron\Tools\StringHelper;
 use Liquid\Content\Model\Locale;
-use Symfony\Component\Yaml\Yaml;
+use Liquid\Framework\App\AppMode;
 
 class AppConfig
 {
+
     private array $data = [];
-    private ApplicationMode|null $mode = null;
-
-    public function isCLI(): bool
-    {
-        return PHP_SAPI === 'cli';
-    }
-
-    public function load(string $configDirPath): void
-    {
-        $configPath = $configDirPath . '/config.yml';
-        if (!file_exists($configPath)) {
-            throw new \Exception('Config file not found');
-        }
-        $this->data = Yaml::parseFile($configPath);
-
-        $this->data['site_url'] = $this->automaticallyDetectSiteUrl();
-
-        if (!$this->isCLI()) {
-            $this->data['current_url'] = $this->detectCurrentUrl();
-        }
-
-        $this->data['app_url'] = 'https://app.attlaz.com/';
-        $this->data['status_url'] = 'https://status.attlaz.com/';
-        $this->data['documentation_url'] = 'https://docs.attlaz.com/';
-        $this->data['api_reference_url'] = 'https://app.swaggerhub.com/apis-docs/Echron/attlaz-api/';
-        $this->data['signup_url'] = 'https://app.attlaz.com/signup';
-        $this->data['dev'] = [
-            'minifyhtml' => true,
-            'minifycss' => true,
-        ];
-
-    }
+    private AppMode|null $mode = null;
 
     public function setValue(string $key, mixed $value): void
     {
@@ -50,6 +20,12 @@ class AppConfig
             throw new \Exception('Value already exists');
         }
         $this->data[$key] = $value;
+    }
+
+    public function getValueString(string $key, string|null $default = null): string
+    {
+        $x = $this->getValue($key, $default);
+        return $x . '';
     }
 
     public function getValue(string $key, string|null $default = null): mixed
@@ -70,12 +46,6 @@ class AppConfig
         return $current;
     }
 
-    public function getValueString(string $key, string|null $default = null): string
-    {
-        $x = $this->getValue($key, $default);
-        return $x . '';
-    }
-
     public function getValueBoolean(string $key, bool|null $default = null): bool
     {
         $x = $this->getValue($key, '');
@@ -89,46 +59,17 @@ class AppConfig
         return (bool)$x;
     }
 
-
-    public function getMode(): ApplicationMode
+    public function getMode(): AppMode
     {
         if ($this->mode === null) {
-            if ($this->getValue('app.mode', ApplicationMode::PRODUCTION->name) === 'develop') {
-                $this->mode = ApplicationMode::DEVELOP;
+            if ($this->getValue('app.mode', AppMode::Production->name) === 'develop') {
+                $this->mode = AppMode::Develop;
             } else {
-                $this->mode = ApplicationMode::PRODUCTION;
+                $this->mode = AppMode::Production;
             }
         }
         return $this->mode;
     }
-
-    private function automaticallyDetectSiteUrl(): string
-    {
-        // TODO: this is not good as
-        if ($this->isCLI()) {
-            $path = getcwd();
-            if ($path === '/var/www/html') {
-                return 'http://localhost:8900/';
-            }
-            if (StringHelper::contains($path, 'girasole')) {
-                return 'https://girasole.attlaz.com/';
-            }
-            return 'https://attlaz.com/';
-
-        }
-        $server = $_SERVER;
-        if (isset($server['HTTP_HOST'])) {
-            return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]/";
-        }
-        return 'http://localhost:8900/';
-    }
-
-    private function detectCurrentUrl(): string
-    {
-        $server = $_SERVER;
-        return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]$server[REQUEST_URI]";
-    }
-
 
     public function setLocale(Locale $locale, bool $defined): void
     {
@@ -156,12 +97,17 @@ class AppConfig
             // TODO: implement locale emulation
             return false;
         }
-        return $this->data['current_locale_defined'] === true;
+        return isset($this->data['current_locale_defined']) && $this->data['current_locale_defined'] === true;
+    }
+
+    public function isCLI(): bool
+    {
+        return PHP_SAPI === 'cli';
     }
 
     final public function debugTranslations(): bool
     {
-        return true;
+        return false;
         // return $this->mode === ApplicationMode::DEVELOP;
     }
 
@@ -169,5 +115,32 @@ class AppConfig
     {
         return false;
         // return $this->mode === ApplicationMode::DEVELOP;
+    }
+
+    private function automaticallyDetectSiteUrl(): string
+    {
+        // TODO: this is not good as
+        if ($this->isCLI()) {
+            $path = getcwd();
+            if ($path === '/var/www/html') {
+                return 'http://localhost:8900/';
+            }
+            if (StringHelper::contains($path, 'girasole')) {
+                return 'https://girasole.attlaz.com/';
+            }
+            return 'https://attlaz.com/';
+
+        }
+        $server = $_SERVER;
+        if (isset($server['HTTP_HOST'])) {
+            return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]/";
+        }
+        return 'http://localhost:8900/';
+    }
+
+    private function detectCurrentUrl(): string
+    {
+        $server = $_SERVER;
+        return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]$server[REQUEST_URI]";
     }
 }

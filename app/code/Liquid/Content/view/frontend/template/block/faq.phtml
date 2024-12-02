@@ -1,0 +1,31 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $viewModel \Liquid\Content\Block\Element\FaqBlock
+ */
+$viewModel = $block->getViewModel();
+
+$topics = $viewModel->getTopics();
+?>
+<div class="faq">
+    <?php
+    $i = 0;
+    foreach ($topics as $topic) {
+        ?>
+        <div class="faq-item">
+            <div class="faq-question">
+                <?= $topic['title'] ?>
+            </div>
+            <div class="faq-answer-wrapper">
+                <div class="faq-answer-text">
+                    <?= $topic['content'] ?>
+                </div>
+            </div>
+        </div>
+        <?php
+        $i++;
+    }
+    ?>
+</div>

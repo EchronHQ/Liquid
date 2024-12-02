@@ -1,0 +1,37 @@
+<?php
+declare(strict_types=1);
+
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $viewModel \Liquid\Blog\Model\ViewModel\Term
+ * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ */
+$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\Term::class);
+$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+$term = $viewModel->getTerm();
+?>
+<page-header>
+    <div class="row">
+        <div class="column col-2-1">
+            <copy-block title="<?= $term->termLong ?>" title-tag="h1">
+
+            </copy-block>
+            $hero->toHtml();
+            ?>
+            <div>
+                <?= $baseViewModel->renderLazyLoad('hero_term.png', $term->term, null, false) ?>
+            </div>
+        </div>
+    </div>
+</page-header>
+<main>
+    <page-section>
+        <div class="row">
+            <?= $block->getChildHtml('content') ?>
+        </div>
+    </page-section>
+    <?= $block->getChildHtml('use_cases') ?>
+</main>

@@ -1,0 +1,212 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $escaper \Liquid\Framework\Escaper
+ * @var $segment \Liquid\Content\Helper\LocaleHelper
+ * @var $logger \Psr\Log\LoggerInterface
+ */
+/** @var \Liquid\Content\ViewModel\BaseViewModel $viewModel */
+$viewModel = $block->getViewModel();
+?>
+
+<section class="cookies">
+    <div class="cookies-container">
+        <div class="cookies-wrapper">
+            <div class="text">
+                By clicking &quot;Accept&quot;, you agree to the storing of cookies on your device to enhance site
+                navigation, <?= $viewModel->translate('analyse') ?> site usage, and assist in our marketing efforts.
+            </div>
+            <div class="buttons grid gap--4">
+                <div class="cookies-accept button button-color-highlight center col--6">Accept</div>
+                <div class="cookies-settings button button-color-white-border center col--6">Settings</div>
+            </div>
+        </div>
+    </div>
+</section>
+<footer>
+    <section class="background-ocean">
+        <div class="content">
+            <div class="container">
+                <div class="wrapper">
+                    <div class="row">
+                        <div class="column col-footer">
+                            <div class="column">
+                                <div class="logo">
+                                    <a href="<?= $viewModel->getResolver()->getPageUrl('home') ?>" aria-label="Attlaz">
+                                        <img height="30px" width="130px" loading="lazy"
+                                             src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/logo-white.svg')->url ?>"
+                                             alt="Attlaz">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div>
+                                    <div class="title">Products</div>
+                                    <ul>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('products/integrate') ?>">Integrate</a>
+                                        </li>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('products/automate') ?>">Automate</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('products/visualize') ?>"><?= $viewModel->translate('Visualize') ?></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div>
+                                    <div class="title">About</div>
+                                    <ul>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('about') ?>">About</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('careers') ?>">Careers</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('partners') ?>">Partners</a>
+                                        </li>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('contact') ?>">Contact
+                                                us</a>
+                                        </li>
+                                        <?php
+                                        $showEnvironment = false;
+                                        if ($showEnvironment):
+                                            ?>
+
+                                            <li><a href="<?= $viewModel->getResolver()->getPageUrl('environment') ?>">Environment</a>
+                                            </li>
+                                        <?php
+                                        endif;
+                                        ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div>
+                                    <div class="title">Solutions</div>
+                                    <ul>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('use-cases/ecommerce') ?>">Ecommerce</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('use-cases/marketing') ?>">Marketing</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('use-cases/data-management') ?>">Data
+                                                management</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div>
+                                    <div class="title">Resources</div>
+                                    <ul>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('blog') ?>">Blog</a></li>
+                                        <li>
+                                            <a href="<?= $viewModel->getResolver()->getPageUrl('docs') ?>">Documentation</a>
+                                        </li>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('docs/api') ?>">API
+                                                reference</a></li>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('status') ?>"
+                                               target="_blank"
+                                               rel="noopener">Platform status</a></li>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('app') ?>"
+                                               target="_blank"
+                                               rel="noopener">Dashboard</a></li>
+                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('support') ?>">Help
+                                                Center</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container container-bottom">
+                <div class="wrapper">
+                    <div class="row row-bottom">
+                        <div class="column col-1-1-1">
+                            <div class="copyright">&copy; <?= date('Y') ?> Attlaz. All rights reserved</div>
+                            <div class="legal">
+                                <ul class="flex-medium">
+                                    <li><a href="<?= $viewModel->getResolver()->getPageUrl('legal/privacy') ?>">Privacy
+                                            Policy</a></li>
+                                    <li><a href="<?= $viewModel->getResolver()->getPageUrl('legal/terms') ?>">Terms and
+                                            Conditions</a></li>
+                                    <li>
+                                        <a href="<?= $viewModel->getResolver()->getPageUrl('legal/cookies') ?>">Cookies</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="social">
+                                <div class="flex-medium">
+                                    <div>
+                                        <a aria-label="Twitter" href="https://twitter.com/attlazhq" target="_blank"
+                                           rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/twitter.svg')->url ?>"
+                                                 alt="Twitter">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a aria-label="Facebook" href="https://www.facebook.com/attlaz" target="_blank"
+                                           rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/facebook.svg')->url ?>"
+                                                 alt="Facebook">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a aria-label="Instagram" href="https://www.instagram.com/attlazhq/"
+                                           target="_blank" rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/instagram.svg')->url ?>"
+                                                 alt="Instagram">
+                                        </a>
+                                    </div>
+                                    <div style="display: none">
+                                        <a aria-label="Youtube" href="https://twitter.com/Attlaz_" target="_blank"
+                                           rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/youtube.svg')->url ?>"
+                                                 alt="Youtube">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a aria-label="LinkedIn" href="https://www.linkedin.com/company/attlaz"
+                                           target="_blank" rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/linkedin.svg')->url ?>"
+                                                 alt="Linkedin">
+                                        </a>
+                                    </div>
+                                    <div style="display: none">
+                                        <a aria-label="Dev.To" href="https://dev.to/attlaz" target="_blank"
+                                           rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/dev-dot-to.svg')->url ?>"
+                                                 alt="Dev.To">
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a aria-label="GitHub" href="https://github.com/Attlaz-Platform" target="_blank"
+                                           rel="noopener">
+                                            <img width="14" height="14" loading="lazy"
+                                                 src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/image/social/github.svg')->url ?>"
+                                                 alt="GitHub">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</footer>

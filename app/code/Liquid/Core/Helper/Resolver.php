@@ -8,17 +8,23 @@ use Echron\Tools\FileSystem;
 use Liquid\Content\Helper\ImageHelper;
 use Liquid\Content\Helper\StaticContentHelper;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
-use Liquid\Content\Model\Locale;
+use Liquid\Content\Model\Segment\SegmentId;
 use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\FrontendFileUrl;
+use Liquid\Framework\Component\ComponentFile;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
 use Liquid\Framework\Component\ComponentType;
 use Liquid\Framework\Filesystem\DirectoryList;
 use Liquid\Framework\Filesystem\Path;
+use Liquid\Framework\Url;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated Use separate classes instead
+ */
 class Resolver
 {
+    public const FILE_ID_SEPARATOR = '::';
     private array|null $pageRoutes = null;
     private array $randomImageUsed = [];
 
@@ -29,87 +35,15 @@ class Resolver
         private readonly DirectoryList               $directoryList,
         private readonly ComponentRegistrarInterface $componentRegistrar,
         private readonly StaticContentHelper         $staticContentHelper,
+        private readonly Url                         $url,
         private readonly LoggerInterface             $logger
     )
     {
     }
 
-    private function isUrl(string $url): bool
-    {
-        return \str_starts_with($url, 'http://') || \str_starts_with($url, 'https://');
-    }
-
-    public function getUrl(string $path = '', Locale|null $locale = null): string
-    {
-        if ($this->isUrl($path)) {
-            return $path;
-        }
-
-        if ($locale === null && $this->configuration->isLocaleDefined()) {
-            $locale = $this->configuration->getLocale();
-        }
-
-        $defaultLocale = 'en-uk';
-        if (($locale !== null && $locale->code === $defaultLocale) || !$this->configuration->hasLocales()) {
-            $locale = null;
-        }
-
-        // TODO: is there a way to check if the url exist?
-        $path = \ltrim($path, '/');
-        if ($locale === null) {
-            return $this->configuration->getValueString('site_url') . $path;
-        }
-        return $this->configuration->getValueString('site_url') . $locale->code . '/' . $path;
-
-
-    }
-
     public function getPageUrl(string $pageIdentifier): string|null
     {
-        if (\is_null($this->pageRoutes)) {
-            $this->logger->error('[Resolver] Unable to get page url: page routes not defined');
-            return null;
-        }
-        $pageIdentifier = IdHelper::escapeId($pageIdentifier);
-
-        if ($pageIdentifier === 'home') {
-            return $this->getUrl();
-        }
-        if ($pageIdentifier === 'contact-sales') {
-            // TODO: rebrand demo to 'contact-sales'
-            $pageIdentifier = 'demo';
-        }
-        // TODO: make list with special page id leading to configuration values
-        if ($pageIdentifier === 'docs') {
-            return $this->configuration->getValueString('documentation_url');
-        }
-        if ($pageIdentifier === 'docs-api') {
-            return $this->configuration->getValueString('api_reference_url');
-        }
-        if ($pageIdentifier === 'status') {
-            return $this->configuration->getValueString('status_url');
-        }
-        if ($pageIdentifier === 'app') {
-            return $this->configuration->getValueString('app_url');
-        }
-
-
-        if (\array_key_exists($pageIdentifier, $this->pageRoutes) && !\is_null($this->pageRoutes[$pageIdentifier])) {
-            return $this->getUrl($this->pageRoutes[$pageIdentifier]);
-        }
-        $debugData = [
-            'registered routes' => $this->pageRoutes,
-            'exists' => \array_key_exists($pageIdentifier, $this->pageRoutes),
-
-        ];
-        if (\array_key_exists($pageIdentifier, $this->pageRoutes)) {
-            $debugData['notnull'] = !\is_null($this->pageRoutes[$pageIdentifier]);
-        }
-
-        $this->logger->error('[Resolver] Unable to get page url: page "' . $pageIdentifier . '" not found', $debugData);
-
-
-        return null;
+        return $this->url->getPageUrl($pageIdentifier);
     }
 
     public function getAssetUrl(string $file, AssetSizeInstruction|null $size = null): FrontendFileUrl|null
@@ -122,6 +56,70 @@ class Resolver
         return $this->getFrontendFileImageUrl('asset/' . $file, $size);
     }
 
+    public function getFrontendFileImageUrl(string $file, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
+    {
+
+        $fileData = ComponentFile::extractModule($file);
+
+
+        // Test theme
+        $themes = $this->componentRegistrar->getPaths(ComponentType::Theme);
+
+        foreach ($themes as $themePath) {
+
+
+            $fileInTheme = $themePath . '/web/' . $fileData['filePath'];
+            if ($this->fileHelper->fileExist($fileInTheme)) {
+                return $this->getX($file, $fileInTheme, $size, $forseResizing);
+            }
+            if ($fileData['moduleId'] !== null) {
+                $fileInTheme = $themePath . '/' . $fileData['moduleId'] . '/web/' . $fileData['filePath'];
+                if ($this->fileHelper->fileExist($fileInTheme)) {
+                    return $this->getX($file, $fileInTheme, $size, $forseResizing);
+                }
+            }
+
+        }
+
+        if ($fileData['moduleId'] !== null) {
+            // TODO: implement further
+            $x = $this->componentRegistrar->getPath(ComponentType::Module, $fileData['moduleId']);
+        }
+//        die('---');
+
+
+//        $localFilePath = $this->getDiskFilePath($file);
+//
+//        if (!$this->fileHelper->fileExist($localFilePath)) {
+        $this->logger->error('Frontend file "' . $file . '" does not exists', ['locale path' => $file]);
+        // TODO: show placeholder
+        return null;
+//        }
+
+    }
+
+    public function getPath(Path $path, string|null $x = null): string
+    {
+        $fullPath = $this->directoryList->getPath($path);
+        if ($x !== null) {
+            // TODO: cleanup if x already starts with slash
+            $fullPath = $fullPath . '/' . $x;
+        }
+        return $fullPath;
+    }
+
+    public function getUrlPath(Path $path, string|null $x = null): string
+    {
+        $siteUrl = $this->configuration->getValueString('site_url');
+        $fullUrlPath = $this->directoryList->getUrlPath($path);
+        if ($x !== null) {
+            // TODO: cleanup if x already starts with slash
+            $fullUrlPath .= '/' . $x;
+        }
+
+        return $siteUrl . (str_ends_with($siteUrl, '/') ? '' : '/') . $fullUrlPath;
+    }
+
     public function getRandomImage(int $width = 250, int $height = 250): string
     {
         $randomImageId = \random_int(1000, 1050);
@@ -131,25 +129,6 @@ class Resolver
 
         $this->randomImageUsed[] = $randomImageId;
         return 'https://picsum.photos/id/' . $randomImageId . '/' . $width . '/' . $height . '?blur=1&random=' . \random_int(0, 999);
-    }
-
-
-    private function getDiskFilePath(string $file): string
-    {
-        $frontendDeployPath = $this->getFrontendFilePath('');
-
-        $file = \ltrim($file, '\\');
-        $file = \str_replace($frontendDeployPath, '', $file);
-
-        return $frontendDeployPath . $file;
-    }
-
-    private function cleanupPath(string $file): string
-    {
-        $frontendDeployPath = $this->getFrontendFilePath('');
-
-        $file = \ltrim($file, '\\');
-        return \str_replace($frontendDeployPath, '', $file);
     }
 
     public function getFrontendFileUrl(string $file): string|null
@@ -164,64 +143,39 @@ class Resolver
             // TODO: show placeholder
             return null;
         }
-        return $this->configuration->getValueString('site_url') . 'static/' . $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file;
+        return $this->url->getUrl() . 'static/' . $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file;
     }
 
-    public const FILE_ID_SEPARATOR = '::';
-
-    public static function extractModule(string $fileId): array
+    public function getFrontendFilePath(string $file): string
     {
-        if (!$fileId || !str_contains($fileId, self::FILE_ID_SEPARATOR)) {
-            return ['', $fileId];
+        // TODO: if path already starts with root dir, return it
+        if (str_starts_with($file, '/var/www/liquid')) {
+            return $file;
         }
-        $result = explode(self::FILE_ID_SEPARATOR, $fileId, 2);
-        if (empty($result[0])) {
-            throw new \Exception('Scope separator "::" cannot be used without scope identifier.');
-        }
-        return [$result[0], $result[1]];
+        return $this->getPath(Path::STATIC_VIEW, $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file);
     }
 
     //ToDo: split this method for static files and images as they return different data
-    public function getFrontendFileImageUrl(string $file, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
+
+    public function getUrl(string $path = '', SegmentId|null $locale = null): string
     {
+        return $this->url->getUrl($path, $locale);
+    }
 
-        [$module, $filePath] = self::extractModule($file);
+    public function setPageRoutes(array $routes): void
+    {
+        $this->pageRoutes = $routes;
+    }
 
-
-        // Test theme
-        $themes = $this->componentRegistrar->getPaths(ComponentType::Theme);
-
-        foreach ($themes as $themePath) {
-
-
-            $fileInTheme = $themePath . '/web/' . $filePath;
-            if ($this->fileHelper->fileExist($fileInTheme)) {
-                return $this->getX($file, $fileInTheme, $size, $forseResizing);
-            }
-            if ($module !== null) {
-                $fileInTheme = $themePath . '/' . $module . '/web/' . $filePath;
-                if ($this->fileHelper->fileExist($fileInTheme)) {
-                    return $this->getX($file, $fileInTheme, $size, $forseResizing);
-                }
-            }
-
+    public function renderSVG(string $path, bool $allowCache = false): string
+    {
+        $fullPath = $this->getFrontendFilePath($path);
+        if (!$this->fileHelper->fileExist($fullPath)) {
+            $this->logger->error('Unable to get file content, file does not exist', ['path' => $fullPath]);
+            //            throw new \Exception('Path does not exist: ' . $path);
+            return '';
         }
-
-        if ($module !== null) {
-            // TODO: implement further
-            $x = $this->componentRegistrar->getPath(ComponentType::Module, $module);
-        }
-//        die('---');
-
-
-//        $localFilePath = $this->getDiskFilePath($file);
-//
-//        if (!$this->fileHelper->fileExist($localFilePath)) {
-        $this->logger->error('Frontend file "' . $file . '" does not exists', ['locale path' => $file]);
-        // TODO: show placeholder
-        return null;
-//        }
-
+        return $this->fileHelper->getFileContent($fullPath, $allowCache);
     }
 
     private function getX(string $file, string $localFilePath, AssetSizeInstruction|null $size = null, bool $forseResizing = false): FrontendFileUrl|null
@@ -310,37 +264,23 @@ class Resolver
 
     }
 
-    public function getFrontendFilePath(string $file): string
+    private function cleanupPath(string $file): string
     {
-        return $this->getPath(Path::STATIC_VIEW, $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file);
+        $frontendDeployPath = $this->getFrontendFilePath('');
+
+        $file = \ltrim($file, '\\');
+        return \str_replace($frontendDeployPath, '', $file);
     }
 
-
-    public function setPageRoutes(array $routes): void
+    private function getDiskFilePath(string $file): string
     {
-        $this->pageRoutes = $routes;
+        $frontendDeployPath = $this->getFrontendFilePath('');
+
+        $file = \ltrim($file, '\\');
+        $file = \str_replace($frontendDeployPath, '', $file);
+
+        return $frontendDeployPath . $file;
     }
 
-    public function getPath(Path $path, string|null $x = null): string
-    {
-        $fullPath = $this->directoryList->getPath($path);
-        if ($x !== null) {
-            // TODO: cleanup if x already starts with slash
-            $fullPath = $fullPath . '/' . $x;
-        }
-        return $fullPath;
-    }
-
-    public function getUrlPath(Path $path, string|null $x = null): string
-    {
-        $siteUrl = $this->configuration->getValueString('site_url');
-        $fullUrlPath = $this->directoryList->getUrlPath($path);
-        if ($x !== null) {
-            // TODO: cleanup if x already starts with slash
-            $fullUrlPath .= '/' . $x;
-        }
-
-        return $siteUrl . (str_ends_with($siteUrl, '/') ? '' : '/') . $fullUrlPath;
-    }
 
 }

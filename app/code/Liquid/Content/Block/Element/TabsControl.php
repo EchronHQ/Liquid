@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element;
 
-use Liquid\Content\Block\TemplateBlock;
+use Liquid\Framework\View\Element\ArgumentInterface;
 
-class TabsControl extends TemplateBlock
+class TabsControl implements ArgumentInterface
 {
-    public string|null $template = 'Liquid_Content::element/tabscontrol.phtml';
+
 
     public int $selectedIndex = 0;
     public array $tabs = [

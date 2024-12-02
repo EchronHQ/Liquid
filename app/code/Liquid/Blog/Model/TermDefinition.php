@@ -11,9 +11,8 @@ class TermDefinition extends AbstractViewableEntity
 {
     public string $term;
     public string $termLong;
+    protected string $controllerEndpoint = 'blog/term/view/term-id/';
     private array $useCaseCategoryIds = [];
-
-    private const URL_PATH_PREFIX = 'blog/term';
 
     public static function generate(int|string $id, array $data): static
     {
@@ -25,14 +24,10 @@ class TermDefinition extends AbstractViewableEntity
         $term->termLong = $dataMapper->getProperty('term_long');
         $term->useCaseCategoryIds = $dataMapper->getArrayProperty('use_case_categories', []);
         parent::appendData($term, $dataMapper);
-
+        $term->urlRewrites[] = 'blog/term/' . $term->urlKey;
         return $term;
     }
 
-    public function getUrlPath(): string
-    {
-        return self::URL_PATH_PREFIX . '/' . $this->urlKey;
-    }
 
     public function getSeoTitle(): string
     {

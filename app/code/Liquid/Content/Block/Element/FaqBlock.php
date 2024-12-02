@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element;
 
-use Liquid\Content\Block\TemplateBlock;
+use Liquid\Framework\View\Element\ArgumentInterface;
 
-class FaqBlock extends TemplateBlock
+class FaqBlock implements ArgumentInterface
 {
-    protected string|null $template = 'block/faq.phtml';
 
     private array $topics = [];
 

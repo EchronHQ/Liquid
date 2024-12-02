@@ -1,0 +1,65 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Html\Picture;
+use Liquid\Core\Model\FrontendFileUrl;
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block Picture
+ */
+assert($block instanceof Picture);
+$default = $block->getDefaultSrc();
+if ($default === null) {
+    return;
+}
+if ($block->hasFormats()):
+    ?>
+    <picture>
+    <?php
+
+//$dimensions = [
+//        '25%'
+//        '50%'
+//        '100%'
+//];
+
+    $types = $block->getFormats();
+    foreach ($types as $type) {
+        /** @var FrontendFileUrl[] $sizes */
+        $sizes = $type['sizes'];
+
+        $strSizes = [];
+        $sizeQueries = [];
+        foreach ($sizes as $breakpoint => $size) {
+            $strSizes[] = $size->url . ' ' . $size->width . 'w';
+            $sizeQueries[] = $breakpoint . ' ' . $size->width . 'w';
+        }
+        ?>
+        <source srcset="<?= implode(', ', $strSizes) ?>" sizes="<?= implode(', ', $sizeQueries) ?>"
+                type="<?= $type['type'] ?>"/>
+        <?php
+    }
+    // TODO: implement usage of low-res variant is default
+endif;
+
+
+?>
+    <img src="<?= $default->url ?>"
+         alt="<?= $block->getAlt() ?>"
+        <?php
+        if (false):
+            // Don't force width and height on image
+            ?>
+            <?= $default->width ? 'width="' . $default->width . 'px"' : '' ?>
+            <?= $default->height ? 'height="' . $default->height . 'px"' : '' ?>
+        <?php
+        endif;
+        ?>
+        <?= $block->lazyLoad ? 'loading="lazy"' : '' ?> />
+<?php
+if ($block->hasFormats()):
+    ?>
+    </picture>
+<?php
+endif;

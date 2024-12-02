@@ -36,6 +36,13 @@ class UrlRepository extends BaseRepository
     //        return null;
     //    }
 
+    final public function addRewrite(UrlRewrite $rewrite): void
+    {
+        if (!$this->urlRewritesLoaded) {
+            $this->loadRewrites();
+        }
+        $this->urlRewrites[] = $rewrite;
+    }
 
     private function loadRewrites(): void
     {
@@ -134,14 +141,6 @@ class UrlRepository extends BaseRepository
 
     }
 
-    final public function addRewrite(UrlRewrite $rewrite): void
-    {
-        if (!$this->urlRewritesLoaded) {
-            $this->loadRewrites();
-        }
-        $this->urlRewrites[] = $rewrite;
-    }
-
     /**
      * @param string $urlPath
      * @return UrlRewrite|null
@@ -150,7 +149,7 @@ class UrlRepository extends BaseRepository
     {
         if (!$this->urlRewritesLoaded) {
             $this->loadRewrites();
-        }
+        };
         foreach ($this->urlRewrites as $urlRewrite) {
             $rewrite = RequestRewriteHelper::rewrite($urlRewrite, $urlPath);
             if ($rewrite !== null) {

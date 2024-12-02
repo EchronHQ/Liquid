@@ -1,0 +1,12 @@
+types:
+  \Liquid\Framework\App\Area\AreaList:
+    arguments:
+      areas:
+        type: array
+        value:
+          frontend:
+            frontendName: null
+            router: standard
+      defaultAreaCode:
+        type: string
+        value: frontend

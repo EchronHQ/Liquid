@@ -1,0 +1,81 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Model\Asset\AssetSizeInstruction;
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $viewModel \Liquid\Blog\Model\ViewModel\CategoryViewViewModel
+ * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ */
+$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\Tag::class);
+$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+$category = $viewModel->getCategory();
+$posts = $viewModel->getPosts();
+?>
+
+<page-header>
+
+    <div class="row">
+        <div class="column col-3-1">
+            <copy-block types="header" title="<?= $category->title_long ?>" title-tag="h1">
+                <?= $category->metaDescription ?>
+            </copy-block>
+            <div>
+                <?= $baseViewModel->renderLazyLoad('hero_term.png', $category->title_long, new AssetSizeInstruction(520, 520)) ?>
+            </div>
+        </div>
+    </div>
+</page-header>
+
+
+<main>
+    <section>
+        <div class="container">
+            <div class="wrapper">
+
+
+                <div class="row rowGapExtraLarge">
+                    <?php
+                    /**
+                     * Tagbar
+                     */
+                    $categoriesTagBar = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'tags', ['data' => ['template' => 'Liquid_Content::element/tagbar.phtml']]);
+
+                    /** @var $tagBarViewModel \Liquid\Content\ViewModel\TagBar */
+                    $tagBarViewModel = $baseViewModel->getObjectManager()->create(\Liquid\Content\ViewModel\TagBar::class);
+                    $tagBarViewModel->setTags($viewModel->getCategories());
+                    $tagBarViewModel->setCurrent($category);
+                    $tagBarViewModel->setAllTarget($baseViewModel->getResolver()->getUrl('blog'));
+
+                    $categoriesTagBar->setViewModel($tagBarViewModel)
+                        ->setViewModel($baseViewModel, 'base');
+                    echo $categoriesTagBar->toHtml();
+
+                    /**
+                     * Posts
+                     */
+                    /** @var \Liquid\Blog\Model\ViewModel\PostList $postListViewmodel */
+                    $postListViewmodel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class,);
+                    $postListViewmodel->setPosts($posts);
+
+                    $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'post-list');
+                    $postListBlock
+                        ->setTemplate('Liquid_Blog::post/list.phtml')
+                        ->setViewModel($postListViewmodel)
+                        ->setViewModel($baseViewModel, 'base');
+                    echo $postListBlock->toHtml();
+
+
+                    ?>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <call-to-action>
+
+    </call-to-action>
+</main>

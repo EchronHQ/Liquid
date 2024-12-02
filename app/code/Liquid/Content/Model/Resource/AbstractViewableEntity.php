@@ -8,25 +8,18 @@ use Liquid\Core\Helper\IdHelper;
 
 abstract class AbstractViewableEntity
 {
-    public int|string $id;
-
     public const ID_PREFIX = '';
-
-    public string|null $urlKey = null;
-
-    public string|null $template = null;
-    public string $docCssClass;
-
-    //    public string|null $theme = null;
-
     public const DEFAULT_TITLE = 'Accelerate your business';
     public const DEFAULT_DESCRIPTION = 'Accelerate your business. Connect everything, engage everywhere and automate every process.';
     public const DEFAULT_KEYWORDS = 'Attlaz, platforms, connection,integration, ecommerce,marketing, data-migration, Magento, Akeneo, Shopify,';
-
-
     public const TITLE_PREFIX = '';
-    public const TITLE_SUFFIX = ' | Attlaz';
 
+    //    public string|null $theme = null;
+    public const TITLE_SUFFIX = ' | Attlaz';
+    public int|string $id;
+    public string|null $urlKey = null;
+    public string|null $template = null;
+    public string $docCssClass;
     public string $metaTitle = self::DEFAULT_TITLE;
     public string $metaDescription = self::DEFAULT_DESCRIPTION;
     public string $metaKeywords = self::DEFAULT_KEYWORDS;
@@ -38,10 +31,19 @@ abstract class AbstractViewableEntity
     public PageSitemapChangeFrequency|null $changeFrequency = null;
 
     public PageStatus $status = PageStatus::ACTIVE;
+    /** @var string[] */
+    protected array $urlRewrites = [];
+
+    protected string $controllerEndpoint = 'content/page/view/page-id/';
 
     public function __construct(int|string $id)
     {
         $this->id = self::generateId($id);
+    }
+
+    public static function generateId(string $id): string
+    {
+        return self::_generateId($id, self::ID_PREFIX);
     }
 
     public static function generate(int|string $id, array $data): static
@@ -82,11 +84,10 @@ abstract class AbstractViewableEntity
         return $page;
     }
 
-    private static function cleanupUrlKey(string $urlKey): string
+    final protected static function _generateId(string $id, string $prefix): string
     {
-        $urlKey = \strtolower($urlKey);
-        // TODO: normalize characters
-        return \str_replace([' '], ['-'], $urlKey);
+        $id = IdHelper::escapeId($id);
+        return $prefix === '' ? $id : $prefix . '-' . $id;
     }
 
     protected static function appendData(self $definition, DataMapper $data): void
@@ -120,6 +121,8 @@ abstract class AbstractViewableEntity
 
         $definition->status = $data->getUntypedProperty('status', PageStatus::ACTIVE);
 
+        $definition->urlRewrites = $data->getArrayProperty('urlRewrites', []);
+
     }
 
     protected static function getProperty(array $data, string $key, string|null $default = ''): string|null
@@ -132,32 +135,37 @@ abstract class AbstractViewableEntity
 
     }
 
+    private static function cleanupUrlKey(string $urlKey): string
+    {
+        $urlKey = \strtolower($urlKey);
+        // TODO: normalize characters
+        return \str_replace([' '], ['-'], $urlKey);
+    }
+
     public function getUrlPath(): string
     {
-        if (\is_null($this->urlKey)) {
-            throw new \Exception('Url key is not defined for page `' . $this->id . '`');
+        if (count($this->urlRewrites) > 0) {
+            return $this->urlRewrites[0];
         }
-        return $this->urlKey;
+        return $this->getViewRoute();
+    }
+
+    /**
+     * This is the route which displays the entity,
+     * mainly used to know where url rewrites point to
+     *
+     * @return string
+     */
+    public function getViewRoute(): string
+    {
+        // TODO: use string interpolation
+        return rtrim($this->controllerEndpoint, '/') . '/' . $this->id;
     }
 
     public function getSeoTitle(): string
     {
         return self::TITLE_PREFIX . $this->metaTitle . self::TITLE_SUFFIX;
     }
-
-
-    public static function generateId(string $id): string
-    {
-        return self::_generateId($id, self::ID_PREFIX);
-    }
-
-    final protected static function _generateId(string $id, string $prefix): string
-    {
-        $id = IdHelper::escapeId($id);
-        return $prefix === '' ? $id : $prefix . '-' . $id;
-    }
-
-    protected array $urlRewrites = [];
 
     public function getUrlRewrites(): array
     {
@@ -172,5 +180,10 @@ abstract class AbstractViewableEntity
     public function isVisibleOnFront(): bool
     {
         return $this->status === PageStatus::ACTIVE;
+    }
+
+    public function setControllerEndpoint(string $controllerEndpoint): void
+    {
+        $this->controllerEndpoint = $controllerEndpoint;
     }
 }

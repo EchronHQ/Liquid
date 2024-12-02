@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Liquid\Admin\Controller\Admin\Editor;
 
-use Liquid\Core\Model\Action\AbstractAction;
-use Liquid\Core\Model\Result\Page;
-use Liquid\Core\Model\Result\Result;
+
+use Liquid\Framework\App\Action\AbstractAction;
+use Liquid\Framework\Controller\Result;
 
 class View extends AbstractAction
 {
@@ -20,9 +20,6 @@ class View extends AbstractAction
 
         //        $builder = new \PHPageBuilder\PHPageBuilder([]);
         //        $builder->handleRequest();
-
-
-
 
 
         return $this->getResultFactory()->create(Page::class);

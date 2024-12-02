@@ -1,0 +1,86 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Content\Block\Element\CopyBlock;
+use Liquid\Content\Model\Asset\AssetSizeInstruction;
+use Liquid\Content\Model\Asset\AssetSizeInstructionCrop;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
+/**
+ * @var TemplateEngine $this
+ * @var Template $block
+ * @var \Liquid\Blog\Model\ViewModel\PostList $viewModel
+ */
+$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\PostList::class);
+assert($viewModel instanceof \Liquid\Blog\Model\ViewModel\PostList);
+$baseViewModel = $block->getViewModel('base', BaseViewModel::class);
+
+
+$posts = $viewModel->getPosts();
+
+if (count($posts) === 0):
+    ?>
+    <div class="column">
+        <?php
+        /** @var CopyBlock $x */
+        $x = $block->getLayout()->createBlock(CopyBlock::class, '', ['types' => 'new center card card--paddingMedium card--theme-aqua']);
+        $x->setHeaderTitle('No posts found');
+        $x->setContent('Whoops, there should be posts here.');
+        $x->setFooter('<div><link arrow="true" page="blog">Go to the blog overview</link></div>');
+        echo $x->toHtml();
+        ?>
+    </div>
+<?php
+else:
+    ?>
+
+
+    <div class="blog-list  grid gap--4 lg:gap--4 sm:gap--1">
+        <?php
+        foreach ($posts as $post) {
+            ?>
+            <div class="col--12 sm:col--6 md:col--3 card card--shadowNormal">
+                <a href="<?= $baseViewModel->getResolver()->getUrl($post->getUrlPath()) ?>" class="blog-content-card">
+                    <div class="blog-thumbnail-wrapper">
+                        <?php if (!empty($post->image)) {
+                            echo $baseViewModel->renderLazyLoad($post->image, $post->metaTitle, new AssetSizeInstruction(339, 187, AssetSizeInstructionCrop::Center));
+                        }
+                        ?>
+                    </div>
+                    <div class="blog-content-wrapper">
+                        <div class="blog-post-info">
+                            <?php
+                            $category = $viewModel->getCategory($post);
+                            if ($category !== null):
+                                ?>
+                                <div class="category">
+                                    <?= $category->metaTitle ?>
+                                </div>
+                            <?php
+                            endif;
+                            ?>
+                            <div class="separator"></div>
+                            <div class="read-duration">
+                                <?= $viewModel->estimateReadingTime($post) ?> min read
+                            </div>
+                        </div>
+                        <div class="blog-card-heading">
+                            <?= $post->metaTitle ?>
+                        </div>
+                        <div class="blog-post-intro">
+                            <?= $post->intro ?>
+                        </div>
+                    </div>
+                </a>
+
+
+            </div>
+            <?php
+        }
+        ?>
+    </div>
+
+<?php
+endif;

@@ -196,6 +196,15 @@ class TerminologyRepository implements ViewableEntityRepository
         ];
     }
 
+    public function getById(string $id): TermDefinition|null
+    {
+        foreach ($this->terms as $term) {
+            if ($term->id === $id) {
+                return $term;
+            }
+        }
+        return null;
+    }
 
     public function getByUrlKey(string $urlKey): TermDefinition|null
     {

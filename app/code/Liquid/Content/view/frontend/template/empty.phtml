@@ -1,0 +1,10 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Framework\View\Element\Template;
+
+assert($block instanceof Template);
+?>
+<div style="background-color: red;padding:10px">
+    No template defined "<?= $this->getNameInLayout() . '" type: ' . get_class($this) ?>
+</div>

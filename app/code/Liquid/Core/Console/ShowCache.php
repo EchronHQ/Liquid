@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Console;
 
-use Liquid\Core\Helper\CacheHelper;
+use Liquid\Framework\App\Cache\CacheManager;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ShowCache extends Command
 {
     public function __construct(
-        private readonly CacheHelper $cache
+        private readonly CacheManager $cacheManager
     )
     {
         parent::__construct('cache:show');
@@ -23,7 +23,8 @@ class ShowCache extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        $keys = $this->cache->getKeys();
+
+        $keys = $this->cacheManager->getAvailableTypes();
         //        $items = $this->cache->getItems($keys);
 
 
@@ -35,31 +36,16 @@ class ShowCache extends Command
         }
 
 
-        foreach ($keys as $key) {
-            $item = $this->cache->getItem($key);
-
-            $expiration = $this->formatExpiration($item);
-            $value = $this->formatValue($item);
-            $table->addRow([$item->getKey(), $value, $expiration, $item->isHit() ? 'Y' : 'N']);
-        }
+//        foreach ($keys as $key) {
+//            $item = $this->cache->getItem($key);
+//
+//            $expiration = $this->formatExpiration($item);
+//            $value = $this->formatValue($item);
+//            $table->addRow([$item->getKey(), $value, $expiration, $item->isHit() ? 'Y' : 'N']);
+//        }
         $table->render();
 
         return Command::SUCCESS;
-    }
-
-    private function formatValue(CacheItemInterface $item): string
-    {
-        $value = $item->get();
-        // TODO: get datatype
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
-        $value = (string)$value;
-        if (\strlen($value) > 100) {
-            $value = \substr($value, 0, 100) . '...';
-        }
-
-        return $value;
     }
 
     private function formatExpiration(CacheItemInterface $item): string
@@ -78,5 +64,20 @@ class ShowCache extends Command
         //            return 'In ' . Time::readableSeconds($interval);
         //        }
         return 'unknown';
+    }
+
+    private function formatValue(CacheItemInterface $item): string
+    {
+        $value = $item->get();
+        // TODO: get datatype
+        if (is_array($value)) {
+            $value = json_encode($value);
+        }
+        $value = (string)$value;
+        if (\strlen($value) > 100) {
+            $value = \substr($value, 0, 100) . '...';
+        }
+
+        return $value;
     }
 }

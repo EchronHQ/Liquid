@@ -10,13 +10,14 @@ use Liquid\Core\Helper\DataMapper;
 class TagDefinition extends AbstractViewableEntity
 {
     public string $title_long = '';
+    protected string $controllerEndpoint = 'blog/tag/view/tag-id/';
 
     public static function generate(int|string $id, array $data): static
     {
         $article = new TagDefinition($id);
 
         self::appendData($article, new DataMapper($data));
-
+        $article->urlRewrites[] = 'blog/tag/' . $article->urlKey;
         return $article;
     }
 
@@ -31,8 +32,4 @@ class TagDefinition extends AbstractViewableEntity
     }
 
 
-    public function getUrlPath(): string
-    {
-        return 'blog/tag/' . $this->urlKey;
-    }
 }

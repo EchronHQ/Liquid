@@ -1,0 +1,22 @@
+<?php
+declare(strict_types=1);
+
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $escaper \Liquid\Framework\Escaper
+ * @var $segment \Liquid\Content\Helper\LocaleHelper
+ * @var $logger \Psr\Log\LoggerInterface
+ */
+
+$headBlock = $block->getLayout()->getBlock('head');
+if ($headBlock instanceof \Liquid\Framework\View\Element\Template) {
+    /** @var \Liquid\Content\ViewModel\HtmlHead $viewModel */
+    $viewModel = $headBlock->getViewModel();
+    $scripts = $viewModel->getScripts();
+
+    foreach ($scripts as $script) {
+        echo $viewModel->renderScript($script);
+    }
+}

@@ -4,19 +4,31 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element;
 
-use Liquid\Content\Block\TemplateBlock;
+use Liquid\Framework\DataObject;
+use Liquid\Framework\Url;
+use Liquid\Framework\View\Element\ArgumentInterface;
 
-class DemoCallToActionBlock extends TemplateBlock
+class DemoCallToActionBlock extends DataObject implements ArgumentInterface
 {
+    protected string|null $template = 'element/democalltoaction.phtml';
     private string $title = 'Want to know more?';
     private string $description = 'A modern software architecture to help your business achieve its full potential in just a few clicks.';
-
-    protected string|null $template = 'element/democalltoaction.phtml';
     private string $callToActionLabel = 'Book a demo';
     private string $callToActionPage = 'demo';
 
+    public function __construct(
+        private readonly Url $url,
+        array                $data = []
+    )
+    {
+        parent::__construct($data);
+    }
+
     public function getTitle(): string
     {
+        if ($this->hasData('title')) {
+            return $this->getData('title');
+        }
         return $this->title;
     }
 
@@ -27,6 +39,9 @@ class DemoCallToActionBlock extends TemplateBlock
 
     public function getDescription(): string
     {
+        if ($this->hasData('description')) {
+            return $this->getData('description');
+        }
         return $this->description;
     }
 
@@ -49,6 +64,6 @@ class DemoCallToActionBlock extends TemplateBlock
 
     public function getCallToActionPage(): string
     {
-        return $this->getResolver()->getPageUrl($this->callToActionPage);
+        return $this->url->getPageUrl($this->callToActionPage);
     }
 }

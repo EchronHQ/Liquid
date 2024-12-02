@@ -6,11 +6,6 @@ namespace Liquid\Core\Helper;
 
 class PathMatcher
 {
-    private static function explode(string $value): array
-    {
-        return \explode('/', $value);
-    }
-
     public static function matches(string $input, string $path): bool
     {
         if ($input === $path) {
@@ -58,5 +53,10 @@ class PathMatcher
         }
 
         return $arguments;
+    }
+
+    private static function explode(string $value): array
+    {
+        return \explode('/', $value);
     }
 }

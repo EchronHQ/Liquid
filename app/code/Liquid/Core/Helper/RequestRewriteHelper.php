@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
-use Liquid\Content\Model\Resource\UrlRewrite;
+
+use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 
 class RequestRewriteHelper
 {
     public static function rewrite(UrlRewrite $rewrite, string $path): UrlRewrite|null
     {
         $arguments = PathMatcher::getMatchValues($rewrite->request, $path);
+
         if ($arguments === null) {
             return null;
         }

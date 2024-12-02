@@ -7,7 +7,7 @@ namespace Liquid\Framework\Component;
 interface ComponentRegistrarInterface
 {
     /**
-     * Get list of registered Magento components
+     * Get list of registered Liquid components
      *
      * Returns an array where key is fully-qualified component name and value is absolute path to component
      */

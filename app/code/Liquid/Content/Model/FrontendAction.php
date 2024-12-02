@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Liquid\Content\Model;
 
 use Liquid\Content\Model\View\Page\PageConfig;
-use Liquid\Core\Layout;
-use Liquid\Core\Model\Action\AbstractAction;
-use Liquid\Core\Model\Action\Context;
+use Liquid\Framework\App\Action\AbstractAction;
+use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\View\Layout\Layout;
 
 abstract class FrontendAction extends AbstractAction
 {
@@ -15,7 +15,8 @@ abstract class FrontendAction extends AbstractAction
         Context              $context,
         protected Layout     $layout,
         protected PageConfig $pageConfig
-    ) {
+    )
+    {
         parent::__construct($context);
     }
 }

@@ -9,16 +9,16 @@ use Liquid\Core\Helper\DataMapper;
 
 class CategoryDefinition extends AbstractViewableEntity
 {
-    public string $title_long = '';
-
     public const TITLE_PREFIX = 'Blog - ';
+    public string $title_long = '';
+    protected string $controllerEndpoint = 'blog/category/view/category-id/';
 
     public static function generate(int|string $id, array $data): static
     {
         $article = new CategoryDefinition($id);
 
         self::appendData($article, new DataMapper($data));
-
+        $article->urlRewrites[] = 'blog/category/' . $article->urlKey;
         return $article;
     }
 
@@ -30,12 +30,6 @@ class CategoryDefinition extends AbstractViewableEntity
         }
 
         $data->report();
-    }
-
-
-    public function getUrlPath(): string
-    {
-        return 'blog/category/' . $this->urlKey;
     }
 
     public function getSeoTitle(): string

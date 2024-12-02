@@ -4,7 +4,7 @@ Liquid framework/boilerplate for rapid development.
 
 ## Develop
 
-```
+```bash
 npm run dev
 ```
 
@@ -12,7 +12,7 @@ Available on part depending on .env
 
 ## Deploy
 
-```
+```bash
 npm run build
 ```
 
@@ -20,26 +20,26 @@ npm run build
 
 Single class:
 
-```
+```bash
   docker-compose run phpunit -c /app/phpunit.xml --filter RouterTest --debug
 ```
 
 ## Generate sitemap
 
-```
+```bash
 php cli.php seo:generate-sitemap
 ```
 
 ## Analyse webpack
 
-```
+```bash
 npm run webpack-analyse
 ```
 
 ## Update packages
 
-```
-docker run -it -v ${PWD}:/app -w /app --rm attlaz/php:8.2 composer update --ignore-platform-req=ext-redis
+```bash
+docker run -it -v ${PWD}:/app -w /app --rm attlaz/php:8.3 composer update --ignore-platform-req=ext-redis
 ```
 
 ## Custom html tags

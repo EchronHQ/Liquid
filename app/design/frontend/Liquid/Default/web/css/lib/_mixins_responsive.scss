@@ -1,60 +1,56 @@
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1024px;
-$breakpoint-xxl: 1536px;
-
+@use "mixins";
+@use "../variables";
 
 @mixin sm {
-  @media (min-width: #{$breakpoint-sm}) {
+  @media (min-width: #{variables.$breakpoint-sm}) {
     @content;
   }
 }
 
 @mixin md {
-  @media (min-width: #{$breakpoint-md}) {
+  @media (min-width: #{variables.$breakpoint-md}) {
     @content;
   }
 }
 
 @mixin lg {
-  @media (min-width: #{$breakpoint-lg}) {
+  @media (min-width: #{variables.$breakpoint-lg}) {
     @content;
   }
 }
 
 @mixin xl {
-  @media (min-width: #{$breakpoint-xl}) {
+  @media (min-width: #{variables.$breakpoint-xl}) {
     @content;
   }
 }
 
 @mixin xxl {
-  @media (min-width: #{$breakpoint-xxl}) {
+  @media (min-width: #{variables.$breakpoint-xxl}) {
     @content;
   }
 }
 
 @mixin tablet-and-wider {
-  @media (min-width: #{$tablet-width}) {
+  @media (min-width: #{variables.$tablet-width}) {
     @content;
   }
 }
 
 @mixin smaller-than-tablet {
-  @media (max-width: #{$tablet-width}) {
+  @media (max-width: #{variables.$tablet-width}) {
     @content;
   }
 }
 
 @mixin smaller-than-desktop {
-  @media (max-width: #{$desktop-width}) {
+  @media (max-width: #{variables.$desktop-width}) {
     @content;
   }
 }
 
 @mixin desktop-and-wider {
-  @media (min-width: #{$desktop-width}) {
+  @media (min-width: #{variables.$desktop-width}) {
     @content;
   }
 }

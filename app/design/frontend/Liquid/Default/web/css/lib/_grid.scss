@@ -1,68 +1,88 @@
-$gapBase: 0.4rem;
+@use "mixins";
+@use "../variables";
 
-/** 1rem = 1x body font size (16px) */
-$gaps: 1, 4, 8, 16, 12;
+@mixin grid(
+  $breakpoints:('sm': variables.$breakpoint-sm, 'md':variables.$breakpoint-md, 'lg':variables.$breakpoint-lg),
+  $gaps: [1, 4, 8, 16, 12],
+  $spans:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+) {
 
-$spans: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
 
-$breakpoints: ('sm': $breakpoint-sm, 'md':$breakpoint-md, 'lg':$breakpoint-lg);
+  $gapBase: 0.4rem;
+
+  /** 1rem = 1x body font size (16px) */
+  //$gaps: 1, 4, 8, 16, 12;
+  //
+  //$spans: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12;
+  //
+  //$breakpoints: ('sm': variables.$breakpoint-sm, 'md':variables.$breakpoint-md, 'lg':variables.$breakpoint-lg);
 
 
-.grid {
-  display: grid;
-  grid-auto-columns: 1fr;
-  grid-auto-flow: row;
-  grid-template-columns: repeat(12, 1fr);
-  @include debug('orange');
-  //border: 2px dashed orange;
-  &.reverse {
-    direction: rtl;
+  .grid {
+    display: grid;
 
-    div {
-      direction: ltr;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: row;
+
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    @include mixins.debug('orange');
+    //border: 2px dashed orange;
+    &.reverse {
+      direction: rtl;
+
+      div {
+        direction: ltr;
+      }
     }
   }
-}
 
-
-@each $span in $spans {
-  .col--#{$span} {
-    grid-column: span $span/span $span;
+  .grid-rows-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-}
 
-
-@each $gap in $gaps {
-  .gap--#{$gap} {
-    gap: $gapBase * $gap;
+  .grid-rows-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-}
 
-@each $breakpoint, $pixels in $breakpoints {
-  @media only screen and (min-width: $pixels) {
-    @each $span in $spans {
-      .#{$breakpoint}\:col--#{$span} {
-        grid-column: span $span/span $span;
-      }
-    };
-    @each $gap in $gaps {
-      .#{$breakpoint}\:gap--#{$gap} {
-        gap: $gapBase * $gap;
-      }
-    };
+  @each $span in $spans {
+    .col--#{$span} {
+      grid-column: span $span/span $span;
+    }
   }
+
+
+  @each $gap in $gaps {
+    .gap--#{$gap} {
+      gap: $gapBase * $gap;
+    }
+  }
+
+  @each $breakpoint, $pixels in $breakpoints {
+    @media only screen and (min-width: $pixels) {
+      @each $span in $spans {
+        .#{$breakpoint}\:col--#{$span} {
+          grid-column: span $span/span $span;
+        }
+      };
+      @each $gap in $gaps {
+        .#{$breakpoint}\:gap--#{$gap} {
+          gap: $gapBase * $gap;
+        }
+      };
+    }
+  }
+
+  //@media only screen and (min-width: $breakpoint-sm) {
+  //  @each $span in $spans {
+  //    .sm\:col--#{$span} {
+  //      grid-column: span $span/span $span;
+  //    }
+  //  };
+  //  @each $gap in $gaps {
+  //    .sm\:gap--#{$gap} {
+  //      gap: $gapBase * $gap;
+  //    }
+  //  };
+  //}
+
 }
-
-//@media only screen and (min-width: $breakpoint-sm) {
-//  @each $span in $spans {
-//    .sm\:col--#{$span} {
-//      grid-column: span $span/span $span;
-//    }
-//  };
-//  @each $gap in $gaps {
-//    .sm\:gap--#{$gap} {
-//      gap: $gapBase * $gap;
-//    }
-//  };
-//}
-

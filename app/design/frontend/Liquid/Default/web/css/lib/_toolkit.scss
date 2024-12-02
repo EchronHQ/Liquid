@@ -1,3 +1,6 @@
+@use "mixins";
+@use "../variables";
+
 /**
 Flex
  */
@@ -24,7 +27,7 @@ Hide/Show
   display: none;
 }
 
-@media only screen and (min-width: $breakpoint-md) {
+@media only screen and (min-width: variables.$breakpoint-md) {
   .md\:show {
     display: unset;
   }

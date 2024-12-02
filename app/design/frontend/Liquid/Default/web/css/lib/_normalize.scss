@@ -11,7 +11,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html, body, p, ul, ol, li, h1, h2, h3 {
+html, body,
+p, pre,
+ul, ol, li,
+h1, h2, h3,
+blockquote, figure {
   // Remove the margin in all browsers (opinionated).
   margin: 0;
   padding: 0;
@@ -354,5 +358,9 @@ textarea {
 }
 
 .align-center {
-  @include align-items(center);
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
 }

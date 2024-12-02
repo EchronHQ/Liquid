@@ -8,8 +8,10 @@ use DI\Attribute\Inject;
 use Echron\Tools\StringHelper;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\FrontendFileUrl;
-use Liquid\Core\Model\Layout\AbstractBlock;
 use Liquid\Framework\Filesystem\Path;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\View\Element\AbstractBlock;
+use Liquid\Framework\View\Layout\Layout;
 use Psr\Log\LoggerInterface;
 
 class CopyBlock extends AbstractBlock
@@ -29,15 +31,17 @@ class CopyBlock extends AbstractBlock
     private string|null $content = null;
 
     private string|null $footer = null;
-
+    private bool $embedIcon = true;
 
     public function __construct(
+        private readonly ObjectManagerInterface                                 $objectManager,
         string|null                                                             $types = null,
         #[Inject(Resolver::class)] private readonly Resolver|null               $resolver = null,
         #[Inject(LoggerInterface::class)] private readonly LoggerInterface|null $logger = null,
         //        #[Inject] private Profiler|null $profiler = null
     )
     {
+        parent::__construct($this->objectManager->get(Layout::class), '');
         $this->validateTypes($types);
         $this->types = $types;
     }
@@ -162,7 +166,11 @@ class CopyBlock extends AbstractBlock
         $this->footer = $footer;
     }
 
-    private bool $embedIcon = true;
+    public function __toString(): string
+    {
+        // TODO: this should not be used but is implemented in case someone makes a mistake, shall we log this?
+        return $this->toHtml();
+    }
 
     public function toHtml(): string
     {
@@ -221,12 +229,6 @@ class CopyBlock extends AbstractBlock
         //            $this->profiler->profilerFinish('toHtml ' . $this->getNameInLayout());
         //        }
         return $output;
-    }
-
-    public function __toString(): string
-    {
-        // TODO: this should not be used but is implemented in case someone makes a mistake, shall we log this?
-        return $this->toHtml();
     }
 
 //    public function setAttributes($input): void

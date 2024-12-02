@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Liquid\Blog\Repository;
 
-use Attlaz\Adapter\Base\RemoteService\SqlRemoteService;
 use Liquid\Blog\Helper\ReadingTime;
 use Liquid\Blog\Model\CategoryDefinition;
 use Liquid\Blog\Model\PostDefinition;
 use Liquid\Blog\Model\TagDefinition;
 use Liquid\Content\Helper\LocaleHelper;
-use Liquid\Content\Helper\TemplateHelper;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
 use Liquid\Core\Repository\BaseRepository;
 use Liquid\Core\Repository\ViewableEntityRepository;
+use Liquid\Framework\Database\Sql\SqlFactory;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\View\Element\Template;
 
 class BlogRepository extends BaseRepository implements ViewableEntityRepository
 {
@@ -30,9 +31,15 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
      */
     private array $pages = [];
 
-    public function __construct(SqlRemoteService $remoteService, private readonly TemplateHelper $templateHelper, LocaleHelper $localeHelper)
+    public function __construct(
+        SqlFactory                              $sqlFactory,
+//        private readonly TemplateFileResolver   $templateFileResolver,
+//        private readonly TemplateEngine         $templateEngine,
+        private readonly ObjectManagerInterface $objectManager,
+        LocaleHelper                            $localeHelper
+    )
     {
-        parent::__construct($remoteService, $localeHelper);
+        parent::__construct($sqlFactory, $localeHelper);
 
         $blogOverviewPage = PageDefinition::generate('blog', [
             'url_key' => 'blog',
@@ -42,7 +49,9 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
             'seo_description' => 'Discover the latest trends in data connectivity, automation and other Attlaz insights.',
             'seo_keywords' => '',
             'priority' => PageSitemapPriority::BASE,
+            'urlRewrites' => ['blog'],
         ]);
+        $blogOverviewPage->setControllerEndpoint('blog/page/view/page-id/');
         $blogOverviewPage->setUrlRewrites(['blog']);
 
         $this->pages = [
@@ -140,6 +149,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'draft' => false,
                 'image' => 'image/blog/improved-attlaz-status-page.jpg',
                 'category' => 'product',
+                'urlRewrites' => ['improved-attlaz-status-page'],
                 'tags' => ['attlaz-news'],
             ]),
             //            PostDefinition::generate('getting-smart', [
@@ -226,15 +236,19 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
             //            ]),
         ];
 
+
+        $attlazNewsTag = TagDefinition::generate('attlaz-news', [
+            'url_key' => 'attlaz-news',
+            'template' => 'Liquid_Blog::category/view.phtml',
+            'seo_title' => 'Attlaz News',
+            'seo_description' => 'Articles & Resources tagged Attlaz News',
+            'seo_keywords' => '',
+            'title_long' => 'Articles & Resources tagged Attlaz News',
+        ]);
+
+
         $this->tags = [
-            TagDefinition::generate('attlaz-news', [
-                'url_key' => 'attlaz-news',
-                'template' => 'Liquid_Blog::category/view.phtml',
-                'seo_title' => 'Attlaz News',
-                'seo_description' => 'Articles & Resources tagged Attlaz News',
-                'seo_keywords' => '',
-                'title_long' => 'Articles & Resources tagged Attlaz News',
-            ]),
+            $attlazNewsTag,
         ];
 
     }
@@ -313,9 +327,24 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
         return $this->tags;
     }
 
-    private function isVisibleOnFrontend(PostDefinition $post): bool
+    /**
+     * @param string $categoryId
+     * @return PostDefinition[]
+     */
+    public function getPostsByCategoryId(string $categoryId, int $limit = 100): array
     {
-        return !$post->draft && ($post->publishDate !== null && $post->publishDate < new \DateTime('now'));
+        $result = [];
+        foreach ($this->getPosts() as $post) {
+            if ($post->categoryId === $categoryId) {
+                $result[] = $post;
+            }
+            if (count($result) >= $limit) {
+                return $result;
+            }
+        }
+
+        return $result;
+
     }
 
     /**
@@ -346,26 +375,6 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
     }
 
     /**
-     * @param string $categoryId
-     * @return PostDefinition[]
-     */
-    public function getPostsByCategoryId(string $categoryId, int $limit = 100): array
-    {
-        $result = [];
-        foreach ($this->getPosts() as $post) {
-            if ($post->categoryId === $categoryId) {
-                $result[] = $post;
-            }
-            if (count($result) >= $limit) {
-                return $result;
-            }
-        }
-
-        return $result;
-
-    }
-
-    /**
      * @param string $tagId
      * @return PostDefinition[]
      */
@@ -380,6 +389,16 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
 
         return $result;
 
+    }
+
+    public function getPostById(string $id): PostDefinition|null
+    {
+        foreach ($this->posts as $post) {
+            if ($post->id === $id) {
+                return $post;
+            }
+        }
+        return null;
     }
 
     public function getPageById(string $id): PageDefinition|null
@@ -399,8 +418,11 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
 
     public function estimateReadingTime(PostDefinition $post): int
     {
-        $templateContent = $this->templateHelper->getTemplateFileContent($post->template);
-        //        $templateContent = HtmlHelper::removeHtml($templateContent);
+
+
+        $template = $this->objectManager->create(Template::class, ['data' => ['template' => $post->template]]);
+        $templateContent = $template->toHtml();
+
         return ReadingTime::estimateReadingTime($templateContent);
     }
 
@@ -410,5 +432,10 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
     public function getEntities(): array
     {
         return array_merge($this->pages, $this->posts, $this->tags, $this->categories);
+    }
+
+    private function isVisibleOnFrontend(PostDefinition $post): bool
+    {
+        return !$post->draft && ($post->publishDate !== null && $post->publishDate < new \DateTime('now'));
     }
 }

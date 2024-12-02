@@ -1,0 +1,33 @@
+<?php
+declare(strict_types=1);
+
+use Liquid\Blog\Model\ViewModel\PostList;
+use Liquid\Blog\Model\ViewModel\RelatedBlogPostsSection;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\View\Element\Template;
+
+/**
+ * @var $block Template
+ */
+
+$baseViewModel = $block->getViewModel('base', BaseViewModel::class);
+
+$blogPostsViewModel = $block->getViewModel('', RelatedBlogPostsSection::class);
+?>
+<page-section>
+    <div class="row rowGapLarge">
+        <div class="column col-1">
+            <copy-block types="header" title="<?= $blogPostsViewModel->title ?>" title-tag="h3"></copy-block>
+        </div>
+        <?php
+        /** @var Template $postListBlock */
+        $postListBlock = $block->getLayout()->createBlock(Template::class, $block->getNameInLayout() . '-blog-list', ['data' => ['template' => 'Liquid_Blog::post/list.phtml']]);
+        $postListBlock->setViewModel($baseViewModel->getObjectManager()->create(PostList::class));
+        $postListBlock->setViewModel($baseViewModel->getObjectManager()->get(BaseViewModel::class), 'base');
+
+        $postListBlock->getViewModel('', PostList::class)->setPosts($blogPostsViewModel->getBlogPosts());
+
+        echo $postListBlock->toHtml();
+        ?>
+    </div>
+</page-section>

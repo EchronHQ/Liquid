@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element\MarkupEngine;
 
-use Liquid\Content\Block\TemplateBlock;
+use Liquid\Framework\View\Element\Template;
+use Liquid\MarkupEngine\Model\MarkupTagAttribute;
+use Liquid\MarkupEngine\Model\TagInterface;
 
-class PageSectionTag extends TemplateBlock
+class PageSectionTag extends Template implements TagInterface
 {
     public const PROP_MAX_WIDTH = 'max-width';
     public const PROP_BACKGROUND = 'background';
@@ -70,5 +72,16 @@ class PageSectionTag extends TemplateBlock
     public function getTypes(): string|null
     {
         return $this->getData(self::PROP_TYPES);
+    }
+
+    public function getAttributes(): array
+    {
+        return [
+            new MarkupTagAttribute(self::PROP_MAX_WIDTH, 'number'),
+            new MarkupTagAttribute(self::PROP_BACKGROUND, 'string'),
+            new MarkupTagAttribute(self::PROP_ARCH_TOP, 'string'),
+            new MarkupTagAttribute(self::PROP_ARCH_BOTTOM, 'string'),
+            new MarkupTagAttribute(self::PROP_TYPES, 'string'),
+        ];
     }
 }

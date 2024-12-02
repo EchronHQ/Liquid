@@ -8,12 +8,16 @@ use Liquid\Content\Model\FrontendAction;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\Repository\PageRepository;
-use Liquid\Core\Layout;
-use Liquid\Core\Model\Action\Context;
-use Liquid\Core\Model\Result\Page;
-use Liquid\Core\Model\Result\Result;
 use Liquid\Core\Router;
+use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Exception\NotFoundException;
+use Liquid\Framework\View\Layout\Layout;
+use Liquid\Framework\View\Result\Page;
 
+/**
+ * @deprecated
+ */
 class PageNotFoundController extends FrontendAction
 {
     public function __construct(
@@ -21,7 +25,8 @@ class PageNotFoundController extends FrontendAction
         Layout                          $layout,
         PageConfig                      $pageConfig,
         private readonly PageRepository $pageRepository
-    ) {
+    )
+    {
         parent::__construct($context, $layout, $pageConfig);
     }
 
@@ -29,15 +34,15 @@ class PageNotFoundController extends FrontendAction
     {
         //        if ($this->getConfiguration()->getMode() === ApplicationMode::DEVELOP) {
         $info = [
-            'path'    => $this->getRequest()->getPathInfo(),
-            'params'  => $this->getRequest()->getParams(),
-            'headers' => $this->getRequest()->getHeaders()
+            'path' => $this->getRequest()->getPathInfo(),
+            'params' => $this->getRequest()->getParams(),
+            'headers' => $this->getRequest()->getHeaders(),
         ];
         $this->logger->warning('Page not found', $info);
         //        }
         $page = $this->pageRepository->getById(Router::PAGE_NOT_FOUND_IDENTIFIER);
         if ($page === null) {
-            throw new \Exception('Page not found page definition not found');
+            throw new NotFoundException('Page not found page definition not found');
         }
         return $this->renderPage($page);
     }

@@ -4,29 +4,23 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Repository;
 
-use Attlaz\Adapter\Base\RemoteService\SqlRemoteService;
+use Liquid\Core\Repository\BaseRepository;
 
-class FormRepository
+class FormRepository extends BaseRepository
 {
-    private SqlRemoteService $remoteService;
 
-
-    public function __construct(SqlRemoteService $remoteService)
-    {
-        $this->remoteService = $remoteService;
-    }
 
     public function create(string $type, array $data, string $ip, float $recaptchaScore, \DateTime $date): void
     {
         $entries = [
             [
-                'type'            => $type,
-                'data'            => \json_encode($data),
-                'ip'              => $ip,
+                'type' => $type,
+                'data' => \json_encode($data),
+                'ip' => $ip,
                 'recaptcha_score' => $recaptchaScore,
-                'date'            => $date->format('Y-m-d H:i:s')
-            ]
+                'date' => $date->format('Y-m-d H:i:s'),
+            ],
         ];
-        $this->remoteService->insert('form_submitted', $entries);
+        $this->getRemoteService()->insert('form_submitted', $entries);
     }
 }

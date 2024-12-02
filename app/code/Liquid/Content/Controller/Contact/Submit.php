@@ -4,21 +4,25 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Controller\Contact;
 
-use Liquid\Content\Helper\RecaptchaHelper;
-use Liquid\Content\Repository\FormRepository;
-use Liquid\Core\Model\Action\AbstractAction;
-use Liquid\Core\Model\Action\Context;
-use Liquid\Core\Model\Result\Json;
-use Liquid\Core\Model\Result\Result;
 use Laminas\Mail\Message;
 use Laminas\Mail\Transport\Smtp;
 use Laminas\Mail\Transport\SmtpOptions;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
+use Liquid\Content\Helper\RecaptchaHelper;
+use Liquid\Content\Repository\FormRepository;
+use Liquid\Framework\App\Action\AbstractAction;
+use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\Controller\Result;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
 class Submit extends AbstractAction
 {
-    public function __construct(Context $context, private readonly FormRepository $formRepository)
+    public function __construct(
+        Context                                 $context,
+        private readonly FormRepository         $formRepository,
+        private readonly ObjectManagerInterface $objectManager,
+    )
     {
 
         parent::__construct($context);
@@ -31,12 +35,12 @@ class Submit extends AbstractAction
 //    }
 
 
-    public function execute(): ?Result
+    public function execute(): Result
     {
         if (!$this->getRequest()->isAjax()) {
             // TODO: redirect to demo page or 404 page
             $this->logger->warning('Submit action is not Ajax');
-            return null;
+            throw new \Exception('Action must be Ajax');
         }
         $request = $this->getRequest();
         $name = $request->getPost('name');
@@ -80,11 +84,11 @@ class Submit extends AbstractAction
             $this->logger->error('Unable to save form email', ['ex' => $ex]);
         }
         $data = [
-            'success' => true
+            'success' => true,
         ];
 
 
-        $result = new Json();
+        $result = $this->objectManager->create(Result\Json::class);
         $result->setData($data);
         return $result;
 

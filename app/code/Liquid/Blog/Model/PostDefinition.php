@@ -9,23 +9,18 @@ use Liquid\Core\Helper\DataMapper;
 
 class PostDefinition extends AbstractViewableEntity
 {
+    public const TITLE_SUFFIX = ' | Attlaz';
     public string|null $publisher = null;
     public PostAuthor|null $author = null;
     public \DateTime|null $publishDate = null;
     public \DateTime|null $modifiedDate = null;
     public string|null $image = null;
-
-    private const URL_PATH_PREFIX = 'blog';
-    public const TITLE_SUFFIX = ' | Attlaz';
-
-
     public string $intro;
     public string|null $categoryId = null;
     public array $tagIds = [];
-
     public int $readDuration = 5;
     public bool $draft = true;
-
+    protected string $controllerEndpoint = 'blog/post/view/post-id';
 
     public static function generate(int|string $id, array $data): static
     {
@@ -48,21 +43,13 @@ class PostDefinition extends AbstractViewableEntity
         $article->draft = $dataMapper->getBooleanProperty('draft', true);
 
         parent::appendData($article, $dataMapper);
-
+        $article->urlRewrites[] = 'blog/' . $article->urlKey;
         //        $notUsedProperties = $dataMapper->getNotUsedProperties();
         //        foreach ($notUsedProperties as $notUsedProperty) {
         //
         //        }
 
         return $article;
-    }
-
-    public function getUrlPath(): string
-    {
-        if ($this->urlKey === '') {
-            return self::URL_PATH_PREFIX;
-        }
-        return self::URL_PATH_PREFIX . '/' . $this->urlKey;
     }
 
     public function getSeoTitle(): string

@@ -37,6 +37,11 @@ class DirectoryList
         }
     }
 
+    private function normalizePath(string|null $path): string
+    {
+        return $path !== null ? str_replace('\\', '/', $path) : '';
+    }
+
     private static function getDefaultConfig(): array
     {
         return [
@@ -50,29 +55,7 @@ class DirectoryList
             Path::MEDIA->name => [self::PATH => 'pub/media', self::URL_PATH => 'media'],
 
             Path::STATIC_VIEW->name => [self::PATH => 'pub/static', self::URL_PATH => 'static'],
-
         ];
-    }
-
-    public function getPath(Path $path): string
-    {
-        if (!isset($this->directories[$path->name][self::PATH])) {
-            throw new \Exception('Not defined');
-        }
-        return $this->directories[$path->name][self::PATH];
-    }
-
-    public function getUrlPath(Path $path): string
-    {
-        if (!isset($this->directories[$path->name][self::URL_PATH])) {
-            throw new \Exception('Not defined');
-        }
-        return $this->directories[$path->name][self::URL_PATH];
-    }
-
-    private function normalizePath(string|null $path): string
-    {
-        return $path !== null ? str_replace('\\', '/', $path) : '';
     }
 
     private function isAbsolute(string|null $path): bool
@@ -97,6 +80,11 @@ class DirectoryList
         return false;
     }
 
+    private function prependRoot(string $path): string
+    {
+        return $this->root . ($this->root && $path ? '/' : '') . $path;
+    }
+
     /**
      * Validates a URL path
      *
@@ -116,8 +104,19 @@ class DirectoryList
         }
     }
 
-    private function prependRoot(string $path): string
+    public function getPath(Path $path): string
     {
-        return $this->root . ($this->root && $path ? '/' : '') . $path;
+        if (!isset($this->directories[$path->name][self::PATH])) {
+            throw new \Exception('Not defined');
+        }
+        return $this->directories[$path->name][self::PATH];
+    }
+
+    public function getUrlPath(Path $path): string
+    {
+        if (!isset($this->directories[$path->name][self::URL_PATH])) {
+            throw new \Exception('Not defined');
+        }
+        return $this->directories[$path->name][self::URL_PATH];
     }
 }

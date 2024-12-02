@@ -4,27 +4,31 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Controller\Demo;
 
-use Liquid\Content\Helper\RecaptchaHelper;
-use Liquid\Content\Repository\FormRepository;
-use Liquid\Core\Model\Action\AbstractAction;
-use Liquid\Core\Model\Action\Context;
-use Liquid\Core\Model\Result\Json;
-use Liquid\Core\Model\Result\Result;
 use Laminas\Mail\Message;
 use Laminas\Mail\Transport\Smtp;
 use Laminas\Mail\Transport\SmtpOptions;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part;
+use Liquid\Content\Helper\RecaptchaHelper;
+use Liquid\Content\Repository\FormRepository;
+use Liquid\Framework\App\Action\AbstractAction;
+use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Exception\NotFoundException;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
 class Submit extends AbstractAction
 {
-    private FormRepository $formRepository;
 
 
-    public function __construct(Context $context, FormRepository $formRepository)
+    public function __construct(
+        Context                                 $context,
+        private readonly FormRepository         $formRepository,
+        private readonly ObjectManagerInterface $objectManager
+    )
     {
         parent::__construct($context);
-        $this->formRepository = $formRepository;
+
 
     }
 
@@ -34,13 +38,13 @@ class Submit extends AbstractAction
 //    }
 
 
-    public function execute(): ?Result
+    public function execute(): Result
     {
         $request = $this->getRequest();
         if (!$request->isAjax()) {
 
             // TODO: redirect to demo page or 404 page
-            return null;
+            throw new NotFoundException('Page not found');
         }
 
         $name = $request->getPost('name');
@@ -57,11 +61,11 @@ class Submit extends AbstractAction
         $ip = $request->getIp();
         $date = new \DateTime('now');
         $submittedData = [
-            'name'      => $name,
-            'email'     => $email,
-            'company'   => $company,
-            'phone'     => $phone,
-            'user_time' => $time
+            'name' => $name,
+            'email' => $email,
+            'company' => $company,
+            'phone' => $phone,
+            'user_time' => $time,
             //            'country' => $country,
             //            'message' => $message,
 
@@ -84,10 +88,10 @@ class Submit extends AbstractAction
             $this->logger->error('Unable to save form email', ['ex' => $ex]);
         }
         $data = [
-            'success' => true
+            'success' => true,
         ];
 
-        $result = new Json();
+        $result = $this->objectManager->create(Result\Json::class);
         $result->setData($data);
         return $result;
 
@@ -126,14 +130,14 @@ class Submit extends AbstractAction
 
 
         $options = new SmtpOptions([
-            'name'              => 'AWS',
-            'host'              => 'email-smtp.eu-west-1.amazonaws.com',
-            'port'              => 587,
-            'connection_class'  => 'plain',
+            'name' => 'AWS',
+            'host' => 'email-smtp.eu-west-1.amazonaws.com',
+            'port' => 587,
+            'connection_class' => 'plain',
             'connection_config' => [
                 'username' => 'AKIAYCYQTLBXL6KZU3XW',
                 'password' => 'BDuCLGrQgDWBRWqx++HuHRuqleyV3p+mF+YplXam6O6q',
-                'ssl'      => 'tls',
+                'ssl' => 'tls',
             ],
         ]);
         $transport->setOptions($options);

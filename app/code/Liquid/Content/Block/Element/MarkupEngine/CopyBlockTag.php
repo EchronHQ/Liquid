@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Liquid\Content\Block\Element\MarkupEngine;
 
 use Liquid\Content\Block\Element\CopyBlock;
-use Liquid\Core\Model\Layout\Block;
+use Liquid\Framework\View\Element\Template;
 
-class CopyBlockTag extends Block
+class CopyBlockTag extends Template
 {
     public const PROP_TITLE = 'title';
     public const PROP_CAPTION = 'caption';
@@ -27,33 +27,6 @@ class CopyBlockTag extends Block
 //        self::PROP_CLASSES,
     ];
 
-
-    public function getTypes(): string|null
-    {
-        return $this->getData(self::PROP_TYPES);
-    }
-
-    public function getContent(): string|null
-    {
-        $content = $this->getData('content');
-        if ($content === null || $content === '') {
-            //            $this->logger->warning('[Copy Block] No content defined');
-            $content = null;
-        }
-        return $content;
-    }
-
-    private function validateData(): void
-    {
-        $dataKeys = $this->getDataKeys();
-        foreach ($dataKeys as $dataKey) {
-            if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
-                $ex = new \Exception('');
-                $this->logger->warning('Copy Block Tag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey), 'info' => $this->getNameInLayout(), 'call stack' => $ex->getTraceAsString()]);
-            }
-        }
-    }
-
     public function toHtml(): string
     {
         $this->validateData();
@@ -65,6 +38,7 @@ class CopyBlockTag extends Block
             $data['types'] = $types;
         }
 
+        /** @var CopyBlock $block */
         $block = $this->getLayout()->createBlock(CopyBlock::class, '', $data);
 
         if ($this->hasData(self::PROP_TITLE)) {
@@ -92,5 +66,31 @@ class CopyBlockTag extends Block
 
 
         return $block->toHtml();
+    }
+
+    private function validateData(): void
+    {
+        $dataKeys = $this->getDataKeys();
+        foreach ($dataKeys as $dataKey) {
+            if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
+                $ex = new \Exception('');
+                $this->logger->warning('Copy Block Tag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey), 'info' => $this->getNameInLayout(), 'call stack' => $ex->getTraceAsString()]);
+            }
+        }
+    }
+
+    public function getTypes(): string|null
+    {
+        return $this->getData(self::PROP_TYPES);
+    }
+
+    public function getContent(): string|null
+    {
+        $content = $this->getData('content');
+        if ($content === null || $content === '') {
+            //            $this->logger->warning('[Copy Block] No content defined');
+            $content = null;
+        }
+        return $content;
     }
 }

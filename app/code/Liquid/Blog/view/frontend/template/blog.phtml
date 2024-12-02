@@ -1,0 +1,65 @@
+<?php
+declare(strict_types=1);
+
+
+use Liquid\Blog\Model\ViewModel\BlogIndexViewModel;
+
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $viewModel BlogIndexViewModel
+ */
+$viewModel = $block->getViewModel('', BlogIndexViewModel::class);
+$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+$posts = $viewModel->getPosts();
+
+?>
+<page-header>
+    <div class="row">
+        <div class="column">
+            <copy-block title="The Attlaz blog" title-tag="h1">
+                <!--                Ideas, practical tips and insider info - the Attlaz blog helps your team to streamline all workflows-->
+            </copy-block>
+        </div>
+    </div>
+</page-header>
+<main>
+    <?php
+    $categories = $viewModel->getCategories();
+    foreach ($categories as $category) {
+        $categoryPosts = $viewModel->getLastCategoryPosts($category, 3);
+        if (count($categoryPosts) > 0):
+            ?>
+            <page-section>
+                <div class="row">
+                    <div class="column category-title">
+                        <h2><?= $category->metaTitle ?></h2>
+                        <a href="<?= $baseViewModel->getResolver()->getUrl($category->getUrlPath()) ?>">See all</a>
+                    </div>
+
+                    <div class="column">
+                        <?php
+                        /** @var \Liquid\Blog\Model\ViewModel\PostList $postListViewModel */
+                        $postListViewModel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class);
+                        $postListViewModel->setPosts($categoryPosts);
+
+                        $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'blog-list-cat-' . $category->id, ['data' => ['template' => 'Liquid_Blog::post/list.phtml']]);
+                        $postListBlock->setViewModel($postListViewModel);
+                        $postListBlock->setViewModel($baseViewModel, 'base');
+                        echo $postListBlock->toHtml();
+                        ?>
+                    </div>
+                </div>
+            </page-section>
+
+        <?php
+
+        endif;
+    }
+
+
+    ?>
+    <call-to-action>
+    </call-to-action>
+</main>

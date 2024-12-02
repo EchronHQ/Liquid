@@ -1,0 +1,77 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $viewModel \Liquid\Blog\Model\ViewModel\Tag
+ * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ */
+$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\Tag::class);
+$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+$tag = $viewModel->getTag();
+$posts = $viewModel->getPosts();
+?>
+
+<page-header>
+
+    <div class="row">
+        <div class="column">
+            <copy-block title="Posts tagged <?= $tag->metaTitle ?>" title-tag="h1">
+
+            </copy-block>
+        </div>
+    </div>
+</page-header>
+
+
+<main>
+    <section>
+        <div class="container">
+            <div class="wrapper">
+
+
+                <div class="row rowGapExtraLarge">
+                    <?php
+                    /**
+                     * Tagbar
+                     */
+                    $categoriesTagBar = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'tags', ['data' => ['template' => 'Liquid_Content::element/tagbar.phtml']]);
+
+                    /** @var $tagBarViewModel \Liquid\Content\ViewModel\TagBar */
+                    $tagBarViewModel = $baseViewModel->getObjectManager()->create(\Liquid\Content\ViewModel\TagBar::class);
+                    $tagBarViewModel->setTags($viewModel->getTags());
+                    $tagBarViewModel->setCurrent($tag);
+                    $tagBarViewModel->setAllTarget($baseViewModel->getResolver()->getUrl('blog'));
+
+                    $categoriesTagBar->setViewModel($tagBarViewModel);
+                    $categoriesTagBar->setViewModel($baseViewModel, 'base');
+                    echo $categoriesTagBar->toHtml();
+
+                    /**
+                     * Posts
+                     */
+                    /** @var \Liquid\Blog\Model\ViewModel\PostList $postListViewmodel */
+                    $postListViewmodel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class);
+                    $postListViewmodel->setPosts($posts);
+
+                    $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'post-list');
+
+                    $postListBlock
+                        ->setViewModel($postListViewmodel)
+                        ->setViewModel($baseViewModel, 'base')
+                        ->setTemplate('Liquid_Blog::post/list.phtml');
+                    echo $postListBlock->toHtml();
+
+
+                    ?>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <call-to-action>
+
+    </call-to-action>
+</main>

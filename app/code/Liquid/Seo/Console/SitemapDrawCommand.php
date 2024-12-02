@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Seo\Console;
 
+use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Seo\Helper\GatherPages;
 use Symfony\Component\Console\Command\Command;
@@ -115,11 +116,10 @@ class SitemapDrawCommand extends Command
 class Segment
 {
     private array $children = [];
-    private PageDefinition|null $page;
 
-    public function __construct(public string $pathSegment, PageDefinition|null $page = null)
+    public function __construct(public string $pathSegment, private readonly AbstractViewableEntity|null $page = null)
     {
-        $this->page = $page;
+
     }
 
     public function getTitle(): string

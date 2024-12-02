@@ -1,0 +1,37 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $viewModel \Liquid\Content\ViewModel\TagBar
+ * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ */
+$viewModel = $block->getViewModel('', \Liquid\Content\ViewModel\TagBar::class);
+$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+$tags = $viewModel->getTags();
+if (count($tags) > 0):
+    ?>
+    <div class="tags-wrapper">
+        <?php if ($viewModel->getLabel()): ?>
+            <div class="label"><?= $viewModel->getLabel() ?></div>
+        <?php endif; ?>
+        <div class="tags">
+            <?php if (!empty($viewModel->getAllTarget())): ?>
+                <a class="tag <?= $viewModel->hasSelected() ? '' : 'active' ?>"
+                   href="<?= $viewModel->getAllTarget() ?>">
+                    All
+                </a>
+            <?php
+            endif;
+            foreach ($tags as $tag): ?>
+                <a class="tag <?= $viewModel->isSelectedTag($tag) ? 'active' : '' ?>"
+                   href="<?= $baseViewModel->getResolver()->getUrl($tag->getUrlPath()) ?>">
+                    <?= $viewModel->getTagLabel($tag) ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php
+endif;

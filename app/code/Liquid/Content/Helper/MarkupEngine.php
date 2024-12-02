@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Helper;
 
-use DI\Container;
 use Liquid\Content\Model\MarkupEngine\BlockTag;
 use Liquid\Content\Model\MarkupEngine\CustomTag;
 use Liquid\Content\Model\MarkupEngine\CustomTagConcrete;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\View\Element\Template;
 use Psr\Log\LoggerInterface;
 
 class MarkupEngine
 {
-    public bool $debug = false;
     private static int $engineInstanceId = 0;
+    public bool $debug = false;
     private array $registeredTags = [];
     private bool $cacheTags = false;
     private bool $sniffForBuriedTags = true;
@@ -24,19 +25,20 @@ class MarkupEngine
     private array $tags = [];
 
     public function __construct(
-        private readonly Container       $container,
-        private readonly LoggerInterface $logger
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly LoggerInterface        $logger
     )
     {
     }
 
-    public function registerTag(string $tag, string $className, array $arguments = []): void
+    public function registerTag(string $tag, string $className, array $arguments = [], string|null $viewModelClassName = null): void
     {
 
         $this->registeredTags[] = [
             'tag' => $tag,
             'class' => $className,
             'arguments' => $arguments,
+            'viewModelClass' => $viewModelClassName,
         ];
     }
 
@@ -145,24 +147,12 @@ class MarkupEngine
         return $this->renderTags($tags);
     }
 
-
-    private function buildReg(): void
-    {
-        $searchRegex = "";
-        foreach ($this->registeredTags as $registeredTag) {
-            if ($searchRegex !== "") {
-                $searchRegex .= "|";
-            }
-            $searchRegex .= '\b' . $registeredTag['tag'] . '\b';
-        }
-        $this->_searchReg = "<($searchRegex)";
-    }
-
     /**
      * Searches and parses a source for custom tags.
      * @access public
      * @param string $source The source to search for custom tags in.
      * @return CustomTag[] An array of found tags.
+     * @throws \Exception
      */
     public function processTags(string $source): array
     {
@@ -217,14 +207,23 @@ class MarkupEngine
 
                 $tagData = $this->getTagData($tagName);
                 $tagClass = $tagData['class'];
-                if ($tagClass === null || !class_exists($tagClass) || !$this->container->has($tagClass)) {
+                if ($tagClass === null || !class_exists($tagClass) || !$this->objectManager->has($tagClass)) {
                     // TODO: is this desired behaviour?
                     $tag = new CustomTagConcrete($tag_source, $tagName, self::$engineInstanceId, count($tags));
 
                     $this->logger->warning('[MarkupEngine] class `' . $tagClass . '` not found for tag `' . $tagName . '`');
                 } else {
-                    $block = $this->container->make($tagClass, $tagData['arguments']);
 
+                    $viewModel = null;
+                    if ($tagData['viewModelClass'] !== null) {
+                        $viewModel = $this->objectManager->create($tagData['viewModelClass'], ['data' => $tagData['arguments']]);
+                    }
+                    /** @var Template $block */
+                    // TODO: check that class is or extends Template
+                    $block = $this->objectManager->create($tagClass, ['data' => $tagData['arguments']]);
+                    if ($viewModel) {
+                        $block->setViewModel($viewModel);
+                    }
 
                     $tag = new BlockTag($tag_source, $tagName, self::$engineInstanceId, count($tags));
                     $tag->setXBlock($block);
@@ -238,6 +237,18 @@ class MarkupEngine
             }
         }
         return $tags;
+    }
+
+    private function buildReg(): void
+    {
+        $searchRegex = "";
+        foreach ($this->registeredTags as $registeredTag) {
+            if ($searchRegex !== "") {
+                $searchRegex .= "|";
+            }
+            $searchRegex .= '\b' . $registeredTag['tag'] . '\b';
+        }
+        $this->_searchReg = "<($searchRegex)";
     }
 
     private function getTagData(string $tag): array|null

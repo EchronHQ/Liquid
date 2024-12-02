@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
-use Liquid\Content\Model\Resource\UrlRewrite;
+
+use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 use PHPUnit\Framework\TestCase;
 
 class RequestRewriteHelperTest extends TestCase

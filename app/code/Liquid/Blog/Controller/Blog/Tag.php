@@ -9,34 +9,42 @@ use Liquid\Blog\Repository\BlogRepository;
 use Liquid\Content\Helper\PageConfigHelper;
 use Liquid\Content\Model\FrontendAction;
 use Liquid\Content\Model\View\Page\PageConfig;
-use Liquid\Core\Layout;
-use Liquid\Core\Model\Action\Context;
-use Liquid\Core\Model\Result\Page;
-use Liquid\Core\Model\Result\Result;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\App\Route\Attribute\Route;
+use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Exception\NotFoundException;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\Layout\Layout;
+use Liquid\Framework\View\Result\Page;
 
+#[Route('blog/tag/view/tag-id/:tag-id', name: 'blog-tag-view')]
 class Tag extends FrontendAction
 {
     /**
      * http://localhost:8080/blog/tag/product
      */
     public function __construct(
-        Context                         $context,
-        Layout                          $layout,
-        PageConfig                      $pageConfig,
-        private readonly BlogRepository $blogRepository
-    ) {
+        Context                                 $context,
+        Layout                                  $layout,
+        PageConfig                              $pageConfig,
+        private readonly BlogRepository         $blogRepository,
+        private readonly ObjectManagerInterface $objectManager
+    )
+    {
         parent::__construct($context, $layout, $pageConfig);
     }
 
 
-    public function execute(): ?Result
+    public function execute(): Result
     {
 
-        $tagIdentifier = $this->getRequest()->getParam('tagId');
-        $tag = $this->blogRepository->getTagByUrlKey($tagIdentifier);
+        $tagIdentifier = $this->getRequest()->getParam('tag-id');
+        $tag = $this->blogRepository->getTagById($tagIdentifier);
         if (\is_null($tag)) {
             $this->logger->error('Unable to render blog tag, tag not found', ['params' => $this->getRequest()->getParams()]);
-            return null;
+            throw new NotFoundException('Page not found');
         }
         return $this->renderPage($tag);
     }
@@ -45,6 +53,7 @@ class Tag extends FrontendAction
     private function renderPage(TagDefinition $categoryDefinition): Result
     {
 
+        $result = $this->getResultFactory()->create(Page::class);
 
         $this->layout->runHandle('layout-1col');
 
@@ -54,10 +63,15 @@ class Tag extends FrontendAction
 
         PageConfigHelper::append($categoryDefinition, $this->pageConfig);
 
-        $pageBlock = $this->layout->addBlock(\Liquid\Blog\Block\Tag::class, 'page', 'content');
-        $pageBlock->setTemplate('tag/view.phtml');
-        $pageBlock->setData('tag', $categoryDefinition);
+        $tagViewModel = $this->objectManager->create(\Liquid\Blog\Model\ViewModel\Tag::class);
+        $tagViewModel->setTag($categoryDefinition);
 
-        return $this->getResultFactory()->create(Page::class);
+        $pageBlock = $this->layout->addBlock(Template::class, 'page', 'content');
+        $pageBlock->setTemplate('Liquid_Blog::tag/view.phtml');
+
+        $pageBlock->setViewModel($tagViewModel);
+        $pageBlock->setViewModel($this->objectManager->get(BaseViewModel::class), 'base');
+
+        return $result;
     }
 }

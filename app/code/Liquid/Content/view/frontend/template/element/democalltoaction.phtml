@@ -1,0 +1,26 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block \Liquid\Framework\View\Element\Template
+ * @var $viewModel \Liquid\Content\Block\Element\DemoCallToActionBlock
+ */
+$viewModel = $block->getViewModel();
+?>
+
+<section class="call-to-action-footer">
+    <div class="container">
+        <div class="wrapper">
+            <div class="row">
+                <div class="column col-2-2">
+                    <copy-block types="header" title="<?= $viewModel->getTitle() ?>" title-tag="div"></copy-block>
+                    <copy-block types="header" title="<?= $viewModel->getDescription() ?>" title-tag="div">
+                        <link href="<?= $viewModel->getCallToActionPage() ?>"
+                              types="button arrow"><?= $viewModel->getCallToActionLabel() ?></link>
+                    </copy-block>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

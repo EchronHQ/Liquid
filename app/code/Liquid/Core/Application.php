@@ -4,225 +4,146 @@ declare(strict_types=1);
 
 namespace Liquid\Core;
 
-use Attlaz\Adapter\Base\RemoteService\SqlRemoteService;
-use Attlaz\AttlazMonolog\Handler\AttlazHandler;
-use Attlaz\Client;
-use Attlaz\Model\Log\LogStreamId;
-use DI\Container;
-use DI\ContainerBuilder;
 use Liquid\Core\Helper\Profiler;
-use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\AppConfig;
-use Liquid\Core\Model\ApplicationMode;
-use Liquid\Framework\Component\ComponentRegistrar;
-use Liquid\Framework\Component\ComponentRegistrarInterface;
+use Liquid\Framework\App\AppInterface;
+use Liquid\Framework\App\AppMode;
+use Liquid\Framework\App\Response\Response;
+use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\DirectoryList;
-use Liquid\Framework\Filesystem\Path;
+use Liquid\Framework\ObjectManager\ObjectManagerFactory;
+use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\Output\Error;
-use Monolog\ErrorHandler;
-use Monolog\Handler\BrowserConsoleHandler;
-use Monolog\Handler\SlackWebhookHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
-use Monolog\Processor\WebProcessor;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
-use function DI\create;
 
 class Application
 {
-    private Container $diContainer;
+    private ObjectManagerInterface $objectManager;
     private LoggerInterface|null $logger = null;
     private AppConfig $config;
 
     private readonly Profiler $profiler;
 
-    public function __construct(private readonly string $rootDir)
+    public function __construct(
+        ObjectManagerFactory    $factory,
+        private readonly string $rootDir,
+        private readonly array  $initParams
+    )
     {
+        $this->objectManager = $factory->create($initParams);
         $this->profiler = new Profiler();
     }
 
-
-    private function initLogger(): void
+    /**
+     * Static method so that client code does not have to create Object Manager Factory every time Bootstrap is called
+     *
+     * @param string $rootDir
+     * @param array $initParams
+     * @param ObjectManagerFactory|null $factory
+     * @return Application
+     */
+    public static function create(
+        string               $rootDir,
+        array                $initParams,
+        ObjectManagerFactory $factory = null
+    ): Application
     {
-        $this->logger = new Logger('Attlaz Site');
-
-        ErrorHandler::register($this->logger);
-        /**
-         * Slack handler
-         */
-        $slackHook = $this->config->getValue('logger.slack.webhook');
-        $slackChannel = $this->config->getValue('logger.slack.webhook');
-        $slackUsername = $this->config->getValue('logger.slack.webhook');
-        $slackMinLogLevel = $this->config->getValue('logger.slack.minloglevel', Level::Info->name);
-        $slackHandler = new SlackWebhookHandler($slackHook, $slackChannel, $slackUsername, true, null, false, true);
-        $slackHandler->setLevel($slackMinLogLevel);
-        if ($this->config->getMode() !== ApplicationMode::DEVELOP) {
-            $this->logger->pushHandler($slackHandler);
+        // self::populateAutoloader($rootDir, $initParams);
+        if ($factory === null) {
+            $factory = self::createObjectManagerFactory($rootDir, $initParams);
         }
-        //                $this->logger->error('Run tests');
-        //                return;
-
-
-        if (!$this->config->isCLI() && $this->config->getMode() === ApplicationMode::DEVELOP) {
-
-            $browserMinLogLevel = $this->config->getValue('logger.browser.minloglevel', Level::Debug->name);
-
-            $browserConsoleHandler = new BrowserConsoleHandler();
-            $browserConsoleHandler->setLevel($browserMinLogLevel);
-            $this->logger->pushHandler($browserConsoleHandler);
-        }
-
-        //        $cliHandler = new StreamHandler(fopen('php://stdout', 'wb'), Level::Debug);
-        //        $htmlFormatter = new HtmlFormatter();
-        //        $cliHandler->setFormatter($htmlFormatter);
-        //        $this->logger->pushHandler($cliHandler);
-
-
-        $attlazLogStreamId = $this->config->getValue('logger.attlaz.logstream_id', '');
-        if ($attlazLogStreamId !== '') {
-
-            $client = new Client();
-
-            $attlazClientToken = $this->config->getValue('logger.attlaz.client_token', '');
-            if ($attlazClientToken === '') {
-                $attlazClientId = $this->config->getValue('logger.attlaz.client_id');
-                $attlazClientSecret = $this->config->getValue('logger.attlaz.client_secret');
-                $client->authWithClient($attlazClientId, $attlazClientSecret);
-            } else {
-                $client->authWithToken($attlazClientToken);
-            }
-
-
-            $attlazApiEndpoint = $this->config->getValue('logger.attlaz.endpoint');
-
-            $attlazMinLogLevel = $this->config->getValue('logger.attlaz.minloglevel', Level::Info->name);
-
-
-            $client->setEndPoint($attlazApiEndpoint);
-            $attlazHandler = new AttlazHandler($client, new LogStreamId($attlazLogStreamId));
-            $attlazHandler->setLevel($attlazMinLogLevel);
-            $this->logger->pushHandler($attlazHandler);
-        }
-
-
-        if ($this->config->isCLI()) {
-            //Stream handler
-            $cliHandler = new StreamHandler(\STDOUT, Level::Debug);
-            $this->logger->pushHandler($cliHandler);
-        } elseif ($this->config->getMode() === ApplicationMode::PRODUCTION) {
-
-            $webProcessor = new WebProcessor();
-            $this->logger->pushProcessor($webProcessor);
-        }
+        return new self($factory, $rootDir, $initParams);
     }
 
-    private function buildCachePool(): CacheItemPoolInterface
+    /**
+     * Creates instance of object manager factory
+     *
+     * @param string $rootDir
+     * @param array $initParams
+     * @return ObjectManagerFactory
+     */
+    public static function createObjectManagerFactory(string $rootDir, array $initParams): ObjectManagerFactory
     {
-        $cacheBackend = $this->config->getValue('cache.storage.backend', 'cache');
-        switch ($cacheBackend) {
-            case 'redis':
-                $host = $this->config->getValueString('cache.storage.host');
-
-                $client = new \Redis();
-                $client->connect($host);
-
-                return new RedisAdapter($client);
-            case 'array':
-                return new ArrayAdapter();
-        }
-        throw new \Error('Invalid cache');
-
-
+        $dirList = new DirectoryList($rootDir);
+//        $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
+//        $driverPool = self::createFilesystemDriverPool($initParams);
+//        $configFilePool = self::createConfigFilePool();
+        return new ObjectManagerFactory($dirList);
     }
 
-    private function buildSQL(): SqlRemoteService
+    /**
+     * Gets the current parameters
+     *
+     * @return array
+     */
+    public function getParams(): array
     {
-        $database = $this->config->getValue('database.database');
-        $username = $this->config->getValue('database.username');
-        $password = $this->config->getValue('database.password');
-        $host = $this->config->getValue('database.host');
-        return new SqlRemoteService($database, $username, $password, $host);
+        return $this->initParams;
     }
 
-    private function initDI(): void
-    {
 
 
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->useAutowiring(true);
-        $containerBuilder->useAttributes(true);
-//        $containerBuilder->enableCompilation(ROOT . 'var/cache');
 
-        $cachePool = $this->buildCachePool();
-        $containerBuilder->addDefinitions([
-            LoggerInterface::class => $this->logger,
-            SqlRemoteService::class => $this->buildSQL(),
-            AppConfig::class => $this->config,
-            CacheItemPoolInterface::class => $cachePool,
-            Profiler::class => $this->profiler,
-            ComponentRegistrarInterface::class => create(ComponentRegistrar::class),
-            DirectoryList::class => new DirectoryList($this->rootDir),
-        ]);
-        $this->diContainer = $containerBuilder->build();
-    }
+//    final protected function beforeRun(): void
+//    {
+//        $this->profiler->profilerStart('Application:beforeRun');
+//
+//        $this->config = new AppConfig();
+//
+//
+//        $x = new DirectoryList($this->rootDir);
+//        $this->config->load($x->getPath(Path::CONFIG));
+//
+//
+//        $this->initLogger();
+//        $this->initDI();
+//
+//
+//        $this->profiler->profilerFinish('Application:beforeRun');
+//
+//    }
 
-    final protected function beforeRun(): void
-    {
-        $this->profiler->profilerStart('Application:beforeRun');
-
-        $this->config = new AppConfig();
-
-
-        $x = new DirectoryList($this->rootDir);
-        $this->config->load($x->getPath(Path::CONFIG));
-
-
-        $this->initLogger();
-        $this->initDI();
-
-
-        $this->profiler->profilerFinish('Application:beforeRun');
-
-    }
-
-    public function run(): void
+    public function run(AppInterface $application): void
     {
         ini_set('memory_limit', '2048M');
         $this->profiler->profilerStart('Application:run');
 
 
         try {
-            $this->beforeRun();
-            /** @var Router $router */
-            $router = $this->diContainer->get(Router::class);
 
-            /** @var Resolver $resolver */
-            $resolver = $this->diContainer->get(Resolver::class);
+            $response = $application->launch();
+            $response->sendResponse();
 
-            $this->profiler->profilerStart('Application:initializeRouter');
-            $router->initialize();
 
-            $pageRoutes = $router->getPageRoutes();
-            $resolver->setPageRoutes($pageRoutes);
-
-            $this->profiler->profilerFinish('Application:initializeRouter');
-
-            $response = $router->execute();
-
-            $response->sendHeaders()->sendContent();
+//            $this->beforeRun();
+//            /** @var Router $router */
+//            $router = $this->diContainer->get(Router::class);
+//
+//            /** @var Resolver $resolver */
+//            $resolver = $this->diContainer->get(Resolver::class);
+//
+//            $this->profiler->profilerStart('Application:initializeRouter');
+//            $router->initialize();
+//
+//            $pageRoutes = $router->getPageRoutes();
+//            $resolver->setPageRoutes($pageRoutes);
+//
+//            $this->profiler->profilerFinish('Application:initializeRouter');
+//
+//            $response = $router->execute();
+//
+//            $response->sendHeaders()->sendContent();
         } catch (\Throwable $ex) {
+            $this->terminate($ex);
+
+
             if ($this->logger !== null) {
                 $this->logger->error('Unable to run application', ['ex' => $ex]);
             }
 
 
             // Safe to file?
-            if ($this->config->getMode() === ApplicationMode::DEVELOP) {
+            if ($this->config->getMode() === AppMode::Develop) {
 
 
                 echo Error::toHtml($ex);
@@ -239,16 +160,82 @@ class Application
             //throw $ex;
         } finally {
             $this->profiler->profilerFinish('Application:run');
-            if ($this->logger !== null && $this->config->getMode() === ApplicationMode::DEVELOP) {
+            if ($this->logger !== null && $this->config->getMode() === AppMode::Develop) {
                 $this->profiler->output($this->logger);
 
             }
         }
     }
 
-    final protected function getContainer(): ContainerInterface
+    /**
+     * Display an exception and terminate program execution
+     *
+     * @param \Throwable $e
+     * @return void
+     */
+    protected function terminate(\Throwable $e): void
     {
-        return $this->diContainer;
+        /** @var Response $response */
+        $response = $this->objectManager->get(Response::class);
+        $response->clearHeaders();
+        $response->setHttpResponseCode(500);
+        $response->setHeader('Content-Type', 'text/plain');
+        if ($this->isDeveloperMode()) {
+            // TODO: use helper to format error to html
+            $response->setBody('<pre>' . (string)$e . '<pre>');
+        } else {
+            $message = "An error has happened during application run. See exception log for details.\n";
+            try {
+                if (!$this->objectManager) {
+                    throw new \DomainException();
+                }
+                $this->objectManager->get(LoggerInterface::class)->critical($e);
+            } catch (\Exception $e) {
+                $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
+            }
+            $response->setBody($message);
+        }
+        $response->sendResponse();
+        exit(1);
+    }
+
+    /**
+     * Checks whether developer mode is set in the initialization parameters
+     *
+     * @return bool
+     */
+    public function isDeveloperMode(): bool
+    {
+        $mode = AppMode::Develop->value;
+        if (isset($this->server[State::PARAM_MODE])) {
+            $mode = $this->server[State::PARAM_MODE];
+        } else {
+            $appConfig = $this->objectManager->get(\Liquid\Framework\App\Config\AppConfig::class);
+            $configMode = $appConfig->get(State::PARAM_MODE);
+            if ($configMode) {
+                $mode = $configMode;
+            }
+        }
+        return $mode === AppMode::Develop->value;
+    }
+
+    public function createApplication(string $type, array $arguments = []): AppInterface|null
+    {
+        try {
+            $application = $this->objectManager->create($type, $arguments);
+            if (!($application instanceof AppInterface)) {
+                throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
+            }
+            return $application;
+        } catch (\Exception $e) {
+            $this->terminate($e);
+        }
+        return null;
+    }
+
+    final protected function getContainer(): ObjectManagerInterface
+    {
+        return $this->objectManager;
     }
 
     final protected function getConfig(): AppConfig

@@ -4,25 +4,47 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Html;
 
-use Liquid\Content\Block\TemplateBlock;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Asset\AssetSizeInstructionType;
+use Liquid\Core\Helper\FileHelper;
+use Liquid\Core\Helper\Profiler;
+use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\FrontendFileUrl;
+use Liquid\Framework\App\State;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\Element\Template\File\TemplateFileResolver;
+use Liquid\Framework\View\Layout\Layout;
+use Liquid\Framework\View\TemplateEngine;
+use Psr\Log\LoggerInterface;
 
-class Picture extends TemplateBlock
+class Picture extends Template
 {
+    public bool $lazyLoad = true;
+    public FrontendFileUrl|null $lowQuality = null;
     protected string|null $template = 'Liquid_Content::html/picture.phtml';
-
     private string|null $imageSrc = null;
     private string|null $alt = null;
-
     private FrontendFileUrl|null $default = null;
     /** @var array{type:string, sizes:array}[]|null */
     private array|null $sizes = null;
-
     private AssetSizeInstruction|null $size = null;
 
-    public bool $lazyLoad = true;
+
+    public function __construct(
+        Layout                    $layout,
+        TemplateFileResolver      $templateFileResolver,
+        TemplateEngine            $templateEngine,
+        State                     $appState,
+        Profiler                  $profiler,
+        FileHelper                $fileHelper,
+        LoggerInterface           $logger,
+        private readonly Resolver $resolver,
+        string                    $nameInLayout = '',
+        array                     $data = []
+    )
+    {
+        parent::__construct($layout, $templateFileResolver, $templateEngine, $appState, $profiler, $fileHelper, $logger, $nameInLayout, $data);
+    }
 
     public function setSrc(string $imageSrc, string $alt = ''): void
     {
@@ -57,35 +79,14 @@ class Picture extends TemplateBlock
         return $this->sizes;
     }
 
-    private function getFormatSrc(AssetSizeInstructionType $forceType, AssetSizeInstruction|null $size = null): FrontendFileUrl|null
+    public function toHtml(): string
     {
-        $currentExtension = AssetSizeInstructionType::fromFile($this->imageSrc);
-        if ($currentExtension === AssetSizeInstructionType::SVG) {
-            // Do not provide alternatives for SVG images
-            return null;
-        }
 
-        $newSize = AssetSizeInstruction::create($size);
-        $newSize->convert = $forceType;
-
-        return $this->getResolver()->getAssetUrl($this->imageSrc, $newSize);
-
-
-        /**
-         * Render images for different viewports (based on CSS breakpoints?)
-         */
-    }
-
-    public FrontendFileUrl|null $lowQuality = null;
-
-    protected function beforeToHtml(): void
-    {
-        parent::beforeToHtml();
-        $default = $this->getResolver()->getAssetUrl($this->imageSrc, $this->size);
+        $default = $this->resolver->getAssetUrl($this->imageSrc, $this->size);
 
         if ($default === null) {
             // TODO: render something...
-            return;
+            return '[No default found]';
         }
         $this->default = $default;
 
@@ -135,5 +136,25 @@ class Picture extends TemplateBlock
                 ['type' => 'image/png', 'sizes' => $png],
             ];
         }
+        return parent::toHtml();
+    }
+
+    private function getFormatSrc(AssetSizeInstructionType $forceType, AssetSizeInstruction|null $size = null): FrontendFileUrl|null
+    {
+        $currentExtension = AssetSizeInstructionType::fromFile($this->imageSrc);
+        if ($currentExtension === AssetSizeInstructionType::SVG) {
+            // Do not provide alternatives for SVG images
+            return null;
+        }
+
+        $newSize = AssetSizeInstruction::create($size);
+        $newSize->convert = $forceType;
+
+        return $this->resolver->getAssetUrl($this->imageSrc, $newSize);
+
+
+        /**
+         * Render images for different viewports (based on CSS breakpoints?)
+         */
     }
 }

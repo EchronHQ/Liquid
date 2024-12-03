@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Liquid\Framework\Controller\Result;
 
 use Liquid\Framework\App\Response\HttpResponseInterface;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 
-class Xml extends Result
+class Xml extends AbstractResult
 {
     private string $xml = '';
 

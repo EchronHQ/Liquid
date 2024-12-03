@@ -3,16 +3,27 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Model\Segment;
 
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\Escaper;
+use Liquid\Framework\Url;
 
-class Segment
+class Segment implements SegmentInterface
 {
+    /**
+     * A placeholder for generating base URL
+     */
+    public const string BASE_URL_PLACEHOLDER = '{{base_url}}';
+
     public SegmentId $id;
     public string $code;
     private array $baseUrlCache = [];
 
     public function __construct(
-        private readonly AppConfig $config
+        private readonly SegmentConfig $config,
+        private readonly Request       $request,
+        private readonly Url           $url,
+        private readonly Escaper       $escaper,
     )
     {
     }
@@ -27,18 +38,24 @@ class Segment
 
         $cacheKey = 'web';
         if (!isset($this->baseUrlCache[$cacheKey])) {
-            $hostname = ($_SERVER['REQUEST_SCHEME'] === 'http' ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'];
-            if ($hostname === false) {
-                $hostname = 'http://localhost:8901';
+
+            $url = $this->getConfig('web/unsecure/base_link_url');
+            if ($url) {
+                $url = $this->updatePathUseSegmentCode($url);
             }
-//            var_dump($hostname);
-//            die('--');
-            // TODO: add auto detect url to this as fallback when url is not set in config
-            $url = $this->config->get('site_url', $hostname);
-            $this->baseUrlCache[$cacheKey] = $this->updatePathUseSegment($url);
+            if ($url && str_contains($url, self::BASE_URL_PLACEHOLDER)) {
+                $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->request->getDistroBaseUrl(), $url);
+            }
+            $this->baseUrlCache[$cacheKey] = $url;
         }
 
         return $this->baseUrlCache[$cacheKey];
+    }
+
+    public function getCurrentUrl(): string
+    {
+        $requestString = $this->escaper->escapeUrl(ltrim($this->request->getRequestString(), '/'));
+        return $requestString;
     }
 
     /**
@@ -59,10 +76,19 @@ class Segment
         return $this->code;
     }
 
-    public function getLocaleCode(): string
+    /**
+     * Retrieve store configuration data
+     *
+     * @param string $path
+     * @return  string|null
+     */
+    public function getConfig(string $path): string|null
     {
-        // TODO: further implement this (from config)
-        return $this->config->get('locale', 'en-gb');
+        $data = $this->config->getValue($path, $this->getId());
+        if ($data === null) {
+            $data = $this->config->getValue($path);
+        }
+        return $data === false ? null : $data;
     }
 
     /**
@@ -71,11 +97,11 @@ class Segment
      * @param string $url
      * @return  string
      */
-    protected function updatePathUseSegment(string $url): string
+    protected function updatePathUseSegmentCode(string $url): string
     {
         if ($this->isUseSegmentCodeInUrl()) {
             // TODO: make it possible to use a config value instead of url path for a segment
-            $url .= $this->config->get('url_key', $this->code) . '/';
+            $url .= $this->config->getValue('url_key', $this->id) . '/';
         }
         return $url;
     }

@@ -7,10 +7,10 @@ namespace Liquid\Framework\App;
 use Liquid\Core\Helper\AccessHelper;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Repository\UrlRepository;
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Area\AreaList;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\Router\RouterList;
@@ -24,7 +24,7 @@ class FrontController
 {
     /**
      * @param LoggerInterface $logger
-     * @param \Liquid\Framework\App\Config\AppConfig $config
+     * @param SegmentConfig $config
      * @param RouterList $routerList
      * @param ObjectManager $diContainer
      * @param Resolver $resolver
@@ -35,7 +35,7 @@ class FrontController
      */
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly AppConfig       $config,
+        private readonly SegmentConfig   $config,
         private readonly RouterList      $routerList,
         private readonly ObjectManager   $diContainer,
         private readonly Resolver        $resolver,
@@ -64,7 +64,7 @@ class FrontController
         //  $this->detectLocale($request);
 
 
-        $this->config->setValue('current_path', $request->getPathInfo());
+        // $this->config->setValue('current_path', $request->getPathInfo());
 
         /**
          * TODO: do we need to rewrite before checking access? And removing this method out of "handle"?
@@ -98,16 +98,24 @@ class FrontController
         while (!$request->isMatched() && $routingCycleCounter++ < 100) {
 
             $routerIds = $this->routerList->getRouterIds();
-//            var_dump($routerIds);
+            // var_dump($routerIds);
 //
-//            var_dump($request->getPathInfo() . ' ' . ($request->isMatched() ? 'Y' : 'N'));
+
             foreach ($routerIds as $routerId) {
+
                 try {
                     $router = $this->routerList->getRouterInstance($routerId);
                     // echo get_class($router) . '<br/>';
                     $action = $router->match($request);
                     if ($action !== null) {
+
                         $result = $this->processRequest($request, $action);
+                        $this->logger->debug('Router matched', [
+                            'Request' => $request->getPathInfo(),
+                            'Action' => \get_class($action),
+                            'Router' => $routerId,
+                            'Matched' => $request->isMatched(),
+                        ]);
                         break;
                     }
 
@@ -122,7 +130,7 @@ class FrontController
                     break;
                 }
             }
-
+            //  var_dump($request->getPathInfo() . ' ' . ($request->isMatched() ? 'Y' : 'N'));
         }
         $this->profiler->profilerFinish('frontcontroller.dispatch');
 
@@ -174,10 +182,10 @@ class FrontController
 //            throw $result;
 //        }
         //   if ($result !== null) {
-        $this->logger->debug('Router matched', [
-            'Request' => $request->getPathInfo(),
-            'Action' => \get_class($action),
-        ]);
+//        $this->logger->debug('Router matched', [
+//            'Request' => $request->getPathInfo(),
+//            'Action' => \get_class($action),
+//        ]);
         //  }
         return $result;
     }

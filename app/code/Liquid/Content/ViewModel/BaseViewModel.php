@@ -24,7 +24,7 @@ class BaseViewModel implements ArgumentInterface
         private readonly ObjectManagerInterface $objectManager,
         private readonly Layout                 $layout,
         private readonly Escaper                $escaper,
-        private readonly LoggerInterface        $logger
+        private readonly LoggerInterface        $logger,
     )
     {
     }

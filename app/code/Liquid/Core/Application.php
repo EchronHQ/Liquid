@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Liquid\Core;
 
 use Liquid\Core\Helper\Profiler;
-use Liquid\Core\Model\AppConfig;
 use Liquid\Framework\App\AppInterface;
 use Liquid\Framework\App\AppMode;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\DirectoryList;
@@ -20,7 +20,7 @@ class Application
 {
     private ObjectManagerInterface $objectManager;
     private LoggerInterface|null $logger = null;
-    private AppConfig $config;
+//    private SegmentConfig $config;
 
     private readonly Profiler $profiler;
 
@@ -143,7 +143,7 @@ class Application
 
 
             // Safe to file?
-            if ($this->config->getMode() === AppMode::Develop) {
+            if ($this->isDeveloperMode()) {
 
 
                 echo Error::toHtml($ex);
@@ -160,11 +160,45 @@ class Application
             //throw $ex;
         } finally {
             $this->profiler->profilerFinish('Application:run');
-            if ($this->logger !== null && $this->config->getMode() === AppMode::Develop) {
+            if ($this->logger !== null && $this->isDeveloperMode()) {
                 $this->profiler->output($this->logger);
 
             }
         }
+    }
+
+    /**
+     * Checks whether developer mode is set in the initialization parameters
+     *
+     * @return bool
+     */
+    public function isDeveloperMode(): bool
+    {
+        $mode = AppMode::Develop->value;
+        if (isset($this->server[State::PARAM_MODE])) {
+            $mode = $this->server[State::PARAM_MODE];
+        } else {
+            $appConfig = $this->objectManager->get(\Liquid\Framework\App\Config\SegmentConfig::class);
+            $configMode = $appConfig->getValue(State::PARAM_MODE);
+            if ($configMode) {
+                $mode = $configMode;
+            }
+        }
+        return $mode === AppMode::Develop->value;
+    }
+
+    public function createApplication(string $type, array $arguments = []): AppInterface|null
+    {
+        try {
+            $application = $this->objectManager->create($type, $arguments);
+            if (!($application instanceof AppInterface)) {
+                throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
+            }
+            return $application;
+        } catch (\Exception $e) {
+            $this->terminate($e);
+        }
+        return null;
     }
 
     /**
@@ -199,47 +233,13 @@ class Application
         exit(1);
     }
 
-    /**
-     * Checks whether developer mode is set in the initialization parameters
-     *
-     * @return bool
-     */
-    public function isDeveloperMode(): bool
-    {
-        $mode = AppMode::Develop->value;
-        if (isset($this->server[State::PARAM_MODE])) {
-            $mode = $this->server[State::PARAM_MODE];
-        } else {
-            $appConfig = $this->objectManager->get(\Liquid\Framework\App\Config\AppConfig::class);
-            $configMode = $appConfig->get(State::PARAM_MODE);
-            if ($configMode) {
-                $mode = $configMode;
-            }
-        }
-        return $mode === AppMode::Develop->value;
-    }
-
-    public function createApplication(string $type, array $arguments = []): AppInterface|null
-    {
-        try {
-            $application = $this->objectManager->create($type, $arguments);
-            if (!($application instanceof AppInterface)) {
-                throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
-            }
-            return $application;
-        } catch (\Exception $e) {
-            $this->terminate($e);
-        }
-        return null;
-    }
-
     final protected function getContainer(): ObjectManagerInterface
     {
         return $this->objectManager;
     }
 
-    final protected function getConfig(): AppConfig
-    {
-        return $this->config;
-    }
+//    final protected function getConfig(): SegmentConfig
+//    {
+//        return $this->config;
+//    }
 }

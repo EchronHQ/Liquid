@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\Cache;
 
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\Cache\Storage\Factory;
 
 class CachePool
@@ -27,11 +27,36 @@ class CachePool
     ];
 
     public function __construct(
-        private readonly AppConfig $appConfig,
-        private readonly Factory   $factory
+        private readonly DeploymentConfig $appConfig,
+        private readonly Factory          $factory
     )
     {
 
+    }
+
+    /**
+     * Retrieve frontend instance by its unique identifier
+     *
+     * @param string $identifier Cache storage identifier
+     * @return StorageInterface Cache storage instance
+     * @throws \InvalidArgumentException
+     */
+    public function get(string $identifier): StorageInterface
+    {
+        $this->initialize();
+        if (isset($this->instances[$identifier])) {
+            return $this->instances[$identifier];
+        }
+
+        if (!isset($this->instances[self::DEFAULT_STORAGE_ID])) {
+            throw new \InvalidArgumentException(
+                "Cache frontend '{$identifier}' is not recognized. As well as " .
+                self::DEFAULT_STORAGE_ID .
+                "cache is not configured"
+            );
+        }
+
+        return $this->instances[self::DEFAULT_STORAGE_ID];
     }
 
     /**
@@ -58,30 +83,5 @@ class CachePool
             return array_replace_recursive($this->storageSettings, $cacheInfo[self::KEY_STORAGE_CACHE]);
         }
         return $this->storageSettings;
-    }
-
-    /**
-     * Retrieve frontend instance by its unique identifier
-     *
-     * @param string $identifier Cache storage identifier
-     * @return StorageInterface Cache storage instance
-     * @throws \InvalidArgumentException
-     */
-    public function get(string $identifier): StorageInterface
-    {
-        $this->initialize();
-        if (isset($this->instances[$identifier])) {
-            return $this->instances[$identifier];
-        }
-
-        if (!isset($this->instances[self::DEFAULT_STORAGE_ID])) {
-            throw new \InvalidArgumentException(
-                "Cache frontend '{$identifier}' is not recognized. As well as " .
-                self::DEFAULT_STORAGE_ID .
-                "cache is not configured"
-            );
-        }
-
-        return $this->instances[self::DEFAULT_STORAGE_ID];
     }
 }

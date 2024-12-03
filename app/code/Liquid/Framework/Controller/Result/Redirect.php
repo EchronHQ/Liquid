@@ -5,9 +5,9 @@ namespace Liquid\Framework\Controller\Result;
 
 
 use Liquid\Framework\App\Response\HttpResponseInterface;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 
-class Redirect extends Result
+class Redirect extends AbstractResult
 {
     private string $url;
 

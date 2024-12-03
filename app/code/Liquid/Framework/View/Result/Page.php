@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\View\Result;
 
-use Echron\Liquid\MarkupEngine\Model\Tags\RelatedBlogPostTag;
 use Liquid\Content\Block\Element\DemoCallToActionBlock;
 use Liquid\Content\Block\Element\MarkupEngine\CopyBlockTag;
 use Liquid\Content\Block\Element\MarkupEngine\LinkTag;
@@ -17,7 +16,7 @@ use Liquid\Content\Model\MarkupEngine\TestSection;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\App\Response\HttpResponseInterface;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -53,7 +52,7 @@ class Page extends LayoutPage
         ObjectManagerInterface             $objectManager,
         //        private readonly Builder                $builder,
         private readonly PageConfig        $pageConfig,
-        private readonly AppConfig         $appConfig,
+        private readonly SegmentConfig     $appConfig,
         private readonly Resolver          $resolver,
         private readonly TerminologyHelper $terminologyHelper,
         private readonly LocaleHelper      $localeHelper,
@@ -131,6 +130,34 @@ class Page extends LayoutPage
         return $this;
     }
 
+    /**
+     * Assign view variable
+     *
+     * @param array|string $key
+     * @param mixed|null $value
+     * @return $this
+     */
+    protected function assignViewVar(array|string $key, mixed $value = null): self
+    {
+        if (is_array($key)) {
+            foreach ($key as $subKey => $subValue) {
+                $this->assignViewVar($subKey, $subValue);
+            }
+        } else {
+            $this->viewVars[$key] = $value;
+        }
+        return $this;
+    }
+
+    protected function renderPage(): string
+    {
+        /** @var Template $pageTemplate */
+        $pageTemplate = $this->layout->createBlock(Template::class, '-');
+        $pageTemplate->assign($this->viewVars);
+        $pageTemplate->setTemplate($this->template);
+        return $pageTemplate->toHtml();
+    }
+
     private function engageMarkupEngine(string $layoutOutput): string
     {
         $this->profiler->profilerStart('MarkupEngine:run');
@@ -152,25 +179,6 @@ class Page extends LayoutPage
         return $layoutOutput;
     }
 
-    /**
-     * Assign view variable
-     *
-     * @param array|string $key
-     * @param mixed|null $value
-     * @return $this
-     */
-    protected function assignViewVar(array|string $key, mixed $value = null): self
-    {
-        if (is_array($key)) {
-            foreach ($key as $subKey => $subValue) {
-                $this->assignViewVar($subKey, $subValue);
-            }
-        } else {
-            $this->viewVars[$key] = $value;
-        }
-        return $this;
-    }
-
     private function renderElementAttributes(string $elementType): string
     {
         $resultAttributes = [];
@@ -181,18 +189,9 @@ class Page extends LayoutPage
         return implode(' ', $resultAttributes);
     }
 
-    protected function renderPage(): string
-    {
-        /** @var Template $pageTemplate */
-        $pageTemplate = $this->layout->createBlock(Template::class, '-');
-        $pageTemplate->assign($this->viewVars);
-        $pageTemplate->setTemplate($this->template);
-        return $pageTemplate->toHtml();
-    }
-
     private function sanitizeHtml(string $html): string
     {
-        if ($this->appConfig->getBool('dev.minifyhtml', true)) {
+        if ($this->appConfig->getBoolValue('dev/minifyhtml')) {
             return \Liquid\Framework\Output\Html::minify($html);
         }
         return $html;

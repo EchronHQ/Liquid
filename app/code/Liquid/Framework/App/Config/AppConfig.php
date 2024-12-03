@@ -7,6 +7,9 @@ namespace Liquid\Framework\App\Config;
 use Liquid\Framework\Exception\FileSystemException;
 use Liquid\Framework\Exception\RuntimeException;
 
+/**
+ * @deprecated
+ */
 class AppConfig
 {
     /**
@@ -68,6 +71,30 @@ class AppConfig
         return $result ?? $defaultValue;
     }
 
+    /**
+     * Gets a value specified key from config data
+     *
+     * @param string|null $key
+     * @return null|mixed
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function getConfigData(string|null $key = null): mixed
+    {
+        if ($key === null) {
+            if (empty($this->data)) {
+                $this->reloadInitialData();
+            }
+            return $this->data;
+        }
+        $result = $this->getConfigDataByKey($key);
+        if ($result === null) {
+            $this->reloadInitialData();
+            $result = $this->getConfigDataByKey($key);
+        }
+        return $result;
+    }
+
     private function reloadData(): void
     {
         $this->reloadInitialData();
@@ -104,30 +131,6 @@ class AppConfig
         }
 
         return $this->flatData[$key] ?? null;
-    }
-
-    /**
-     * Gets a value specified key from config data
-     *
-     * @param string|null $key
-     * @return null|mixed
-     * @throws FileSystemException
-     * @throws RuntimeException
-     */
-    public function getConfigData(string|null $key = null): mixed
-    {
-        if ($key === null) {
-            if (empty($this->data)) {
-                $this->reloadInitialData();
-            }
-            return $this->data;
-        }
-        $result = $this->getConfigDataByKey($key);
-        if ($result === null) {
-            $this->reloadInitialData();
-            $result = $this->getConfigDataByKey($key);
-        }
-        return $result;
     }
 
     /**

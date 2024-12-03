@@ -12,7 +12,7 @@ use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Framework\App\Action\Context;
 use Liquid\Framework\App\Route\Attribute\Route;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -37,7 +37,7 @@ class Tag extends FrontendAction
     }
 
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
 
         $tagIdentifier = $this->getRequest()->getParam('tag-id');
@@ -50,7 +50,7 @@ class Tag extends FrontendAction
     }
 
 
-    private function renderPage(TagDefinition $categoryDefinition): Result
+    private function renderPage(TagDefinition $categoryDefinition): AbstractResult
     {
 
         $result = $this->getResultFactory()->create(Page::class);

@@ -44,9 +44,9 @@ class Router implements RouterInterface
         if ($rewrite === null) {
             return null;
         }
-        $this->logger->info('Found url rewrite: ' . $rewrite->request . ' > ' . $rewrite->target);
+        $this->logger->info('Found url rewrite: `' . $rewrite->request . '` > `' . $rewrite->target . '`');
         if ($rewrite->statusCode === UrlRewriteType::INTERNAL) {
-            $this->logger->debug('Rewrite matched', [
+            $this->logger->debug('Rewrite matched (internal)', [
                 'Origin' => $request->getPathInfo(),
                 'Target' => $rewrite->target,
                 //'Action' => \get_class($action),
@@ -54,8 +54,7 @@ class Router implements RouterInterface
             $request->setPathInfo($rewrite->target, $rewrite);
 
             // Forward the request after rewriting the path info to handle it further
-            return $this->actionFactory->create(ForwardAction::class,
-                ['forward' => new Forward($request)]);
+            return $this->actionFactory->create(ForwardAction::class, ['forward' => new Forward($request)]);
         }
 
         $url = $this->resolver->getUrl($rewrite->target);

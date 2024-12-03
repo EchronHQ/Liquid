@@ -10,16 +10,20 @@ return [
                 'areas' => [
                     'type' => 'array',
                     'value' => [
-                        'frontend' => ['frontName' => null, 'router' => 'standard'],
+                        'frontend' => [
+                            'code' => \Liquid\Framework\App\Area\AreaCode::Frontend,
+                            'frontName' => null,
+                            'router' => 'standard',
+                        ],
                     ],
                 ],
                 'defaultAreaCode' => [
-                    'type' => 'string',
-                    'value' => 'frontend',
+                    'type' => 'const',
+                    'value' => \Liquid\Framework\App\Area\AreaCode::Frontend,
                 ],
             ],
         ],
-        Liquid\Framework\App\Router\RouterList::class => [
+        \Liquid\Framework\App\Router\RouterList::class => [
             'arguments' => [
                 'routerList' => [
                     'type' => 'array',
@@ -73,6 +77,19 @@ return [
                     'value' => [
                         'pages' => [
                             'class' => \Liquid\Content\Model\Storage\EntityResolver::class,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        \Liquid\Framework\App\Router\NoRouteHandlerList::class => [
+            'arguments' => [
+                'handlerClassesList' => [
+                    'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_ARRAY,
+                    'value' => [
+                        'default' => [
+                            'class' => \Liquid\Framework\App\Router\NoRouteHandler::class,
+                            'sortOrder' => 100,
                         ],
                     ],
                 ],

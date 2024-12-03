@@ -46,25 +46,37 @@ class AttributeConfigReader implements ConfigReaderInterface
         $routes = [];
         foreach ($classNames as $className) {
             if (!class_exists($className, true)) {
-                $this->logger->warning('[Attribute config reader] Invalid class "' . $className . '" (class does not seem to exist)');
-                break;
-            }
-
-            $reflectionClass = new \ReflectionClass($className);
-
-            $attributes = $reflectionClass->getAttributes($this->attributeClassName);
-            foreach ($attributes as $attribute) {
-                if ($attribute->getName() === $this->attributeClassName) {
-                    /** @var ActionClassAttribute $actionClassData */
-                    $actionClassData = $attribute->newInstance();
-
-                    $routes[$className] = $actionClassData;
+                $this->logger->error('[Attribute config reader] Invalid class "' . $className . '" (class does not seem to exist)');
+            } else {
 
 
+                $reflectionClass = new \ReflectionClass($className);
+
+                $attributes = $reflectionClass->getAttributes($this->attributeClassName);
+                foreach ($attributes as $attribute) {
+                    if ($attribute->getName() === $this->attributeClassName) {
+                        /** @var ActionClassAttribute $actionClassData */
+                        $actionClassData = $attribute->newInstance();
+                        $routes[$className] = $actionClassData;
+                    }
                 }
             }
+
         }
         return $routes;
+    }
+
+
+    /**
+     * Get module directory by directory type
+     *
+     * @param string $type
+     * @param string $moduleName
+     * @return string
+     */
+    protected function getModuleDir(string $type, string $moduleName): string
+    {
+        return $this->moduleDir->getDir($moduleName, $type);
     }
 
     private function getClassNames(): array
@@ -86,17 +98,5 @@ class AttributeConfigReader implements ConfigReaderInterface
             }
         }
         return $actions;
-    }
-
-    /**
-     * Get module directory by directory type
-     *
-     * @param string $type
-     * @param string $moduleName
-     * @return string
-     */
-    protected function getModuleDir(string $type, string $moduleName): string
-    {
-        return $this->moduleDir->getDir($moduleName, $type);
     }
 }

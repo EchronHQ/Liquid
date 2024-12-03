@@ -41,6 +41,29 @@ class RouteConfig
     }
 
     /**
+     * Retrieve list of modules by route front name
+     *
+     * @param string $frontName
+     * @param AreaCode|null $scope
+     * @return Route[]
+     * @throws \ReflectionException
+     */
+    public function getActions(string $frontName, AreaCode|null $scope = null): array
+    {
+        return $this->getRoutes($scope);
+
+//        $modules = [];
+//        foreach ($routes as $route => $routeData) {
+//            if ($route === $frontName) {
+//                foreach ($routeData as $subRouteKey => $subRoute) {
+//                    $modules[$subRouteKey] = $subRoute;
+//                }
+//            }
+//        }
+//        return array_unique($modules);
+    }
+
+    /**
      * @param AreaCode|null $scope
      * @return Route[]
      * @throws \ReflectionException
@@ -48,7 +71,6 @@ class RouteConfig
     protected function getRoutes(AreaCode|null $scope = null): array
     {
         $scope = $scope ?: $this->scopeConfig->getCurrentScope();
-
         if (isset($this->routes[$scope->value])) {
             return $this->routes[$scope->value];
         }
@@ -71,37 +93,20 @@ class RouteConfig
     }
 
     /**
-     * @param string $routerId
+     * @param string|null $routerId
      * @param AreaCode $scope
      * @return Route[]
      * @throws \ReflectionException
      */
-    protected function getRoutesByRouterId(string $routerId, AreaCode $scope): array
+    protected function getRoutesByRouterId(string|null $routerId, AreaCode $scope): array
     {
-        return $this->reader->read($scope->value);
-    }
+        $routers = $this->reader->read($scope->value);
 
-    /**
-     * Retrieve list of modules by route front name
-     *
-     * @param string $frontName
-     * @param AreaCode|null $scope
-     * @return Route[]
-     * @throws \ReflectionException
-     */
-    public function getActions(string $frontName, AreaCode|null $scope = null): array
-    {
-        return $this->getRoutes($scope);
-
-//        $modules = [];
-//        foreach ($routes as $route => $routeData) {
-//            if ($route === $frontName) {
-//                foreach ($routeData as $subRouteKey => $subRoute) {
-//                    $modules[$subRouteKey] = $subRoute;
-//                }
-//            }
-//        }
-//        return array_unique($modules);
+        if (isset($routers[$routerId])) {
+            return $routers[$routerId];
+        }
+        die('No routes for router `' . $routerId . '`');
+        return [];
     }
 
 }

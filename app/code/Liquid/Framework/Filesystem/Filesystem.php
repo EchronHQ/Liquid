@@ -10,7 +10,9 @@ class Filesystem
 {
     private array $readInstances = [];
 
-    public function __construct(private readonly DirectoryList $directoryList)
+    public function __construct(
+        private readonly DirectoryList $directoryList
+    )
     {
 
     }

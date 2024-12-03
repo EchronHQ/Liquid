@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\ObjectManager;
 
-interface ObjectManagerInterface
+use Psr\Container\ContainerInterface;
+
+interface ObjectManagerInterface extends ContainerInterface
 {
     /**
      * Create new object instance

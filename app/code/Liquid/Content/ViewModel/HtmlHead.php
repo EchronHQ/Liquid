@@ -14,8 +14,9 @@ use Liquid\Content\Model\Segment\SegmentManager;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Framework\App\AppMode;
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\App\State;
+use Liquid\Framework\Locale\ResolverInterface;
 use Liquid\Framework\Output\Html;
 use Liquid\Framework\Url;
 use Liquid\Framework\View\Element\ArgumentInterface;
@@ -42,15 +43,22 @@ class HtmlHead implements ArgumentInterface
     public function __construct(
         private readonly PageConfig         $pageConfig,
         private readonly FrontendFileHelper $frontendFileHelper,
+        private readonly ResolverInterface  $localeResolver,
         private readonly Resolver           $resolver,
         private readonly SegmentManager     $segmentManager,
         private readonly Url                $url,
-        private readonly AppConfig          $config,
+        private readonly SegmentConfig      $config,
         private readonly State              $appState,
         private readonly LoggerInterface    $logger
     )
     {
 
+    }
+
+    public function getLocaleCode(): string
+    {
+        // TODO: get exact code from config
+        return $this->localeResolver->getLocale();
     }
 
     public function getPageConfig(): PageConfig
@@ -84,7 +92,7 @@ class HtmlHead implements ArgumentInterface
             $this->logger->error('Unable to get Critical CSS from file');
             return '';
         }
-        if ($this->config->getBool('dev.minifycss', true)) {
+        if ($this->config->isSetFlag('dev.minifycss')) {
             $criticalCss = Html::minifyCss($criticalCss);
         }
 
@@ -231,8 +239,7 @@ class HtmlHead implements ArgumentInterface
 
     public function getCurrentUrl(): string
     {
-        // TODO: implement this
-        return $this->config->get('current_url', '');
+        return $this->segmentManager->getSegment()->getCurrentUrl();
     }
 
     final public function getLdData(): array
@@ -251,12 +258,12 @@ class HtmlHead implements ArgumentInterface
         if (!$this->isGoogleTagManagerEnabled()) {
             return '';
         }
-        return $this->config->get('seo.googletagmanager.code', '');
+        return $this->config->getValue('seo/googletagmanager/code');
     }
 
     public function isGoogleTagManagerEnabled(): bool
     {
-        return $this->config->getBool('seo.googletagmanager.enabled', false);
+        return $this->config->getValue('seo/googletagmanager/enabled') === true;
     }
 
     private function getFrontendBuildUrl(string $fileName): string

@@ -9,9 +9,10 @@ use Liquid\Core\Helper\DisableMagicMethodsTrait;
 use Liquid\Core\Helper\FileHelper;
 use Liquid\Core\Helper\Output;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Core\Model\AppConfig;
 use Liquid\Core\Model\BlockContext;
 use Liquid\Framework\App\AppMode;
+use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\View\Element\AbstractBlock;
 use Liquid\Framework\View\Layout\Layout;
 use Psr\Log\LoggerInterface;
 
@@ -19,7 +20,7 @@ class Block extends AbstractBlock
 {
     use DisableMagicMethodsTrait;
 
-    protected AppConfig $configuration;
+    protected SegmentConfig $configuration;
     protected Layout|null $layout;
     protected Resolver $resolver;
     protected FileHelper $fileHelper;
@@ -29,9 +30,11 @@ class Block extends AbstractBlock
 
     public function __construct(
         BlockContext $context,
+        string       $nameInLayout = '',
+        array        $data = []
     )
     {
-        parent::__construct();
+        parent::__construct($context->layout, $nameInLayout, $data);
 
         $this->configuration = $context->configuration;
         $this->layout = $context->layout;
@@ -68,11 +71,6 @@ class Block extends AbstractBlock
         return $output;
     }
 
-    protected function beforeToHtml(): void
-    {
-
-    }
-
     public function getChildNames(): array
     {
         return $this->getLayout()->getChildNames($this->getNameInLayout());
@@ -83,29 +81,7 @@ class Block extends AbstractBlock
         return $this->layout;
     }
 
-    protected function handleUnableToRender(\Throwable $ex): string
-    {
-        $this->logger->error('Unable to render block', ['name' => $this->getNameInLayout(), 'class' => \get_class($this), 'error' => $ex->getMessage(), 'file' => $ex->getFile() . ':' . $ex->getLine()]);
-        if ($this->configuration->getMode() === AppMode::Develop) {
-            return '<div style="background:rgb(255 255 255 / 80%);border:2px dashed red;padding: 10px;margin:10px;position: absolute;z-index: 999;border-radius: 6px"><div>Unable to render block "' . $this->getNameInLayout() . '"</div><div>Class: "' . \get_class($this) . '</div><div>Msg: ' . $ex->getMessage() . '</div></div>';
-        }
-
-        return '';
-    }
-
-
-
-    final protected function getFileContent(string $path, bool $allowCache = true): string
-    {
-        if (!$this->fileHelper->fileExist($path)) {
-            $this->logger->error('Unable to get file content, file does not exist', ['path' => $path]);
-            //            throw new \Exception('Path does not exist: ' . $path);
-            return '';
-        }
-        return $this->fileHelper->getFileContent($path, $allowCache);
-    }
-
-    public function getConfiguration(): AppConfig
+    public function getConfiguration(): SegmentConfig
     {
         return $this->configuration;
     }
@@ -137,6 +113,31 @@ class Block extends AbstractBlock
     final public function getLogger(): LoggerInterface
     {
         return $this->logger;
+    }
+
+    protected function beforeToHtml(): void
+    {
+
+    }
+
+    protected function handleUnableToRender(\Throwable $ex): string
+    {
+        $this->logger->error('Unable to render block', ['name' => $this->getNameInLayout(), 'class' => \get_class($this), 'error' => $ex->getMessage(), 'file' => $ex->getFile() . ':' . $ex->getLine()]);
+        if ($this->configuration->getMode() === AppMode::Develop) {
+            return '<div style="background:rgb(255 255 255 / 80%);border:2px dashed red;padding: 10px;margin:10px;position: absolute;z-index: 999;border-radius: 6px"><div>Unable to render block "' . $this->getNameInLayout() . '"</div><div>Class: "' . \get_class($this) . '</div><div>Msg: ' . $ex->getMessage() . '</div></div>';
+        }
+
+        return '';
+    }
+
+    final protected function getFileContent(string $path, bool $allowCache = true): string
+    {
+        if (!$this->fileHelper->fileExist($path)) {
+            $this->logger->error('Unable to get file content, file does not exist', ['path' => $path]);
+            //            throw new \Exception('Path does not exist: ' . $path);
+            return '';
+        }
+        return $this->fileHelper->getFileContent($path, $allowCache);
     }
 
     final protected function renderTemplate(string $path): string

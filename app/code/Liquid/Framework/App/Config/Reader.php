@@ -10,8 +10,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class Reader
 {
-    public const APP_CONFIG = 'app_config';
-    public const APP_ENV = 'app_env';
+    public const string APP_CONFIG = 'app_config';
+    public const string APP_ENV = 'app_env';
 
     // TODO: add additional config files if needed?
     private array $applicationConfigFiles = [
@@ -21,7 +21,9 @@ class Reader
         self::APP_ENV => 'env.yml',
     ];
 
-    public function __construct(private DirectoryList $directoryList)
+    public function __construct(
+        private readonly DirectoryList $directoryList
+    )
     {
 
     }

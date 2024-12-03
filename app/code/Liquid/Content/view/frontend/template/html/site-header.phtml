@@ -14,12 +14,14 @@ $viewModel = $block->getViewModel('base');
 $navigationViewModel = $block->getViewModel('navigation');
 
 $resolver = $viewModel->getResolver();
+
+$helper = $this->helper(\Liquid\Content\Helper\ViewableEntity::class);
 ?>
 <header class="site-header">
     <div class="container">
         <div class="wrapper">
             <div class="logo">
-                <a href="<?= $viewModel->getUrl()->getPageUrl('home') ?>" aria-label="Attlaz">
+                <a href="<?= $helper->getUrl('home') ?>" aria-label="Attlaz">
                     <img height="30px" width="130px" class="logo-light"
                          src="<?= $resolver->getFrontendFileImageUrl('asset/logo-light.svg')->url ?>" alt="Attlaz">
                     <img height="30px" width="130px" class="logo-dark"
@@ -60,7 +62,7 @@ $resolver = $viewModel->getResolver();
                                                         >
                                                             <div class="item-icon">
                                                                 <?= $viewModel->renderSVG($navItemSubSectionItem['icon']) ?>
-<!--                                                                <img loading="lazy"-->
+                                                                <!--                                                                <img loading="lazy"-->
                                                                 <!--                                                                     src="-->
                                                                 <?php //= $navItemSubSectionItem['icon'] ?><!--"-->
                                                                 <!--                                                                     alt="-->

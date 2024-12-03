@@ -6,7 +6,7 @@ namespace Liquid\Content\Helper;
 
 use Liquid\Blog\Repository\TerminologyRepository;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Core\Model\AppConfig;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Psr\Log\LoggerInterface;
 
 class TerminologyHelper
@@ -16,16 +16,10 @@ class TerminologyHelper
     public function __construct(
         private readonly TerminologyRepository $terminologyRepository,
         private readonly Resolver              $resolver,
-        private readonly AppConfig             $appConfig,
+        private readonly SegmentConfig         $appConfig,
         private readonly LoggerInterface       $logger
-    ) {
-    }
-
-    private function getBetween(string $content): array
+    )
     {
-        preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $content, $matches);
-
-        return $matches;
     }
 
     public function buildTerms(string $input): string
@@ -66,27 +60,6 @@ class TerminologyHelper
         return \str_replace($toReplace, $buildTerms, $input);
     }
 
-    private function loadTerms(): bool
-    {
-        $terms = $this->terminologyRepository->getAll();
-        foreach ($terms as $termDefinition) {
-            $this->addTerm($termDefinition->id, $this->resolver->getUrl($termDefinition->getUrlPath()));
-        }
-        return true;
-    }
-
-    private function getTerm(string $term): array|null
-    {
-        if ($this->terms === null) {
-            $loaded = $this->loadTerms();
-            if (!$loaded) {
-                return null;
-            }
-        }
-        $term = $this->formatTerm($term);
-        return $this->terms[$term] ?? null;
-    }
-
     public function addTerm(string $term, string $target): void
     {
         if ($this->terms === null) {
@@ -96,11 +69,6 @@ class TerminologyHelper
         $this->terms[$term] = [
             'target' => $target,
         ];
-    }
-
-    private function formatTerm(string $term): string
-    {
-        return \str_replace([' '], ['-'], \strtolower($term));
     }
 
     public function findMissingTerms(string $input): void
@@ -128,6 +96,39 @@ class TerminologyHelper
         }
 
 
+    }
+
+    private function getBetween(string $content): array
+    {
+        preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $content, $matches);
+
+        return $matches;
+    }
+
+    private function loadTerms(): bool
+    {
+        $terms = $this->terminologyRepository->getAll();
+        foreach ($terms as $termDefinition) {
+            $this->addTerm($termDefinition->id, $this->resolver->getUrl($termDefinition->getUrlPath()));
+        }
+        return true;
+    }
+
+    private function getTerm(string $term): array|null
+    {
+        if ($this->terms === null) {
+            $loaded = $this->loadTerms();
+            if (!$loaded) {
+                return null;
+            }
+        }
+        $term = $this->formatTerm($term);
+        return $this->terms[$term] ?? null;
+    }
+
+    private function formatTerm(string $term): string
+    {
+        return \str_replace([' '], ['-'], \strtolower($term));
     }
 
 

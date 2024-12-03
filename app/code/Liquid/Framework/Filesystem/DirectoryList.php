@@ -5,8 +5,8 @@ namespace Liquid\Framework\Filesystem;
 
 class DirectoryList
 {
-    public const PATH = 'path';
-    public const URL_PATH = 'uri';
+    public const string PATH = 'path';
+    public const string URL_PATH = 'uri';
 
     private array $directories;
     private string $root;
@@ -37,11 +37,6 @@ class DirectoryList
         }
     }
 
-    private function normalizePath(string|null $path): string
-    {
-        return $path !== null ? str_replace('\\', '/', $path) : '';
-    }
-
     private static function getDefaultConfig(): array
     {
         return [
@@ -56,6 +51,27 @@ class DirectoryList
 
             Path::STATIC_VIEW->name => [self::PATH => 'pub/static', self::URL_PATH => 'static'],
         ];
+    }
+
+    public function getPath(Path $path): string
+    {
+        if (!isset($this->directories[$path->name][self::PATH])) {
+            throw new \Exception('Not defined');
+        }
+        return $this->directories[$path->name][self::PATH];
+    }
+
+    public function getUrlPath(Path $path): string
+    {
+        if (!isset($this->directories[$path->name][self::URL_PATH])) {
+            throw new \Exception('Not defined');
+        }
+        return $this->directories[$path->name][self::URL_PATH];
+    }
+
+    private function normalizePath(string|null $path): string
+    {
+        return $path !== null ? str_replace('\\', '/', $path) : '';
     }
 
     private function isAbsolute(string|null $path): bool
@@ -102,21 +118,5 @@ class DirectoryList
                 "URL path must be relative directory path in lowercase with '/' directory separator: '{$urlPath}'"
             );
         }
-    }
-
-    public function getPath(Path $path): string
-    {
-        if (!isset($this->directories[$path->name][self::PATH])) {
-            throw new \Exception('Not defined');
-        }
-        return $this->directories[$path->name][self::PATH];
-    }
-
-    public function getUrlPath(Path $path): string
-    {
-        if (!isset($this->directories[$path->name][self::URL_PATH])) {
-            throw new \Exception('Not defined');
-        }
-        return $this->directories[$path->name][self::URL_PATH];
     }
 }

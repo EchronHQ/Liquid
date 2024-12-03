@@ -15,8 +15,10 @@ use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
 class BaseRouter implements RouterInterface
 {
-    protected array $_requiredParams = ['moduleFrontName', 'actionPath', 'actionName'];
-    protected string|null $pathPrefix = null;
+    protected bool $requestHasAreaFrontName = false;
+
+//    protected array $_requiredParams = ['moduleFrontName', 'actionPath', 'actionName'];
+//    protected string|null $pathPrefix = null;
     protected string $defaultPath = '';
     protected array $reservedWords = [
         'abstract', ' and ', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone ', 'const',
@@ -110,30 +112,59 @@ class BaseRouter implements RouterInterface
 //        }
 //        return $modules;
 //    }
-
+    /**
+     * @param Request $request
+     * @return array{areaFrontName: string, actionPath: string}
+     */
     protected function parseRequest(Request $request): array
     {
         $output = [];
         $path = trim($request->getPathInfo(), '/');
         $params = explode('/', $path !== '' ? $path : $this->defaultPath);
-        foreach ($this->_requiredParams as $paramName) {
-            $output[$paramName] = array_shift($params);
-        }
 
-        for ($i = 0, $l = count($params); $i < $l; $i += 2) {
-            $output['variables'][$params[$i]] = isset($params[$i + 1]) ? urldecode($params[$i + 1]) : '';
-        }
+        // The first param is the area front name (for example admin code)
+        $output['areaFrontName'] = $this->requestHasAreaFrontName ? array_shift($params) : null;
+
+
+        $output['actionPath'] = implode('/', $params);
+
+//        foreach ($this->_requiredParams as $paramName) {
+//            $output[$paramName] = array_shift($params);
+//        }
+
+//
+//        for ($i = 0, $l = count($params); $i < $l; $i += 2) {
+//            $output['variables'][$params[$i]] = isset($params[$i + 1]) ? urldecode($params[$i + 1]) : '';
+//        }
         return $output;
     }
 
+    /**
+     * @param Request $request
+     * @param array{areaFrontName: string, actionPath: string} $params
+     * @return ActionInterface|null
+     * @throws \ReflectionException
+     */
     protected function matchAction(Request $request, array $params): ActionInterface|null
     {
-        $moduleFrontName = $this->matchModuleFrontName($request, $params['moduleFrontName']);
-        if (\is_null($moduleFrontName)) {
-            return null;
-        }
-        $actions = $this->routeConfig->getActions($moduleFrontName);
+//        $moduleFrontName = $this->matchModuleFrontName($request, $params['moduleFrontName']);
+//        if (\is_null($moduleFrontName)) {
+//            return null;
+//        }
+        //  var_dump($moduleFrontName);
+        $actions = $this->routeConfig->getActions('thisisnolongerused');
 
+        if (false) {
+            /**
+             * Debug
+             */
+            echo '<div>' . 'Request Path: ' . $request->getPathInfo() . '</div>';
+            echo '<div>Frontname: ' . $params["areaFrontName"] . '</div>';
+            echo '<div>Action: ' . $params["actionPath"] . '</div>';
+            foreach ($actions as $action) {
+                echo '<div>' . implode('|', $action->methods) . ' ' . $action->path . ' (' . $action->class . ')</div>';
+            }
+        }
         if (empty($actions)) {
             return null;
         }
@@ -189,10 +220,10 @@ class BaseRouter implements RouterInterface
 //
 //        $debug .= '</div>';
         // echo $debug;
-        foreach ($actions as $module) {
+        foreach ($actions as $action) {
 
             // echo $module->path . '<br/>';
-            $actionClassName = $this->getActionClassNew($module, $request->getPathInfo(), $request);
+            $actionClassName = $this->getActionClassNew($action, $params['actionPath'], $request);
 
             if ($actionClassName !== null) {
                 // TODO: handle exceptions
@@ -202,9 +233,9 @@ class BaseRouter implements RouterInterface
 //                    throw new \RuntimeException('Action should be "' . AbstractAction::class . '", "' . get_class($actionInstance) . '" given');
 //                }
 
-                if (isset($params['variables'])) {
-                    $request->setParams($params['variables']);
-                }
+//                if (isset($params['variables'])) {
+//                    $request->setParams($params['variables']);
+//                }
 
                 //                echo '<pre>' . \json_encode($request->getParams(), \JSON_PRETTY_PRINT) . '</pre>';
                 return $actionInstance;
@@ -229,7 +260,7 @@ class BaseRouter implements RouterInterface
             $moduleFrontName = $param;
         } else {
             //            $moduleFrontName = $this->_defaultPath->getPart('module');
-            //            $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, '');
+            //            $request->setAlias(\Liquid\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, '');
             //            if (!$moduleFrontName) {
             //                return null;
             //            }

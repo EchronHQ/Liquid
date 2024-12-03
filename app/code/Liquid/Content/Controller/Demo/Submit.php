@@ -13,7 +13,7 @@ use Liquid\Content\Helper\RecaptchaHelper;
 use Liquid\Content\Repository\FormRepository;
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\Context;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
@@ -38,7 +38,7 @@ class Submit extends AbstractAction
 //    }
 
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
         $request = $this->getRequest();
         if (!$request->isAjax()) {

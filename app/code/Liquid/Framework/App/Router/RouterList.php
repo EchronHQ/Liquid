@@ -10,7 +10,10 @@ class RouterList
 {
     private array $routerList = [];
 
-    public function __construct(private readonly ObjectManager $objectManager, array $routerList)
+    public function __construct(
+        private readonly ObjectManager $objectManager,
+        array                          $routerList
+    )
     {
         $this->routerList = array_filter(
             $routerList,

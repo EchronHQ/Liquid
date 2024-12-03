@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element\MarkupEngine;
 
+use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Core\Helper\FileHelper;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\State;
-use Liquid\Framework\Url;
 use Liquid\Framework\View\Element\Template\File\TemplateFileResolver;
 use Liquid\Framework\View\Layout\Layout;
 use Liquid\Framework\View\TemplateEngine;
@@ -17,7 +17,18 @@ class LinkTag extends \Liquid\Framework\View\Element\Template
 {
     protected string|null $template = 'element/markupengine/link.phtml';
 
-    public function __construct(Layout $layout, TemplateFileResolver $templateFileResolver, TemplateEngine $templateEngine, State $appState, Profiler $profiler, FileHelper $fileHelper, LoggerInterface $logger, private readonly Url $url, string $nameInLayout = '', array $data = [])
+    public function __construct(
+        Layout                          $layout,
+        TemplateFileResolver            $templateFileResolver,
+        TemplateEngine                  $templateEngine,
+        State                           $appState,
+        Profiler                        $profiler,
+        FileHelper                      $fileHelper,
+        LoggerInterface                 $logger,
+        private readonly ViewableEntity $viewableEntityHelper,
+        string                          $nameInLayout = '',
+        array                           $data = []
+    )
     {
         parent::__construct($layout, $templateFileResolver, $templateEngine, $appState, $profiler, $fileHelper, $logger, $nameInLayout, $data);
     }
@@ -39,7 +50,7 @@ class LinkTag extends \Liquid\Framework\View\Element\Template
 
         $page = $this->getData('page');
         if ($page !== null) {
-            return $this->url->getPageUrl($page);
+            return $this->viewableEntityHelper->getUrl($page);
         }
         $link = $this->getData('link');
         if ($link !== null) {

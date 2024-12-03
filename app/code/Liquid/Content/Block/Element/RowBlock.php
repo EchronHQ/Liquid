@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element;
 
-use Liquid\Core\Model\Layout\AbstractBlock;
+use Liquid\Framework\View\Element\AbstractBlock;
 
 class RowBlock extends AbstractBlock
 {

@@ -30,7 +30,6 @@ class HttpApp implements AppInterface
         $this->state->setAreaCode($areaCode);
         $this->objectManager->configure($this->configLoader->load($areaCode));
 
-
         $frontController = $this->objectManager->get(FrontController::class);
 
         $result = $frontController->dispatch($this->request);

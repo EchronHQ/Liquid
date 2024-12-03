@@ -40,7 +40,7 @@ $pageConfig = $viewModel->getPageConfig();
     <?php
     $segments = $viewModel->getAlternativeSegments();
     foreach ($segments as $segment):
-        $hrefLang = $escaper->escapeHtmlAttribute($segment->getLocaleCode());
+        $hrefLang = $escaper->escapeHtmlAttribute($viewModel->getLocaleCode());
         $urlForLocale = $viewModel->getCurrentUrlForSegment($segment);
         ?>
         <link rel="alternate" hreflang="<?= $hrefLang ?>" href="<?= $escaper->escapeHtmlAttribute($urlForLocale) ?>"/>

@@ -147,7 +147,6 @@ class MergeLayoutProcessor
     public function getCacheId(): string
     {
         $layoutCacheKeys = [];// $this->layoutCacheKey->getCacheKeys();
-        // phpcs:ignore Magento2.Security.InsecureFunction
         return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
     }
 

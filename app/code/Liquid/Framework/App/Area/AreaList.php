@@ -15,17 +15,17 @@ class AreaList
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param array<AreaCode,array> $areas
-     * @param string|null $defaultAreaCode
+     * @param array<string,array> $areas
+     * @param AreaCode|null $defaultAreaCode
      */
     public function __construct(
         private readonly ObjectManagerInterface $objectManager,
         private readonly array                  $areas = [],
-        string|null                             $defaultAreaCode = null
+        AreaCode|null                           $defaultAreaCode = null
     )
     {
         if ($defaultAreaCode !== null) {
-            $this->defaultAreaCode = AreaCode::tryFrom($defaultAreaCode);
+            $this->defaultAreaCode = $defaultAreaCode;
         }
     }
 
@@ -38,12 +38,13 @@ class AreaList
     public function getCodeByFrontName(string $frontName): AreaCode|null
     {
         foreach ($this->areas as $areaCode => $areaInfo) {
-//            if (!isset($areaInfo['frontName']) && isset($areaInfo['frontNameResolver'])) {
-//                $resolver = $this->_resolverFactory->create($areaInfo['frontNameResolver']);
-//                $areaInfo['frontName'] = $resolver->getFrontName(true);
-//            }
+            if (!isset($areaInfo['frontName']) && isset($areaInfo['frontNameResolver'])) {
+                /** @var FrontNameResolverInterface $resolver */
+                $resolver = $this->objectManager->create($areaInfo['frontNameResolver']);
+                $areaInfo['frontName'] = $resolver->getFrontName(true);
+            }
             if (isset($areaInfo['frontName']) && $areaInfo['frontName'] === $frontName) {
-                return $areaCode;
+                return $areaInfo['code'];
             }
         }
         return $this->defaultAreaCode;
@@ -56,7 +57,9 @@ class AreaList
      */
     public function getCodes(): array
     {
-        return array_keys($this->areas);
+        return array_map(function ($area) {
+            return $area['code'];
+        }, $this->areas);
     }
 
     /**

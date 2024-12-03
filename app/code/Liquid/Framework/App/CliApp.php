@@ -21,7 +21,6 @@ use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Seo\Console\SeoReportCommand;
 use Liquid\Seo\Console\SitemapDrawCommand;
 use Liquid\Seo\Console\SitemapGenerateCommand;
-use Magento\Framework\App\Area;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
 class CliApp implements AppInterface

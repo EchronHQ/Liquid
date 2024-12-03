@@ -6,12 +6,16 @@ namespace Liquid\Framework\View\Element;
 use Liquid\Framework\DataObject;
 use Liquid\Framework\View\Layout\Layout;
 
+/**
+ * Avoid inheriting from this class. Will be deprecated.
+ * @deprecated
+ */
 abstract class AbstractBlock extends DataObject implements BlockInterface
 {
 
     public function __construct(
         private Layout $layout,
-        private string $nameInLayout,
+        private string $nameInLayout = '',
         array          $data = []
     )
     {

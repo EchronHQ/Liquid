@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
-use Liquid\Core\Model\AppConfig;
 use Liquid\Framework\App\Cache\Type\FileInfo;
 use Liquid\Framework\Serialize\Serializer\Serialize;
 use Psr\Log\LoggerInterface;
@@ -19,7 +18,6 @@ readonly class FileHelper
 
     public function __construct(
         private FileInfo        $cache,
-        private AppConfig       $configuration,
         private Serialize       $serialize,
         private LoggerInterface $logger
     )
@@ -32,11 +30,6 @@ readonly class FileHelper
     {
         $cacheKey = $this->cleanupPathForKey($path, self::KEY_PREFIX_FILE_EXIST);
         $saved = $this->cache->save($exist ? '1' : '0', $cacheKey, [], new \DateInterval('P5D'));
-    }
-
-    private function cleanupPathForKey(string $path, string $prefix = ''): string
-    {
-        return $prefix . '-' . str_replace(['.'], [''], strtolower($path));
     }
 
     public function clearFileExists(string $path): void
@@ -158,6 +151,11 @@ readonly class FileHelper
         if (!$copied) {
             throw new \Error('File not copied');
         }
+    }
+
+    private function cleanupPathForKey(string $path, string $prefix = ''): string
+    {
+        return $prefix . '-' . str_replace(['.'], [''], strtolower($path));
     }
 
 

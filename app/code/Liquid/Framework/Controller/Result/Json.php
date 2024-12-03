@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace Liquid\Framework\Controller\Result;
 
 use Liquid\Framework\App\Response\ResponseInterface;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 
-class Json extends Result
+class Json extends AbstractResult
 {
     private string $json = '';
 
     public function __construct(
-        private \Liquid\Framework\Serialize\Serializer\Json $serializer
+        private readonly \Liquid\Framework\Serialize\Serializer\Json $serializer
     )
     {
 
@@ -23,7 +23,7 @@ class Json extends Result
         return $this;
     }
 
-    protected function render(ResponseInterface $response): Result
+    protected function render(ResponseInterface $response): AbstractResult
     {
         $response->setHeader('Content-Type', 'application/json', true);
         $response->setContent($this->json);

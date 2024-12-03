@@ -7,7 +7,24 @@ return [
                 'areas' => [
                     'type' => 'array',
                     'value' => [
-                        'adminhtml' => ['frontNameResolver' => '', 'router' => 'admin'],
+                        'admin' => [
+                            'code' => \Liquid\Framework\App\Area\AreaCode::Admin,
+                            'frontNameResolver' => \Liquid\Admin\App\Area\FrontNameResolver::class,
+                            'router' => 'admin',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        \Liquid\Framework\App\Router\NoRouteHandlerList::class => [
+            'arguments' => [
+                'handlerClassesList' => [
+                    'type' => 'array',
+                    'value' => [
+                        'admin' => [
+                            'class' => \Liquid\Admin\App\Router\NoRouteHandler::class,
+                            'sortOrder' => 10,
+                        ],
                     ],
                 ],
             ],

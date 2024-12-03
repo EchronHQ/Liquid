@@ -7,7 +7,7 @@ use Attlaz\AttlazMonolog\Handler\AttlazHandler;
 use Attlaz\Client;
 use Attlaz\Model\Log\LogStreamId;
 use Liquid\Framework\App\AppMode;
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Monolog\ErrorHandler;
 use Monolog\Handler\BrowserConsoleHandler;
@@ -23,8 +23,7 @@ class LoggerProxy implements LoggerInterface
     private LoggerInterface|null $logger = null;
 
     public function __construct(
-        private readonly ObjectManagerInterface $objectManager,
-        private readonly AppConfig              $appConfig
+        private readonly ObjectManagerInterface $objectManager
     )
     {
 
@@ -104,7 +103,7 @@ class LoggerProxy implements LoggerInterface
     {
         if ($this->logger === null) {
 
-
+            $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
             $this->logger = new Logger('Attlaz Site');
 
             ErrorHandler::register($this->logger);
@@ -112,10 +111,10 @@ class LoggerProxy implements LoggerInterface
              * Slack handler
              */
             if (false):
-                $slackHook = $this->appConfig->get('logger.slack.webhook');
-                $slackChannel = $this->appConfig->get('logger.slack.webhook');
-                $slackUsername = $this->appConfig->get('logger.slack.webhook');
-                $slackMinLogLevel = $this->appConfig->get('logger.slack.minloglevel', Level::Info->name);
+                $slackHook = $deploymentConfig->getValue('logger.slack.webhook');
+                $slackChannel = $deploymentConfig->getValue('logger.slack.webhook');
+                $slackUsername = $deploymentConfig->getValue('logger.slack.webhook');
+                $slackMinLogLevel = $deploymentConfig->getValue('logger.slack.minloglevel', Level::Info->name);
                 $slackHandler = new SlackWebhookHandler($slackHook, $slackChannel, $slackUsername, true, null, false, true);
                 $slackHandler->setLevel($slackMinLogLevel);
                 if ($this->enableDebug()) {
@@ -125,9 +124,9 @@ class LoggerProxy implements LoggerInterface
                 //                return;
 
             endif;
-            //  if (!$this->appConfig->isCLI() && $this->appConfig->getMode() === AppMode::Develop) {
+            //  if (!$this->appConfig->isCLI() && $deploymentConfig->getValueMode() === AppMode::Develop) {
 
-            $browserMinLogLevel = $this->appConfig->get('logger.browser.minloglevel', Level::Debug->name);
+            $browserMinLogLevel = $deploymentConfig->getValue('logger.browser.minloglevel', Level::Debug->name);
 
             //  var_dump($browserMinLogLevel);
             $browserConsoleHandler = new BrowserConsoleHandler();
@@ -141,24 +140,24 @@ class LoggerProxy implements LoggerInterface
             //        $this->logger->pushHandler($cliHandler);
 
 
-            $attlazLogStreamId = $this->appConfig->get('logger.attlaz.logstream_id', '');
+            $attlazLogStreamId = $deploymentConfig->getValue('logger.attlaz.logstream_id', '');
             if ($attlazLogStreamId !== '') {
 
                 $client = new Client();
 
-                $attlazClientToken = $this->appConfig->get('logger.attlaz.client_token', '');
+                $attlazClientToken = $deploymentConfig->getValue('logger.attlaz.client_token', '');
                 if ($attlazClientToken === '') {
-                    $attlazClientId = $this->appConfig->get('logger.attlaz.client_id');
-                    $attlazClientSecret = $this->appConfig->get('logger.attlaz.client_secret');
+                    $attlazClientId = $deploymentConfig->getValue('logger.attlaz.client_id');
+                    $attlazClientSecret = $deploymentConfig->getValue('logger.attlaz.client_secret');
                     $client->authWithClient($attlazClientId, $attlazClientSecret);
                 } else {
                     $client->authWithToken($attlazClientToken);
                 }
 
 
-                $attlazApiEndpoint = $this->appConfig->get('logger.attlaz.endpoint');
+                $attlazApiEndpoint = $deploymentConfig->getValue('logger.attlaz.endpoint');
 
-                $attlazMinLogLevel = $this->appConfig->get('logger.attlaz.minloglevel', Level::Info->name);
+                $attlazMinLogLevel = $deploymentConfig->getValue('logger.attlaz.minloglevel', Level::Info->name);
 
 
                 $client->setEndPoint($attlazApiEndpoint);
@@ -172,7 +171,7 @@ class LoggerProxy implements LoggerInterface
                 //Stream handler
                 $cliHandler = new StreamHandler(\STDOUT, Level::Debug);
                 $this->logger->pushHandler($cliHandler);
-            } elseif ($this->appConfig->get('mode') === AppMode::Production) {
+            } elseif ($deploymentConfig->getValue('mode') === AppMode::Production) {
 
                 $webProcessor = new WebProcessor();
                 $this->logger->pushProcessor($webProcessor);

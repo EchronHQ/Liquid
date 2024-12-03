@@ -13,7 +13,7 @@ use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\Context;
 use Liquid\Framework\App\Route\Attribute\Route;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -34,7 +34,7 @@ class View extends AbstractAction
         parent::__construct($context);
     }
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
         $pageIdentifier = null;
         if (!\is_null($this->getRequest()->getParam('page-id'))) {
@@ -55,7 +55,7 @@ class View extends AbstractAction
         return $this->renderPage($page);
     }
 
-    private function renderPage(PageDefinition $page): Result
+    private function renderPage(PageDefinition $page): AbstractResult
     {
         $result = $this->getResultFactory()->create(Page::class);
 

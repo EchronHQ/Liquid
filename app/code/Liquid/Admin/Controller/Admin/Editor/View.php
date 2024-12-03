@@ -6,7 +6,7 @@ namespace Liquid\Admin\Controller\Admin\Editor;
 
 
 use Liquid\Framework\App\Action\AbstractAction;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 
 class View extends AbstractAction
 {
@@ -15,7 +15,7 @@ class View extends AbstractAction
      */
 
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
 
         //        $builder = new \PHPageBuilder\PHPageBuilder([]);

@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Cache;
 
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\DeploymentConfig;
 
-class CacheState
+class CacheState implements CacheStateInterface
 {
     /**
      * Deployment config key
      */
-    public const CACHE_KEY = 'cache_types';
+    public const string CACHE_KEY = 'cache_types';
 
     private array|null $statuses = null;
 
     public function __construct(
-        private readonly AppConfig $appConfig,
-        private readonly bool      $disableAll = false
+        private readonly DeploymentConfig $appConfig,
+        private readonly bool             $disableAll = false
     )
     {
     }
@@ -47,6 +47,14 @@ class CacheState
     }
 
     /**
+     * Resets mutable state and/ or resources in objects that need to be cleaned after a response has been sent.
+     */
+    public function resetState(): void
+    {
+        $this->statuses = null;
+    }
+
+    /**
      * Load statuses (enabled/disabled) of cache types
      *
      * @return void
@@ -60,13 +68,5 @@ class CacheState
             }
             $this->statuses = $this->appConfig->getConfigData(self::CACHE_KEY) ?: [];
         }
-    }
-
-    /**
-     * Resets mutable state and/ or resources in objects that need to be cleaned after a response has been sent.
-     */
-    public function resetState(): void
-    {
-        $this->statuses = null;
     }
 }

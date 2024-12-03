@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Block\Element;
 
+use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Framework\DataObject;
-use Liquid\Framework\Url;
 use Liquid\Framework\View\Element\ArgumentInterface;
 
 class DemoCallToActionBlock extends DataObject implements ArgumentInterface
@@ -17,8 +17,8 @@ class DemoCallToActionBlock extends DataObject implements ArgumentInterface
     private string $callToActionPage = 'demo';
 
     public function __construct(
-        private readonly Url $url,
-        array                $data = []
+        private readonly ViewableEntity $viewableEntityHelper,
+        array                           $data = []
     )
     {
         parent::__construct($data);
@@ -64,6 +64,6 @@ class DemoCallToActionBlock extends DataObject implements ArgumentInterface
 
     public function getCallToActionPage(): string
     {
-        return $this->url->getPageUrl($this->callToActionPage);
+        return $this->viewableEntityHelper->getUrl($this->callToActionPage);
     }
 }

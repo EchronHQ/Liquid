@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Repository;
 
-use Liquid\Content\Model\Resource\UrlRewrite;
-use Liquid\Content\Model\Resource\UrlRewriteType;
 use Liquid\Core\Helper\RequestRewriteHelper;
+use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
+use Liquid\UrlRewrite\Model\Resource\UrlRewriteType;
 
 class UrlRepository extends BaseRepository
 {
@@ -42,6 +42,24 @@ class UrlRepository extends BaseRepository
             $this->loadRewrites();
         }
         $this->urlRewrites[] = $rewrite;
+    }
+
+    /**
+     * @param string $urlPath
+     * @return UrlRewrite|null
+     */
+    public function getRewrite(string $urlPath): UrlRewrite|null
+    {
+        if (!$this->urlRewritesLoaded) {
+            $this->loadRewrites();
+        };
+        foreach ($this->urlRewrites as $urlRewrite) {
+            $rewrite = RequestRewriteHelper::rewrite($urlRewrite, $urlPath);
+            if ($rewrite !== null) {
+                return $rewrite;
+            }
+        }
+        return null;
     }
 
     private function loadRewrites(): void
@@ -139,24 +157,6 @@ class UrlRepository extends BaseRepository
 
         $this->urlRewritesLoaded = true;
 
-    }
-
-    /**
-     * @param string $urlPath
-     * @return UrlRewrite|null
-     */
-    public function getRewrite(string $urlPath): UrlRewrite|null
-    {
-        if (!$this->urlRewritesLoaded) {
-            $this->loadRewrites();
-        };
-        foreach ($this->urlRewrites as $urlRewrite) {
-            $rewrite = RequestRewriteHelper::rewrite($urlRewrite, $urlPath);
-            if ($rewrite !== null) {
-                return $rewrite;
-            }
-        }
-        return null;
     }
 
 //    private function parse(array $raw): Url

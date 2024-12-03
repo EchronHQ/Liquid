@@ -39,7 +39,7 @@ class PathPatternHelper
             $replacement = substr_replace($match, '(?:', 0, 2);
             $replacement = substr_replace($replacement, ')', -2);
             $replacement = str_replace(',', '|', $replacement);
-            $pattern = substr_replace($pattern, $replacement, $offset, strlen($match));
+            $pattern = substr_replace($pattern, $replacement, (int)$offset, strlen($match));
         }
         return $pattern;
     }
@@ -66,7 +66,7 @@ class PathPatternHelper
             $replacement = substr_replace($match, '[' . ($exclude ? '^' : ''), 0, $exclude ? 4 : 2);
             $replacement = substr_replace($replacement, ']', -2);
             $replacement = str_replace('\\-', '-', $replacement);
-            $pattern = substr_replace($pattern, $replacement, $offset, strlen($match));
+            $pattern = substr_replace($pattern, $replacement, (int)$offset, strlen($match));
         }
         return $pattern;
     }

@@ -13,7 +13,7 @@ use Liquid\Content\Repository\PageRepository;
 use Liquid\Core\Router;
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\Context;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\View\Element\Template;
 use Liquid\Framework\View\Layout\Layout;
@@ -31,7 +31,7 @@ class NotFound extends AbstractAction
         parent::__construct($context);
     }
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
 
 
@@ -44,7 +44,7 @@ class NotFound extends AbstractAction
         return $this->renderPage($page);
     }
 
-    private function renderPage(PageDefinition $page): Result
+    private function renderPage(PageDefinition $page): AbstractResult
     {
         $this->layout->runHandle('layout-1col');
 

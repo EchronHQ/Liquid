@@ -13,7 +13,7 @@ use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Framework\App\Action\Context;
 use Liquid\Framework\App\Route\Attribute\Route;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -38,7 +38,7 @@ class Category extends FrontendAction
     }
 
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
 
         $categoryIdentifier = $this->getRequest()->getParam('category-id');
@@ -51,7 +51,7 @@ class Category extends FrontendAction
     }
 
 
-    private function renderPage(CategoryDefinition $categoryDefinition): Result
+    private function renderPage(CategoryDefinition $categoryDefinition): AbstractResult
     {
 
         $result = $this->getResultFactory()->create(Page::class);

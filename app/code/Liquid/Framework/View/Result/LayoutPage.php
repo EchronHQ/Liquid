@@ -4,12 +4,16 @@ declare(strict_types=1);
 namespace Liquid\Framework\View\Result;
 
 use Liquid\Framework\App\Response\HttpResponseInterface;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Layout\Builder;
 use Liquid\Framework\View\Layout\Layout;
 
-class LayoutPage extends Result
+/**
+ *  A generic layout response can be used for rendering any kind of layout
+ *  So it comprises a response body from the layout elements it has and sets it to the HTTP response
+ */
+class LayoutPage extends AbstractResult
 {
     public function __construct(
         protected readonly Layout                 $layout,
@@ -17,11 +21,6 @@ class LayoutPage extends Result
     )
     {
         $this->initLayoutBuilder();
-    }
-
-    protected function initLayoutBuilder(): void
-    {
-        $this->objectManager->create(Builder::class, ['layout' => $this->layout]);
     }
 
     /**
@@ -34,7 +33,12 @@ class LayoutPage extends Result
         return $this;
     }
 
-    protected function render(HttpResponseInterface $response): Result
+    protected function initLayoutBuilder(): void
+    {
+        $this->objectManager->create(Builder::class, ['layout' => $this->layout]);
+    }
+
+    protected function render(HttpResponseInterface $response): AbstractResult
     {
         $output = $this->layout->getOutput();
         $response->appendBody($output);

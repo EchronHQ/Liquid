@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Model;
 
+use Liquid\Framework\App\Config\SegmentConfig;
 use PHPUnit\Framework\TestCase;
 
 class AppConfigTest extends TestCase
 {
     public function testExisting(): void
     {
-        $config = new AppConfig();
+        $config = new SegmentConfig();
         $config->setValue('test', 'value');
         $config->setValue('test2', ['sub' => 'subvalue']);
 
@@ -20,7 +21,7 @@ class AppConfigTest extends TestCase
 
     public function testNonExisting(): void
     {
-        $config = new AppConfig();
+        $config = new SegmentConfig();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Config value "test" not found');
@@ -30,7 +31,7 @@ class AppConfigTest extends TestCase
 
     public function testNonExistingWithDefault(): void
     {
-        $config = new AppConfig();
+        $config = new SegmentConfig();
 
 
         $this->assertEquals('default', $config->getValue('test', 'default'));

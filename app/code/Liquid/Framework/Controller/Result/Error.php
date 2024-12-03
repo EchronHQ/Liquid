@@ -5,9 +5,9 @@ namespace Liquid\Framework\Controller\Result;
 
 use Laminas\Http\Response as HttpResponse;
 use Liquid\Framework\App\Response\HttpResponseInterface;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 
-class Error extends Result
+class Error extends AbstractResult
 {
 
 

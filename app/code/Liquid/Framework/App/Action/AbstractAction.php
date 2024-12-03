@@ -3,20 +3,23 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Action;
 
-use Liquid\Core\Model\AppConfig;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\Controller\ResultFactory;
 use Liquid\Framework\Controller\ResultInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated Inheritance in controllers should be avoided in favor of composition
+ */
 abstract class AbstractAction implements ActionInterface
 {
     protected readonly LoggerInterface $logger;
     protected readonly Request $request;
     protected readonly Response $response;
     private readonly ResultFactory $resultFactory;
-    private readonly AppConfig $configuration;
+    private readonly SegmentConfig $configuration;
 
     public function __construct(Context $context)
     {
@@ -26,6 +29,8 @@ abstract class AbstractAction implements ActionInterface
         $this->configuration = $context->getConfiguration();
         $this->logger = $context->getLogger();
     }
+
+    abstract public function execute(): ResultInterface;
 
     protected function getRequest(): Request
     {
@@ -42,10 +47,8 @@ abstract class AbstractAction implements ActionInterface
         return $this->resultFactory;
     }
 
-    protected function getConfiguration(): AppConfig
+    protected function getConfiguration(): SegmentConfig
     {
         return $this->configuration;
     }
-
-    abstract public function execute(): ResultInterface;
 }

@@ -34,7 +34,6 @@ class ConfigLoader
         } else {
             $data = $this->serializer->unserialize($data);
         }
-
         return $data;
     }
 }

@@ -11,7 +11,7 @@ class State
     /**
      * Application run code (pass with bootstrap arguments)
      */
-    public const PARAM_MODE = 'LQ_MODE';
+    public const string PARAM_MODE = 'LQ_MODE';
 
     private AreaCode|null $areaCode = null;
 

@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\ObjectManager;
 
-use DI\ContainerBuilder;
-use Liquid\Core\Model\AppConfig;
 use Liquid\Framework\App\AppMode;
+use Liquid\Framework\App\Cache\CacheState;
+use Liquid\Framework\App\Cache\CacheStateInterface;
 use Liquid\Framework\App\Config\PrimaryConfigFileResolver;
 use Liquid\Framework\App\Config\Reader;
+use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\SegmentConfigInterface;
+use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\App\Entity\AggregateEntityResolver;
 use Liquid\Framework\App\Entity\EntityResolverInterface;
 use Liquid\Framework\App\State;
@@ -21,6 +24,8 @@ use Liquid\Framework\Exception\RuntimeException;
 use Liquid\Framework\Filesystem\DirectoryList;
 use Liquid\Framework\Filesystem\Filesystem;
 use Liquid\Framework\Locale\Formatter;
+use Liquid\Framework\Locale\Resolver;
+use Liquid\Framework\Locale\ResolverInterface;
 use Liquid\Framework\Logger\LoggerProxy;
 use Liquid\Framework\Serialize\Serializer\Json;
 use Liquid\Framework\Serialize\Serializer\Serialize;
@@ -33,7 +38,7 @@ class ObjectManagerFactory
     /**
      * Initialization parameter for custom deployment configuration data
      */
-    public const INIT_PARAM_DEPLOYMENT_CONFIG = 'LQ_CONFIG';
+    public const string INIT_PARAM_DEPLOYMENT_CONFIG = 'LQ_CONFIG';
 
     public function __construct(private readonly DirectoryList $directoryList)
     {
@@ -45,7 +50,7 @@ class ObjectManagerFactory
         $appMode = isset($arguments[State::PARAM_MODE]) ? $arguments[State::PARAM_MODE] : AppMode::Production;
 
 
-        $appConfig = $this->createAppConfig($this->directoryList, $arguments);
+        $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $arguments);
 
         // $cachePool = $this->buildCachePool();
 
@@ -67,6 +72,9 @@ class ObjectManagerFactory
                 ObjectManagerInterface::class => ObjectManager::class,
                 SerializerInterface::class => Json::class,
                 EntityResolverInterface::class => AggregateEntityResolver::class,
+                CacheStateInterface::class => CacheState::class,
+                SegmentConfigInterface::class => SegmentConfig::class,
+                ResolverInterface::class => Resolver::class,
             ],
             'types' => [
                 ConfigLoader::class => [
@@ -103,7 +111,7 @@ class ObjectManagerFactory
         $sharedInstances = [
 
             //  SqlRemoteService::class => $this->buildSQL(),
-            AppConfig::class => $appConfig,
+            DeploymentConfig::class => $deploymentConfig,
             Config::class => $diConfig,
             //   CacheItemPoolInterface::class => $cachePool,
             //    Profiler::class => $this->profiler,
@@ -113,65 +121,53 @@ class ObjectManagerFactory
         ];
 
 
-        $appConfig->setValue('site_url', 'http://localhost:8901');
+        $deploymentConfig->setValue('site_url', 'http://localhost:8901');
 //        $this->data['site_url'] = $this->automaticallyDetectSiteUrl();
 //
 //        if (!$this->isCLI()) {
 //            $this->data['current_url'] = $this->detectCurrentUrl();
 //        }
 //
-        $appConfig->setValue('app_url', 'https://app.attlaz.com/');
-        $appConfig->setValue('status_url', 'https://status.attlaz.com/');
-        $appConfig->setValue('documentation_url', 'https://docs.attlaz.com/');
-        $appConfig->setValue('api_reference_url', 'https://app.swaggerhub.com/apis-docs/Echron/attlaz-api/');
-        $appConfig->setValue('signup_url', 'https://app.attlaz.com/signup');
-        $appConfig->setValue('dev', [
-            'minifyhtml' => true,
-            'minifycss' => true,
-        ]);
+
 
         /**
          * Build first with initial config
          */
-        $containerBuilder = $this->createContainerBuilder();
-        $containerBuilder->addDefinitions($diConfig->getDefinitions());
-        $containerBuilder->addDefinitions($sharedInstances);
+//        $containerBuilder = $this->createContainerBuilder();
+//        $containerBuilder->addDefinitions($diConfig->getDefinitions());
+//        $containerBuilder->addDefinitions($sharedInstances);
+//
+//        $container = $containerBuilder->build();
+        $objectManager = new ObjectManager($diConfig, $sharedInstances);
 
-        $container = $containerBuilder->build();
-        $objectManager = new ObjectManager($container, $diConfig);
-        $container->set(ObjectManagerInterface::class, $objectManager);
 
         /**
          * Load additional config (module configuration)
          */
         $moduleFileReader = $objectManager->get(\Liquid\Framework\Module\File\Reader::class);
-        $diConfig->extend($this->loadEnvironmentConfig($this->directoryList, $moduleFileReader));
+        $objectManager->configure($this->loadEnvironmentConfig($this->directoryList, $moduleFileReader));
 
         /**
          * // TODO: is it possibe to re-use already build instances? Do we actually want this?
          * Build container again
          */
-        $containerBuilder = $this->createContainerBuilder();
-        $containerBuilder->addDefinitions($sharedInstances);
-        $containerBuilder->addDefinitions($diConfig->getDefinitions());
 
-        $container = $containerBuilder->build();
-
-        $objectManager = new ObjectManager($container, $diConfig);
-        $container->set(ObjectManagerInterface::class, $objectManager);
 
         return $objectManager;
 
     }
 
-    private function createAppConfig(DirectoryList $directoryList, array $arguments): AppConfig
+    private function createDeploymentConfig(
+        DirectoryList $directoryList,
+        array         $arguments
+    ): DeploymentConfig
     {
         $customData = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG]
             : [];
 
         $reader = new Reader($directoryList);
-        return new AppConfig($reader, $customData);
+        return new DeploymentConfig($reader, $customData);
     }
 
     /**
@@ -198,15 +194,7 @@ class ObjectManagerFactory
         return $configData;
     }
 
-    private function createContainerBuilder(): ContainerBuilder
-    {
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->useAutowiring(true);
-        $containerBuilder->useAttributes(true);
-        // $containerBuilder->enableDefinitionCache('lq');
-        // $containerBuilder->enableCompilation(ROOT . 'var/cache');
-        return $containerBuilder;
-    }
+
 //    /**
 //     * TODO: move this to cacheFactory class
 //     * @return CacheItemPoolInterface
@@ -242,7 +230,7 @@ class ObjectManagerFactory
      */
     private function loadEnvironmentConfig(DirectoryList $directoryList, \Liquid\Framework\Module\File\Reader $moduleFileReader): array
     {
-        $configData = null;
+
         try {
 
             $fileSystem = new Filesystem($directoryList);
@@ -250,11 +238,9 @@ class ObjectManagerFactory
 
             $reader = new FileSystemReader($fileResolver, 'di.php');
 
-            $configData = $reader->read('global');
-
+            return $reader->read('global');
         } catch (\Exception $e) {
             throw new RuntimeException($e->getMessage());
         }
-        return $configData;
     }
 }

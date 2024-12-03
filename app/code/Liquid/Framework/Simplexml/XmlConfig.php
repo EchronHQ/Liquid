@@ -12,7 +12,7 @@ class XmlConfig
      *
      * @param string|null $path
      * @return XmlElement|bool
-     * @see \Magento\Framework\Simplexml\Element::descend
+     * @see \Liquid\Framework\Simplexml\XmlElement::descend
      */
     public function getNode(string|null $path = null): XmlElement|bool
     {

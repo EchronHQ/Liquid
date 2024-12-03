@@ -5,38 +5,24 @@ declare(strict_types=1);
 namespace Liquid\Framework\App\Request;
 
 
+use Liquid\Framework\StringHelper;
 use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 
 class Request extends \Laminas\Http\PhpEnvironment\Request
 {
-    public const DEFAULT_HTTP_PORT = 80;
-    public const DEFAULT_HTTPS_PORT = 443;
+    public const int DEFAULT_HTTP_PORT = 80;
+    public const int DEFAULT_HTTPS_PORT = 443;
 
     public array $params = [];
-    private string|null $pathInfo = null;
+    protected string $requestString = '';
 
     // TODO: why do we save the rewrites?
+    private string|null $pathInfo = null;
     /** @var UrlRewrite[] */
     private array $rewrites = [];
     private array $paramAliases = [];
     private bool $isMatched = false;
-
-    final public function getIp(): string
-    {
-
-        if (!empty($this->getServer('HTTP_CLIENT_IP'))) {
-            //ip from share internet
-            $ip = $this->getServer('HTTP_CLIENT_IP');
-        } elseif (!empty($this->getServer('HTTP_X_FORWARDED_FOR'))) {
-            //ip pass from proxy
-            $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
-        } else {
-            $ip = $this->getServer('REMOTE_ADDR');
-        }
-        return $ip;
-
-    }
-
+    private string|null $distroBaseUrl = null;
 //    private function getUrlSegment(int $index): ?string
 //    {
 //        if (isset($this->urlSegments[$index])) {
@@ -63,6 +49,29 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
 //        }
 //        return $this->getUrlSegment(2);
 //    }
+
+    public function __construct(
+        private readonly StringHelper $converter,
+    )
+    {
+        parent::__construct();
+    }
+
+    final public function getIp(): string
+    {
+
+        if (!empty($this->getServer('HTTP_CLIENT_IP'))) {
+            //ip from share internet
+            $ip = $this->getServer('HTTP_CLIENT_IP');
+        } elseif (!empty($this->getServer('HTTP_X_FORWARDED_FOR'))) {
+            //ip pass from proxy
+            $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
+        } else {
+            $ip = $this->getServer('REMOTE_ADDR');
+        }
+        return $ip;
+
+    }
 
     final public function isAjax(): bool
     {
@@ -108,7 +117,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
             // TODO: do we need to be sure that pathInfo never starts with a slash or will this be the case anyway?
             //   $pathInfo = trim($pathInfo, '/');
 
-            //            $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
+            $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
         }
         $pathInfo = trim($pathInfo, '/');
 
@@ -117,6 +126,16 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
             $this->rewrites[] = $rewrite;
         }
         return $this;
+    }
+
+    /**
+     * Get request string
+     *
+     * @return string
+     */
+    public function getRequestString()
+    {
+        return $this->requestString;
     }
 
     /**
@@ -239,6 +258,40 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
             return $host[0];
         }
         return $httpHost;
+    }
+
+    /**
+     * Get website instance base url
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function getDistroBaseUrl(): string
+    {
+        if ($this->distroBaseUrl) {
+            return $this->distroBaseUrl;
+        }
+        $headerHttpHost = $this->getServer('HTTP_HOST');
+        $headerHttpHost = $this->converter->cleanString($headerHttpHost);
+        $headerScriptName = $this->getServer('SCRIPT_NAME');
+
+        if (isset($headerScriptName) && $headerHttpHost !== '') {
+            if ($secure = $this->isSecure()) {
+                $scheme = 'https://';
+            } else {
+                $scheme = 'http://';
+            }
+
+            $hostArr = explode(':', $headerHttpHost);
+            $host = $hostArr[0];
+            $port = isset($hostArr[1])
+            && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
+            $path = $this->getBasePath();
+
+            return $this->distroBaseUrl = $scheme . $host . $port . rtrim($path, '/') . '/';
+        }
+        return 'http://localhost/';
     }
 
     /**

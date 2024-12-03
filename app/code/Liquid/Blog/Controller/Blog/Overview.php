@@ -12,7 +12,7 @@ use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Framework\App\Action\Context;
 use Liquid\Framework\App\Route\Attribute\Route;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -33,7 +33,7 @@ class Overview extends FrontendAction
         parent::__construct($context, $layout, $pageConfig);
     }
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
         $page = $this->blogRepository->getPageById('blog');
         if ($page === null) {
@@ -44,7 +44,7 @@ class Overview extends FrontendAction
     }
 
 
-    private function renderPage(PageDefinition $articlePage): Result
+    private function renderPage(PageDefinition $articlePage): AbstractResult
     {
         $result = $this->getResultFactory()->create(Page::class);
         $this->layout->runHandle('layout-1col');

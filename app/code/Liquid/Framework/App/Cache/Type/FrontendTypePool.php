@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Cache\Type;
 
-use Liquid\Framework\App\Config\AppConfig;
+use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\Cache\CachePool;
 use Liquid\Framework\Cache\FrontendInterface;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
@@ -13,10 +13,10 @@ class FrontendTypePool
     /**
      * Config key for cache
      */
-    public const KEY_CACHE = 'cache';
+    public const string KEY_CACHE = 'cache';
 
-    public const KEY_CACHE_TYPE = 'type';
-    public const KEY_FRONTEND_CACHE = 'frontend';
+    public const string KEY_CACHE_TYPE = 'type';
+    public const string KEY_FRONTEND_CACHE = 'frontend';
 
 
     /** @var FrontendInterface[] */
@@ -24,7 +24,7 @@ class FrontendTypePool
 
     public function __construct(
         private readonly ObjectManagerInterface $objectManager,
-        private readonly AppConfig              $appConfig,
+        private readonly DeploymentConfig       $appConfig,
         private readonly CachePool              $frontendPool
     )
     {

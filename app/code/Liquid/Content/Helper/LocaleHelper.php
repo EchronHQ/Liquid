@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Liquid\Content\Helper;
 
 use Liquid\Content\Model\Locale;
-use Liquid\Core\Model\AppConfig;
+use Liquid\Translation\Model\Config;
 use Psr\Log\LoggerInterface;
 
 class LocaleHelper
@@ -50,8 +50,9 @@ class LocaleHelper
     ];
 
     public function __construct(
-        private readonly AppConfig       $appConfig,
-        private readonly LoggerInterface $logger
+
+        private readonly Config $config,
+        private readonly LoggerInterface                  $logger
     )
     {
     }
@@ -72,7 +73,7 @@ class LocaleHelper
 
         if ($translation === null) {
             $this->logger->warning('No translation found for "' . $input . '"');
-            if ($this->appConfig->debugTranslations()) {
+            if ($this->config->isDebugActive()) {
                 return '[' . StringHelper::mask($input) . ']';
             }
             return $input;
@@ -83,10 +84,41 @@ class LocaleHelper
         }
 
 
-        if ($this->appConfig->debugTranslations()) {
+        if ($this->config->isDebugActive()) {
             return StringHelper::mask($translation);
         }
         return $translation;
+
+    }
+
+    public function findMissingTranslations(string $input): void
+    {
+        $input = HtmlHelper::removeHtml($input);
+        $input = \strtolower($input);
+        // $defaultLocale = $this->appConfig->getLocale();
+        foreach ($this->translations as $key => $translations) {
+//            if (\str_contains($input, $key)) {
+//                $this->logger->warning('Non translated (term) "' . $key . '" found');
+//            }
+            foreach ($translations as $locale => $translation) {
+                // Ignore if the word is already in the default locale
+
+                //  if ($locale !== $defaultLocale || true) {
+
+
+                $occurrences = StringHelper::getOccurrences($input, $translation);
+
+                foreach ($occurrences as $occurrence) {
+
+
+                    $position = \substr($input, $occurrence - 50, 50 + \strlen($translation) + 50);
+                    $this->logger->warning('Non translated (' . $key . ' - ' . $locale . ') "' . $translation . '" found at "... ' . $position . ' ..."');
+                }
+                // }
+
+            }
+        }
+
 
     }
 
@@ -115,37 +147,6 @@ class LocaleHelper
     private function isCapital(string $character): bool
     {
         return \strtoupper($character) === $character;
-    }
-
-    public function findMissingTranslations(string $input): void
-    {
-        $input = HtmlHelper::removeHtml($input);
-        $input = \strtolower($input);
-        $defaultLocale = $this->appConfig->getLocale();
-        foreach ($this->translations as $key => $translations) {
-//            if (\str_contains($input, $key)) {
-//                $this->logger->warning('Non translated (term) "' . $key . '" found');
-//            }
-            foreach ($translations as $locale => $translation) {
-                // Ignore if the word is already in the default locale
-
-                //  if ($locale !== $defaultLocale || true) {
-
-
-                $occurrences = StringHelper::getOccurrences($input, $translation);
-
-                foreach ($occurrences as $occurrence) {
-
-
-                    $position = \substr($input, $occurrence - 50, 50 + \strlen($translation) + 50);
-                    $this->logger->warning('Non translated (' . $key . ' - ' . $locale . ') "' . $translation . '" found at "... ' . $position . ' ..."');
-                }
-                // }
-
-            }
-        }
-
-
     }
 
 }

@@ -6,7 +6,7 @@ namespace Liquid\Framework\Controller;
 use Liquid\Framework\App\Response\HttpResponseInterface;
 use Liquid\Framework\App\Response\ResponseInterface;
 
-abstract class Result implements ResultInterface
+abstract class AbstractResult implements ResultInterface
 {
     protected int|null $httpResponseCode = null;
     protected array $headers = [];

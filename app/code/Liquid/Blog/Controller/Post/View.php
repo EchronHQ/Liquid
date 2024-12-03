@@ -15,7 +15,7 @@ use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Framework\App\Action\Context;
 use Liquid\Framework\App\Route\Attribute\Route;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -43,7 +43,7 @@ class View extends FrontendAction
     }
 
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
         $articlePage = $this->getArticleByRequest();
         if (\is_null($articlePage)) {
@@ -65,7 +65,7 @@ class View extends FrontendAction
     }
 
 
-    private function renderPage(PostDefinition $articlePage): Result
+    private function renderPage(PostDefinition $articlePage): AbstractResult
     {
 
         $result = $this->getResultFactory()->create(Page::class);

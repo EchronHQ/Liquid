@@ -5,7 +5,7 @@ namespace Liquid\Framework\Module;
 
 use Liquid\Framework\Component\ComponentRegistrarInterface;
 use Liquid\Framework\Component\ComponentType;
-use Psr\Log\LoggerInterface;
+use Liquid\Framework\Exception\ContextException;
 
 class ModuleHelper
 {
@@ -17,7 +17,7 @@ class ModuleHelper
 
     public function __construct(
         private readonly ComponentRegistrarInterface $componentRegistrar,
-        private readonly LoggerInterface             $logger
+        // private readonly LoggerInterface             $logger
     )
     {
 
@@ -78,7 +78,7 @@ class ModuleHelper
                 $moduleData->routes = $routes;
                 foreach ($routes as $route => $paths) {
                     if (!is_array($paths)) {
-                        $this->logger->error('Route paths should be array', ['module' => $moduleData->name, 'paths' => $paths]);
+                        throw new ContextException('Route paths should be array', ['module' => $moduleData->name, 'paths' => $paths]);
                     }
                 }
             }

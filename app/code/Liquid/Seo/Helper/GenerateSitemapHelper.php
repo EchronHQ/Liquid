@@ -6,10 +6,31 @@ namespace Liquid\Seo\Helper;
 
 use Liquid\Content\Model\Resource\PageSitemapPriority;
 use Liquid\Content\Model\SitemapUrlEntry;
-use Liquid\Core\Model\Result\Xml;
+use Liquid\Framework\Controller\Result\Xml;
 
 class GenerateSitemapHelper
 {
+    public static function getModificationDate(string $filePath): \DateTime|null
+    {
+        if (!\file_exists($filePath)) {
+            return null;
+        }
+        $time = \filemtime($filePath);
+        if ($time === false) {
+            return null;
+        }
+        return \DateTime::createFromFormat('U', (string)$time);
+    }
+
+    public static function store(\SimpleXMLElement $sitemapXml, string $filePath): void
+    {
+
+
+        $sitemapXml->asXML($filePath);
+        $result = new Xml();
+        $result->setData($sitemapXml->asXML());
+    }
+
     /**
      * @param SitemapUrlEntry[] $entries
      * @return \SimpleXMLElement
@@ -67,25 +88,5 @@ class GenerateSitemapHelper
         // TODO add validation (apparently simplexml doesn't support validation)
 
         return $xml;
-    }
-
-    public static function getModificationDate(string $filePath): \DateTime|null
-    {
-        if (!\file_exists($filePath)) {
-            return null;
-        }
-        $time = \filemtime($filePath);
-        if ($time === false) {
-            return null;
-        }
-        return \DateTime::createFromFormat('U', (string)$time);
-    }
-
-    public static function store(\SimpleXMLElement $sitemapXml, string $filePath): void
-    {
-        $result = new Xml();
-
-        $sitemapXml->asXML($filePath);
-        $result->setData($sitemapXml->asXML());
     }
 }

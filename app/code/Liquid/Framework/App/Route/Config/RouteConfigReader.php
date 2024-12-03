@@ -28,7 +28,7 @@ class RouteConfigReader extends AttributeConfigReader
     }
 
     /**
-     * @return Route[]
+     * @return Route[][]
      * @throws \ReflectionException
      */
     public function read(string|null $scope = null): array
@@ -42,7 +42,7 @@ class RouteConfigReader extends AttributeConfigReader
             $route->class = $class;
             $route->path = $this->formatRoutePath($value->getPath());
             $route->methods = $value->getMethods();
-            $routes[] = $route;
+            $routes[$value->getRouterId()][] = $route;
         }
         return $routes;
     }

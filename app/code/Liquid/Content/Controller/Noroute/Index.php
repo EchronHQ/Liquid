@@ -3,26 +3,24 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Controller\Noroute;
 
-use Liquid\Content\Repository\FormRepository;
-use Liquid\Framework\App\Action\AbstractAction;
-use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\App\Action\ActionInterface;
+use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Route\Attribute\Route;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Result\LayoutPage;
 
 #[Route('content/noroute/index', name: 'no_route')]
-class Index extends AbstractAction
+class Index implements ActionInterface
 {
 
 
     public function __construct(
-        Context                                 $context,
-        private readonly FormRepository         $formRepository,
+
+        private readonly Request                $request,
         private readonly ObjectManagerInterface $objectManager
     )
     {
-        parent::__construct($context);
 
 
     }
@@ -33,7 +31,7 @@ class Index extends AbstractAction
 //    }
 
 
-    public function execute(): Result
+    public function execute(): AbstractResult
     {
         /** @var LayoutPage|null $resultPage */
         //   $resultPage = null;// $pageHelper->prepareResultPage($this, $pageId);

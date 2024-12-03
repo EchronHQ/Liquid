@@ -19,9 +19,9 @@ readonly class GatherPages
 {
     public function __construct(
         private ModuleHelper                     $moduleHelper,
-        private readonly TemplateFileResolver    $templateFileResolver,
+        private TemplateFileResolver    $templateFileResolver,
         private FileHelper                       $fileHelper,
-        private readonly AggregateEntityResolver $entityResolver,
+        private AggregateEntityResolver $entityResolver,
         private LoggerInterface                  $logger
     )
     {

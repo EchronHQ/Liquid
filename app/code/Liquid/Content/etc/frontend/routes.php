@@ -6,6 +6,7 @@ use Liquid\Content\Controller\Demo\Submit as SubmitDemo;
 use Liquid\Content\Controller\Page\View as PageViewController;
 use Liquid\Core\Controller\PageNotFoundController;
 
+die('This is no longer used');
 return [
     'router' => [
         'id' => 'standard',

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Liquid\Seo\Console;
 
 use Liquid\Content\Model\Resource\AbstractViewableEntity;
-use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Seo\Helper\GatherPages;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -117,7 +116,10 @@ class Segment
 {
     private array $children = [];
 
-    public function __construct(public string $pathSegment, private readonly AbstractViewableEntity|null $page = null)
+    public function __construct(
+        public string                       $pathSegment,
+        private AbstractViewableEntity|null $page = null
+    )
     {
 
     }
@@ -161,12 +163,12 @@ class Segment
         return array_values($this->children);
     }
 
-    public function getPage(): PageDefinition|null
+    public function getPage(): AbstractViewableEntity|null
     {
         return $this->page;
     }
 
-    public function setPage(PageDefinition $page): void
+    public function setPage(AbstractViewableEntity $page): void
     {
         $this->page = $page;
     }

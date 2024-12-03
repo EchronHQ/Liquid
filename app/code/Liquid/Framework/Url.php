@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Framework;
 
 use Liquid\Content\Model\Segment\SegmentId;
-use Liquid\Content\Model\Segment\SegmentManager;
-use Liquid\Core\Helper\IdHelper;
+use Liquid\Content\Model\Segment\SegmentResolver;
 use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\App\Entity\EntityResolverInterface;
 use Liquid\Framework\App\Request\Request;
@@ -19,78 +18,31 @@ class Url
         private readonly EntityResolverInterface $entityResolver,
         private readonly State                   $appState,
         private readonly Request                 $request,
-        private readonly SegmentManager          $segmentManager,
+        private readonly SegmentResolver         $segmentResolver,
         private readonly LoggerInterface         $logger,
     )
     {
     }
 
-    public function getPageUrl(string $pageIdentifier): string|null
-    {
-
-        $pageIdentifier = IdHelper::escapeId($pageIdentifier);
-
-        if ($pageIdentifier === 'home') {
-            return $this->getUrl();
-        }
-        if ($pageIdentifier === 'contact-sales') {
-            // TODO: rebrand demo to 'contact-sales'
-            $pageIdentifier = 'demo';
-        }
-        // TODO: make list with special page id leading to configuration values
-        if ($pageIdentifier === 'docs') {
-            return $this->segmentConfig->getValue('documentation_url');
-        }
-        if ($pageIdentifier === 'docs-api') {
-            return $this->segmentConfig->getValue('api_reference_url');
-        }
-        if ($pageIdentifier === 'status') {
-            return $this->segmentConfig->getValue('status_url');
-        }
-        if ($pageIdentifier === 'app') {
-            return $this->segmentConfig->getValue('app_url');
-        }
-
-        $entity = $this->entityResolver->getEntity($pageIdentifier);
-        if ($entity !== null) {
-            $segment = $this->segmentManager->getSegment();
-
-            if (!$entity->isVisibleOnFront()) {
-                $this->logger->warning('Get url for not visible entity `' . $entity->id . '`');
-            }
-            return $segment->getBaseUrl() . '/' . $entity->getUrlPath();
-//            $rewrites = $entity->getUrlRewrites();
-//            if (count($rewrites) > 0) {
-//                return $rewrites[0];
-//            }
-//            return $entity->getViewRoute();
-        }
-
-
-//        if (\array_key_exists($pageIdentifier, $this->pageRoutes) && !\is_null($this->pageRoutes[$pageIdentifier])) {
-//            return $this->getUrl($this->pageRoutes[$pageIdentifier]);
-//        }
-        $debugData = [
-//            'registered routes' => $this->pageRoutes,
-//            'exists' => \array_key_exists($pageIdentifier, $this->pageRoutes),
-//
-        ];
-//        if (\array_key_exists($pageIdentifier, $this->pageRoutes)) {
-//            $debugData['notnull'] = !\is_null($this->pageRoutes[$pageIdentifier]);
-//        }
-//
-        $this->logger->error('[Resolver] Unable to get entity url: entity "' . $pageIdentifier . '" not found', $debugData);
-
-
-        return null;
-    }
-
+    /**
+     * TODO: this needs better + remove this from url class (move it to segment class maybe?)
+     * @param string $path
+     * @param SegmentId|null $segmentId
+     * @return string
+     * @throws \Exception
+     */
     public function getUrl(string $path = '', SegmentId|null $segmentId = null): string
     {
         if ($this->isUrl($path)) {
             return $path;
         }
-        $segment = $this->segmentManager->getSegment($segmentId);
+
+        //  var_dump($path);
+
+//        $this->segmentConfig->get()
+
+        //   $this->segmentResolver->getCurrentSegmentId()
+        //     $segment = $this->segmentManager->getSegment($segmentId);
 
 
 //        $defaultLocale = 'en-uk';
@@ -101,16 +53,11 @@ class Url
         // TODO: is there a way to check if the url exist?
         $path = \ltrim($path, '/');
 //        if ($locale === null) {
-//            return $this->segmentConfig->getValue('site_url') . $path;
+        return $this->segmentConfig->getValue('web/unsecure/base_url') . $path;
 //        }
-        return $segment->getBaseUrl() . '/' . $path;
+        //  return $segment->getBaseUrl() . '/' . $path;
+        return '';
 
-
-    }
-
-    private function isUrl(string $url): bool
-    {
-        return \str_starts_with($url, 'http://') || \str_starts_with($url, 'https://');
     }
 
     /**
@@ -135,5 +82,10 @@ class Url
             }
         }
         return $this->request->getScheme() . '://' . $httpHost . $port . $this->request->getRequestUri();
+    }
+
+    private function isUrl(string $url): bool
+    {
+        return \str_starts_with($url, 'http://') || \str_starts_with($url, 'https://');
     }
 }

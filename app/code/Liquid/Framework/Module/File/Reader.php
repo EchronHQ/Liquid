@@ -25,6 +25,7 @@ class Reader
      */
     public function getConfigurationFiles(string $filename): FileIterator
     {
+
         // TODO: store this so we load this 1 time per request
         return $this->getFiles($filename, 'etc');
     }
@@ -41,6 +42,7 @@ class Reader
         $result = [];
         foreach ($this->modulesList->getModules() as $moduleData) {
             $file = $moduleData->path . ($subDir === null ? '' : '/' . $subDir) . '/' . $filename;
+
             if ($this->fileHelper->fileExist($file)) {
                 $result[] = $file;
             }

@@ -6,7 +6,6 @@ namespace Liquid\Content\Helper;
 
 use Liquid\Blog\Model\PostDefinition;
 use Liquid\Content\Model\Resource\AbstractViewableEntity;
-use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
 
 class PageConfigHelper

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Content\ViewModel;
 
 use Liquid\Content\Helper\LocaleHelper;
+use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Framework\Url;
 use Liquid\Framework\View\Element\ArgumentInterface;
@@ -13,9 +14,10 @@ class Navigation implements ArgumentInterface
     public array $navigation;
 
     public function __construct(
-        private readonly Resolver     $resolver,
-        private readonly Url          $url,
-        private readonly LocaleHelper $localeHelper
+        private readonly Resolver       $resolver,
+        private readonly Url            $url,
+        private readonly ViewableEntity $viewableEntityHelper,
+        private readonly LocaleHelper   $localeHelper
     )
     {
 
@@ -32,7 +34,7 @@ class Navigation implements ArgumentInterface
                                 'title' => 'Integrate',
                                 'description' => 'Connect your platforms with ease and manage your data in one place so you can focus on growing your business.',
                                 'icon' => 'asset/icons/menu/integrate.svg',
-                                'link' => $this->url->getPageUrl('products/integrate'),
+                                'link' => $this->viewableEntityHelper->getUrl('products/integrate'),
                             ],
                         ],
                     ],
@@ -43,25 +45,25 @@ class Navigation implements ArgumentInterface
                                 'title' => 'Integrate',
                                 'description' => 'Connect your platforms with ease and manage your data in one place so you can focus on growing your business.',
                                 'icon' => 'asset/icons/menu/integrate.svg',
-                                'link' => $this->url->getPageUrl('products/integrate'),
+                                'link' => $this->viewableEntityHelper->getUrl('products/integrate'),
                             ],
                             [
                                 'title' => 'Automate',
                                 'description' => 'Automate your processes. Gain better insights and reduce mistakes.',
                                 'icon' => 'asset/icons/menu/automate.svg',
-                                'link' => $this->url->getPageUrl('products/automate'),
+                                'link' => $this->viewableEntityHelper->getUrl('products/automate'),
                             ],
                             [
                                 'title' => $this->localeHelper->translate('Visualize'),
                                 'description' => 'Monitor platforms, processes and data, identify issues and solve issues instantly.',
                                 'icon' => 'asset/icons/menu/visualize.svg',
-                                'link' => $this->url->getPageUrl('products/visualize'),
+                                'link' => $this->viewableEntityHelper->getUrl('products/visualize'),
                             ],
                             [
                                 'title' => 'Why Attlaz',
                                 'description' => 'Giving your team superpowers',
                                 'icon' => 'asset/icons/menu/why-attlaz.svg',
-                                'link' => $this->url->getPageUrl('platform'),
+                                'link' => $this->viewableEntityHelper->getUrl('platform'),
                             ],
                             //                            [
                             //                                'title'       => 'How it works',
@@ -85,38 +87,38 @@ class Navigation implements ArgumentInterface
                                 'title' => 'Ecommerce',
                                 'description' => 'Enhance your ecommerce',
                                 'icon' => 'asset/icons/menu/ecommerce.svg',
-                                'link' => $this->url->getPageUrl('use-cases/ecommerce'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ecommerce'),
                             ],
                             [
                                 'title' => 'Finance',
                                 'description' => 'Streamline all your financial data',
                                 'icon' => 'asset/icons/menu/ecommerce.svg',
-                                'link' => $this->url->getPageUrl('use-cases/finance'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/finance'),
                             ],
                             [
                                 'title' => 'IT',
                                 'description' => 'Centralize all your data and application integrations',
                                 'icon' => 'asset/icons/menu/ecommerce.svg',
-                                'link' => $this->url->getPageUrl('use-cases/it'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/it'),
                             ],
 //
 //                            [
 //                                'title' => 'Data management',
 //                                'description' => 'Manage your data',
 //                                'icon' => $this->resolver->getFrontendFileImageUrl('asset/icons/menu/data-migration.svg',
-//                                'link' => $this->url->getPageUrl('use-cases/data-management'),
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/data-management'),
 //                            ],
                             [
                                 'title' => 'Marketing',
                                 'description' => 'Enable marketing automation',
                                 'icon' => 'asset/icons/menu/marketing.svg',
-                                'link' => $this->url->getPageUrl('use-cases/marketing'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/marketing'),
                             ],
                             [
                                 'title' => 'Sales',
                                 'description' => 'Connect all your sales processes',
                                 'icon' => 'asset/icons/menu/marketing.svg',
-                                'link' => $this->url->getPageUrl('use-cases/sales'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
                             ],
                             //                            ['title' => 'API reference', 'link' => $this->resolver->getPageUrl('api-reference')],
                             //                            ['title' => 'Platform status', 'link' => $this->getConfiguration()->getValue('status_url'), 'target' => '_blank', 'rel' => 'noopener'],
@@ -129,14 +131,14 @@ class Navigation implements ArgumentInterface
                                 'title' => 'Adobe Commerce',
                                 'description' => '',
                                 'icon' => 'asset/icons/menu/ecommerce.svg',
-                                'link' => $this->url->getPageUrl('use-cases/ecommerce'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ecommerce'),
                             ],
 
                             [
                                 'title' => 'Shopify',
                                 'description' => '',
                                 'icon' => 'asset/icons/menu/data-migration.svg',
-                                'link' => $this->url->getPageUrl('use-cases/data-management'),
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/data-management'),
                             ],
 //                            [
 //                                'title' => 'Marketing',
@@ -167,19 +169,19 @@ class Navigation implements ArgumentInterface
                                 'title' => 'About',
                                 'description' => 'Discover what Attlaz is all about',
                                 'icon' => 'asset/icons/menu/about.svg',
-                                'link' => $this->url->getPageUrl('about'),
+                                'link' => $this->viewableEntityHelper->getUrl('about'),
                             ],
                             [
                                 'title' => 'Careers',
                                 'description' => 'Work with purpose. Leave your mark.',
                                 'icon' => 'asset/icons/menu/careers.svg',
-                                'link' => $this->url->getPageUrl('careers'),
+                                'link' => $this->viewableEntityHelper->getUrl('careers'),
                             ],
                             [
                                 'title' => 'Partners',
                                 'description' => 'Learn how Attlaz partners are accelerating businesses',
                                 'icon' => 'asset/icons/menu/partners.svg',
-                                'link' => $this->url->getPageUrl('partners'),
+                                'link' => $this->viewableEntityHelper->getUrl('partners'),
                             ],
                         ],
                     ],
@@ -235,19 +237,19 @@ class Navigation implements ArgumentInterface
                                 'title' => 'Customer stories',
                                 'description' => 'See how ' . $this->localeHelper->translate('organizations') . ' are using the Attlaz platform to achieve their goals.',
                                 'icon' => 'asset/icons/menu/customers.svg',
-                                'link' => $this->url->getPageUrl('case-studies'),
+                                'link' => $this->viewableEntityHelper->getUrl('case-studies'),
                             ],
                             [
                                 'title' => 'Blog',
                                 'description' => 'Read up on all things integrating, automating, and much more',
                                 'icon' => 'asset/icons/menu/blog.svg',
-                                'link' => $this->url->getPageUrl('blog'),
+                                'link' => $this->viewableEntityHelper->getUrl('blog'),
                             ],
                             [
                                 'title' => 'Documentation',
                                 'description' => 'Access Attlaz documentation',
                                 'icon' => 'asset/icons/menu/documentation.svg',
-                                'link' => $this->url->getPageUrl('docs'),
+                                'link' => $this->viewableEntityHelper->getUrl('docs'),
                                 'target' => '_blank',
                                 'rel' => 'noopener',
                             ],
@@ -255,7 +257,7 @@ class Navigation implements ArgumentInterface
                                 'title' => 'Help center',
                                 'description' => 'We are here to help you',
                                 'icon' => 'asset/icons/menu/support.svg',
-                                'link' => $this->url->getPageUrl('support'),
+                                'link' => $this->viewableEntityHelper->getUrl('support'),
                             ],
                         ],
                     ],

@@ -17,6 +17,12 @@ class FileResolver implements FileResolverInterface
 
     }
 
+    /**
+     * @param string $filename
+     * @param string|null $scope (admin|frontend)
+     * @return FileIterator
+     * @throws \Exception
+     */
     public function get(string $filename, string|null $scope = null): FileIterator
     {
         switch ($scope) {

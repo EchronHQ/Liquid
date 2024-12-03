@@ -6,9 +6,9 @@ namespace Liquid\Framework\Controller\Result;
 
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Response\HttpResponseInterface;
-use Liquid\Framework\Controller\Result;
+use Liquid\Framework\Controller\AbstractResult;
 
-class Forward extends Result
+class Forward extends AbstractResult
 {
 
     private string|null $module = null;

@@ -7,7 +7,7 @@ namespace Liquid\Core\Console;
 use Echron\Tools\Bytes;
 use Echron\Tools\FileSystem;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Core\Model\AppConfig;
+use Liquid\Framework\App\Config\SegmentConfig;
 use Liquid\Framework\Filesystem\Path;
 use Liquid\Seo\Helper\GenerateSitemapHelper;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SystemInfo extends Command
 {
     public function __construct(
-        private readonly AppConfig $appConfig, private readonly Resolver $resolver
+        private readonly SegmentConfig $appConfig,
+        private readonly Resolver      $resolver
     )
     {
         parent::__construct('system:info');

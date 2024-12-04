@@ -8,10 +8,10 @@ use Liquid\Core\Helper\IdHelper;
 
 abstract class AbstractViewableEntity
 {
-    public const ID_PREFIX = '';
-    public const DEFAULT_TITLE = 'Accelerate your business';
-    public const DEFAULT_DESCRIPTION = 'Accelerate your business. Connect everything, engage everywhere and automate every process.';
-    public const DEFAULT_KEYWORDS = 'Attlaz, platforms, connection,integration, ecommerce,marketing, data-migration, Magento, Akeneo, Shopify,';
+    public const string ID_PREFIX = '';
+    public const string DEFAULT_TITLE = 'Accelerate your business';
+    public const string DEFAULT_DESCRIPTION = 'Accelerate your business. Connect everything, engage everywhere and automate every process.';
+    public const string DEFAULT_KEYWORDS = 'Attlaz, platforms, connection,integration, ecommerce,marketing, data-migration, Magento, Akeneo, Shopify,';
     public const TITLE_PREFIX = '';
 
     //    public string|null $theme = null;

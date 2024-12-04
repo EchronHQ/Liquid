@@ -33,7 +33,8 @@
     "ext-dom": "*",
     "ext-libxml": "*",
     "ext-simplexml": "*",
-    "ext-gd": "*"
+    "ext-gd": "*",
+    "ext-sodium": "*"
   },
   "replace": {
     "illuminate/view": "^8.20",

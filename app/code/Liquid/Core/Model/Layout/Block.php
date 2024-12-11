@@ -11,7 +11,8 @@ use Liquid\Core\Helper\Output;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Model\BlockContext;
 use Liquid\Framework\App\AppMode;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
+use Liquid\Framework\App\State;
 use Liquid\Framework\View\Element\AbstractBlock;
 use Liquid\Framework\View\Layout\Layout;
 use Psr\Log\LoggerInterface;
@@ -20,7 +21,7 @@ class Block extends AbstractBlock
 {
     use DisableMagicMethodsTrait;
 
-    protected SegmentConfig $configuration;
+    protected ScopeConfig $configuration;
     protected Layout|null $layout;
     protected Resolver $resolver;
     protected FileHelper $fileHelper;
@@ -29,9 +30,10 @@ class Block extends AbstractBlock
     protected LoggerInterface $logger;
 
     public function __construct(
-        BlockContext $context,
-        string       $nameInLayout = '',
-        array        $data = []
+        BlockContext           $context,
+        string                 $nameInLayout = '',
+        private readonly State $appState,
+        array                  $data = []
     )
     {
         parent::__construct($context->layout, $nameInLayout, $data);
@@ -81,7 +83,7 @@ class Block extends AbstractBlock
         return $this->layout;
     }
 
-    public function getConfiguration(): SegmentConfig
+    public function getConfiguration(): ScopeConfig
     {
         return $this->configuration;
     }
@@ -123,7 +125,7 @@ class Block extends AbstractBlock
     protected function handleUnableToRender(\Throwable $ex): string
     {
         $this->logger->error('Unable to render block', ['name' => $this->getNameInLayout(), 'class' => \get_class($this), 'error' => $ex->getMessage(), 'file' => $ex->getFile() . ':' . $ex->getLine()]);
-        if ($this->configuration->getMode() === AppMode::Develop) {
+        if ($this->appState->getMode() === AppMode::Develop) {
             return '<div style="background:rgb(255 255 255 / 80%);border:2px dashed red;padding: 10px;margin:10px;position: absolute;z-index: 999;border-radius: 6px"><div>Unable to render block "' . $this->getNameInLayout() . '"</div><div>Class: "' . \get_class($this) . '</div><div>Msg: ' . $ex->getMessage() . '</div></div>';
         }
 

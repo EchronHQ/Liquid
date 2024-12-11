@@ -126,7 +126,7 @@ class LoggerProxy implements LoggerInterface
             endif;
             //  if (!$this->appConfig->isCLI() && $deploymentConfig->getValueMode() === AppMode::Develop) {
 
-            $browserMinLogLevel = $deploymentConfig->getValue('logger.browser.minloglevel', Level::Debug->name);
+            $browserMinLogLevel = $deploymentConfig->getValue('logging/browser/minloglevel', Level::Error->name);
 
             //  var_dump($browserMinLogLevel);
             $browserConsoleHandler = new BrowserConsoleHandler();

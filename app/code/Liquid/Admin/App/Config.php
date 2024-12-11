@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Admin\App;
 
 use Liquid\Config\App\Config\Type\System;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Config\SegmentConfigInterface;
 
 class Config
@@ -12,7 +12,7 @@ class Config
     private array $data = [];
 
     public function __construct(
-        private readonly SegmentConfig $appConfig
+        private readonly ScopeConfig $appConfig
     )
     {
 

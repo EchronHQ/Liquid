@@ -8,7 +8,7 @@ use Liquid\Framework\App\Cache\CacheState;
 use Liquid\Framework\App\Cache\CacheStateInterface;
 use Liquid\Framework\App\Config\PrimaryConfigFileResolver;
 use Liquid\Framework\App\Config\Reader;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Config\SegmentConfigInterface;
 use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\App\Entity\AggregateEntityResolver;
@@ -30,6 +30,8 @@ use Liquid\Framework\Logger\LoggerProxy;
 use Liquid\Framework\Serialize\Serializer\Json;
 use Liquid\Framework\Serialize\Serializer\Serialize;
 use Liquid\Framework\Serialize\Serializer\SerializerInterface;
+use Liquid\Framework\Url\ScopeResolver;
+use Liquid\Framework\Url\ScopeResolverInterface;
 use Liquid\Framework\View\TemplateEngine;
 use Psr\Log\LoggerInterface;
 
@@ -73,8 +75,9 @@ class ObjectManagerFactory
                 SerializerInterface::class => Json::class,
                 EntityResolverInterface::class => AggregateEntityResolver::class,
                 CacheStateInterface::class => CacheState::class,
-                SegmentConfigInterface::class => SegmentConfig::class,
+                SegmentConfigInterface::class => ScopeConfig::class,
                 ResolverInterface::class => Resolver::class,
+                ScopeResolverInterface::class => ScopeResolver::class,
             ],
             'types' => [
                 ConfigLoader::class => [

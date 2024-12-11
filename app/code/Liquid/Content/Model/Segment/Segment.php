@@ -3,29 +3,49 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Model\Segment;
 
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Content\Model\ScopeType;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Scope\ScopeInterface as AppScopeInterface;
+use Liquid\Framework\DataObject;
 use Liquid\Framework\Escaper;
+use Liquid\Framework\Filesystem\Filesystem;
+use Liquid\Framework\Filesystem\Path;
 use Liquid\Framework\Url;
+use Liquid\Framework\Url\ScopeInterface as UrlScopeInterface;
+use Liquid\Framework\Url\UrlType;
 
-class Segment implements SegmentInterface
+class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
 {
     /**
      * A placeholder for generating base URL
      */
     public const string BASE_URL_PLACEHOLDER = '{{base_url}}';
 
+    public const string XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
+    public const string  XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
+    public const string  XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
+    public const string  XML_PATH_SECURE_BASE_STATIC_URL = 'web/secure/base_static_url';
+    public const string  XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
+    public const string  XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+    public const string  XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+    public const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
+    public const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
     public SegmentId $id;
     public string $code;
     private array $baseUrlCache = [];
+    private bool|null $_isFrontSecure = null;
 
     public function __construct(
-        private readonly SegmentConfig $config,
-        private readonly Request       $request,
-        private readonly Url           $url,
-        private readonly Escaper       $escaper,
+        private readonly ScopeConfig $config,
+        private readonly Request     $request,
+        private readonly Filesystem  $filesystem,
+        private readonly Url         $url,
+        private readonly Escaper     $escaper,
+        array                        $data = []
     )
     {
+        parent::__construct($data);
     }
 
     public function getId(): SegmentId
@@ -33,16 +53,46 @@ class Segment implements SegmentInterface
         return $this->id;
     }
 
-    public function getBaseUrl(): string
+    public function getBaseUrl(UrlType $type = UrlType::LINK, bool|null $secure = null): string
     {
-
-        $cacheKey = 'web';
+        $cacheKey = $type->name . '/' . ($secure === null ? 'null' : ($secure ? 'true' : 'false'));
         if (!isset($this->baseUrlCache[$cacheKey])) {
 
-            $url = $this->getConfig('web/unsecure/base_link_url');
-            if ($url) {
-                $url = $this->updatePathUseSegmentCode($url);
+            switch ($type) {
+                case UrlType::WEB:
+                    $path = $secure
+                        ? self::XML_PATH_SECURE_BASE_URL
+                        : self::XML_PATH_UNSECURE_BASE_URL;
+                    $url = $this->getConfig($path);
+                    break;
+                case UrlType::LINK:
+                    $path = $secure ? self::XML_PATH_SECURE_BASE_LINK_URL : self::XML_PATH_UNSECURE_BASE_LINK_URL;
+                    $url = $this->getConfig($path);
+//                    $url = $this->_updatePathUseRewrites($url);
+                    $url = $this->updatePathUseSegmentCode($url);
+                    break;
+                case UrlType::STATIC:
+                    $path = $secure ? self::XML_PATH_SECURE_BASE_STATIC_URL : self::XML_PATH_UNSECURE_BASE_STATIC_URL;
+                    $url = $this->getConfig($path);
+                    if (!$url) {
+                        $url = $this->getBaseUrl(UrlType::WEB, $secure) . $this->filesystem->getUri(Path::STATIC_VIEW);
+                    }
+                    break;
+                case UrlType::MEDIA:
+                    //$url = $this->_getMediaScriptUrl($this->filesystem, $secure);
+//                    if (!$url) {
+                    $path = $secure ? self::XML_PATH_SECURE_BASE_MEDIA_URL : self::XML_PATH_UNSECURE_BASE_MEDIA_URL;
+                    $url = $this->getConfig($path);
+                    if (!$url) {
+                        $url = $this->getBaseUrl(UrlType::WEB, $secure)
+                            . $this->filesystem->getUri(Path::MEDIA);
+                    }
+//                    }
+                    break;
+                default:
+                    throw new \InvalidArgumentException('Invalid base url type');
             }
+
             if ($url && str_contains($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->request->getDistroBaseUrl(), $url);
             }
@@ -89,6 +139,40 @@ class Segment implements SegmentInterface
             $data = $this->config->getValue($path);
         }
         return $data === false ? null : $data;
+    }
+
+    public function getScopeType(): ScopeType
+    {
+        return ScopeType::SEGMENT;
+    }
+
+    public function getScopeTypeName(): string
+    {
+        return 'Segment View';
+    }
+
+    public function getName(): string
+    {
+        return $this->_getData('name');
+    }
+
+    public function isUrlSecure(): bool
+    {
+        return $this->isFrontUrlSecure();
+    }
+
+    /**
+     * Check if frontend URLs should be secure
+     *
+     * @return bool
+     */
+    public function isFrontUrlSecure(): bool
+    {
+        if ($this->_isFrontSecure === null) {
+            $this->_isFrontSecure = $this->config
+                ->isSetFlag(self::XML_PATH_SECURE_IN_FRONTEND, $this->getId());
+        }
+        return $this->_isFrontSecure;
     }
 
     /**

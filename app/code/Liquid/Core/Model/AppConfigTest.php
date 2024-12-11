@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Model;
 
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use PHPUnit\Framework\TestCase;
 
 class AppConfigTest extends TestCase

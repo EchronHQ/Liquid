@@ -25,7 +25,7 @@ class ListUrlRewrites extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $segment = $this->segmentManager->getSegment(new SegmentId('0'));
+        $segment = $this->segmentManager->getSegment(new SegmentId('seg_0'));
         var_dump($this->urlFinder->findOneByRequestPath('use-cases/ecommerce', $segment->id));
         return Command::SUCCESS;
     }

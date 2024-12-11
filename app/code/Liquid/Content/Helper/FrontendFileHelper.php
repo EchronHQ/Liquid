@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Helper;
 
-use Echron\Tools\StringHelper;
 use Liquid\Core\Helper\Resolver;
 
 class FrontendFileHelper
@@ -35,7 +34,7 @@ class FrontendFileHelper
 
     public function getUrlByFileName(string $fileName): string
     {
-        if (StringHelper::startsWith($fileName, 'https://') || StringHelper::startsWith($fileName, 'http://')) {
+        if (str_starts_with($fileName, 'https://') || str_starts_with($fileName, 'http://')) {
             return $fileName;
         }
         $filePath = $this->getFilePath($fileName);

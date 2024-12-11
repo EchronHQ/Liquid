@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Action;
 
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\Controller\ResultFactory;
@@ -15,7 +15,7 @@ readonly class Context
         private Request         $request,
         private Response        $response,
         private ResultFactory   $resultFactory,
-        private SegmentConfig   $configuration,
+        private ScopeConfig     $configuration,
         private LoggerInterface $logger
     )
     {
@@ -36,7 +36,7 @@ readonly class Context
         return $this->resultFactory;
     }
 
-    public function getConfiguration(): SegmentConfig
+    public function getConfiguration(): ScopeConfig
     {
         return $this->configuration;
     }

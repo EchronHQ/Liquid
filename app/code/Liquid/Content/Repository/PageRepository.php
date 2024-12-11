@@ -62,7 +62,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
             PageDefinition::generate('why-attlaz', [
                 'url_key' => 'why-attlaz',
-                'template' => 'Liquid_Content::page/why-attlaz.phtml',
+                'template' => 'Liquid_Content::page/about/why-attlaz.phtml',
                 'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Discover the Attlaz platform',
                 'seo_description' => 'Learn how Attlaz improve your internal data management',
@@ -121,7 +121,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
             PageDefinition::generate('partners', [
                 'url_key' => 'partners',
-                'template' => 'Liquid_Content::page/partners.phtml',
+                'template' => 'Liquid_Content::page/about/partners.phtml',
                 'doc_css_class' => 'theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Find our become an Attlaz partner',
                 'seo_description' => "Partner with the world’s leading system integrators and technology innovators",
@@ -132,7 +132,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
             PageDefinition::generate('careers', [
                 'url_key' => 'careers',
-                'template' => 'Liquid_Content::page/careers.phtml',
+                'template' => 'Liquid_Content::page/about/careers.phtml',
                 'doc_css_class' => 'theme--light palette--wintergreen accent--green',
                 'seo_title' => 'Careers - Join our fast growing team',
                 'seo_description' => 'Careers - Join our fast growing team',
@@ -153,7 +153,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             PageDefinition::generate('environment', [
                 'url_key' => 'environment',
                 'path' => 'environment',
-                'template' => 'Liquid_Content::page/environment.phtml',
+                'template' => 'Liquid_Content::page/about/environment.phtml',
                 'doc_css_class' => 'theme--light palette--lemonlime accent--green',
                 'seo_title' => 'Environment and sustainability',
                 'seo_description' => 'Attlaz empower companies to improve their carbon footprint and be more sustainable',
@@ -163,7 +163,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
             PageDefinition::generate('support', [
                 'url_key' => 'support',
-                'template' => 'Liquid_Content::page/support.phtml',
+                'template' => 'Liquid_Content::page/about/support.phtml',
                 'doc_css_class' => 'theme--light palette--chroma accent--cyan',
                 'seo_title' => 'Support Center',
                 'seo_description' => 'Everything you need to know right here at your fingertips. Ask questions, browse around for answers, or submit your feature requests.',
@@ -210,39 +210,39 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             /**
              * Products
              */
-            PageDefinition::generate('products/integrate', [
-                'url_key' => 'products/integrate',
-                'template' => 'Liquid_Content::page/products/integrate.phtml',
-                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
-                'seo_title' => 'Integrations made easy',
-                'seo_description' => 'Integrations made easy',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2022-10-23 15:49:06',
-                'urlRewrites' => ['products/integrate'],
-            ]),
-            PageDefinition::generate('products/automate', [
-                'url_key' => 'products/automate',
-                'template' => 'Liquid_Content::page/products/automate.phtml',
-                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
-                'seo_title' => 'Powerful automation',
-                'seo_description' => 'Powerful automation',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2022-10-23 15:49:06',
-                'urlRewrites' => ['products/automate'],
-            ]),
-            PageDefinition::generate('products/visualize', [
-                'url_key' => 'products/visualize',
-                'template' => 'Liquid_Content::page/products/visualize.phtml',
-                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
-                'seo_title' => 'Visualization and monitoring',
-                'seo_description' => 'Visualization and monitoring',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2022-10-23 15:49:06',
-                'urlRewrites' => ['products/visualize'],
-            ]),
+//            PageDefinition::generate('products/integrate', [
+//                'url_key' => 'products/integrate',
+//                'template' => 'Liquid_Content::page/products/integrate.phtml',
+//                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+//                'seo_title' => 'Integrations made easy',
+//                'seo_description' => 'Integrations made easy',
+//                'seo_keywords' => '',
+//                'priority' => PageSitemapPriority::HIGH,
+//                'modified' => '2022-10-23 15:49:06',
+//                'urlRewrites' => ['products/integrate'],
+//            ]),
+//            PageDefinition::generate('products/automate', [
+//                'url_key' => 'products/automate',
+//                'template' => 'Liquid_Content::page/products/automate.phtml',
+//                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+//                'seo_title' => 'Powerful automation',
+//                'seo_description' => 'Powerful automation',
+//                'seo_keywords' => '',
+//                'priority' => PageSitemapPriority::HIGH,
+//                'modified' => '2022-10-23 15:49:06',
+//                'urlRewrites' => ['products/automate'],
+//            ]),
+//            PageDefinition::generate('products/visualize', [
+//                'url_key' => 'products/visualize',
+//                'template' => 'Liquid_Content::page/products/visualize.phtml',
+//                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+//                'seo_title' => 'Visualization and monitoring',
+//                'seo_description' => 'Visualization and monitoring',
+//                'seo_keywords' => '',
+//                'priority' => PageSitemapPriority::HIGH,
+//                'modified' => '2022-10-23 15:49:06',
+//                'urlRewrites' => ['products/visualize'],
+//            ]),
             /**
              * Solutions - Overview
              */
@@ -260,17 +260,17 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
              * Industries
              */
             // TODO: make overview page with all industries
-            PageDefinition::generate('industries/startups', [
-                'url_key' => 'industries/startups',
-                'template' => 'Liquid_Content::page/industries/startups.phtml',
-                'doc_css_class' => 'theme--light palette--chroma accent--cyan',
-                'seo_title' => 'Attlaz for startups',
-                'seo_description' => 'Attlaz for startups',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::IGNORE,
-                'modified' => '2023-11-17 12:41:03',
-                'urlRewrites' => ['industries/startups'],
-            ]),
+//            PageDefinition::generate('industries/startups', [
+//                'url_key' => 'industries/startups',
+//                'template' => 'Liquid_Content::page/industries/startups.phtml',
+//                'doc_css_class' => 'theme--light palette--chroma accent--cyan',
+//                'seo_title' => 'Attlaz for startups',
+//                'seo_description' => 'Attlaz for startups',
+//                'seo_keywords' => '',
+//                'priority' => PageSitemapPriority::IGNORE,
+//                'modified' => '2023-11-17 12:41:03',
+//                'urlRewrites' => ['industries/startups'],
+//            ]),
             /**
              * Case studies
              */

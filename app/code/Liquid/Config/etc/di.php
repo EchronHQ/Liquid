@@ -5,7 +5,7 @@ use Liquid\Framework\App\Config\ConfigSourceInterface;
 
 return [
     'types' => [
-        \Liquid\Framework\App\Config\SegmentConfig::class => [
+        \Liquid\Framework\App\Config\ScopeConfig::class => [
             'arguments' => [
                 'types' => [
                     'type' => 'array',

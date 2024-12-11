@@ -70,7 +70,9 @@ $helper = $this->helper(\Liquid\Content\Helper\ViewableEntity::class);
                                                             </div>
                                                             <div class="item-text">
                                                                 <div class="item-text-title"><?= $navItemSubSectionItem['title'] ?></div>
-                                                                <div class="item-text-description"><?= $navItemSubSectionItem['description'] ?></div>
+                                                                <?php if (isset($navItemSubSectionItem['description'])): ?>
+                                                                    <div class="item-text-description"><?= $navItemSubSectionItem['description'] ?></div>
+                                                                <?php endif; ?>
                                                             </div>
 
                                                         </a>

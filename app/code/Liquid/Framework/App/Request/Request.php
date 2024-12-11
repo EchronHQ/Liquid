@@ -23,6 +23,15 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     private array $paramAliases = [];
     private bool $isMatched = false;
     private string|null $distroBaseUrl = null;
+
+    private string|null $route = null;
+
+    public function __construct(
+        private readonly StringHelper $converter,
+    )
+    {
+        parent::__construct();
+    }
 //    private function getUrlSegment(int $index): ?string
 //    {
 //        if (isset($this->urlSegments[$index])) {
@@ -49,12 +58,30 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
 //        }
 //        return $this->getUrlSegment(2);
 //    }
-
-    public function __construct(
-        private readonly StringHelper $converter,
-    )
+    /**
+     * Set route name
+     *
+     * @param string $route
+     * @return $this
+     */
+    public function setRouteName(string $route): self
     {
-        parent::__construct();
+        $this->route = $route;
+//        $module = $this->routeConfig->getRouteFrontName($route);
+//        if ($module) {
+//            $this->setModuleName($module);
+//        }
+        return $this;
+    }
+
+    /**
+     * Retrieve route name
+     *
+     * @return string|null
+     */
+    public function getRouteName(): string|null
+    {
+        return $this->route;
     }
 
     final public function getIp(): string
@@ -233,8 +260,8 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         if ($this->immediateRequestSecure()) {
             return true;
         }
-        return false;
-//        return $this->initialRequestSecure($this->getSslOffloadHeader());
+        // return false;//$this->getSslOffloadHeader()
+        return $this->initialRequestSecure('X-Forwarded-Proto');
     }
 
     /**
@@ -269,7 +296,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      */
     public function getDistroBaseUrl(): string
     {
-        if ($this->distroBaseUrl) {
+        if ($this->distroBaseUrl !== null) {
             return $this->distroBaseUrl;
         }
         $headerHttpHost = $this->getServer('HTTP_HOST');

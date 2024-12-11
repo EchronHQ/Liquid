@@ -24,7 +24,7 @@ class GeneratorPool
     /**
      * @var State
      */
-    private State $state;
+    private State $appState;
 
     /**
      * @param ScheduledStructureHelper $helper
@@ -43,7 +43,7 @@ class GeneratorPool
     )
     {
         $this->addGenerators($generators);
-        $this->state = $state ?? $objectManager->get(State::class);
+        $this->appState = $state ?? $objectManager->get(State::class);
     }
 
     /**
@@ -196,7 +196,7 @@ class GeneratorPool
             $structure->setAsChild($element, $destination, $alias);
             $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
         } catch (\OutOfBoundsException $e) {
-            if ($this->state->getMode() === AppMode::Develop) {
+            if ($this->appState->getMode() === AppMode::Develop) {
                 $this->logger->warning('Broken reference: ' . $e->getMessage());
             }
         }

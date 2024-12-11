@@ -37,19 +37,20 @@ $selectedKey = $viewModel->selectedIndex;
         </div>
     </div>
     <div class="tab-content">
-        <?php
-        foreach ($tabs as $key => $tab) {
-            ?>
-            <div
-                    class="tab-panel"
-                    data-tab="<?= $key ?>"
-                    role="tabpanel"
-                    id="<?= $id . '-panel-' . $key ?>"
-                    aria-labelledby="<?= $id . '-tab-' . $key ?>">
-                <?= $tab['content'] ?>
-            </div>
+        <div class="tab-content-track">
             <?php
-        } ?>
-
+            foreach ($tabs as $key => $tab) {
+                ?>
+                <div
+                        class="tab-panel"
+                        data-tab="<?= $key ?>"
+                        role="tabpanel"
+                        id="<?= $id . '-panel-' . $key ?>"
+                        aria-labelledby="<?= $id . '-tab-' . $key ?>">
+                    <?= $tab['content'] ?>
+                </div>
+                <?php
+            } ?>
+        </div>
     </div>
 </div>

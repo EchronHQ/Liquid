@@ -8,14 +8,14 @@ use Liquid\Content\Helper\LocaleHelper;
 use Liquid\Core\Helper\FileHelper;
 use Liquid\Core\Helper\Output;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\View\Layout\Layout;
 use Psr\Log\LoggerInterface;
 
 readonly class BlockContext
 {
     public function __construct(
-        public SegmentConfig   $configuration,
+        public ScopeConfig     $configuration,
         public Layout|null     $layout,
         public Resolver        $resolver,
         public FileHelper      $fileHelper,

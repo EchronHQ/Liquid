@@ -4,6 +4,9 @@ declare(strict_types=1);
 use Liquid\Framework\App\Entity\AggregateEntityResolver;
 
 return [
+    'preferences' => [
+        \Liquid\Framework\App\Scope\ScopeResolverInterface::class => \Liquid\Content\Model\Resolver\Segment::class,
+    ],
     'types' => [
         \Liquid\Framework\App\Area\AreaList::class => [
             'arguments' => [
@@ -90,6 +93,19 @@ return [
                         'default' => [
                             'class' => \Liquid\Framework\App\Router\NoRouteHandler::class,
                             'sortOrder' => 100,
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        \Liquid\Framework\App\Config\ScopeConfig::class => [
+            'arguments' => [
+                'types' => [
+                    'type' => 'array',
+                    'value' => [
+                        'scopes' => [
+                            'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_OBJECT,
+                            'value' => \Liquid\Content\App\Config\Type\Scopes::class,
                         ],
                     ],
                 ],

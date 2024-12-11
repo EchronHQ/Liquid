@@ -6,7 +6,7 @@ namespace Liquid\Content\Helper;
 
 use Liquid\Blog\Repository\TerminologyRepository;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Psr\Log\LoggerInterface;
 
 class TerminologyHelper
@@ -16,7 +16,7 @@ class TerminologyHelper
     public function __construct(
         private readonly TerminologyRepository $terminologyRepository,
         private readonly Resolver              $resolver,
-        private readonly SegmentConfig         $appConfig,
+        private readonly ScopeConfig           $appConfig,
         private readonly LoggerInterface       $logger
     )
     {

@@ -7,7 +7,7 @@ namespace Liquid\Framework;
  */
 class DataObject
 {
-    private array $_data;
+    protected array $_data;
 
     public function __construct(array $data = [])
     {

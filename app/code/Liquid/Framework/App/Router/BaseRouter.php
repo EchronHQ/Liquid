@@ -154,17 +154,17 @@ class BaseRouter implements RouterInterface
         //  var_dump($moduleFrontName);
         $actions = $this->routeConfig->getActions('thisisnolongerused');
 
-        if (false) {
-            /**
-             * Debug
-             */
-            echo '<div>' . 'Request Path: ' . $request->getPathInfo() . '</div>';
-            echo '<div>Frontname: ' . $params["areaFrontName"] . '</div>';
-            echo '<div>Action: ' . $params["actionPath"] . '</div>';
-            foreach ($actions as $action) {
-                echo '<div>' . implode('|', $action->methods) . ' ' . $action->path . ' (' . $action->class . ')</div>';
-            }
-        }
+//        if (false) {
+//            /**
+//             * Debug
+//             */
+//            echo '<div>' . 'Request Path: ' . $request->getPathInfo() . '</div>';
+//            echo '<div>Frontname: ' . $params["areaFrontName"] . '</div>';
+//            echo '<div>Action: ' . $params["actionPath"] . '</div>';
+//            foreach ($actions as $action) {
+//                echo '<div>' . implode('|', $action->methods) . ' ' . $action->path . ' (' . $action->class . ')</div>';
+//            }
+//        }
         if (empty($actions)) {
             return null;
         }

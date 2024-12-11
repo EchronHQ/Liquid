@@ -6,7 +6,7 @@ namespace Liquid\Content\Helper;
 
 use Liquid\Blog\Repository\TerminologyRepository;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +17,7 @@ class TerminologyHelperTest extends TestCase
 
         $stub = $this->createStub(TerminologyRepository::class);
         $resolver = $this->createStub(Resolver::class);
-        $appConfig = $this->createStub(SegmentConfig::class);
+        $appConfig = $this->createStub(ScopeConfig::class);
         $logger = $this->createStub(Logger::class);
 
         $terminologyHelper = new TerminologyHelper($stub, $resolver, $appConfig, $logger);
@@ -30,7 +30,7 @@ class TerminologyHelperTest extends TestCase
     {
         $stub = $this->createStub(TerminologyRepository::class);
         $resolver = $this->createStub(Resolver::class);
-        $appConfig = $this->createStub(SegmentConfig::class);
+        $appConfig = $this->createStub(ScopeConfig::class);
         $logger = $this->createStub(Logger::class);
 
         $terminologyHelper = new TerminologyHelper($stub, $resolver, $appConfig, $logger);
@@ -42,7 +42,7 @@ class TerminologyHelperTest extends TestCase
     {
         $stub = $this->createStub(TerminologyRepository::class);
         $resolver = $this->createStub(Resolver::class);
-        $appConfig = $this->createStub(SegmentConfig::class);
+        $appConfig = $this->createStub(ScopeConfig::class);
         $logger = $this->createStub(Logger::class);
 
         $terminologyHelper = new TerminologyHelper($stub, $resolver, $appConfig, $logger);

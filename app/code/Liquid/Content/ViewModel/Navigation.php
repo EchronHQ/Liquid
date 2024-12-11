@@ -31,48 +31,72 @@ class Navigation implements ArgumentInterface
                         'title' => 'Products',
                         'items' => [
                             [
-                                'title' => 'Integrate',
-                                'description' => 'Connect your platforms with ease and manage your data in one place so you can focus on growing your business.',
+                                'title' => 'Feed Management',
+                                'description' => 'Streamline product distribution',
                                 'icon' => 'asset/icons/menu/integrate.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/integrate'),
+                                'link' => $this->viewableEntityHelper->getUrl('products/feed-management'),
+                            ],
+                            [
+                                'title' => 'Competitor Monitoring',
+                                'description' => 'Track market dynamics',
+                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('products/competitor-monitoring'),
+                            ],
+                            [
+                                'title' => 'Inventory Management',
+                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('products/inventory-management'),
+                            ],
+                            [
+                                'title' => 'Integrations',
+                                'description' => 'Connect business ecosystems',
+                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('products/integrations'),
+                            ],
+                            [
+                                'title' => 'Automations',
+                                'description' => 'Simplify workflow processes',
+                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('products/automations'),
                             ],
                         ],
                     ],
-                    [
-                        'title' => 'Features',
-                        'items' => [
-                            [
-                                'title' => 'Integrate',
-                                'description' => 'Connect your platforms with ease and manage your data in one place so you can focus on growing your business.',
-                                'icon' => 'asset/icons/menu/integrate.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/integrate'),
-                            ],
-                            [
-                                'title' => 'Automate',
-                                'description' => 'Automate your processes. Gain better insights and reduce mistakes.',
-                                'icon' => 'asset/icons/menu/automate.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/automate'),
-                            ],
-                            [
-                                'title' => $this->localeHelper->translate('Visualize'),
-                                'description' => 'Monitor platforms, processes and data, identify issues and solve issues instantly.',
-                                'icon' => 'asset/icons/menu/visualize.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/visualize'),
-                            ],
-                            [
-                                'title' => 'Why Attlaz',
-                                'description' => 'Giving your team superpowers',
-                                'icon' => 'asset/icons/menu/why-attlaz.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform'),
-                            ],
-                            //                            [
-                            //                                'title'       => 'How it works',
-                            //                                'description' => 'Attlaz powers the pathways to accelerate your business.',
-                            //                                'icon'        => $this->resolver->getFrontendFileUrl('asset/icons/menu/how-it-works.svg',
-                            //                                'link'        => $this->resolver->getPageUrl('platform')
-                            //                            ],
-                        ],
-                    ],
+//                    [
+//                        'title' => 'Features',
+//                        'items' => [
+//                            [
+//                                'title' => 'Integrate',
+//                                'description' => 'Connect your platforms with ease and manage your data in one place so you can focus on growing your business.',
+//                                'icon' => 'asset/icons/menu/integrate.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/integrate'),
+//                            ],
+//                            [
+//                                'title' => 'Automate',
+//                                'description' => 'Automate your processes. Gain better insights and reduce mistakes.',
+//                                'icon' => 'asset/icons/menu/automate.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/automate'),
+//                            ],
+//                            [
+//                                'title' => $this->localeHelper->translate('Visualize'),
+//                                'description' => 'Monitor platforms, processes and data, identify issues and solve issues instantly.',
+//                                'icon' => 'asset/icons/menu/visualize.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/visualize'),
+//                            ],
+//                            [
+//                                'title' => 'Why Attlaz',
+//                                'description' => 'Giving your team superpowers',
+//                                'icon' => 'asset/icons/menu/why-attlaz.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform'),
+//                            ],
+//                            //                            [
+//                            //                                'title'       => 'How it works',
+//                            //                                'description' => 'Attlaz powers the pathways to accelerate your business.',
+//                            //                                'icon'        => $this->resolver->getFrontendFileUrl('asset/icons/menu/how-it-works.svg',
+//                            //                                'link'        => $this->resolver->getPageUrl('platform')
+//                            //                            ],
+//                        ],
+//                    ],
                 ],
             ],
             [

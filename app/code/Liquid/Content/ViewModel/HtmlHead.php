@@ -14,7 +14,7 @@ use Liquid\Content\Model\Segment\SegmentManager;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Framework\App\AppMode;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\State;
 use Liquid\Framework\Locale\ResolverInterface;
 use Liquid\Framework\Output\Html;
@@ -47,7 +47,7 @@ class HtmlHead implements ArgumentInterface
         private readonly Resolver           $resolver,
         private readonly SegmentManager     $segmentManager,
         private readonly Url                $url,
-        private readonly SegmentConfig      $config,
+        private readonly ScopeConfig        $config,
         private readonly State              $appState,
         private readonly LoggerInterface    $logger
     )
@@ -226,15 +226,15 @@ class HtmlHead implements ArgumentInterface
     public function getDefaultLocale(): Segment
     {
         // TODO: get this from config
-        return $this->segmentManager->getSegment(new SegmentId('0'));
+        return $this->segmentManager->getSegment(new SegmentId('seg_0'));
     }
 
-    public function getCurrentUrlForSegment(Segment|null $segment): string
+    public function getCurrentUrlForSegment(SegmentId|null $segment): string
     {
-        $this->segmentManager->getSegment()->getBaseUrl();
-        $currentPath = $this->url->getCurrentUrl();
-
-        return $this->url->getUrl($currentPath, $segment->getId());
+        return $this->segmentManager->getSegment($segment)->getCurrentUrl();
+//        $currentPath = $this->url->getCurrentUrl();
+//// This is not correct!
+//        return $this->url->getUrl($currentPath, $segment);
     }
 
     public function getCurrentUrl(): string

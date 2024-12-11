@@ -5,15 +5,18 @@ namespace Liquid\Content\Model\Segment;
 
 
 use Liquid\Content\Model\SegmentRepository;
+use Liquid\Content\Model\SegmentResolver;
 use Liquid\Core\Helper\Profiler;
+use Liquid\Framework\App\Config\ScopeConfig;
 
 class SegmentManager
 {
     private SegmentId|null $currentSegmentId = null;
 
     public function __construct(
-        private readonly SegmentResolver   $segmentResolver,
+        private readonly ScopeConfig       $scopeConfig,
         private readonly SegmentRepository $segmentRepository,
+        private readonly SegmentResolver   $segmentResolver,
         private readonly Profiler          $profiler
     )
     {
@@ -62,7 +65,7 @@ class SegmentManager
     {
         $stores = [];
         foreach ($this->segmentRepository->getList() as $segment) {
-            if (!$withDefault && $segment->getId() === new SegmentId('0')) {
+            if (!$withDefault && $segment->getId() === new SegmentId('seg_0')) {
                 continue;
             }
             if ($codeKey) {

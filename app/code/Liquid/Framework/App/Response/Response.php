@@ -105,6 +105,9 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function sendResponse(): int|null
     {
+        $this->setHeadersSentHandler(function () {
+            echo 'headers already send';
+        });
         $this->send();
         return null;
     }

@@ -4,15 +4,22 @@ declare(strict_types=1);
 namespace Liquid\Framework\View\Asset;
 
 use Liquid\Framework\App\Area\AreaCode;
+use Liquid\Framework\Component\ComponentFile;
+use Liquid\Framework\Filesystem\Path;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\Url;
+use Liquid\Framework\Url\UrlType;
+use Liquid\Framework\View\Asset\File\AssetFileFallbackContext;
 use Liquid\Framework\View\Design\Theme;
 
 class Repository
 {
     private array|null $defaults = null;
+    private array $fallbackContext = [];
 
     public function __construct(
-        private readonly ObjectManagerInterface $objectManager
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly Url                    $baseUrl,
     )
     {
     }
@@ -78,6 +85,50 @@ class Repository
     }
 
     /**
+     * Create a file asset that's subject of fallback system
+     *
+     * @param string $fileId
+     * @param array $params
+     * @return AssetFile
+     */
+    public function createAsset(string $fileId, array $params = []): AssetFile
+    {
+        $this->updateDesignParams($params);
+        $module = ComponentFile::extractModule($fileId);
+        if ($module['moduleId'] === null && $params['module']) {
+            $module['moduleId'] = $params['module'];
+        }
+
+        if (!isset($params['publish'])) {
+//            $map = $this->getRepositoryFilesMap($fileId, $params);
+//            if ($map) {
+//                $params = array_replace($params, $map);
+//            }
+        }
+
+        $isSecure = isset($params['_secure']) ? (bool)$params['_secure'] : null;
+        $themePath = isset($params['theme']) ? $params['theme'] : $this->design->getThemePath($params['themeModel']);
+        $context = $this->getFallbackContext(
+            UrlType::STATIC,
+            $isSecure,
+            $params['area'],
+            $themePath,
+            $params['locale']
+        );
+
+//        return new AssetFile();
+//        return $this->fileFactory->create(
+//            [
+//                'source' => $this->assetSource,
+//                'context' => $context,
+//                'filePath' => $filePath,
+//                'module' => $module['moduleId'],
+//                'contentType' => $this->assetSource->getContentType($filePath),
+//            ]
+//        );
+    }
+
+    /**
      * Get default design parameter
      *
      * @param string $name
@@ -88,5 +139,39 @@ class Repository
 
         // $this->defaults = $this->design->getDesignParams();
         return $this->defaults[$name] ?? null;
+    }
+
+    /**
+     * Get a fallback context value object
+     *
+     * Create only one instance per combination of parameters
+     *
+     * @param UrlType $urlType
+     * @param bool|null $isSecure
+     * @param AreaCode $area
+     * @param string $themePath
+     * @param string $locale
+     * @return AssetFileFallbackContext
+     */
+    private function getFallbackContext(UrlType $urlType, bool $isSecure, AreaCode $area, string $themePath, string $locale): AssetFileFallbackContext
+    {
+        $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
+        $baseDirType = Path::STATIC_VIEW;
+        $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
+        if (!isset($this->fallbackContext[$id])) {
+            $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
+            $this->fallbackContext[$id] = new AssetFileFallbackContext($url, $area, $themePath, $locale);
+
+//
+//                $this->fallbackContextFactory->create(
+//                [
+//                    'baseUrl' => $url,
+//                    'areaType' => $area,
+//                    'themePath' => $themePath,
+//                    'localeCode' => $locale
+//                ]
+            // );
+        }
+        return $this->fallbackContext[$id];
     }
 }

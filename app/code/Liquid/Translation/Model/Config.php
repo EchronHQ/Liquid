@@ -5,12 +5,12 @@ namespace Liquid\Translation\Model;
 
 use Liquid\Content\Model\Segment\SegmentGroupId;
 use Liquid\Content\Model\Segment\SegmentId;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 
 class Config
 {
     public function __construct(
-        private readonly SegmentConfig $config,
+        private readonly ScopeConfig $config,
     )
     {
 

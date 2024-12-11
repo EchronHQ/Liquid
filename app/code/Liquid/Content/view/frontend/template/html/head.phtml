@@ -33,15 +33,15 @@ $pageConfig = $viewModel->getPageConfig();
     <meta name="description" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoDescription()) ?>"/>
     <meta name="keywords" content="<?= $escaper->escapeHtmlAttribute($pageConfig->getSeoKeywords()) ?>"/>
     <?php
-    $canonicalUrlForCurrentLocale = $viewModel->getCurrentUrlForSegment($viewModel->getCurrentSegment());
-    $urlForDefaultLocale = $viewModel->getCurrentUrlForSegment($viewModel->getDefaultLocale());
+    $canonicalUrlForCurrentLocale = $viewModel->getCurrentUrlForSegment($viewModel->getCurrentSegment()->id);
+    $urlForDefaultLocale = $viewModel->getCurrentUrlForSegment($viewModel->getDefaultLocale()->id);
     ?>
     <link rel="canonical" href="<?= $escaper->escapeHtmlAttribute($canonicalUrlForCurrentLocale) ?>"/>
     <?php
     $segments = $viewModel->getAlternativeSegments();
     foreach ($segments as $segment):
         $hrefLang = $escaper->escapeHtmlAttribute($viewModel->getLocaleCode());
-        $urlForLocale = $viewModel->getCurrentUrlForSegment($segment);
+        $urlForLocale = $viewModel->getCurrentUrlForSegment($segment->id);
         ?>
         <link rel="alternate" hreflang="<?= $hrefLang ?>" href="<?= $escaper->escapeHtmlAttribute($urlForLocale) ?>"/>
     <?php

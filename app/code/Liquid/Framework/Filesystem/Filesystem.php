@@ -36,6 +36,18 @@ class Filesystem
     }
 
     /**
+     * Retrieve uri for given code
+     *
+     * @param Path $code
+     * @return string
+     * @throws \Exception
+     */
+    public function getUri(Path $code): string
+    {
+        return $this->directoryList->getUrlPath($code);
+    }
+
+    /**
      * Gets configuration of a directory
      *
      * @param Path $code

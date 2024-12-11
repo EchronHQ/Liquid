@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Liquid\Config\App\Config\Type;
 
+use Liquid\Content\Model\Config\Processor\Fallback;
 use Liquid\Framework\App\Config\ConfigSourceInterface;
 
 class SystemConfigReader
 {
     public function __construct(
         private readonly ConfigSourceInterface $source,
+        private readonly Fallback              $fallback,
     )
     {
 
@@ -23,10 +25,10 @@ class SystemConfigReader
      */
     public function read(): array
     {
-        //return $this->fallback->process(
+        return $this->fallback->process(
         //   $this->preProcessor->process(
-        return $this->source->get();
+            $this->source->get()
         // )
-        //);
+        );
     }
 }

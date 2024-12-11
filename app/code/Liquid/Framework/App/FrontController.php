@@ -10,7 +10,7 @@ use Liquid\Core\Helper\Resolver;
 use Liquid\Core\Repository\UrlRepository;
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Area\AreaList;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\Router\RouterList;
@@ -24,7 +24,7 @@ class FrontController
 {
     /**
      * @param LoggerInterface $logger
-     * @param SegmentConfig $config
+     * @param ScopeConfig $config
      * @param RouterList $routerList
      * @param ObjectManager $diContainer
      * @param Resolver $resolver
@@ -35,7 +35,7 @@ class FrontController
      */
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SegmentConfig   $config,
+        private readonly ScopeConfig     $config,
         private readonly RouterList      $routerList,
         private readonly ObjectManager   $diContainer,
         private readonly Resolver        $resolver,

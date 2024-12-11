@@ -7,7 +7,8 @@ namespace Liquid\Core\Console;
 use Echron\Tools\Bytes;
 use Echron\Tools\FileSystem;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
+use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\Path;
 use Liquid\Seo\Helper\GenerateSitemapHelper;
 use Symfony\Component\Console\Command\Command;
@@ -18,8 +19,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SystemInfo extends Command
 {
     public function __construct(
-        private readonly SegmentConfig $appConfig,
-        private readonly Resolver      $resolver
+        private readonly ScopeConfig $appConfig,
+        private readonly State       $appState,
+        private readonly Resolver    $resolver
     )
     {
         parent::__construct('system:info');
@@ -31,7 +33,7 @@ class SystemInfo extends Command
         $data = [
             'Root directory' => $this->resolver->getPath(Path::ROOT),
             'Pub directory' => $this->resolver->getPath(Path::PUB),
-            'Mode' => $this->appConfig->getMode()->name,
+            'Mode' => $this->appState->getMode()->name,
             'Site url' => $this->appConfig->getValue('site_url'),
             'Sitemap generation date' => $this->getSitemapGenerationDate(),
             'Asset cache files count' => $assetFileInfo['count'],

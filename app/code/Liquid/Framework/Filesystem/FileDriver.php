@@ -8,6 +8,16 @@ use Liquid\Framework\Exception\FileSystemException;
 class FileDriver
 {
     /**
+     * Flag for checking whether or not to be the behavior of statefulFile
+     */
+    private bool $stateful;
+
+    public function __construct(bool $stateful = false)
+    {
+        $this->stateful = $stateful;
+    }
+
+    /**
      * Is file or directory exist in file system
      *
      * @param string $path

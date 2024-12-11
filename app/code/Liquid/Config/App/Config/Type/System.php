@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Liquid\Config\App\Config\Type;
 
-use Liquid\Content\Model\Segment\SegmentInterface;
+use Liquid\Content\Model\ScopeType;
 use Liquid\Framework\App\Cache\CacheStateInterface;
 use Liquid\Framework\App\Config\ConfigTypeInterface;
+use Liquid\Framework\App\Scope\ScopeInterface;
 use Liquid\Framework\Cache\FrontendInterface;
 use Liquid\Framework\Encryption\Encryptor;
 use Liquid\Framework\Exception\RuntimeException;
@@ -86,31 +87,37 @@ class System implements ConfigTypeInterface
     {
 
         $pathParts = explode('/', $path);
-        if (count($pathParts) === 1 && $pathParts[0] !== SegmentInterface::SEGMENT_DEFAULT) {
+        if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT->value) {
             if (!isset($this->data[$pathParts[0]])) {
                 $this->readData();
             }
 
             return $this->data[$pathParts[0]];
         }
-        $segmentType = array_shift($pathParts);
-        if ($segmentType === SegmentInterface::SEGMENT_DEFAULT) {
-            if (!isset($this->data[$segmentType])) {
+        $rawScopeType = array_shift($pathParts);
+
+        $scopeType = $rawScopeType === '' ? null : ScopeType::from($rawScopeType);
+        $scopeTypeKey = $scopeType === null ? null : $scopeType->value;
+
+        if ($scopeType === ScopeInterface::SCOPE_DEFAULT) {
+            if (!isset($this->data[$scopeTypeKey])) {
                 $scopeData = $this->loadDefaultScopeData() ?? [];
-                $this->setDataBySegmentType($segmentType, $scopeData);
+                $this->setDataByScopeType($scopeType, $scopeData);
             }
 
-            return $this->getDataByPathParts($this->data[$segmentType], $pathParts);
+            return $this->getDataByPathParts($this->data[$scopeTypeKey], $pathParts);
         }
         $segmentId = array_shift($pathParts);
 
         ///    var_dump(['type' => $segmentType, 'segment' => $segmentId]);
-        if (!isset($this->data[$segmentType][$segmentId])) {
-            $scopeData = $this->loadScopeData($segmentType, $segmentId) ?? [];
-            $this->setDataBySegmentId($segmentType, $segmentId, $scopeData);
+        ///
+
+        if (!isset($this->data[$scopeTypeKey][$segmentId])) {
+            $scopeData = $this->loadScopeData($scopeType, $segmentId) ?? [];
+            $this->setDataByScopeId($scopeType, $segmentId, $scopeData);
         }
-        return isset($this->data[$segmentType][$segmentId])
-            ? $this->getDataByPathParts($this->data[$segmentType][$segmentId], $pathParts)
+        return isset($this->data[$scopeTypeKey][$segmentId])
+            ? $this->getDataByPathParts($this->data[$scopeTypeKey][$segmentId], $pathParts)
             : null;
     }
 
@@ -142,12 +149,12 @@ class System implements ConfigTypeInterface
             return $this->readData();
         }
         $loadAction = function () {
-            $scopeType = SegmentInterface::SEGMENT_DEFAULT;
+            $scopeType = ScopeInterface::SCOPE_DEFAULT;
             $cachedData = $this->cache->load($this->configType . '_' . $scopeType);
             $scopeData = false;
             if ($cachedData !== false) {
                 try {
-                    $scopeData = [$scopeType => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
+                    $scopeData = [$scopeType->value => $this->serializer->unserialize($this->encryptor->decrypt($cachedData))];
                 } catch (\InvalidArgumentException $e) {
                     // $this->logger->warning($e->getMessage());
                     $scopeData = false;
@@ -162,11 +169,11 @@ class System implements ConfigTypeInterface
     /**
      * Load configuration data for a specified scope.
      *
-     * @param string $scopeType
+     * @param ScopeType $scopeType
      * @param string $scopeId
      * @return array
      */
-    private function loadScopeData(string $scopeType, string $scopeId): array
+    private function loadScopeData(ScopeType|null $scopeType, string $scopeId): array
     {
         if (!$this->cacheState->isEnabled(\Liquid\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER)) {
             return $this->readData();
@@ -176,7 +183,7 @@ class System implements ConfigTypeInterface
             /* Note: configType . '_scopes' needs to be loaded first to avoid race condition where cache finishes
                saving after configType . '_' . $scopeType . '_' . $scopeId but before configType . '_scopes'. */
             $cachedScopeData = $this->cache->load($this->configType . '_scopes');
-            $cachedData = $this->cache->load($this->configType . '_' . $scopeType . '_' . $scopeId);
+            $cachedData = $this->cache->load($this->configType . '_' . $scopeType->value . '_' . $scopeId);
             $scopeData = false;
             if ($cachedData === false) {
                 if ($this->availableDataScopes === null) {
@@ -185,16 +192,18 @@ class System implements ConfigTypeInterface
                         $this->availableDataScopes = $this->serializer->unserialize($serializedCachedData);
                     }
                 }
-                if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType][$scopeId])) {
-                    $scopeData = [$scopeType => [$scopeId => []]];
+                if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType->value][$scopeId])) {
+                    $scopeData = [$scopeType->value => [$scopeId => []]];
                 }
             } else {
                 $serializedCachedData = $this->encryptor->decrypt($cachedData);
-                $scopeData = [$scopeType => [$scopeId => $this->serializer->unserialize($serializedCachedData)]];
+                $scopeData = [$scopeType->value => [$scopeId => $this->serializer->unserialize($serializedCachedData)]];
             }
 
             return $scopeData;
         };
+        // TODo: implement loading from cache
+        return [];
     }
 
     /**
@@ -222,17 +231,18 @@ class System implements ConfigTypeInterface
     /**
      * Sets data according to scope type.
      *
-     * @param string|null $segmentType
+     * @param ScopeType|null $scopeType
      * @param array $segmentData
      * @return void
      */
-    private function setDataBySegmentType(string|null $segmentType, array $segmentData): void
+    private function setDataByScopeType(ScopeType|null $scopeType, array $segmentData): void
     {
-        if (!isset($this->data[$segmentType])) {
-            if (isset($segmentData[$segmentType])) {
-                $this->data[$segmentType] = $segmentData[$segmentType];
+        $scopeTypeKey = $scopeType === null ? null : $scopeType->value;
+        if (!isset($this->data[$scopeTypeKey])) {
+            if (isset($segmentData[$scopeTypeKey])) {
+                $this->data[$scopeTypeKey] = $segmentData[$scopeTypeKey];
             } else {
-                $this->data[$segmentType] = [];
+                $this->data[$scopeTypeKey] = [];
             }
         }
     }
@@ -240,15 +250,16 @@ class System implements ConfigTypeInterface
     /**
      * Sets data according to segment type and id.
      *
-     * @param string|null $segmentType
+     * @param ScopeType|null $scopeType
      * @param string|null $segmentId
      * @param array $segmentData
      * @return void
      */
-    private function setDataBySegmentId(string|null $segmentType, string|null $segmentId, array $segmentData): void
+    private function setDataByScopeId(ScopeType|null $scopeType, string|null $segmentId, array $segmentData): void
     {
-        if (!isset($this->data[$segmentType][$segmentId]) && isset($segmentData[$segmentType][$segmentId])) {
-            $this->data[$segmentType][$segmentId] = $segmentData[$segmentType][$segmentId];
+        $scopeTypeKey = $scopeType === null ? null : $scopeType->value;
+        if (!isset($this->data[$scopeTypeKey][$segmentId]) && isset($segmentData[$scopeTypeKey][$segmentId])) {
+            $this->data[$scopeTypeKey][$segmentId] = $segmentData[$scopeTypeKey][$segmentId];
         }
     }
 }

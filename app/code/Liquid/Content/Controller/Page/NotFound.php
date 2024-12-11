@@ -10,7 +10,6 @@ use Liquid\Content\Helper\PageConfigHelper;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\Repository\PageRepository;
-use Liquid\Core\Router;
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\Context;
 use Liquid\Framework\Controller\AbstractResult;
@@ -33,11 +32,12 @@ class NotFound extends AbstractAction
 
     public function execute(): AbstractResult
     {
+        // TODO: get this from config
+        $pageId = '';
 
-
-        $page = $this->pageRepository->getById(Router::PAGE_NOT_FOUND_IDENTIFIER);
+        $page = $this->pageRepository->getById($pageId);
         if (\is_null($page)) {
-            $this->logger->warning('No page found with identifier', ['identifier' => Router::PAGE_NOT_FOUND_IDENTIFIER]);
+            $this->logger->warning('No page found with identifier', ['identifier' => $pageId]);
             throw new NotFoundException('Page not found');
         }
 

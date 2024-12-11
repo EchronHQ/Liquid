@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Action;
 
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\Controller\ResultFactory;
@@ -19,7 +19,7 @@ abstract class AbstractAction implements ActionInterface
     protected readonly Request $request;
     protected readonly Response $response;
     private readonly ResultFactory $resultFactory;
-    private readonly SegmentConfig $configuration;
+    private readonly ScopeConfig $configuration;
 
     public function __construct(Context $context)
     {
@@ -47,7 +47,7 @@ abstract class AbstractAction implements ActionInterface
         return $this->resultFactory;
     }
 
-    protected function getConfiguration(): SegmentConfig
+    protected function getConfiguration(): ScopeConfig
     {
         return $this->configuration;
     }

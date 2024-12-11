@@ -7,8 +7,8 @@ use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Request\Request;
 use Liquid\Framework\App\Route\Attribute\Route;
 use Liquid\Framework\Controller\AbstractResult;
+use Liquid\Framework\Controller\Result\Plain;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
-use Liquid\Framework\View\Result\LayoutPage;
 
 #[Route('content/noroute/index', name: 'no_route')]
 class Index implements ActionInterface
@@ -33,20 +33,21 @@ class Index implements ActionInterface
 
     public function execute(): AbstractResult
     {
-        /** @var LayoutPage|null $resultPage */
-        //   $resultPage = null;// $pageHelper->prepareResultPage($this, $pageId);
+        //$pageId = null;
 
 
-        echo '<div>Page not found</div>';
-        echo $this->request->getUri();
+//        echo '<div>Page not found</div>';
+//        echo '<div>Request: ' . $this->request->getUri() . '</div>';
 
         // TODO: can we show all registered routes?
 
-        $resultPage = $this->objectManager->create(LayoutPage::class);
+        $resultPage = $this->objectManager->create(Plain::class);
+        $resultPage->setText('<div>Page not found</div><div>Request: ' . $this->request->getUri() . '</div>');
         //     if ($resultPage) {
         $resultPage->setStatusHeader(404, '1.1', 'Not Found');
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+
         return $resultPage;
 //        }
 //

@@ -116,6 +116,11 @@ class Escaper
         return $this->escapeHtml($this->escapeXssInUrl($string));
     }
 
+    public function encodeUrlParam(string $string): string
+    {
+        return $this->escapeUrl($string);
+    }
+
     /**
      * Escape xss in urls
      *

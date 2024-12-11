@@ -27,26 +27,6 @@ abstract class AbstractResult implements ResultInterface
         return $this->render($response);
     }
 
-    protected function applyHttpHeaders(ResponseInterface $response): self
-    {
-        if ($this->httpResponseCode !== null) {
-            $response->setHttpResponseCode($this->httpResponseCode);
-        }
-        if ($this->statusHeaderCode !== null) {
-            $response->setStatusHeader(
-                $this->statusHeaderCode,
-                $this->statusHeaderVersion,
-                $this->statusHeaderPhrase
-            );
-        }
-        if (!empty($this->headers)) {
-            foreach ($this->headers as $headerData) {
-                $response->setHeader($headerData['name'], $headerData['value'], $headerData['replace']);
-            }
-        }
-        return $this;
-    }
-
     public function setHttpResponseCode(int $httpCode): self
     {
         $this->httpResponseCode = $httpCode;
@@ -74,6 +54,26 @@ abstract class AbstractResult implements ResultInterface
             'value' => $value,
             'replace' => $replace,
         ];
+        return $this;
+    }
+
+    protected function applyHttpHeaders(HttpResponseInterface $response): self
+    {
+        if ($this->httpResponseCode !== null) {
+            $response->setHttpResponseCode($this->httpResponseCode);
+        }
+        if ($this->statusHeaderCode !== null) {
+            $response->setStatusHeader(
+                $this->statusHeaderCode,
+                $this->statusHeaderVersion,
+                $this->statusHeaderPhrase
+            );
+        }
+        if (!empty($this->headers)) {
+            foreach ($this->headers as $headerData) {
+                $response->setHeader($headerData['name'], $headerData['value'], $headerData['replace']);
+            }
+        }
         return $this;
     }
 

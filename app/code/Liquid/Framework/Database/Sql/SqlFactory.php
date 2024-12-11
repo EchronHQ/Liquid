@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace Liquid\Framework\Database\Sql;
 
 
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
 class SqlFactory
 {
     public function __construct(
-        private readonly SegmentConfig          $config,
+        private readonly ScopeConfig            $config,
         private readonly ObjectManagerInterface $objectManager
     )
     {

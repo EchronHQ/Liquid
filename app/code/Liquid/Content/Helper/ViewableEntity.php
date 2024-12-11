@@ -5,7 +5,7 @@ namespace Liquid\Content\Helper;
 
 use Liquid\Content\Model\Segment\SegmentManager;
 use Liquid\Core\Helper\IdHelper;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Entity\EntityResolverInterface;
 use Liquid\Framework\App\Helper\AbstractHelper;
 use Psr\Log\LoggerInterface;
@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 class ViewableEntity extends AbstractHelper
 {
     public function __construct(
-        private readonly SegmentConfig           $segmentConfig,
+        private readonly ScopeConfig             $segmentConfig,
         private readonly EntityResolverInterface $entityResolver,
         private readonly SegmentManager          $segmentManager,
         private readonly LoggerInterface         $logger,
@@ -53,7 +53,7 @@ class ViewableEntity extends AbstractHelper
             if (!$entity->isVisibleOnFront()) {
                 $this->logger->warning('Get url for not visible entity `' . $entity->id . '`');
             }
-            return $segment->getBaseUrl() . '/' . $entity->getUrlPath();
+            return $segment->getBaseUrl() . $entity->getUrlPath();
 //            $rewrites = $entity->getUrlRewrites();
 //            if (count($rewrites) > 0) {
 //                return $rewrites[0];

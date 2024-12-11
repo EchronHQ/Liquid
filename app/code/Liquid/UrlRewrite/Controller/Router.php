@@ -7,8 +7,8 @@ namespace Liquid\UrlRewrite\Controller;
 use Liquid\Content\Model\Segment\SegmentId;
 use Liquid\Content\Model\Segment\SegmentManager;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\ActionFactory;
+use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Action\ForwardAction;
 use Liquid\Framework\App\Action\RedirectAction;
 use Liquid\Framework\App\Request\Request;
@@ -35,7 +35,7 @@ class Router implements RouterInterface
 
     }
 
-    public function match(Request $request): AbstractAction|null
+    public function match(Request $request): ActionInterface|null
     {
         $rewrite = $this->getRewrite(
             $request->getPathInfo(),

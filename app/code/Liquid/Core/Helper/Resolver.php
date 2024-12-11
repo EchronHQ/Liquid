@@ -11,7 +11,7 @@ use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Segment\SegmentId;
 use Liquid\Core\Model\FrontendFileUrl;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\Component\ComponentFile;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
 use Liquid\Framework\Component\ComponentType;
@@ -30,7 +30,7 @@ class Resolver
     private array $randomImageUsed = [];
 
     public function __construct(
-        private readonly SegmentConfig               $configuration,
+        private readonly ScopeConfig                 $configuration,
         private readonly FileHelper                  $fileHelper,
         private readonly ImageHelper                 $imageHelper,
         private readonly DirectoryList               $directoryList,
@@ -112,14 +112,23 @@ class Resolver
 
     public function getUrlPath(Path $path, string|null $x = null): string
     {
-        $siteUrl = $this->configuration->getValue('web/unsecure/base_url');
-        $fullUrlPath = $this->directoryList->getUrlPath($path);
-        if ($x !== null) {
-            // TODO: cleanup if x already starts with slash
-            $fullUrlPath .= '/' . $x;
+        $siteUrl = $this->url->getBaseUrl(['_type' => Url\UrlType::MEDIA]);
+        if ($path !== Path::MEDIA) {
+            $siteUrl .= '/' . $this->staticContentHelper->getStaticDeployedVersion();
         }
 
-        return $siteUrl . (str_ends_with($siteUrl, '/') ? '' : '/') . $fullUrlPath;
+        // $siteUrl = $this->url->getBaseUrl(['_type' => Url\UrlType::MEDIA]) . '/' . $this->staticContentHelper->getStaticDeployedVersion();
+        // var_dump($siteUrl);
+//        $siteUrl = $this->configuration->getValue('web/unsecure/base_url');
+        //  $fullUrlPath = $this->directoryList->getUrlPath($path);
+
+
+        if ($x !== null) {
+            // TODO: cleanup if x already starts with slash
+            $siteUrl .= '/' . $x;
+        }
+//        return $fullUrlPath;
+        return $siteUrl;
     }
 
     public function getRandomImage(int $width = 250, int $height = 250): string
@@ -145,7 +154,7 @@ class Resolver
             // TODO: show placeholder
             return null;
         }
-        return $this->url->getUrl() . 'static/' . $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file;
+        return $this->url->getBaseUrl(['_type' => Url\UrlType::STATIC]) . '/' . $this->staticContentHelper->getStaticDeployedVersion() . '/' . $file;
     }
 
     public function getFrontendFilePath(string $file): string

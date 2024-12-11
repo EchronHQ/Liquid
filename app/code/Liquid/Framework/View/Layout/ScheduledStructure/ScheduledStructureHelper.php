@@ -29,7 +29,7 @@ class ScheduledStructureHelper
 
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly State           $state
+        private readonly State $appState
     )
     {
     }
@@ -186,7 +186,7 @@ class ScheduledStructureHelper
             } else {
                 $scheduledStructure->setElementToBrokenParentList($key);
 
-                if ($this->state->getMode() === AppMode::Develop) {
+                if ($this->appState->getMode() === AppMode::Develop) {
                     $this->logger->info(
                         "Broken reference: the '{$name}' element cannot be added as child to '{$parentName}', " .
                         'because the latter doesn\'t exist'

@@ -8,7 +8,7 @@ class ComponentFile
     /**
      * Scope separator for module notation of file ID
      */
-    public const FILE_ID_SEPARATOR = '::';
+    public const string FILE_ID_SEPARATOR = '::';
 
     public function __construct(
         private readonly ComponentType $componentType,

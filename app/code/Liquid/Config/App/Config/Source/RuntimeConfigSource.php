@@ -41,7 +41,13 @@ class RuntimeConfigSource implements ConfigSourceInterface
             'default' => [
                 'web' => [
                     'unsecure' => [
-                        'base_url' => 'http://localhost:8901/',
+//                        'base_url' => 'http://localhost:8901/',
+                        'base_url' => Segment::BASE_URL_PLACEHOLDER,
+                        'base_link_url' => Segment::BASE_URL_PLACEHOLDER,
+                    ],
+                    'secure' => [
+                        'use_in_frontend' => true,
+                        'base_url' => Segment::BASE_URL_PLACEHOLDER,
                         'base_link_url' => Segment::BASE_URL_PLACEHOLDER,
                     ],
                 ],
@@ -61,6 +67,12 @@ class RuntimeConfigSource implements ConfigSourceInterface
                         'active' => false,
                     ],
                 ],
+                // LOgging is defined in deployment config (etc/config.yml)
+//                'logging' => [
+//                    'browser' => [
+//                        'minloglevel' => 'info',
+//                    ],
+//                ],
             ],
         ];
     }

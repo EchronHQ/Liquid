@@ -6,7 +6,7 @@ namespace Liquid\Admin\App\Area;
 use Laminas\Uri\Uri;
 use Liquid\Admin\App\Config;
 use Liquid\Framework\App\Area\FrontNameResolverInterface;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\App\Request\Request;
 
@@ -28,11 +28,11 @@ class FrontNameResolver implements FrontNameResolverInterface
     private readonly string $defaultFrontName;
 
     public function __construct(
-        private readonly Config        $config,
-        private readonly SegmentConfig $segmentConfig,
-        private readonly Request       $request,
-        private readonly Uri           $uri,
-        DeploymentConfig               $deploymentConfig,
+        private readonly Config      $config,
+        private readonly ScopeConfig $segmentConfig,
+        private readonly Request     $request,
+        private readonly Uri         $uri,
+        DeploymentConfig             $deploymentConfig,
     )
     {
         $this->defaultFrontName = $deploymentConfig->getValueString('backend/frontName');

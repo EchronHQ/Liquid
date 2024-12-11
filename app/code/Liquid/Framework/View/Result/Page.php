@@ -16,7 +16,7 @@ use Liquid\Content\Model\MarkupEngine\TestSection;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Helper\Resolver;
-use Liquid\Framework\App\Config\SegmentConfig;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Response\HttpResponseInterface;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\Framework\View\Element\Template;
@@ -52,7 +52,7 @@ class Page extends LayoutPage
         ObjectManagerInterface             $objectManager,
         //        private readonly Builder                $builder,
         private readonly PageConfig        $pageConfig,
-        private readonly SegmentConfig     $appConfig,
+        private readonly ScopeConfig       $appConfig,
         private readonly Resolver          $resolver,
         private readonly TerminologyHelper $terminologyHelper,
         private readonly LocaleHelper      $localeHelper,

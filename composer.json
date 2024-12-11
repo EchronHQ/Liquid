@@ -49,7 +49,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Liquid\\": "app/code/Liquid"
+      "Liquid\\": "app/code/Liquid/"
     }
   },
   "repositories": [

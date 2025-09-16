@@ -118,9 +118,9 @@ $helper = $this->helper(\Liquid\Content\Helper\ViewableEntity::class);
                 <div class="overlay"></div>
             </nav>
             <div class="links gap--1">
-                <a href="<?= $resolver->getPageUrl('app') ?>" target="_blank" rel="noopener"
+                <a href="<?= $viewModel->getConfig()->getValue('external/url/app') ?>" target="_blank" rel="noopener"
                    class="link hide md:show signin">Sign in</a>
-                <a href="<?= $resolver->getPageUrl('demo') ?>" class="try hide md:show link">Book a demo</a>
+                <a href="<?= $viewModel->getEntityUrl('demo') ?>" class="try hide md:show link">Book a demo</a>
                 <div class="menu-button link">
                     <img width="24" height="24" loading="lazy"
                          src="<?= $resolver->getFrontendFileImageUrl('asset/image/menu.svg')->url ?>" alt="Menu">

@@ -11,17 +11,17 @@ class RequestRewriteHelper
 {
     public static function rewrite(UrlRewrite $rewrite, string $path): UrlRewrite|null
     {
-        $arguments = PathMatcher::getMatchValues($rewrite->request, $path);
+        $arguments = PathMatcher::getMatchValues($rewrite->getRequestPath(), $path);
 
         if ($arguments === null) {
             return null;
         }
-        $target = $rewrite->target;
+        $target = $rewrite->getTargetPath();
         foreach ($arguments as $key => $value) {
             $target = \str_replace($key, $value, $target);
         }
 
-        $rewrite->target = $target;
+        $rewrite->setTargetPath($target);
         return $rewrite;
     }
 }

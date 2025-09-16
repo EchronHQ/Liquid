@@ -33,31 +33,31 @@ class Navigation implements ArgumentInterface
                             [
                                 'title' => 'Feed Management',
                                 'description' => 'Streamline product distribution',
-                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'icon' => 'asset/icons/menu/feed-management.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('products/feed-management'),
                             ],
                             [
                                 'title' => 'Competitor Monitoring',
                                 'description' => 'Track market dynamics',
-                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'icon' => 'asset/icons/menu/market-sentry.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('products/competitor-monitoring'),
                             ],
                             [
                                 'title' => 'Inventory Management',
                                 'description' => 'Optimize inventory decisions',
-                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('products/inventory-management'),
                             ],
                             [
                                 'title' => 'Integrations',
                                 'description' => 'Connect business ecosystems',
-                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'icon' => 'asset/icons/menu/integrations.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('products/integrations'),
                             ],
                             [
                                 'title' => 'Automations',
                                 'description' => 'Simplify workflow processes',
-                                'icon' => 'asset/icons/menu/integrate.svg',
+                                'icon' => 'asset/icons/menu/automations.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('products/automations'),
                             ],
                         ],
@@ -116,13 +116,13 @@ class Navigation implements ArgumentInterface
                             [
                                 'title' => 'Finance',
                                 'description' => 'Streamline all your financial data',
-                                'icon' => 'asset/icons/menu/ecommerce.svg',
+                                'icon' => 'asset/icons/menu/finance.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('use-cases/finance'),
                             ],
                             [
                                 'title' => 'IT',
                                 'description' => 'Centralize all your data and application integrations',
-                                'icon' => 'asset/icons/menu/ecommerce.svg',
+                                'icon' => 'asset/icons/menu/it.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('use-cases/it'),
                             ],
 //
@@ -141,7 +141,7 @@ class Navigation implements ArgumentInterface
                             [
                                 'title' => 'Sales',
                                 'description' => 'Connect all your sales processes',
-                                'icon' => 'asset/icons/menu/marketing.svg',
+                                'icon' => 'asset/icons/menu/sales.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
                             ],
                             //                            ['title' => 'API reference', 'link' => $this->resolver->getPageUrl('api-reference')],

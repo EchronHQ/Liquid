@@ -222,9 +222,11 @@ class Url extends DataObject
             $routePieces = explode('/', $data);
             $route = array_shift($routePieces);
             if ('*' === $route) {
-                $route = $this->request->getRouteName();
+                $route = $this->request->getActionName();
             }
         }
+//        echo $data . PHP_EOL;
+//        var_dump($routePieces);
         $this->_setRouteName($route);
 
 //        $controller = '';
@@ -235,15 +237,15 @@ class Url extends DataObject
 //            }
 //        }
 //        $this->_setControllerName($controller);
-//
-//        $action = '';
-//        if (!empty($routePieces)) {
-//            $action = array_shift($routePieces);
-//            if ('*' === $action) {
-//                $action = $this->request->getActionName();
-//            }
-//        }
-//        $this->_setActionName($action);
+
+        $action = '';
+        if (!empty($routePieces)) {
+            $action = array_shift($routePieces);
+            if ('*' === $action) {
+                $action = $this->request->getActionName();
+            }
+        }
+        $this->_setActionName($action);
 
         if (!empty($routePieces)) {
             while (!empty($routePieces)) {
@@ -255,6 +257,17 @@ class Url extends DataObject
             }
         }
 
+        return $this;
+    }
+
+    protected function _setActionName(string $data): self
+    {
+        if ($this->_getData('action_name') === $data) {
+            return $this;
+        }
+        $this->unsetData('route_path');
+        $this->setData('action_name', $data);
+        $this->queryParamsResolver->unsetData('secure');
         return $this;
     }
 
@@ -306,6 +319,7 @@ class Url extends DataObject
             $routePath = $this->_getActionPath();
 
             $routeParams = $this->_getRouteParams();
+
             if ($routeParams) {
                 foreach ($routeParams as $key => $value) {
                     if ($value === null || false === $value || '' === $value || !is_scalar($value)) {
@@ -330,9 +344,8 @@ class Url extends DataObject
             return '';
         }
 
-        // $hasParams = (bool)$this->_getRouteParams();
-        $path = $this->_getControllerName() . '/';
-//
+        $hasParams = (bool)$this->_getRouteParams();
+        $path = $this->_getActionName() . '/';
 //        if ($this->_getControllerName()) {
 //            $path .= $this->_getControllerName() . '/';
 //        } elseif ($hasParams) {
@@ -345,6 +358,11 @@ class Url extends DataObject
 //        }
 
         return $path;
+    }
+
+    protected function _getActionName(string|null $default = null): string|null
+    {
+        return $this->_getData('action_name') ? $this->_getData('action_name') : $default;
     }
 
     /**
@@ -375,11 +393,15 @@ class Url extends DataObject
     /**
      * Retrieve route params
      *
-     * @return array|null
+     * @return array
      */
-    protected function _getRouteParams(): array|null
+    protected function _getRouteParams(): array
     {
-        return $this->routeParamsResolver->getRouteParams();
+        $params = $this->routeParamsResolver->getRouteParams();
+        if (is_null($params)) {
+            return [];
+        }
+        return $params;
     }
 
     /**

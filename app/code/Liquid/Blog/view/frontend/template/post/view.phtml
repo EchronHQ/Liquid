@@ -24,7 +24,7 @@ $category = $postViewModel->getPostCategory();
         <div class="column">
             <div class="blog-breadcrumbs-wrapper">
                 <div class="blog-breadcrumbs">
-                    <a href="<?= $baseViewModel->getResolver()->getPageUrl('blog') ?>">Blog</a> /
+                    <a href="<?= $baseViewModel->getEntityUrl('blog') ?>">Blog</a> /
                     <a href="<?= $baseViewModel->getResolver()->getUrl($category->getUrlPath()) ?>"><?= $category->metaTitle ?></a>
                     /
                     <span><?= $post->metaTitle ?></span>

@@ -28,12 +28,12 @@ class Block extends AbstractBlock
     protected LocaleHelper $localeHelper;
     protected Output $outputHelper;
     protected LoggerInterface $logger;
+    protected State $appState;
 
     public function __construct(
-        BlockContext           $context,
-        string                 $nameInLayout = '',
-        private readonly State $appState,
-        array                  $data = []
+        BlockContext $context,
+        string       $nameInLayout = '',
+        array        $data = []
     )
     {
         parent::__construct($context->layout, $nameInLayout, $data);
@@ -45,6 +45,7 @@ class Block extends AbstractBlock
         $this->localeHelper = $context->localeHelper;
         $this->outputHelper = $context->outputHelper;
         $this->logger = $context->logger;
+        $this->appState = $context->appState;
     }
 
     public function toHtml(): string

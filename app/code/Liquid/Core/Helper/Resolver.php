@@ -7,11 +7,9 @@ namespace Liquid\Core\Helper;
 use Echron\Tools\FileSystem;
 use Liquid\Content\Helper\ImageHelper;
 use Liquid\Content\Helper\StaticContentHelper;
-use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Segment\SegmentId;
 use Liquid\Core\Model\FrontendFileUrl;
-use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\Component\ComponentFile;
 use Liquid\Framework\Component\ComponentRegistrarInterface;
 use Liquid\Framework\Component\ComponentType;
@@ -25,28 +23,22 @@ use Psr\Log\LoggerInterface;
  */
 class Resolver
 {
-    public const FILE_ID_SEPARATOR = '::';
-    private array|null $pageRoutes = null;
+
     private array $randomImageUsed = [];
 
     public function __construct(
-        private readonly ScopeConfig                 $configuration,
         private readonly FileHelper                  $fileHelper,
         private readonly ImageHelper                 $imageHelper,
         private readonly DirectoryList               $directoryList,
         private readonly ComponentRegistrarInterface $componentRegistrar,
         private readonly StaticContentHelper         $staticContentHelper,
         private readonly Url                         $url,
-        private readonly ViewableEntity              $viewableEntityHelper,
+
         private readonly LoggerInterface             $logger
     )
     {
     }
 
-    public function getPageUrl(string $pageIdentifier): string|null
-    {
-        return $this->viewableEntityHelper->getUrl($pageIdentifier);
-    }
 
     public function getAssetUrl(string $file, AssetSizeInstruction|null $size = null): FrontendFileUrl|null
     {
@@ -173,10 +165,6 @@ class Resolver
         return $this->url->getUrl($path, $locale);
     }
 
-    public function setPageRoutes(array $routes): void
-    {
-        $this->pageRoutes = $routes;
-    }
 
     public function renderSVG(string $path, bool $allowCache = false): string
     {
@@ -270,9 +258,9 @@ class Resolver
         }
 
 
-        //  die('--');
-        return new FrontendFileUrl($this->getUrlPath(Path::MEDIA, $mediaCacheSuffix . $file), $dimension['width'], $dimension['height']);
-
+        $result = new FrontendFileUrl($this->getUrlPath(Path::MEDIA, $mediaCacheSuffix . $file), $dimension['width'], $dimension['height']);
+        $result->path = $this->getPath(Path::MEDIA, $mediaCacheSuffix . $file);
+        return $result;
     }
 
     private function cleanupPath(string $file): string

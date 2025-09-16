@@ -25,13 +25,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     private string|null $distroBaseUrl = null;
 
     private string|null $route = null;
-
-    public function __construct(
-        private readonly StringHelper $converter,
-    )
-    {
-        parent::__construct();
-    }
+    private string|null $action;
 //    private function getUrlSegment(int $index): ?string
 //    {
 //        if (isset($this->urlSegments[$index])) {
@@ -58,6 +52,14 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
 //        }
 //        return $this->getUrlSegment(2);
 //    }
+
+    public function __construct(
+        private readonly StringHelper $converter,
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * Set route name
      *
@@ -82,6 +84,17 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     public function getRouteName(): string|null
     {
         return $this->route;
+    }
+
+    public function setActionName(string $value): self
+    {
+        $this->action = $value;
+        return $this;
+    }
+
+    public function getActionName(): string|null
+    {
+        return $this->action;
     }
 
     final public function getIp(): string
@@ -299,7 +312,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         if ($this->distroBaseUrl !== null) {
             return $this->distroBaseUrl;
         }
-        $headerHttpHost = $this->getServer('HTTP_HOST');
+        $headerHttpHost = $this->getServer('HTTP_HOST', '');
         $headerHttpHost = $this->converter->cleanString($headerHttpHost);
         $headerScriptName = $this->getServer('SCRIPT_NAME');
 

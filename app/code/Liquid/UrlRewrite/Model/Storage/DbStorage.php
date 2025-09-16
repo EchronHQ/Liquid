@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 namespace Liquid\UrlRewrite\Model\Storage;
 
-use Liquid\Content\Model\Segment\SegmentId;
 use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 use Liquid\UrlRewrite\Model\UrlFinderInterface;
 
 class DbStorage implements UrlFinderInterface
 {
-    public const TABLE_NAME = 'url_rewrite';
+    public const string TABLE_NAME = 'url_rewrite';
 
     /**
      * @inheritdoc
      */
-    public function findOneByRequestPath(string $requestPath, SegmentId $segmentId): UrlRewrite|null
+    public function findOneByData(array $data): UrlRewrite|null
     {
         // TODO: Implement findOneByRequestPath() method.
         return null;
@@ -23,7 +22,7 @@ class DbStorage implements UrlFinderInterface
     /**
      * @inheritdoc
      */
-    public function findAllByRequestPath(string $requestPath, SegmentId $segmentId): array
+    public function findAllByData(array $data): array
     {
         // TODO: Implement findAllByRequestPath() method.
         return [];

@@ -12,8 +12,10 @@ class RequestRewriteHelperTest extends TestCase
 {
     public function testMatchesBasicPath(): void
     {
-        $rewrite = new UrlRewrite('/somepath', '/targetpath');
-        $this->assertEquals('/targetpath', RequestRewriteHelper::rewrite($rewrite, '/somepath')->target);
+        $rewrite = new UrlRewrite();
+        $rewrite->setRequestPath('/somepath');
+        $rewrite->setTargetPath('/somepath');
+        $this->assertEquals('/targetpath', RequestRewriteHelper::rewrite($rewrite, '/somepath')->getTargetPath());
     }
 
     public function testMatchesParameters(): void
@@ -21,7 +23,7 @@ class RequestRewriteHelperTest extends TestCase
         $rewrite = new UrlRewrite('/somepath/:id', '/targetpath/:id');
 
         $this->assertNull(RequestRewriteHelper::rewrite($rewrite, '/notmatching/12'));
-        $this->assertEquals('/targetpath/12', RequestRewriteHelper::rewrite($rewrite, '/somepath/12')->target);
+        $this->assertEquals('/targetpath/12', RequestRewriteHelper::rewrite($rewrite, '/somepath/12')->getTargetPath());
     }
 
     public function testMatchesParametersDifferentLength(): void
@@ -29,6 +31,6 @@ class RequestRewriteHelperTest extends TestCase
         $rewrite = new UrlRewrite('/page/:id', '/page/view/page/:id');
         $this->assertNull(RequestRewriteHelper::rewrite($rewrite, '/blog/12'));
 
-        $this->assertEquals('/page/view/page/home', RequestRewriteHelper::rewrite($rewrite, '/page/home')->target);
+        $this->assertEquals('/page/view/page/home', RequestRewriteHelper::rewrite($rewrite, '/page/home')->getTargetPath());
     }
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Liquid\UrlRewrite\Model;
 
-use Liquid\Content\Model\Segment\SegmentId;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 
@@ -21,12 +20,12 @@ class AggregateUrlFinder implements UrlFinderInterface
     }
 
 
-    public function findOneByRequestPath(string $requestPath, SegmentId $segmentId): UrlRewrite|null
+    public function findOneByData(array $data): UrlRewrite|null
     {
         foreach ($this->children as $child) {
             /** @var UrlFinderInterface $urlFinder */
             $urlFinder = $this->objectManager->get($child['class']);
-            $rewrite = $urlFinder->findOneByRequestPath($requestPath, $segmentId);
+            $rewrite = $urlFinder->findOneByData($data);
             if ($rewrite !== null) {
                 return $rewrite;
             }
@@ -34,13 +33,13 @@ class AggregateUrlFinder implements UrlFinderInterface
         return null;
     }
 
-    public function findAllByRequestPath(string $requestPath, SegmentId $segmentId): array
+    public function findAllByData(array $data): array
     {
         $result = [];
         foreach ($this->children as $child) {
             /** @var UrlFinderInterface $urlFinder */
             $urlFinder = $this->objectManager->get($child['class']);
-            $rewrites = $urlFinder->findAllByRequestPath($requestPath, $segmentId);
+            $rewrites = $urlFinder->findAllByData($data);
             $result = array_merge($result, $rewrites);
         }
         return $result;

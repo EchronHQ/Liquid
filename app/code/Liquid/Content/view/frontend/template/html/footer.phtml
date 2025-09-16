@@ -35,7 +35,7 @@ $viewModel = $block->getViewModel();
                         <div class="column col-footer">
                             <div class="column">
                                 <div class="logo">
-                                    <a href="<?= $viewModel->getResolver()->getPageUrl('home') ?>" aria-label="Attlaz">
+                                    <a href="<?= $viewModel->getEntityUrl('home') ?>" aria-label="Attlaz">
                                         <img height="30px" width="130px" loading="lazy"
                                              src="<?= $viewModel->getResolver()->getFrontendFileImageUrl('asset/logo-white.svg')->url ?>"
                                              alt="Attlaz">
@@ -47,12 +47,12 @@ $viewModel = $block->getViewModel();
                                     <div class="title">Products</div>
                                     <ul>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('products/integrate') ?>">Integrate</a>
+                                            <a href="<?= $viewModel->getEntityUrl('products/integrate') ?>">Integrate</a>
                                         </li>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('products/automate') ?>">Automate</a>
+                                        <li><a href="<?= $viewModel->getEntityUrl('products/automate') ?>">Automate</a>
                                         </li>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('products/visualize') ?>"><?= $viewModel->translate('Visualize') ?></a>
+                                            <a href="<?= $viewModel->getEntityUrl('products/visualize') ?>"><?= $viewModel->translate('Visualize') ?></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -61,15 +61,15 @@ $viewModel = $block->getViewModel();
                                 <div>
                                     <div class="title">About</div>
                                     <ul>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('about') ?>">About</a>
+                                        <li><a href="<?= $viewModel->getEntityUrl('about') ?>">About</a>
                                         </li>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('careers') ?>">Careers</a>
+                                            <a href="<?= $viewModel->getEntityUrl('careers') ?>">Careers</a>
                                         </li>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('partners') ?>">Partners</a>
+                                            <a href="<?= $viewModel->getEntityUrl('partners') ?>">Partners</a>
                                         </li>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('contact') ?>">Contact
+                                        <li><a href="<?= $viewModel->getEntityUrl('contact') ?>">Contact
                                                 us</a>
                                         </li>
                                         <?php
@@ -77,7 +77,7 @@ $viewModel = $block->getViewModel();
                                         if ($showEnvironment):
                                             ?>
 
-                                            <li><a href="<?= $viewModel->getResolver()->getPageUrl('environment') ?>">Environment</a>
+                                            <li><a href="<?= $viewModel->getEntityUrl('environment') ?>">Environment</a>
                                             </li>
                                         <?php
                                         endif;
@@ -90,13 +90,13 @@ $viewModel = $block->getViewModel();
                                     <div class="title">Solutions</div>
                                     <ul>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('use-cases/ecommerce') ?>">Ecommerce</a>
+                                            <a href="<?= $viewModel->getEntityUrl('use-cases/ecommerce') ?>">Ecommerce</a>
                                         </li>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('use-cases/marketing') ?>">Marketing</a>
+                                            <a href="<?= $viewModel->getEntityUrl('use-cases/marketing') ?>">Marketing</a>
                                         </li>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('use-cases/data-management') ?>">Data
+                                            <a href="<?= $viewModel->getEntityUrl('use-cases/data-management') ?>">Data
                                                 management</a></li>
                                     </ul>
                                 </div>
@@ -105,19 +105,19 @@ $viewModel = $block->getViewModel();
                                 <div>
                                     <div class="title">Resources</div>
                                     <ul>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('blog') ?>">Blog</a></li>
+                                        <li><a href="<?= $viewModel->getEntityUrl('blog') ?>">Blog</a></li>
                                         <li>
-                                            <a href="<?= $viewModel->getResolver()->getPageUrl('docs') ?>">Documentation</a>
+                                            <a href="<?= $viewModel->getConfig()->getValue('external/url/docs') ?>">Documentation</a>
                                         </li>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('docs/api') ?>">API
+                                        <li><a href="<?= $viewModel->getConfig()->getValue('external/url/docs_api') ?>">API
                                                 reference</a></li>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('status') ?>"
+                                        <li><a href="<?= $viewModel->getConfig()->getValue('external/url/status') ?>"
                                                target="_blank"
                                                rel="noopener">Platform status</a></li>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('app') ?>"
+                                        <li><a href="<?= $viewModel->getConfig()->getValue('external/url/app') ?>"
                                                target="_blank"
                                                rel="noopener">Dashboard</a></li>
-                                        <li><a href="<?= $viewModel->getResolver()->getPageUrl('support') ?>">Help
+                                        <li><a href="<?= $viewModel->getEntityUrl('support') ?>">Help
                                                 Center</a>
                                         </li>
                                     </ul>
@@ -134,12 +134,12 @@ $viewModel = $block->getViewModel();
                             <div class="copyright">&copy; <?= date('Y') ?> Attlaz. All rights reserved</div>
                             <div class="legal">
                                 <ul class="flex-medium">
-                                    <li><a href="<?= $viewModel->getResolver()->getPageUrl('legal/privacy') ?>">Privacy
+                                    <li><a href="<?= $viewModel->getEntityUrl('legal/privacy') ?>">Privacy
                                             Policy</a></li>
-                                    <li><a href="<?= $viewModel->getResolver()->getPageUrl('legal/terms') ?>">Terms and
+                                    <li><a href="<?= $viewModel->getEntityUrl('legal/terms') ?>">Terms and
                                             Conditions</a></li>
                                     <li>
-                                        <a href="<?= $viewModel->getResolver()->getPageUrl('legal/cookies') ?>">Cookies</a>
+                                        <a href="<?= $viewModel->getEntityUrl('legal/cookies') ?>">Cookies</a>
                                     </li>
                                 </ul>
                             </div>

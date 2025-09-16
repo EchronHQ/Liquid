@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Content\Helper;
 
 use Liquid\Content\Model\Segment\SegmentManager;
+use Liquid\Content\Model\ViewableEntity\Url;
 use Liquid\Core\Helper\IdHelper;
 use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Entity\EntityResolverInterface;
@@ -13,20 +14,22 @@ use Psr\Log\LoggerInterface;
 class ViewableEntity extends AbstractHelper
 {
     public function __construct(
-        private readonly ScopeConfig             $segmentConfig,
-        private readonly EntityResolverInterface $entityResolver,
-        private readonly SegmentManager          $segmentManager,
-        private readonly LoggerInterface         $logger,
+        private readonly ScopeConfig                              $segmentConfig,
+        private readonly EntityResolverInterface                  $entityResolver,
+        private readonly SegmentManager                           $segmentManager,
+        private readonly Url $url,
+        private readonly LoggerInterface                          $logger,
     )
     {
     }
+
 
     public function getUrl(string $entityIdentifier): string|null
     {
         $pageIdentifier = IdHelper::escapeId($entityIdentifier);
 
         if ($pageIdentifier === 'home') {
-            return $this->segmentConfig->getValue('home');
+            return $this->segmentManager->getSegment()->getBaseUrl();
         }
         if ($pageIdentifier === 'contact-sales') {
             // TODO: rebrand demo to 'contact-sales'
@@ -53,7 +56,7 @@ class ViewableEntity extends AbstractHelper
             if (!$entity->isVisibleOnFront()) {
                 $this->logger->warning('Get url for not visible entity `' . $entity->id . '`');
             }
-            return $segment->getBaseUrl() . $entity->getUrlPath();
+            return $this->url->getEntityUrl($entity);
 //            $rewrites = $entity->getUrlRewrites();
 //            if (count($rewrites) > 0) {
 //                return $rewrites[0];

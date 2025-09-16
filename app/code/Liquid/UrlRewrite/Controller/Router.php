@@ -44,29 +44,29 @@ class Router implements RouterInterface
         if ($rewrite === null) {
             return null;
         }
-        $this->logger->info('Found url rewrite: `' . $rewrite->request . '` > `' . $rewrite->target . '`');
-        if ($rewrite->statusCode === UrlRewriteType::INTERNAL) {
+        $this->logger->info('Found url rewrite: `' . $rewrite->getRequestPath() . '` > `' . $rewrite->getTargetPath() . '`');
+        if ($rewrite->getRedirectType() === UrlRewriteType::INTERNAL) {
             $this->logger->debug('Rewrite matched (internal)', [
                 'Origin' => $request->getPathInfo(),
-                'Target' => $rewrite->target,
+                'Target' => $rewrite->getTargetPath(),
                 //'Action' => \get_class($action),
             ]);
-            $request->setPathInfo($rewrite->target, $rewrite);
+            $request->setPathInfo($rewrite->getTargetPath(), $rewrite);
 
             // Forward the request after rewriting the path info to handle it further
             return $this->actionFactory->create(ForwardAction::class, ['forward' => new Forward($request)]);
         }
 
-        $url = $this->resolver->getUrl($rewrite->target);
-        $this->response->setRedirect($url, $rewrite->statusCode->value);
+        $url = $this->resolver->getUrl($rewrite->getTargetPath());
+        $this->response->setRedirect($url, $rewrite->getRedirectType()->value);
         $request->setMatched(true);
 
-        return $this->actionFactory->create(RedirectAction::class, ['redirect' => new Redirect($url, $rewrite->statusCode->value)]);
+        return $this->actionFactory->create(RedirectAction::class, ['redirect' => new Redirect($url, $rewrite->getRedirectType()->value)]);
 
     }
 
     protected function getRewrite(string $requestPath, SegmentId $segmentId): UrlRewrite|null
     {
-        return $this->urlFinder->findOneByRequestPath(ltrim($requestPath, '/'), $segmentId);
+        return $this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'), UrlRewrite::SEGMENT_ID => $segmentId]);
     }
 }

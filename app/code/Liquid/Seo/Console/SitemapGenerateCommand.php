@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Liquid\Seo\Console;
 
 use Liquid\Content\Model\SitemapUrlEntry;
+use Liquid\Content\Model\ViewableEntity\Url as ViewableEntityUrl;
 use Liquid\Content\Repository\LocaleRepository;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Framework\Filesystem\Path;
@@ -17,9 +18,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SitemapGenerateCommand extends Command
 {
     public function __construct(
-        private readonly LocaleRepository $localeRepository,
-        private readonly Resolver         $resolver,
-        private readonly GatherPages      $gatherPages
+        private readonly LocaleRepository  $localeRepository,
+        private readonly Resolver          $resolver,
+        private readonly ViewableEntityUrl $viewableEntityUrl,
+        private readonly GatherPages       $gatherPages
     )
     {
         parent::__construct('seo:generate-sitemap');
@@ -38,17 +40,17 @@ class SitemapGenerateCommand extends Command
         $defaultLocale = $this->localeRepository->getDefault();
         foreach ($pages as $page) {
 
-            //$output->writeln($page->metaTitle . ' | ' . $page->getUrlPath());
+            $output->writeln($page->metaTitle . ' | ' . $page->getUrlPath() . ' | ' . $this->viewableEntityUrl->getEntityUrl($page));
 
 
-            $entry = new SitemapUrlEntry($this->resolver->getUrl($page->getUrlPath()), $page->priority, $page->changeFrequency);
+            $entry = new SitemapUrlEntry($this->viewableEntityUrl->getEntityUrl($page), $page->priority, $page->changeFrequency);
             $entry->lastmod = $page->modifiedDate;
-            foreach ($locales as $locale) {
-                if ($locale->code !== $defaultLocale->code) {
-                    $alternativeUrl = $this->resolver->getUrl($page->getUrlPath(), $locale);
-                    $entry->addAlternative($locale->langCode, $alternativeUrl);
-                }
-            }
+            // foreach ($locales as $locale) {
+            // if ($locale->code !== $defaultLocale->code) {
+//            $alternativeUrl = $this->resolver->getUrl($page->getUrlPath(), $locale);
+//            $entry->addAlternative($locale->langCode, $alternativeUrl);
+            // }
+            // }
             $entries[] = $entry;
 
 
@@ -57,7 +59,7 @@ class SitemapGenerateCommand extends Command
         $sitemapHelper = new GenerateSitemapHelper();
         $sitemapXml = $sitemapHelper->generate($entries);
 
-        GenerateSitemapHelper::store($sitemapXml, $this->resolver->getPath(Path::PUB,'sitemap.xml'));
+        GenerateSitemapHelper::store($sitemapXml, $this->resolver->getPath(Path::PUB, 'sitemap.xml'));
 
         $output->writeln('Sitemap generated (' . count($entries) . ') entries');
         return Command::SUCCESS;

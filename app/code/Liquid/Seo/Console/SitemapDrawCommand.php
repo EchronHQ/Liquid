@@ -29,11 +29,11 @@ class SitemapDrawCommand extends Command
         $rootSegment = new Segment('');
         foreach ($pages as $page) {
 
-            if ($page->getUrlPath() === '') {
-                $pathSegments = ['home'];
-            } else {
-                $pathSegments = explode('/', 'home/' . $page->getUrlPath());
-            }
+//            if ($page->getUrlPath() === '') {
+//                $pathSegments = ['home'];
+//            } else {
+            $pathSegments = explode('/', 'home/' . $page->getUrlPath());
+            //}
 
 
             $currentEntrySegment = $rootSegment;
@@ -53,7 +53,7 @@ class SitemapDrawCommand extends Command
                             $x->setPage($page);
                         } else {
                             // This should not happen
-                            echo 'WRONG' . PHP_EOL;
+                            echo 'WRONG (' . $x->getPath() . ')' . PHP_EOL;
                         }
                     }
 

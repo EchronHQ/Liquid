@@ -23,6 +23,9 @@ class AggregateEntityResolver implements EntityResolverInterface
         foreach ($this->children as $child) {
             /** @var EntityResolverInterface $entityResolver */
             $entityResolver = $this->objectManager->get($child['class']);
+            if (!$entityResolver instanceof EntityResolverInterface) {
+                throw new \Exception('Entity resolver must implement `' . EntityResolverInterface::class . '` interface');
+            }
             $entity = $entityResolver->getEntity($entityId);
             if ($entity !== null) {
                 return $entity;
@@ -37,6 +40,9 @@ class AggregateEntityResolver implements EntityResolverInterface
         foreach ($this->children as $child) {
             /** @var EntityResolverInterface $entityResolver */
             $entityResolver = $this->objectManager->get($child['class']);
+            if (!$entityResolver instanceof EntityResolverInterface) {
+                throw new \Exception('Entity resolver must implement `' . EntityResolverInterface::class . '` interface');
+            }
             $entities = $entityResolver->getEntities();
             foreach ($entities as $entity) {
                 $result[] = $entity;

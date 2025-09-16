@@ -25,7 +25,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
 
         $this->pages = [
             PageDefinition::generate('home', [
-                'url_key' => '',
+                'url_key' => 'home',
                 'template' => 'Liquid_Content::page/home.phtml',
                 'doc_css_class' => 'theme--light palette--wintergreen accent--green',
                 // TODO: improve SEO tags

@@ -229,6 +229,8 @@ class BaseRouter implements RouterInterface
                 // TODO: handle exceptions
                 $actionInstance = $this->diContainer->get($actionClassName);
 
+                $request->setActionName($params['actionPath']);
+//                var_dump($action->path);
 //                if (!$actionInstance instanceof AbstractAction) {
 //                    throw new \RuntimeException('Action should be "' . AbstractAction::class . '", "' . get_class($actionInstance) . '" given');
 //                }

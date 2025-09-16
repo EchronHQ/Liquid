@@ -5,6 +5,8 @@ namespace Liquid\Core\Model;
 
 class FrontendFileUrl
 {
+    public string|null $path = null;
+
     public function __construct(
         public readonly string   $url,
         public readonly int|null $width = null,

@@ -9,6 +9,7 @@ use Liquid\Core\Helper\FileHelper;
 use Liquid\Core\Helper\Output;
 use Liquid\Core\Helper\Resolver;
 use Liquid\Framework\App\Config\ScopeConfig;
+use Liquid\Framework\App\State;
 use Liquid\Framework\View\Layout\Layout;
 use Psr\Log\LoggerInterface;
 
@@ -21,7 +22,8 @@ readonly class BlockContext
         public FileHelper      $fileHelper,
         public LocaleHelper    $localeHelper,
         public Output          $outputHelper,
-        public LoggerInterface $logger
+        public LoggerInterface $logger,
+        public State           $appState,
     )
     {
     }

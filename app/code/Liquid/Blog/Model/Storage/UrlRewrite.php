@@ -5,12 +5,11 @@ namespace Liquid\Blog\Model\Storage;
 
 use Liquid\Blog\Repository\BlogRepository;
 use Liquid\Blog\Repository\TerminologyRepository;
-use Liquid\Content\Model\Segment\SegmentId;
-use Liquid\Core\Helper\RequestRewriteHelper;
+use Liquid\Content\Model\Storage\AbstractUrlRewriteStorage;
 use Liquid\UrlRewrite\Model\Resource\UrlRewriteType;
 use Liquid\UrlRewrite\Model\UrlFinderInterface;
 
-class UrlRewrite implements UrlFinderInterface
+class UrlRewrite extends AbstractUrlRewriteStorage implements UrlFinderInterface
 {
     private array|null $loadedUrlRewrites = null;
 
@@ -22,40 +21,12 @@ class UrlRewrite implements UrlFinderInterface
 
     }
 
-    /** @inheritdoc */
-    public function findOneByRequestPath(string $requestPath, SegmentId $segmentId): \Liquid\UrlRewrite\Model\Resource\UrlRewrite|null
-    {
-        $urlRewrites = $this->getUrlRewrites();
-        foreach ($urlRewrites as $urlRewrite) {
-            $rewrite = RequestRewriteHelper::rewrite($urlRewrite, $requestPath);
-            if ($rewrite !== null) {
-                return $rewrite;
-            }
-        }
-
-        return null;
-    }
-
-    /** @inheritdoc */
-    public function findAllByRequestPath(string $requestPath, SegmentId $segmentId): array
-    {
-        $urlRewrites = $this->getUrlRewrites();
-        $result = [];
-        foreach ($urlRewrites as $urlRewrite) {
-            $rewrite = RequestRewriteHelper::rewrite($urlRewrite, $requestPath);
-            if ($rewrite !== null) {
-                $result[] = $rewrite;
-            }
-        }
-
-        return $result;
-    }
 
     /**
      * @return \Liquid\UrlRewrite\Model\Resource\UrlRewrite[]
      * @throws \Exception
      */
-    private function getUrlRewrites(): array
+    protected function getUrlRewrites(): array
     {
         if ($this->loadedUrlRewrites === null) {
 
@@ -73,7 +44,15 @@ class UrlRewrite implements UrlFinderInterface
                         if (!is_string($entityUrlRewrite)) {
                             var_dump($entityUrlRewrite);
                         } else {
-                            $urlRewrites[] = new \Liquid\UrlRewrite\Model\Resource\UrlRewrite($entityUrlRewrite, $viewableEntity->getViewRoute(), UrlRewriteType::INTERNAL);
+
+                            $urlRewrite = new \Liquid\UrlRewrite\Model\Resource\UrlRewrite();
+                            $urlRewrite->setEntityId($viewableEntity->id);
+                            $urlRewrite->setEntityType(get_class($viewableEntity));
+                            $urlRewrite->setTargetPath($viewableEntity->getViewRoute());
+                            $urlRewrite->setRedirectType(UrlRewriteType::INTERNAL);
+                            $urlRewrite->setRequestPath($entityUrlRewrite);
+
+                            $urlRewrites[] = $urlRewrite;
                         }
 
                     }

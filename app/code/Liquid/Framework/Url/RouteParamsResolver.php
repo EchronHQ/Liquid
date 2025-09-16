@@ -93,7 +93,7 @@ class RouteParamsResolver extends DataObject
     public function setRouteParam(string $key, mixed $data): self
     {
         $params = $this->_getData('route_params');
-        if (isset($params[$key]) && $params[$key] == $data) {
+        if (isset($params[$key]) && $params[$key] === $data) {
             return $this;
         }
         $params[$key] = $data;

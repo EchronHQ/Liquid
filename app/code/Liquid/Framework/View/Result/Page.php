@@ -162,7 +162,8 @@ class Page extends LayoutPage
     {
         $this->profiler->profilerStart('MarkupEngine:run');
 
-        // TODO: registration of tags should happen elsewhere
+        // TODO: registration of tags should happen through configuration
+
         $this->markupEngine->registerTag('ct:section', TestSection::class);
         $this->markupEngine->registerTag('page-header', Template::class, ['template' => 'Liquid_Content::element/markupengine/page-header.phtml']);
         $this->markupEngine->registerTag('page-section', PageSectionTag::class, ['template' => 'Liquid_Content::element/markupengine/page-section.phtml']);

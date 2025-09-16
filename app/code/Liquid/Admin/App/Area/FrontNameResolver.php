@@ -52,6 +52,7 @@ class FrontNameResolver implements FrontNameResolverInterface
 
     public function isHostBackend(): bool
     {
+        // TODO: when we use {{base_url}} as unsecure/base_url then this doesn't work
         if ($this->segmentConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL)) {
             $backendUrl = $this->segmentConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL);
         } else {
@@ -60,7 +61,6 @@ class FrontNameResolver implements FrontNameResolverInterface
                 $backendUrl = $this->segmentConfig->getValue('web/unsecure/base_url');
             }
         }
-
         $host = (string)$this->request->getServer('HTTP_HOST', '');
         $hostWithPort = $this->getHostWithPort($backendUrl);
 

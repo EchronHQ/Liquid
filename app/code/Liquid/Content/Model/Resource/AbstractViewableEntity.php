@@ -35,6 +35,7 @@ abstract class AbstractViewableEntity
     protected array $urlRewrites = [];
 
     protected string $controllerEndpoint = 'content/page/view/page-id/';
+    private string|null $requestPath = null;
 
     public function __construct(int|string $id)
     {
@@ -167,11 +168,18 @@ abstract class AbstractViewableEntity
         return self::TITLE_PREFIX . $this->metaTitle . self::TITLE_SUFFIX;
     }
 
+    /**
+     * @return string[]
+     */
     public function getUrlRewrites(): array
     {
         return $this->urlRewrites;
     }
 
+    /**
+     * @param string[] $urlRewrites
+     * @return void
+     */
     public function setUrlRewrites(array $urlRewrites): void
     {
         $this->urlRewrites = $urlRewrites;
@@ -185,5 +193,16 @@ abstract class AbstractViewableEntity
     public function setControllerEndpoint(string $controllerEndpoint): void
     {
         $this->controllerEndpoint = $controllerEndpoint;
+    }
+
+    public function getRequestPath(): string|null
+    {
+        return $this->requestPath;
+    }
+
+    public function setRequestPath(string|null $value): self
+    {
+        $this->requestPath = $value;
+        return $this;
     }
 }

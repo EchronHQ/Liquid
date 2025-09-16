@@ -407,14 +407,15 @@ class Navigation {
     }
 
     private close(): void {
+
         if (this.closeTimeout !== null) {
             window.clearTimeout(this.closeTimeout);
         }
         this.closeTimeout = window.setTimeout(() => {
             // console.log('Menu closed')
-            const menuItemToggles: JQuery = $('header.site-header .navigation .nav-item[aria-haspopup="true"]');
-            menuItemToggles.removeClass('open');
-            $('header.site-header').removeClass('sub-navigation-open');
+            // const menuItemToggles: JQuery = $('header.site-header .navigation .nav-item[aria-haspopup="true"]');
+            // menuItemToggles.removeClass('open');
+            // $('header.site-header').removeClass('sub-navigation-open');
         }, 200);
 
         // console.log('x', this.closeTimeout);

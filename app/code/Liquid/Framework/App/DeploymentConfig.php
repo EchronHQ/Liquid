@@ -207,7 +207,7 @@ class DeploymentConfig
         $this->flatData = $this->getAllEnvOverrides() + $this->flatData;
     }
 
-    private function flattenParams(array $params, ?string $path = null, array &$flattenResult = null): array
+    private function flattenParams(array $params, string|null $path = null, array|null &$flattenResult = null): array
     {
         if (null === $flattenResult) {
             $flattenResult = [];
@@ -223,15 +223,15 @@ class DeploymentConfig
                 throw new \Liquid\Framework\Exception\RuntimeException("Key collision '" . $newPath . "' is already defined.");
             }
 
-            if (is_array($param)) {
+            if (\is_array($param)) {
                 $flattenResult[$newPath] = $param;
                 $this->flattenParams($param, $newPath, $flattenResult);
             } else {
                 // allow reading values from env variables
                 // value need to be specified in %env(NAME, "default value")% format
                 // like #env(DB_PASSWORD), #env(DB_NAME, "test")
-                if ($param !== null && $param !== true && $param !== false && preg_match(self::ENV_NAME_PATTERN, $param, $matches)) {
-                    $param = getenv($matches['name']) ?: ($matches['default'] ?? null);
+                if ($param !== null && $param !== true && $param !== false && \preg_match(self::ENV_NAME_PATTERN, (string)$param, $matches)) {
+                    $param = \getenv($matches['name']) ?: ($matches['default'] ?? null);
                 }
 
                 $flattenResult[$newPath] = $param;
@@ -252,12 +252,10 @@ class DeploymentConfig
             // allow reading values from env variables by convention
             // LIQUID_DC_{path}, like db/connection/default/host =>
             // can be overwritten by LIQUID_DC_DB__CONNECTION__DEFAULT__HOST
-            foreach (getenv() as $key => $value) {
-                if (false !== \strpos($key, self::LIQUID_ENV_PREFIX)
-                    && $key !== self::OVERRIDE_KEY
-                ) {
+            foreach (\getenv() as $key => $value) {
+                if ($key !== self::OVERRIDE_KEY && str_contains($key, self::LIQUID_ENV_PREFIX)) {
                     // convert LIQUID_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
-                    $flatKey = strtolower(str_replace([self::LIQUID_ENV_PREFIX, '__'], ['', '/'], $key));
+                    $flatKey = \strtolower(\str_replace([self::LIQUID_ENV_PREFIX, '__'], ['', '/'], $key));
                     $this->envOverrides[$flatKey] = $value;
                 }
             }
@@ -277,7 +275,7 @@ class DeploymentConfig
         if (empty($this->readerLoad) || empty($this->data) || empty($this->flatData)) {
             $this->readerLoad = $this->configReader->load();
         }
-        $this->data = array_replace(
+        $this->data = \array_replace(
             $this->readerLoad,
             $this->overrideData ?? [],
             $this->getEnvOverride()
@@ -293,7 +291,7 @@ class DeploymentConfig
      */
     private function getEnvOverride(): array
     {
-        $env = getenv(self::OVERRIDE_KEY);
+        $env = \getenv(self::OVERRIDE_KEY);
         return !empty($env) ? (json_decode($env, true, 512, JSON_THROW_ON_ERROR) ?? []) : [];
     }
 

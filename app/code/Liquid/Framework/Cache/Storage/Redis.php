@@ -12,10 +12,15 @@ class Redis implements StorageInterface
 {
     private RedisAdapter $adapter;
 
-    public function __construct(string $host, int $port)
+    public function __construct(string $host, int $port, string|null $password = null)
     {
         $client = new \Redis();
         $client->connect($host, $port);
+
+        if (!empty($password)) {
+            $client->auth($password);
+        }
+
 
         $this->adapter = new RedisAdapter($client);
 

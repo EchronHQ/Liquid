@@ -39,7 +39,7 @@ npm run webpack-analyse
 ## Update packages
 
 ```bash
-docker run -it -v ${PWD}:/app -w /app --rm attlaz/php:8.3 composer update --ignore-platform-req=ext-redis
+docker run -it -v ${PWD}:/app -w /app --rm attlaz/php:8.4 composer update --ignore-platform-req=ext-redis
 ```
 
 ## (re) build dev environment

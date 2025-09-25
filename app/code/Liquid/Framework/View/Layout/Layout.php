@@ -89,7 +89,7 @@ class Layout extends XmlConfig
         $this->build();
         /** @var Template $block */
         $block = $this->createBlock(Template::class);
-        if (!\is_null($template)) {
+        if ($template !== null) {
             // TODO: what is the point of creating a template block without valid template?
             $block->setTemplate($template);
         }
@@ -165,7 +165,7 @@ class Layout extends XmlConfig
     public function getChildNames(string $parentName): array
     {
         $this->build();
-        return array_keys($this->structure->getChildren($parentName));
+        return \array_keys($this->structure->getChildren($parentName));
     }
 
     public function getBlock(string $name): AbstractBlock|null
@@ -524,7 +524,7 @@ class Layout extends XmlConfig
 
         $htmlTag = $this->structure->getAttribute($containerName, self::CONTAINER_OPT_HTML_TAG);
 
-        return sprintf('<%1$s%2$s%3$s>%4$s</%1$s>', $htmlTag, $htmlId, $htmlClass, $html);
+        return \sprintf('<%1$s%2$s%3$s>%4$s</%1$s>', $htmlTag, $htmlId, $htmlClass, $html);
     }
 
     private function renderBlock(string $blockName): string

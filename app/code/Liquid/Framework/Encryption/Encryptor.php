@@ -160,10 +160,10 @@ class Encryptor
      * @throws \Exception
      */
     private function getCrypt(
-        string $key = null,
-        int    $cipherVersion = null,
-        string $initVector = null
-    ): ?SodiumChachaIetf
+        string|null $key = null,
+        int|null    $cipherVersion = null,
+        string|null $initVector = null
+    ): SodiumChachaIetf|null
     {
         //phpcs:disable PHPCompatibility.Constants.RemovedConstants
         if (null === $key && null === $cipherVersion) {

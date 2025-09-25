@@ -7,7 +7,6 @@ namespace Liquid\Core;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\AppInterface;
 use Liquid\Framework\App\AppMode;
-use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\DirectoryList;
@@ -43,9 +42,9 @@ class Application
      * @return Application
      */
     public static function create(
-        string               $rootDir,
-        array                $initParams,
-        ObjectManagerFactory $factory = null
+        string                    $rootDir,
+        array                     $initParams,
+        ObjectManagerFactory|null $factory = null
     ): Application
     {
         // self::populateAutoloader($rootDir, $initParams);

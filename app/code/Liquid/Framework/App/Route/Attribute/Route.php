@@ -18,10 +18,10 @@ class Route
      * @param array $methods The list of HTTP methods allowed by this route (GET, POST, PUT, DELETE)
      */
     public function __construct(
-        string $path,
-        string $name = null,
-        string $routerId = 'standard',
-        array  $methods = [],
+        string      $path,
+        string|null $name = null,
+        string      $routerId = 'standard',
+        array       $methods = [],
     )
     {
         $this->path = $path;

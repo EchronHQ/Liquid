@@ -25,7 +25,7 @@ class File
         return $this->resolve($this->getFallbackType(), $file, $area, $themeModel, null, $moduleId);
     }
 
-    public function resolve(string $type, string $file, AreaCode|null $area = null, Theme $theme = null, string|null $locale = null, string|null $module = null)
+    public function resolve(string $type, string $file, AreaCode|null $area = null, Theme|null $theme = null, string|null $locale = null, string|null $module = null)
     {
         $params = [
             'area' => $area,
@@ -68,6 +68,11 @@ class File
         return null;
     }
 
+    protected function getFallbackType(): string
+    {
+        return ResolveTypesPool::TYPE_FILE;
+    }
+
     /**
      * Validate the file path to be secured
      *
@@ -97,10 +102,5 @@ class File
 //        }
 
         throw new \InvalidArgumentException("File path '{$filePath}' is forbidden for security reasons.");
-    }
-
-    protected function getFallbackType(): string
-    {
-        return ResolveTypesPool::TYPE_FILE;
     }
 }

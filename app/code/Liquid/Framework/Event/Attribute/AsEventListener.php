@@ -18,7 +18,7 @@ class AsEventListener
      */
     public function __construct(
         private readonly string $eventId,
-        string                  $name = null,
+        string|null             $name = null,
         private readonly bool   $isDisabled = false,
         private readonly bool   $isInstanceShared = true
     )

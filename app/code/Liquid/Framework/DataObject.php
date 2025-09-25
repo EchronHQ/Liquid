@@ -118,6 +118,42 @@ class DataObject
     }
 
     /**
+     * Get object data by path
+     *
+     *  Method consider the path as chain of keys: a/b/c => ['a']['b']['c']
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function getDataByPath(string $path): mixed
+    {
+        $keys = explode('/', (string)$path);
+
+        $data = $this->_data;
+        foreach ($keys as $key) {
+            if ((array)$data === $data && isset($data[$key])) {
+                $data = $data[$key];
+            } elseif ($data instanceof self) {
+                $data = $data->getDataByKey($key);
+            } else {
+                return null;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Get object data by particular key
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function getDataByKey(string $key): mixed
+    {
+        return $this->_getData($key);
+    }
+
+    /**
      * Get value from _data array without parse key
      *
      * @param string $key
@@ -143,7 +179,7 @@ class DataObject
      * @param int|string|null $index
      * @return mixed
      */
-    public function getData(string $key = '', int|string $index = null): mixed
+    public function getData(string $key = '', int|string|null $index = null): mixed
     {
         if ('' === $key) {
             return $this->_data;
@@ -190,41 +226,5 @@ class DataObject
             $this->_data[$key] = $value;
         }
         return $this;
-    }
-
-    /**
-     * Get object data by path
-     *
-     *  Method consider the path as chain of keys: a/b/c => ['a']['b']['c']
-     *
-     * @param string $path
-     * @return mixed
-     */
-    public function getDataByPath(string $path): mixed
-    {
-        $keys = explode('/', (string)$path);
-
-        $data = $this->_data;
-        foreach ($keys as $key) {
-            if ((array)$data === $data && isset($data[$key])) {
-                $data = $data[$key];
-            } elseif ($data instanceof self) {
-                $data = $data->getDataByKey($key);
-            } else {
-                return null;
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Get object data by particular key
-     *
-     * @param string $key
-     * @return mixed
-     */
-    public function getDataByKey(string $key): mixed
-    {
-        return $this->_getData($key);
     }
 }

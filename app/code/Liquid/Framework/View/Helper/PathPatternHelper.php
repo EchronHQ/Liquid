@@ -13,7 +13,7 @@ class PathPatternHelper
      */
     public function translatePatternFromGlob(string $path): string
     {
-        $pattern = str_replace(['\\?', '\\*'], ['[^/]', '[^/]*'], preg_quote($path));
+        $pattern = \str_replace(['\\?', '\\*'], ['[^/]', '[^/]*'], \preg_quote($path));
         $pattern = $this->translateGroupsFromGlob($pattern);
         $pattern = $this->translateCharacterGroupsFromGlob($pattern);
         return $pattern;
@@ -33,13 +33,13 @@ class PathPatternHelper
      */
     protected function translateGroupsFromGlob(string $pattern): string
     {
-        preg_match_all('~\\\\\\{[^,\\}]+(?:,[^,\\}]*)*\\\\\\}~', $pattern, $matches, PREG_OFFSET_CAPTURE);
+        \preg_match_all('~\\\\\\{[^,\\}]+(?:,[^,\\}]*)*\\\\\\}~', $pattern, $matches, PREG_OFFSET_CAPTURE);
         for ($index = count($matches[0]) - 1; $index >= 0; $index--) {
             [$match, $offset] = $matches[0][$index];
-            $replacement = substr_replace($match, '(?:', 0, 2);
-            $replacement = substr_replace($replacement, ')', -2);
-            $replacement = str_replace(',', '|', $replacement);
-            $pattern = substr_replace($pattern, $replacement, (int)$offset, strlen($match));
+            $replacement = \substr_replace($match, '(?:', 0, 2);
+            $replacement = \substr_replace($replacement, ')', -2);
+            $replacement = \str_replace(',', '|', $replacement);
+            $pattern = \substr_replace($pattern, $replacement, (int)$offset, \strlen($match));
         }
         return $pattern;
     }
@@ -59,14 +59,14 @@ class PathPatternHelper
      */
     protected function translateCharacterGroupsFromGlob(string $pattern): string
     {
-        preg_match_all('~\\\\\\[(\\\\\\!)?[^\\]]+\\\\\\]~i', $pattern, $matches, PREG_OFFSET_CAPTURE);
+        \preg_match_all('~\\\\\\[(\\\\\\!)?[^\\]]+\\\\\\]~i', $pattern, $matches, PREG_OFFSET_CAPTURE);
         for ($index = count($matches[0]) - 1; $index >= 0; $index--) {
             [$match, $offset] = $matches[0][$index];
             $exclude = !(empty($matches[1][$index]) || empty($matches[1][$index][0]));
-            $replacement = substr_replace($match, '[' . ($exclude ? '^' : ''), 0, $exclude ? 4 : 2);
-            $replacement = substr_replace($replacement, ']', -2);
-            $replacement = str_replace('\\-', '-', $replacement);
-            $pattern = substr_replace($pattern, $replacement, (int)$offset, strlen($match));
+            $replacement = \substr_replace($match, '[' . ($exclude ? '^' : ''), 0, $exclude ? 4 : 2);
+            $replacement = \substr_replace($replacement, ']', -2);
+            $replacement = \str_replace('\\-', '-', $replacement);
+            $pattern = \substr_replace($pattern, $replacement, (int)$offset, \strlen($match));
         }
         return $pattern;
     }

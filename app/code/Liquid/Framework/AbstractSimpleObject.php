@@ -41,13 +41,13 @@ abstract class AbstractSimpleObject
     public function __toArray(): array
     {
         $data = $this->_data;
-        $hasToArray = function ($model) {
-            return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);
+        $hasToArray = static function ($model) {
+            return \is_object($model) && \method_exists($model, '__toArray') && \is_callable([$model, '__toArray']);
         };
         foreach ($data as $key => $value) {
             if ($hasToArray($value)) {
                 $data[$key] = $value->__toArray();
-            } elseif (is_array($value)) {
+            } elseif (\is_array($value)) {
                 foreach ($value as $nestedKey => $nestedValue) {
                     if ($hasToArray($nestedValue)) {
                         $value[$nestedKey] = $nestedValue->__toArray();

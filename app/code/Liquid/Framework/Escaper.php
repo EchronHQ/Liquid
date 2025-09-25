@@ -26,15 +26,15 @@ class Escaper
     public function escapeHtmlAttribute(string $input, bool $stripHtml = true): string
     {
         if ($stripHtml) {
-            $input = strip_tags($input);
+            $input = \strip_tags($input);
         }
         $input = $this->escapeTerms($input);
-        return htmlspecialchars($input, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+        return \htmlspecialchars($input, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
     }
 
     public function jsonEncode(mixed $input): string
     {
-        return json_encode($input, JSON_THROW_ON_ERROR);
+        return \json_encode($input, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -52,11 +52,11 @@ class Escaper
 
 
         if (!empty($data)) {
-            if (is_array($allowedTags) && !empty($allowedTags)) {
+            if (\is_array($allowedTags) && !empty($allowedTags)) {
                 $allowedTags = $this->filterProhibitedTags($allowedTags);
-                $wrapperElementId = uniqid('', true);
+                $wrapperElementId = \uniqid('', true);
                 $domDocument = new \DOMDocument('1.0', 'UTF-8');
-                set_error_handler(
+                \set_error_handler(
                     static function ($errorNumber, $errorString) {
                         throw new \InvalidArgumentException($errorString, $errorNumber);
                     }
@@ -73,10 +73,10 @@ class Escaper
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
                     );
                 } catch (\Exception $e) {
-                    restore_error_handler();
+                    \restore_error_handler();
                     $this->logger->critical($e);
                 }
-                restore_error_handler();
+                \restore_error_handler();
 
                 $this->removeComments($domDocument);
                 $this->removeNotAllowedTags($domDocument, $allowedTags);
@@ -85,7 +85,7 @@ class Escaper
                 $this->escapeAttributeValues($domDocument);
 
                 $result = mb_decode_numericentity(
-                    html_entity_decode(
+                    \html_entity_decode(
                         $domDocument->saveHTML(),
                         ENT_QUOTES | ENT_SUBSTITUTE,
                         'UTF-8'
@@ -94,11 +94,11 @@ class Escaper
                     'UTF-8'
                 );
 
-                preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
+                \preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
-            } else {
-                $result = htmlspecialchars($data, $this->htmlSpecialCharsFlag, 'UTF-8', false);
             }
+
+            $result = \htmlspecialchars($data, $this->htmlSpecialCharsFlag, 'UTF-8', false);
         } else {
             $result = $data;
         }
@@ -131,10 +131,10 @@ class Escaper
      */
     public function escapeXssInUrl(string $data): string
     {
-        $data = html_entity_decode((string)$data);
+        $data = \html_entity_decode((string)$data);
         // $this->getTranslateInline()->processResponseBody($data);
 
-        return htmlspecialchars(
+        return \htmlspecialchars(
             $this->escapeScriptIdentifiers($data),
             $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
@@ -150,17 +150,17 @@ class Escaper
      */
     private function escapeScriptIdentifiers(string $data): string
     {
-        $filteredData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
+        $filteredData = \preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $data);
         if ($filteredData === false || $filteredData === '') {
             return '';
         }
 
-        $filteredData = preg_replace(self::$xssFiltrationPattern, ':', $filteredData);
+        $filteredData = \preg_replace(self::$xssFiltrationPattern, ':', $filteredData);
         if ($filteredData === false) {
             return '';
         }
 
-        if (preg_match(self::$xssFiltrationPattern, $filteredData)) {
+        if (\preg_match(self::$xssFiltrationPattern, $filteredData)) {
             $filteredData = $this->escapeScriptIdentifiers($filteredData);
         }
 
@@ -210,9 +210,9 @@ class Escaper
      * @param string $value
      * @return string
      */
-    private function escapeAttributeValue($name, $value)
+    private function escapeAttributeValue(string $name, string $value): string
     {
-        return in_array($name, $this->escapeAsUrlAttributes) ? $this->escapeUrl($value) : $this->escapeHtml($value);
+        return \in_array($name, $this->escapeAsUrlAttributes, true) ? $this->escapeUrl($value) : $this->escapeHtml($value);
     }
 
     /**
@@ -228,11 +228,11 @@ class Escaper
         /** @var \DOMNode[] $nodes */
         $nodes = $xpath->query(
             '//node()[name() != \''
-            . implode('\' and name() != \'', array_merge($allowedTags, ['html', 'body']))
+            . \implode('\' and name() != \'', \array_merge($allowedTags, ['html', 'body']))
             . '\']'
         );
         foreach ($nodes as $node) {
-            if ($node->nodeName != '#text') {
+            if ($node->nodeName !== '#text') {
                 $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
             }
         }
@@ -244,7 +244,7 @@ class Escaper
      * @param \DOMDocument $domDocument
      * @return void
      */
-    private function removeComments(\DOMDocument $domDocument)
+    private function removeComments(\DOMDocument $domDocument): void
     {
         $xpath = new \DOMXPath($domDocument);
         /** @var \DOMNode[] $nodes */
@@ -275,16 +275,16 @@ class Escaper
      */
     private function filterProhibitedTags(array $allowedTags): array
     {
-        $notAllowedTags = array_intersect(
-            array_map('strtolower', $allowedTags),
+        $notAllowedTags = \array_intersect(
+            \array_map('strtolower', $allowedTags),
             $this->notAllowedTags
         );
 
         if (!empty($notAllowedTags)) {
             $this->logger->critical(
-                'The following tag(s) are not allowed: ' . implode(', ', $notAllowedTags)
+                'The following tag(s) are not allowed: ' . \implode(', ', $notAllowedTags)
             );
-            $allowedTags = array_diff($allowedTags, $this->notAllowedTags);
+            $allowedTags = \array_diff($allowedTags, $this->notAllowedTags);
         }
 
         return $allowedTags;
@@ -301,7 +301,7 @@ class Escaper
         $xpath = new \DOMXPath($domDocument);
         /** @var \DOMNode[] $nodes */
         $nodes = $xpath->query(
-            '//@*[name() != \'' . implode('\' and name() != \'', $this->allowedAttributes) . '\']'
+            '//@*[name() != \'' . \implode('\' and name() != \'', $this->allowedAttributes) . '\']'
         );
         foreach ($nodes as $node) {
             $node->parentNode->removeAttribute($node->nodeName);
@@ -310,7 +310,7 @@ class Escaper
         foreach ($this->notAllowedAttributes as $tag => $attributes) {
             /** @var \DOMNode[] $nodes */
             $nodes = $xpath->query(
-                '//@*[name() =\'' . implode('\' or name() = \'', $attributes) . '\']'
+                '//@*[name() =\'' . \implode('\' or name() = \'', $attributes) . '\']'
                 . '[parent::node()[name() = \'' . $tag . '\']]'
             );
             foreach ($nodes as $node) {
@@ -321,7 +321,7 @@ class Escaper
 
     private function escapeTerms(string $input): string
     {
-        preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $input, $matches);
+        \preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $input, $matches);
 
         [$toReplace, $foundTerms] = $matches;
 

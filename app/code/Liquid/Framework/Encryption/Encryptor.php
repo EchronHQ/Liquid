@@ -44,7 +44,7 @@ class Encryptor
     )
     {
         // load all possible keys
-        $this->keys = preg_split('/\s+/s', trim($deploymentConfig->getValueString(self::PARAM_CRYPT_KEY)));
+        $this->keys = \preg_split('/\s+/s', \trim($deploymentConfig->getValueString(self::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
     }
 
@@ -67,7 +67,7 @@ class Encryptor
 
         return $this->keyVersion .
             ':' . self::CIPHER_AEAD_CHACHA20POLY1305 .
-            ':' . base64_encode($crypt->encrypt($data));
+            ':' . \base64_encode($crypt->encrypt($data));
     }
 
     /**
@@ -84,7 +84,7 @@ class Encryptor
     public function decrypt(string $data): string
     {
         if ($data) {
-            $parts = explode(':', $data, 4);
+            $parts = \explode(':', $data, 4);
             $partsCount = count($parts);
 
             $initVector = null;
@@ -120,7 +120,7 @@ class Encryptor
             if (null === $crypt) {
                 return '';
             }
-            return trim($crypt->decrypt(base64_decode((string)$data)));
+            return \trim($crypt->decrypt(\base64_decode((string)$data)));
         }
         return '';
     }
@@ -142,7 +142,7 @@ class Encryptor
             self::CIPHER_RIJNDAEL_256,
             self::CIPHER_AEAD_CHACHA20POLY1305,
         ];
-        if (!in_array($version, $types, true)) {
+        if (!\in_array($version, $types, true)) {
             throw new \Exception('Not supported cipher version');
         }
         return $version;
@@ -153,9 +153,9 @@ class Encryptor
      *
      * By default initializes with latest key and crypt versions
      *
-     * @param string $key
-     * @param int $cipherVersion
-     * @param string $initVector
+     * @param string|null $key
+     * @param int|null $cipherVersion
+     * @param string|null $initVector
      * @return SodiumChachaIetf|null
      * @throws \Exception
      */
@@ -204,12 +204,13 @@ class Encryptor
      * Find out actual decode key
      *
      * @param string $key
-     * @return false|string
+     * @return null|string
      */
-    private function decodeKey(string $key): string|bool
+    private function decodeKey(string $key): string|null
     {
-        return (str_starts_with($key, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) ?
-            base64_decode(substr($key, strlen(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX))) :
+        $decoded = (str_starts_with($key, ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX)) ?
+            \base64_decode(\substr($key, \strlen(ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX))) :
             $key;
+        return ($decoded === false ? null : $decoded);
     }
 }

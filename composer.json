@@ -17,12 +17,11 @@
     "php-di/php-di": "^7.1.1",
     "attlaz/attlaz-monolog": "^2.2.1",
     "attlaz/adapter-base": "^1.16.7",
-    "symfony/mailer": "^7.3.3",
+    "symfony/mailer": "^7.3.4",
     "laminas/laminas-http": "^2.22.0",
-    "doctrine/annotations": "^2.0.2",
     "symfony/yaml": "^v7.3.3",
     "symfony/console": "^v7.3.3",
-    "symfony/cache": "^v7.3.2",
+    "symfony/cache": "^v7.3.4",
     "gumlet/php-image-resize": "^2.1.2",
     "echron/tools": "^1.8.1",
     "thecodingmachine/safe": "^3.3.0",
@@ -41,11 +40,11 @@
     "hansschouten/phpagebuilder": "v0.21.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.3.14",
+    "phpunit/phpunit": "^12.4.1",
     "squizlabs/php_codesniffer": "^4.0.0",
     "phpmd/phpmd": "^2.15.0",
     "phpstan/phpstan": "^2.1",
-    "friendsofphp/php-cs-fixer": "^v3.88"
+    "friendsofphp/php-cs-fixer": "^v3.89"
   },
   "autoload": {
     "psr-4": {

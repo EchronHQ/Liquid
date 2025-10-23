@@ -26,7 +26,84 @@ class Navigation implements ArgumentInterface
             [
                 'title' => 'Platform',
                 'type' => 'dropdown',
+                'template' => 'Liquid_Content::navigation/platform.phtml',
                 'subsections' => [
+                    [
+                        'title' => 'Platform Overview',
+                        'items' => [
+                            [
+                                'title' => 'Bespoke Platform',
+                                'description' => 'Understand our unique platform’s focus on data integration, automation and visualisation.',
+                                'icon' => 'asset/icons/menu/feed-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform'),
+                            ],
+                            [
+                                'title' => 'Why Attlaz?',
+                                'description' => 'See what makes Attlaz stand out.',
+                                'icon' => 'asset/icons/menu/market-sentry.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/why-attlaz'),
+                            ],
+                            [
+                                'title' => 'Pricing',
+                                'description' => 'Find the best package for you.',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('products/pricing'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'title' => 'Key Capabilities',
+                        'items' => [
+                            [
+                                'title' => 'Unified Data Integration Hub',
+//                                'description' => 'Streamline product distribution',
+                                'icon' => 'asset/icons/menu/feed-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/data-integration-hub'),
+                            ],
+                            [
+                                'title' => 'Connector Marketplace',
+//                                'description' => 'Track market dynamics',
+                                'icon' => 'asset/icons/menu/market-sentry.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('products/competitor-monitoring'),
+                            ],
+                            [
+                                'title' => 'Real-Time Monitoring',
+//                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/real-time-monitoring'),
+                            ],
+                            [
+                                'title' => 'Error Management',
+//                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/error-management'),
+                            ],
+                            [
+                                'title' => 'Advanced Workflow Automation',
+//                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/workflow-automation'),
+                            ],
+                            [
+                                'title' => 'Cross-Application Connectivity',
+//                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/cross-application-connectivity'),
+                            ],
+                            [
+                                'title' => 'Advanced Data Transformation & Quality Engine',
+//                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/data-transformation-quality-engine'),
+                            ],
+                            [
+                                'title' => 'Adaptive Infrastructure',
+//                                'description' => 'Optimize inventory decisions',
+                                'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/infrastructure'),
+                            ],
+                        ],
+                    ],
                     [
                         'title' => 'Products',
                         'items' => [
@@ -104,7 +181,7 @@ class Navigation implements ArgumentInterface
                 'type' => 'dropdown',
                 'subsections' => [
                     [
-                        'title' => 'By use case',
+                        'title' => 'Function',
                         // TODO: make these items come from the use-case repository
                         'items' => [
                             [
@@ -149,6 +226,73 @@ class Navigation implements ArgumentInterface
                         ],
                     ],
                     [
+                        'title' => 'By use case',
+                        // TODO: make these items come from the use-case repository
+                        'items' => [
+                            [
+                                'title' => 'Digital Marketing',
+//                                'description' => 'Enhance your ecommerce',
+                                'icon' => 'asset/icons/menu/ecommerce.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ecommerce'),
+                            ],
+                            [
+                                'title' => 'Ecommerce Marketing',
+//                                'description' => 'Streamline all your financial data',
+                                'icon' => 'asset/icons/menu/finance.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/finance'),
+                            ],
+                            [
+                                'title' => 'Expense Management',
+//                                'description' => 'Centralize all your data and application integrations',
+                                'icon' => 'asset/icons/menu/it.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/it'),
+                            ],
+
+                            [
+                                'title' => 'Financial Planning & Analysis',
+//                                'description' => 'Enable marketing automation',
+                                'icon' => 'asset/icons/menu/marketing.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/marketing'),
+                            ],
+                            [
+                                'title' => 'Product Data Management',
+//                                'description' => 'Connect all your sales processes',
+                                'icon' => 'asset/icons/menu/sales.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
+                            ],
+                            [
+                                'title' => 'Product Management',
+//                                'description' => 'Connect all your sales processes',
+                                'icon' => 'asset/icons/menu/sales.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
+                            ],
+                            [
+                                'title' => 'Product Operations',
+//                                'description' => 'Connect all your sales processes',
+                                'icon' => 'asset/icons/menu/sales.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
+                            ],
+                            [
+                                'title' => 'Product Usage',
+//                                'description' => 'Connect all your sales processes',
+                                'icon' => 'asset/icons/menu/sales.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
+                            ],
+                            [
+                                'title' => 'Inventory Management',
+//                                'description' => 'Connect all your sales processes',
+                                'icon' => 'asset/icons/menu/sales.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
+                            ],
+                            [
+                                'title' => 'Sales Channel Management',
+//                                'description' => 'Connect all your sales processes',
+                                'icon' => 'asset/icons/menu/sales.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales'),
+                            ],
+                        ],
+                    ],
+                    [
                         'title' => 'By application',
                         'items' => [
                             [
@@ -182,35 +326,35 @@ class Navigation implements ArgumentInterface
 //                    'link' => $this->resolver->getPageUrl('case-studies'),
 //                ],
             ],
-            [
-                'title' => 'About',
-                'type' => 'dropdown',
-                'subsections' => [
-                    [
-                        'title' => 'About Attlaz',
-                        'items' => [
-                            [
-                                'title' => 'About',
-                                'description' => 'Discover what Attlaz is all about',
-                                'icon' => 'asset/icons/menu/about.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('about'),
-                            ],
-                            [
-                                'title' => 'Careers',
-                                'description' => 'Work with purpose. Leave your mark.',
-                                'icon' => 'asset/icons/menu/careers.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('careers'),
-                            ],
-                            [
-                                'title' => 'Partners',
-                                'description' => 'Learn how Attlaz partners are accelerating businesses',
-                                'icon' => 'asset/icons/menu/partners.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('partners'),
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+//            [
+//                'title' => 'About',
+//                'type' => 'dropdown',
+//                'subsections' => [
+//                    [
+//                        'title' => 'About Attlaz',
+//                        'items' => [
+//                            [
+//                                'title' => 'About',
+//                                'description' => 'Discover what Attlaz is all about',
+//                                'icon' => 'asset/icons/menu/about.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('about'),
+//                            ],
+//                            [
+//                                'title' => 'Careers',
+//                                'description' => 'Work with purpose. Leave your mark.',
+//                                'icon' => 'asset/icons/menu/careers.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('careers'),
+//                            ],
+//                            [
+//                                'title' => 'Partners',
+//                                'description' => 'Learn how Attlaz partners are accelerating businesses',
+//                                'icon' => 'asset/icons/menu/partners.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('partners'),
+//                            ],
+//                        ],
+//                    ],
+//                ],
+//            ],
             //            [
             //                'title'       => 'Developers',
             //                'type'        => 'dropdown',
@@ -225,50 +369,31 @@ class Navigation implements ArgumentInterface
             //                    ]
             //                ]
             //            ],
+
             [
                 'title' => 'Resources',
                 'type' => 'dropdown',
                 'subsections' => [
-//                    [
-//                        'title' => 'Resources',
-//                        'items' => [
-//                            [
-//                                'title' => 'Blog',
-//                                'description' => 'Read up on all things integrating, automating, and much more',
-//                                'icon' => $this->resolver->getFrontendFileImageUrl('asset/icons/menu/blog.svg',
-//                                'link' => $this->resolver->getPageUrl('blog'),
-//                            ],
-//                            [
-//                                'title' => 'Documentation',
-//                                'description' => 'Access Attlaz documentation',
-//                                'icon' => $this->resolver->getFrontendFileImageUrl('asset/icons/menu/documentation.svg',
-//                                'link' => $this->resolver->getPageUrl('docs'),
-//                                'target' => '_blank',
-//                                'rel' => 'noopener',
-//                            ],
-//                            [
-//                                'title' => 'Help center',
-//                                'description' => 'We are here to help you',
-//                                'icon' => $this->resolver->getFrontendFileImageUrl('asset/icons/menu/support.svg',
-//                                'link' => $this->resolver->getPageUrl('support'),
-//                            ],
-//                        ],
-//                    ],
                     [
-                        'title' => 'Resources',
+                        'title' => 'Services',
                         'items' => [
                             [
-                                'title' => 'Customer stories',
-                                'description' => 'See how ' . $this->localeHelper->translate('organizations') . ' are using the Attlaz platform to achieve their goals.',
+                                'title' => 'Customer Experience',
+//                                'description' => 'See how ' . $this->localeHelper->translate('organizations') . ' are using the Attlaz platform to achieve their goals.',
                                 'icon' => 'asset/icons/menu/customers.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('case-studies'),
                             ],
                             [
-                                'title' => 'Blog',
-                                'description' => 'Read up on all things integrating, automating, and much more',
-                                'icon' => 'asset/icons/menu/blog.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('blog'),
+                                'title' => 'Consultancy',
+//                                'description' => 'See how ' . $this->localeHelper->translate('organizations') . ' are using the Attlaz platform to achieve their goals.',
+                                'icon' => 'asset/icons/menu/customers.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('case-studies'),
                             ],
+                        ],
+                    ],
+                    [
+                        'title' => 'Support',
+                        'items' => [
                             [
                                 'title' => 'Documentation',
                                 'description' => 'Access Attlaz documentation',
@@ -283,6 +408,38 @@ class Navigation implements ArgumentInterface
                                 'icon' => 'asset/icons/menu/support.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('support'),
                             ],
+                        ],
+                    ],
+                    [
+                        'title' => 'Explore',
+                        'items' => [
+                            [
+                                'title' => 'Blog',
+                                'description' => 'Read up on all things integrating, automating, and much more',
+                                'icon' => 'asset/icons/menu/blog.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('blog'),
+                            ],
+                            [
+                                'title' => 'Customer stories',
+                                'description' => 'See how ' . $this->localeHelper->translate('organizations') . ' are using the Attlaz platform to achieve their goals.',
+                                'icon' => 'asset/icons/menu/customers.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('case-studies'),
+                            ],
+
+
+                        ],
+                    ],
+                ],
+            ],
+
+            [
+                'title' => 'Support',
+                'type' => 'dropdown',
+                'subsections' => [
+                    [
+                        'title' => 'Developer platform',
+                        'items' => [
+
                         ],
                     ],
                 ],

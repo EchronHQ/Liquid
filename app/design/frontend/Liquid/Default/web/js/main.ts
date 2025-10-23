@@ -1,8 +1,8 @@
 "use strict";
-import * as $ from "jquery";
 import * as Sentry from '@sentry/browser';
-import Site from './components/site';
+import * as $ from "jquery";
 import Faq from './components/faq';
+import Site from './components/site';
 import Tabs from './components/tabs';
 import MouseEnterEvent = JQuery.MouseEnterEvent;
 import MouseLeaveEvent = JQuery.MouseLeaveEvent;
@@ -355,11 +355,20 @@ class Navigation {
             return;
         }
 
-        let left: number = menuItem.position().left;
+        // let left: number = menuItem.position().left;
+        // TODO: align the center of the navigation on the center of the menuitem
+        // @ts-ignore
+
+        let menuItemWidth = menuItem.width();
+        if (menuItemWidth === undefined) {
+            menuItemWidth = 0;
+        }
+        const left: number = (menuItem.position().left + menuItemWidth) - (width / 2);
 
         this.wrapperContainer
             .css('width', width + 'px')
             .css('height', height + 'px')
+            .css('top', '10px')
             .css('left', left + 'px');
 
         // Move a little closer without animations 100 120  => 110
@@ -413,9 +422,9 @@ class Navigation {
         }
         this.closeTimeout = window.setTimeout(() => {
             // console.log('Menu closed')
-            // const menuItemToggles: JQuery = $('header.site-header .navigation .nav-item[aria-haspopup="true"]');
-            // menuItemToggles.removeClass('open');
-            // $('header.site-header').removeClass('sub-navigation-open');
+            const menuItemToggles: JQuery = $('header.site-header .navigation .nav-item[aria-haspopup="true"]');
+            menuItemToggles.removeClass('open');
+            $('header.site-header').removeClass('sub-navigation-open');
         }, 200);
 
         // console.log('x', this.closeTimeout);

@@ -11,6 +11,10 @@ use Psr\Log\LoggerInterface;
 
 class TerminologyHelper
 {
+    /**
+     * Debug terms
+     */
+    public const string CONFIG_DEBUG_TERMINOLOGY = 'content/terminology/debug';
     private array|null $terms = null;
 
     public function __construct(
@@ -25,7 +29,7 @@ class TerminologyHelper
     public function buildTerms(string $input): string
     {
         $terms = $this->getBetween($input);
-        if (count($terms[0]) === 0) {
+        if (\count($terms[0]) === 0) {
             return $input;
         }
 
@@ -43,7 +47,7 @@ class TerminologyHelper
                 $buildTerms[] = $foundTerm;
                 $missingTerms[] = $foundTerm;
             } else {
-                if ($this->appConfig->debugTerms()) {
+                if ($this->appConfig->getBoolValue(self::CONFIG_DEBUG_TERMINOLOGY)) {
                     $foundTerm = StringHelper::mask($foundTerm);
                 }
 
@@ -53,7 +57,7 @@ class TerminologyHelper
         }
 
         $missingTerms = \array_unique($missingTerms);
-        if (count($missingTerms) > 0) {
+        if (\count($missingTerms) > 0) {
             $this->logger->warning('[Terminology] Some terms are missing', ['Missing terms' => $missingTerms]);
         }
 
@@ -100,7 +104,7 @@ class TerminologyHelper
 
     private function getBetween(string $content): array
     {
-        preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $content, $matches);
+        \preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $content, $matches);
 
         return $matches;
     }
@@ -130,6 +134,4 @@ class TerminologyHelper
     {
         return \str_replace([' '], ['-'], \strtolower($term));
     }
-
-
 }

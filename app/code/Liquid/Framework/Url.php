@@ -16,13 +16,13 @@ use Psr\Log\LoggerInterface;
 
 class Url extends DataObject
 {
-    const UrlType DEFAULT_URL_TYPE = UrlType::LINK;
+    public const UrlType DEFAULT_URL_TYPE = UrlType::LINK;
     /** @var string[] */
     private array $cacheUrl = [];
 
     public function __construct(
         private readonly ScopeConfig            $segmentConfig,
-        private readonly ScopeResolverInterface $segmentResolver,
+        private readonly ScopeResolverInterface $scopeResolver,
         private readonly RouteParamsResolver    $routeParamsResolver,
         private readonly QueryParamsResolver    $queryParamsResolver,
         private readonly Request                $request,
@@ -45,17 +45,17 @@ class Url extends DataObject
     public function getUrl(string|null $routePath = null, array|null $routeParams = null): string
     {
 
-        if ($this->isUrl($routePath)) {
+        if ($routePath !== null && $this->isUrl($routePath)) {
             return $routePath;
         }
-        $paramsIsArray = is_array($routeParams);
+        $paramsIsArray = \is_array($routeParams);
         $allowCache = true;
         //  var_dump($path);
         if ($paramsIsArray) {
-            array_walk_recursive(
+            \array_walk_recursive(
                 $routeParams,
-                function ($item) use (&$allowCache) {
-                    if (is_object($item)) {
+                static function ($item) use (&$allowCache) {
+                    if (\is_object($item)) {
                         $allowCache = false;
                     }
                 }
@@ -79,10 +79,10 @@ class Url extends DataObject
 //        }
         $cachedParams = $routeParams;
         if ($paramsIsArray) {
-            ksort($cachedParams);
+            \ksort($cachedParams);
         }
 
-        $cacheKey = sha1($routePath . $this->serializer->serialize($cachedParams));
+        $cacheKey = \sha1($routePath . $this->serializer->serialize($cachedParams));
         if (!isset($this->cacheUrl[$cacheKey])) {
 //            $this->cacheUrl[$cacheKey] = $this->getUrlModifier()->execute(
 //                $this->createUrl($routePath, $routeParams)
@@ -138,7 +138,7 @@ class Url extends DataObject
     public function getCurrentUrl(): string
     {
         $httpHostWithPort = $this->request->getHttpHost(false);
-        $httpHostWithPort = explode(':', $httpHostWithPort);
+        $httpHostWithPort = \explode(':', $httpHostWithPort);
         $httpHost = $httpHostWithPort[0] ?? '';
         $port = '';
         if (isset($httpHostWithPort[1])) {
@@ -147,7 +147,7 @@ class Url extends DataObject
                 Request::DEFAULT_HTTPS_PORT,
             ];
             /** Only add custom port to url when it's not a default one */
-            if (!in_array($httpHostWithPort[1], $defaultPorts, true)) {
+            if (!\in_array($httpHostWithPort[1], $defaultPorts, true)) {
                 $port = ':' . $httpHostWithPort[1];
             }
         }
@@ -162,7 +162,7 @@ class Url extends DataObject
      */
     public function setScope(ScopeId|null $scopeId): Url
     {
-        $scope = $this->segmentResolver->getScope($scopeId);
+        $scope = $this->scopeResolver->getScope($scopeId);
         $this->setData('scope', $scope);
         // $this->getRouteParamsResolver()->setScope($scope);
 
@@ -178,24 +178,26 @@ class Url extends DataObject
      */
     public function getRouteUrl(string|null $routePath = null, array|null $routeParams = null): string
     {
-        if (filter_var($routePath, FILTER_VALIDATE_URL)) {
+        if (\filter_var($routePath, FILTER_VALIDATE_URL)) {
             return $routePath;
         }
 
         $this->routeParamsResolver->unsetData('route_params');
 
         if (isset($routeParams['_direct'])) {
-            if (is_array($routeParams)) {
+            if (\is_array($routeParams)) {
                 $this->_setRouteParams($routeParams, false);
             }
             return $this->getBaseUrl() . $routeParams['_direct'];
         }
 
-        $this->_setRoutePath($routePath);
-        if (is_array($routeParams)) {
+        if ($routePath !== null) {
+            $this->_setRoutePath($routePath);
+        }
+        if (\is_array($routeParams)) {
             $this->_setRouteParams($routeParams, false);
         }
-        if (is_null($routeParams)) {
+        if ($routeParams === null) {
             $routeParams = [];
         }
         return $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
@@ -219,8 +221,8 @@ class Url extends DataObject
         $route = '';
         $routePieces = [];
         if (!empty($data)) {
-            $routePieces = explode('/', $data);
-            $route = array_shift($routePieces);
+            $routePieces = \explode('/', $data);
+            $route = \array_shift($routePieces);
             if ('*' === $route) {
                 $route = $this->request->getActionName();
             }
@@ -240,7 +242,7 @@ class Url extends DataObject
 
         $action = '';
         if (!empty($routePieces)) {
-            $action = array_shift($routePieces);
+            $action = \array_shift($routePieces);
             if ('*' === $action) {
                 $action = $this->request->getActionName();
             }
@@ -249,9 +251,9 @@ class Url extends DataObject
 
         if (!empty($routePieces)) {
             while (!empty($routePieces)) {
-                $key = array_shift($routePieces);
+                $key = \array_shift($routePieces);
                 if (!empty($routePieces)) {
-                    $value = array_shift($routePieces);
+                    $value = \array_shift($routePieces);
                     $this->routeParamsResolver->setRouteParam($key, $value);
                 }
             }
@@ -322,7 +324,7 @@ class Url extends DataObject
 
             if ($routeParams) {
                 foreach ($routeParams as $key => $value) {
-                    if ($value === null || false === $value || '' === $value || !is_scalar($value)) {
+                    if ($value === null || false === $value || '' === $value || !\is_scalar($value)) {
                         continue;
                     }
                     $routePath .= $key . '/' . $value . '/';
@@ -483,6 +485,11 @@ class Url extends DataObject
      *
      * @param string|null $routePath
      * @param array|null $routeParams
+     * params:
+     * _escape ?
+     * _query: query params
+     * _nosid: ?
+     *
      * @return  string
      */
     private function createUrl(string|null $routePath = null, array|null $routeParams = null): string
@@ -512,9 +519,9 @@ class Url extends DataObject
          * Apply query params, need call after getRouteUrl for rewrite _current values
          */
         if ($query !== null) {
-            if (is_string($query)) {
+            if (\is_string($query)) {
                 $this->queryParamsResolver->setQuery($query);
-            } elseif (is_array($query)) {
+            } elseif (\is_array($query)) {
                 $this->queryParamsResolver->addQueryParams($query);
             }
             if ($query === false) {
@@ -541,6 +548,6 @@ class Url extends DataObject
 
     private function isUrl(string $url): bool
     {
-        return filter_var($url, FILTER_VALIDATE_URL);
+        return \filter_var($url, FILTER_VALIDATE_URL);
     }
 }

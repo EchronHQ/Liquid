@@ -89,7 +89,7 @@ class Fallback
                 $code = $website['code'];
                 $nonStdConfigs = $this->getTheEnvConfigs($websites, $this->websiteNonStdCodes, $code);
                 $stdConfigs = $websites[$code] ?? [];
-                return count($nonStdConfigs) ? $stdConfigs + $nonStdConfigs : $stdConfigs;
+                return \count($nonStdConfigs) ? $stdConfigs + $nonStdConfigs : $stdConfigs;
             }
         }
         return [];
@@ -104,8 +104,8 @@ class Fallback
      */
     private function mapEnvStoreToStore(array $configs, string $code): array
     {
-        if (!count($this->storeNonStdCodes)) {
-            $this->storeNonStdCodes = array_diff(array_keys($configs), array_column($this->segmentData, 'code'));
+        if (!\count($this->storeNonStdCodes)) {
+            $this->storeNonStdCodes = \array_diff(\array_keys($configs), \array_column($this->segmentData, 'code'));
         }
 
         return $this->getTheEnvConfigs($configs, $this->storeNonStdCodes, $code);
@@ -123,12 +123,12 @@ class Fallback
     {
         $additionalConfigs = [];
         foreach ($nonStdCodes as $nonStdStoreCode) {
-            if (strtolower($nonStdStoreCode) === strtolower($code)) {
+            if (\strtolower($nonStdStoreCode) === \strtolower($code)) {
                 $additionalConfigs = $this->getConfigsByNonStandardCodes($configs, $nonStdStoreCode, $code);
             }
         }
 
-        return count($additionalConfigs) ? $additionalConfigs : ($configs[$code] ?? []);
+        return \count($additionalConfigs) ? $additionalConfigs : ($configs[$code] ?? []);
     }
 
     /**
@@ -142,7 +142,7 @@ class Fallback
     private function getConfigsByNonStandardCodes(array $configs, string $nonStdCode, string $internalCode): array
     {
         $internalCodeConfigs = $configs[$internalCode] ?? [];
-        if (strtolower($internalCode) === strtolower($nonStdCode)) {
+        if (\strtolower($internalCode) === \strtolower($nonStdCode)) {
             return isset($configs[$nonStdCode]) ?
                 $internalCodeConfigs + $configs[$nonStdCode]
                 : $internalCodeConfigs;
@@ -167,7 +167,7 @@ class Fallback
             $code = $website['code'];
             $id = $website['id'];
             $websiteConfig = $this->mapEnvWebsiteToWebsite($websitesConfig, $code);
-            $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig);
+            $result[$code] = \array_replace_recursive($defaultConfig, $websiteConfig);
             $result[$id] = $result[$code];
         }
         return $result;
@@ -182,8 +182,8 @@ class Fallback
      */
     private function mapEnvWebsiteToWebsite(array $configs, string $code): array
     {
-        if (!count($this->websiteNonStdCodes)) {
-            $this->websiteNonStdCodes = array_diff(array_keys($configs), array_keys($this->websiteData));
+        if (!\count($this->websiteNonStdCodes)) {
+            $this->websiteNonStdCodes = \array_diff(\array_keys($configs), \array_keys($this->websiteData));
         }
 
         return $this->getTheEnvConfigs($configs, $this->websiteNonStdCodes, $code);

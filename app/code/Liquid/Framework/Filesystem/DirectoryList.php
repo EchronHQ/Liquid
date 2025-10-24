@@ -17,8 +17,8 @@ class DirectoryList
         $this->directories = static::getDefaultConfig();
 
         // Set system temp directory
-        $sysTmpPath = get_cfg_var('upload_tmp_dir') ?: sys_get_temp_dir();
-        $this->directories[Path::SYS_TMP->name] = [self::PATH => realpath($sysTmpPath)];
+        $sysTmpPath = \get_cfg_var('upload_tmp_dir') ?: \sys_get_temp_dir();
+        $this->directories[Path::SYS_TMP->name] = [self::PATH => \realpath($sysTmpPath)];
 
         //Set root directory
         $this->directories[Path::ROOT->name] = [self::PATH => $root];
@@ -71,24 +71,24 @@ class DirectoryList
 
     private function normalizePath(string|null $path): string
     {
-        return $path !== null ? str_replace('\\', '/', $path) : '';
+        return $path !== null ? \str_replace('\\', '/', $path) : '';
     }
 
     private function isAbsolute(string|null $path): bool
     {
-        $path = $path !== null ? str_replace('\\', '/', $path) . '' : '';
+        $path = $path !== null ? \str_replace('\\', '/', $path) . '' : '';
 
         if (str_starts_with($path, '/')) {
             //is UnixRoot
             return true;
         }
 
-        if (preg_match('#^\w{1}:/#', $path)) {
+        if (\preg_match('#^\w{1}:/#', $path)) {
             //is WindowsRoot
             return true;
         }
 
-        if (parse_url($path, PHP_URL_SCHEME) !== null) {
+        if (\parse_url($path, PHP_URL_SCHEME) !== null) {
             //is WindowsLetter
             return true;
         }
@@ -113,7 +113,7 @@ class DirectoryList
      */
     private function assertUrlPath(string $urlPath): void
     {
-        if (!preg_match('/^([a-z0-9_]+[a-z0-9\._]*(\/[a-z0-9_]+[a-z0-9\._]*)*)?$/', $urlPath)) {
+        if (!\preg_match('/^([a-z0-9_]+[a-z0-9\._]*(\/[a-z0-9_]+[a-z0-9\._]*)*)?$/', $urlPath)) {
             throw new \InvalidArgumentException(
                 "URL path must be relative directory path in lowercase with '/' directory separator: '{$urlPath}'"
             );

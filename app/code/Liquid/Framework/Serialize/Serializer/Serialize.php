@@ -10,7 +10,7 @@ class Serialize implements SerializerInterface
      */
     public function serialize(string|int|float|bool|array|null $data): string|null
     {
-        return serialize($data);
+        return \serialize($data);
     }
 
     /**
@@ -21,14 +21,14 @@ class Serialize implements SerializerInterface
         if ('' === $string) {
             throw new \InvalidArgumentException('Unable to unserialize value.');
         }
-        set_error_handler(
+        \set_error_handler(
             static function () {
-                restore_error_handler();
+                \restore_error_handler();
                 throw new \InvalidArgumentException('Unable to unserialize value, string is corrupted.');
             }
         );
-        $result = unserialize($string, ['allowed_classes' => false]);
-        restore_error_handler();
+        $result = \unserialize($string, ['allowed_classes' => false]);
+        \restore_error_handler();
         return $result;
     }
 }

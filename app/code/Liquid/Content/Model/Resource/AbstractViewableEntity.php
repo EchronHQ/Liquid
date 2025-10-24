@@ -54,7 +54,7 @@ abstract class AbstractViewableEntity
         self::appendData($page, new DataMapper($data));
 
         // Validate that doc_css_class as theme, palette and accent variables
-        $classes = explode(' ', $page->docCssClass);
+        $classes = \explode(' ', $page->docCssClass);
         $hasTheme = false;
         $hasPalette = false;
         $hasAccent = false;
@@ -145,7 +145,7 @@ abstract class AbstractViewableEntity
 
     public function getUrlPath(): string
     {
-        if (count($this->urlRewrites) > 0) {
+        if (\count($this->urlRewrites) > 0) {
             return $this->urlRewrites[0];
         }
         return $this->getViewRoute();
@@ -160,7 +160,7 @@ abstract class AbstractViewableEntity
     public function getViewRoute(): string
     {
         // TODO: use string interpolation
-        return rtrim($this->controllerEndpoint, '/') . '/' . $this->id;
+        return \rtrim($this->controllerEndpoint, '/') . '/' . $this->id;
     }
 
     public function getSeoTitle(): string

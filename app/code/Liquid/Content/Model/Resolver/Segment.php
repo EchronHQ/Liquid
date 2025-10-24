@@ -17,9 +17,9 @@ class Segment implements ScopeResolverInterface
 
     }
 
-    public function getScope(ScopeId|null $segmentId = null): ScopeInterface
+    public function getScope(ScopeId|null $scopeId = null): ScopeInterface
     {
-        $scope = $this->segmentManager->getSegment($segmentId);
+        $scope = $this->segmentManager->getSegment($scopeId);
         if (!$scope instanceof ScopeInterface) {
             throw new \Exception('The scope object is invalid. Verify the scope object and try again.');
         }

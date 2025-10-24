@@ -28,11 +28,11 @@ class StaticContentHelper
     {
         if ($this->staticContentDeployedVersion === null) {
 
-            if (!file_exists($this->versionFilePath)) {
+            if (!\file_exists($this->versionFilePath)) {
                 throw new \Exception('Version file does not exists');
             }
             $version = \Safe\file_get_contents($this->versionFilePath);
-            $version = trim($version);
+            $version = \trim($version);
             if ($version !== '') {
                 $this->staticContentDeployedVersion = 'v' . $version;
             }
@@ -42,6 +42,6 @@ class StaticContentHelper
 
     public function updateStaticDeployedVersion(): void
     {
-        file_put_contents($this->versionFilePath, gmdate('U'));
+        \file_put_contents($this->versionFilePath, \gmdate('U'));
     }
 }

@@ -35,7 +35,7 @@ class Config
      */
     public function getPreference(string $type): string
     {
-        $type = $type !== null ? ltrim($type, '\\') : '';
+        $type = $type !== null ? \ltrim($type, '\\') : '';
         $preferencePath = [];
 
         while (isset($this->preferences[$type])) {
@@ -120,17 +120,17 @@ class Config
         /**
          * Format types
          */
-        $types = array_unique(array_keys($this->arguments));
+        $types = \array_unique(\array_keys($this->arguments));
         foreach ($types as $type) {
             $arguments = $this->getArguments($type);
 
             $parameters = [];
             foreach ($arguments as $argumentName => $argument) {
                 // TODO: we use the array key as argument name now, but we also still have a property of arguments['name']. This is confusing.
-                if (is_numeric($argumentName) && isset($argument['name'])) {
+                if (\is_numeric($argumentName) && isset($argument['name'])) {
                     $argumentName = $argument['name'];
                 }
-                if (is_string($argument)) {
+                if (\is_string($argument)) {
                     throw new ContextException('Argument `' . $argumentName . '` should be array, string given', [
                         'arguments' => $arguments,
                         'value' => $argument,
@@ -191,7 +191,7 @@ class Config
 
             if (isset($this->arguments[$type])) {
                 if ($arguments && count($arguments)) {
-                    $arguments = array_replace_recursive($arguments, $this->arguments[$type]);
+                    $arguments = \array_replace_recursive($arguments, $this->arguments[$type]);
                     // $arguments = $this->sortItemsHelper->sortItems($arguments);
                 } else {
                     $arguments = $this->arguments[$type];
@@ -216,7 +216,7 @@ class Config
             switch ($key) {
                 case 'preferences':
                     foreach ($curConfig as $for => $to) {
-                        $this->preferences[ltrim($for, '\\')] = ltrim($to, '\\');
+                        $this->preferences[\ltrim($for, '\\')] = \ltrim($to, '\\');
                     }
                     break;
                 case 'types':
@@ -246,7 +246,7 @@ class Config
                                     $existingValues = $this->arguments[$name][$argument]['value'];
                                     $newValues = $argumentData['value'];
 
-                                    $this->arguments[$name][$argument]['value'] = array_replace($existingValues, $newValues);
+                                    $this->arguments[$name][$argument]['value'] = \array_replace($existingValues, $newValues);
                                 } else {
                                     $this->arguments[$name][$argument]['value'] = $argumentData['value'];
                                 }
@@ -270,19 +270,19 @@ class Config
 
                 default:
                     var_dump($curConfig);
-                    die('--- wrong config? ---');
+                    die('--- wrong config? (unknown configuration key) ---');
                     $key = ltrim($key, '\\');
                     var_dump($key);
                     var_dump($curConfig);
                     if (isset($curConfig['type'])) {
-                        $this->virtualTypes[$key] = ltrim($curConfig['type'], '\\');
+                        $this->virtualTypes[$key] = \ltrim($curConfig['type'], '\\');
                     }
                     if (isset($curConfig['arguments'])) {
                         if (!empty($this->mergedArguments)) {
                             $this->mergedArguments = [];
                         }
                         if (isset($this->arguments[$key])) {
-                            $this->arguments[$key] = array_replace($this->arguments[$key], $curConfig['arguments']);
+                            $this->arguments[$key] = \array_replace($this->arguments[$key], $curConfig['arguments']);
                         } else {
                             $this->arguments[$key] = $curConfig['arguments'];
                         }

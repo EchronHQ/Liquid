@@ -261,34 +261,18 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
         //            return $this->parse($rawArticle);
         //        }
 
-        foreach ($this->posts as $post) {
+        return array_find($this->posts, fn(PostDefinition $post) => $post->urlKey === $urlKey);
 
-            if ($post->urlKey === $urlKey) {
-                return $post;
-            }
-        }
-
-        return null;
     }
 
     public function getCategoryById(string $id): CategoryDefinition|null
     {
-        foreach ($this->categories as $category) {
-            if ($category->id === $id) {
-                return $category;
-            }
-        }
-        return null;
+        return array_find($this->categories, fn(CategoryDefinition $category) => $category->id === $id);
     }
 
     public function getCategoryByUrlKey(string $urlKey): CategoryDefinition|null
     {
-        foreach ($this->categories as $category) {
-            if ($category->urlKey === $urlKey) {
-                return $category;
-            }
-        }
-        return null;
+        return array_find($this->categories, fn(CategoryDefinition $category) => $category->urlKey === $urlKey);
     }
 
     /**
@@ -301,22 +285,12 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
 
     public function getTagByUrlKey(string $urlKey): TagDefinition|null
     {
-        foreach ($this->tags as $tag) {
-            if ($tag->urlKey === $urlKey) {
-                return $tag;
-            }
-        }
-        return null;
+        return array_find($this->tags, fn(TagDefinition $tag) => $tag->urlKey === $urlKey);
     }
 
     public function getTagById(string $urlKey): TagDefinition|null
     {
-        foreach ($this->tags as $tag) {
-            if ($tag->id === $urlKey) {
-                return $tag;
-            }
-        }
-        return null;
+        return array_find($this->tags, fn(TagDefinition $tag) => $tag->id === $urlKey);
     }
 
     /**
@@ -338,7 +312,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
             if ($post->categoryId === $categoryId) {
                 $result[] = $post;
             }
-            if (count($result) >= $limit) {
+            if (\count($result) >= $limit) {
                 return $result;
             }
         }
@@ -363,7 +337,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
         /**
          * Sort by publish date (newest first)
          */
-        usort($result, static function (PostDefinition $a, PostDefinition $b) {
+        \usort($result, static function (PostDefinition $a, PostDefinition $b) {
             if ($a->publishDate === $b->publishDate) {
                 return 0;
             }
@@ -382,7 +356,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
     {
         $result = [];
         foreach ($this->getPosts() as $post) {
-            if (in_array($tagId, $post->tagIds, true)) {
+            if (\in_array($tagId, $post->tagIds, true)) {
                 $result[] = $post;
             }
         }
@@ -393,22 +367,12 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
 
     public function getPostById(string $id): PostDefinition|null
     {
-        foreach ($this->posts as $post) {
-            if ($post->id === $id) {
-                return $post;
-            }
-        }
-        return null;
+        return array_find($this->posts, fn(PostDefinition $post) => $post->id === $id);
     }
 
     public function getPageById(string $id): PageDefinition|null
     {
-        foreach ($this->pages as $page) {
-            if ($page->id === $id) {
-                return $page;
-            }
-        }
-        return null;
+        return array_find($this->pages, fn(PageDefinition $page) => $page->id === $id);
     }
 
     public function getPages(): array
@@ -431,7 +395,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
      */
     public function getEntities(): array
     {
-        return array_merge($this->pages, $this->posts, $this->tags, $this->categories);
+        return \array_merge($this->pages, $this->posts, $this->tags, $this->categories);
     }
 
     private function isVisibleOnFrontend(PostDefinition $post): bool

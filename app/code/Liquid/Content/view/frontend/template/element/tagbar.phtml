@@ -26,8 +26,12 @@ if (count($tags) > 0):
             <?php
             endif;
             foreach ($tags as $tag): ?>
+
+                <?php
+                var_dump($tag->getUrlPath());
+                ?>
                 <a class="tag <?= $viewModel->isSelectedTag($tag) ? 'active' : '' ?>"
-                   href="<?= $baseViewModel->getResolver()->getUrl($tag->getUrlPath()) ?>">
+                   href="<?= $baseViewModel->getUrl()->getUrl($tag->getUrlPath()) ?>">
                     <?= $viewModel->getTagLabel($tag) ?>
                 </a>
             <?php endforeach; ?>

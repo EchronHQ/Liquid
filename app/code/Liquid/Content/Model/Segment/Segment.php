@@ -29,8 +29,8 @@ class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
     public const string  XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
     public const string  XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
     public const string  XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
-    public const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
-    public const XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
+    public const string XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
+    public const string XML_PATH_UNSECURE_BASE_MEDIA_URL = 'web/unsecure/base_media_url';
     public SegmentId $id;
     public string $code;
     private array $baseUrlCache = [];
@@ -68,6 +68,10 @@ class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
                 case UrlType::LINK:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_LINK_URL : self::XML_PATH_UNSECURE_BASE_LINK_URL;
                     $url = $this->getConfig($path);
+                    if ($url === null) {
+                        $url = 'https://lq.com';
+//                        throw new \Exception('Segment config `' . $path . '` not defined');
+                    }
 //                    $url = $this->_updatePathUseRewrites($url);
                     $url = $this->updatePathUseSegmentCode($url);
                     break;
@@ -94,7 +98,7 @@ class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
             }
 
             if ($url && str_contains($url, self::BASE_URL_PLACEHOLDER)) {
-                $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->request->getDistroBaseUrl(), $url);
+                $url = \str_replace(self::BASE_URL_PLACEHOLDER, $this->request->getDistroBaseUrl(), $url);
             }
             $this->baseUrlCache[$cacheKey] = $url;
         }

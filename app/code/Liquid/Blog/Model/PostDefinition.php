@@ -9,7 +9,7 @@ use Liquid\Core\Helper\DataMapper;
 
 class PostDefinition extends AbstractViewableEntity
 {
-    public const TITLE_SUFFIX = ' | Attlaz';
+    public const string TITLE_SUFFIX = ' | Attlaz';
     public string|null $publisher = null;
     public PostAuthor|null $author = null;
     public \DateTime|null $publishDate = null;

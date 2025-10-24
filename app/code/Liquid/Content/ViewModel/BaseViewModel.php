@@ -32,7 +32,10 @@ class BaseViewModel implements ArgumentInterface
     {
     }
 
-    /** @deprecated */
+    /**
+     * @deprecated
+     * The resolver is deprecated
+     */
     public function getResolver(): Resolver
     {
         return $this->resolver;
@@ -73,13 +76,18 @@ class BaseViewModel implements ArgumentInterface
         return $this->escaper;
     }
 
+    public function getViewableEntityHelper(): ViewableEntity
+    {
+        return $this->viewableEntityHelper;
+    }
+
     public function renderLazyLoad(string $assetFile, string $alt = '', AssetSizeInstruction|array|null $sizeInstruction = null, bool $lazyLoad = true): string
     {
         if ($assetFile === 'random') {
             $assetFile = 'image/placeholder.jpg';
         }
         $picture = $this->layout->createBlock(Picture::class);
-        assert($picture instanceof Picture);
+        \assert($picture instanceof Picture);
         $picture->setSrc($assetFile, $alt);
         if ($sizeInstruction !== null) {
             if (\is_array($sizeInstruction)) {
@@ -98,8 +106,8 @@ class BaseViewModel implements ArgumentInterface
             $this->logger->error('SVG not found `' . $svg . '`');
             return '';
         }
-        if (file_exists($path->path)) {
-            return file_get_contents($path->path);
+        if (\file_exists($path->path)) {
+            return \file_get_contents($path->path);
         }
         $this->logger->error('SVG not found `' . $path->path . '`');
         return '';

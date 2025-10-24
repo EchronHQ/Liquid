@@ -43,7 +43,7 @@ class Category extends FrontendAction
 
         $categoryIdentifier = $this->getRequest()->getParam('category-id');
         $category = $this->blogRepository->getCategoryById($categoryIdentifier);
-        if (\is_null($category)) {
+        if ($category === null) {
             $this->logger->error('Unable to render blog category, category not found', ['params' => $this->getRequest()->getParams()]);
             throw new NotFoundException('Page not found');
         }

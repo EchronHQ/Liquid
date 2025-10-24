@@ -8,6 +8,9 @@ namespace Liquid\Framework\App\Request;
 use Liquid\Framework\StringHelper;
 use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 
+/**
+ * TODO: remove Laminas request dependency (or at least don't extend from it)
+ */
 class Request extends \Laminas\Http\PhpEnvironment\Request
 {
     public const int DEFAULT_HTTP_PORT = 80;
@@ -294,7 +297,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
             return null;
         }
         if ($trimPort) {
-            $host = explode(':', $httpHost);
+            $host = \explode(':', $httpHost);
             return $host[0];
         }
         return $httpHost;
@@ -323,13 +326,13 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
                 $scheme = 'http://';
             }
 
-            $hostArr = explode(':', $headerHttpHost);
+            $hostArr = \explode(':', $headerHttpHost);
             $host = $hostArr[0];
             $port = isset($hostArr[1])
             && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
             $path = $this->getBasePath();
 
-            return $this->distroBaseUrl = $scheme . $host . $port . rtrim($path, '/') . '/';
+            return $this->distroBaseUrl = $scheme . $host . $port . \rtrim($path, '/') . '/';
         }
         return 'http://localhost/';
     }
@@ -355,7 +358,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     protected function initialRequestSecure(string $offLoaderHeader): bool
     {
         // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
-        $offLoaderHeader = str_replace('-', '_', strtoupper($offLoaderHeader));
+        $offLoaderHeader = \str_replace('-', '_', \strtoupper($offLoaderHeader));
         // Some webservers do not append HTTP_
         $header = $this->getServer($offLoaderHeader);
         // Apache appends HTTP_
@@ -365,9 +368,6 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
 
     private function getParamAlias(string $key): string|null
     {
-        if (isset($this->paramAliases[$key])) {
-            return $this->paramAliases[$key];
-        }
-        return null;
+        return $this->paramAliases[$key] ?? null;
     }
 }

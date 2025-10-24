@@ -14,6 +14,10 @@ class Redis implements StorageInterface
 
     public function __construct(string $host, int $port, string|null $password = null)
     {
+        if (!\class_exists(\Redis::class)) {
+            // TODO: log this
+            return;
+        }
         $client = new \Redis();
         $client->connect($host, $port);
 

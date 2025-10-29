@@ -51,7 +51,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
             'priority' => PageSitemapPriority::BASE,
             'urlRewrites' => ['blog'],
         ]);
-        $blogOverviewPage->setControllerEndpoint('blog/page/view/page-id/');
+        $blogOverviewPage->setControllerEndpoint('blog/overview');
         $blogOverviewPage->setUrlRewrites(['blog']);
 
         $this->pages = [

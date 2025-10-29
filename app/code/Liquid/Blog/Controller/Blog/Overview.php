@@ -19,7 +19,7 @@ use Liquid\Framework\View\Element\Template;
 use Liquid\Framework\View\Layout\Layout;
 use Liquid\Framework\View\Result\Page;
 
-#[Route('blog/page/view/page-id/:page-id', name: 'blog-index')]
+#[Route('blog/overview', name: 'blog-index')]
 class Overview extends FrontendAction
 {
     public function __construct(

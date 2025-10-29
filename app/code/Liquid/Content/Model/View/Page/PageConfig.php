@@ -20,11 +20,10 @@ class PageConfig
     public const PAGE_TYPE_ARTICLE = 'article';
 
     //    private string $title = 'Attlaz default title';
+    public PostAuthor|null $author = null;
     private string $description = 'Attlaz default description';
     private string $keywords = 'Attlaz';
-
     private string|null $publisher = null;
-    public PostAuthor|null $author = null;
     private \DateTime|null $publishDate = null;
     private \DateTime|null $modifiedDate = null;
 
@@ -33,6 +32,8 @@ class PageConfig
     private string $image = 'icon/icon-512x512.png';
 
     private array $breadCrumbPages = [];
+    private AbstractViewableEntity|null $definition = null;
+    private array $attributes = [];
 
     public function addBreadcrumb(string $name, string $url): void
     {
@@ -47,8 +48,6 @@ class PageConfig
         return $this->breadCrumbPages;
     }
 
-    private AbstractViewableEntity|null $definition = null;
-
     public function setPageDefinition(AbstractViewableEntity $definition): void
     {
         $this->definition = $definition;
@@ -59,15 +58,15 @@ class PageConfig
         return $this->definition;
     }
 
-    public function getSeoTitle(): string
-    {
-        return $this->definition->getSeoTitle();
-    }
-
 //    public function setSeoTitle(string $title): void
 //    {
 //        $this->title = $title;
 //    }
+
+    public function getSeoTitle(): string
+    {
+        return $this->definition->getSeoTitle();
+    }
 
     public function getSeoDescription(): string
     {
@@ -88,7 +87,6 @@ class PageConfig
     {
         $this->keywords = $keywords;
     }
-
 
     public function getPublisher(): string|null
     {
@@ -153,19 +151,17 @@ class PageConfig
         $this->image = $image;
     }
 
-    private array $attributes = [];
-
     public function addBodyClass(string $className): void
     {
-        $className = preg_replace('#[^a-z0-9-_]+#', '-', strtolower($className));
+        $className = \preg_replace('#[^a-z0-9-_]+#', '-', \strtolower($className));
         $bodyClasses = $this->getElementAttribute(self::ELEMENT_TYPE_BODY, self::BODY_ATTRIBUTE_CLASS);
-        $bodyClasses = $bodyClasses ? explode(' ', $bodyClasses) : [];
+        $bodyClasses = $bodyClasses ? \explode(' ', $bodyClasses) : [];
         $bodyClasses[] = $className;
-        $bodyClasses = array_unique($bodyClasses);
+        $bodyClasses = \array_unique($bodyClasses);
         $this->setElementAttribute(
             self::ELEMENT_TYPE_BODY,
             self::BODY_ATTRIBUTE_CLASS,
-            implode(' ', $bodyClasses)
+            \implode(' ', $bodyClasses)
         );
     }
 

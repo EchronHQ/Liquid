@@ -57,7 +57,7 @@ class Tag extends FrontendAction
 
         $this->layout->runHandle('layout-1col');
 
-        $this->pageConfig->addBodyClass('theme-aqua');
+//        $this->pageConfig->addBodyClass('theme-aqua');
         $this->pageConfig->addBodyClass('blog-tag');
         $this->pageConfig->addBodyClass('blog-tag-' . $categoryDefinition->id);
 

@@ -9,7 +9,7 @@ use Liquid\Core\Helper\DataMapper;
 
 class CategoryDefinition extends AbstractViewableEntity
 {
-    public const TITLE_PREFIX = 'Blog - ';
+    public const string TITLE_PREFIX = 'Blog - ';
     public string $title_long = '';
     protected string $controllerEndpoint = 'blog/category/view/category-id/:entity-id';
 
@@ -19,6 +19,7 @@ class CategoryDefinition extends AbstractViewableEntity
 
         self::appendData($article, new DataMapper($data));
         $article->urlRewrites[] = 'blog/category/' . $article->urlKey;
+        $article->docCssClass = 'theme--light palette--pomogranate accent--purple';
         return $article;
     }
 

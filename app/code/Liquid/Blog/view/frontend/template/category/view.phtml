@@ -20,7 +20,7 @@ $posts = $viewModel->getPosts();
 
     <div class="row">
         <div class="column col-3-1">
-            <copy-block types="header" title="<?= $category->title_long ?>" title-tag="h1">
+            <copy-block types="header" caption="Blog" title="<?= $category->title_long ?>" title-tag="h1">
                 <?= $category->metaDescription ?>
             </copy-block>
             <div>
@@ -51,21 +51,21 @@ $posts = $viewModel->getPosts();
                     $tagBarViewModel->setAllTarget($baseViewModel->getResolver()->getUrl('blog'));
 
                     $categoriesTagBar->setViewModel($tagBarViewModel)
-                        ->setViewModel($baseViewModel, 'base');
+                            ->setViewModel($baseViewModel, 'base');
                     echo $categoriesTagBar->toHtml();
 
                     /**
                      * Posts
                      */
                     /** @var \Liquid\Blog\Model\ViewModel\PostList $postListViewmodel */
-                    $postListViewmodel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class,);
+                    $postListViewmodel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class);
                     $postListViewmodel->setPosts($posts);
 
                     $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'post-list');
                     $postListBlock
-                        ->setTemplate('Liquid_Blog::post/list.phtml')
-                        ->setViewModel($postListViewmodel)
-                        ->setViewModel($baseViewModel, 'base');
+                            ->setTemplate('Liquid_Blog::post/list.phtml')
+                            ->setViewModel($postListViewmodel)
+                            ->setViewModel($baseViewModel, 'base');
                     echo $postListBlock->toHtml();
 
 

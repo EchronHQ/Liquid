@@ -18,6 +18,7 @@ class TagDefinition extends AbstractViewableEntity
 
         self::appendData($article, new DataMapper($data));
         $article->urlRewrites[] = 'blog/tag/' . $article->urlKey;
+        $article->docCssClass = 'theme--light palette--pomogranate accent--purple';
         return $article;
     }
 

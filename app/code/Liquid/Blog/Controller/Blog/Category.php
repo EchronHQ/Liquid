@@ -58,7 +58,7 @@ class Category extends FrontendAction
 
         $this->layout->runHandle('layout-1col');
 
-        $this->pageConfig->addBodyClass('theme-aqua');
+//        $this->pageConfig->addBodyClass('theme-mustard');
         $this->pageConfig->addBodyClass('blog-category');
         $this->pageConfig->addBodyClass('blog-category-' . $categoryDefinition->id);
 

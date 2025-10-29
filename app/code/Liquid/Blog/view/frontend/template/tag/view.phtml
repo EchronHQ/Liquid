@@ -18,7 +18,7 @@ $posts = $viewModel->getPosts();
 
     <div class="row">
         <div class="column">
-            <copy-block title="Posts tagged <?= $tag->metaTitle ?>" title-tag="h1">
+            <copy-block title="Posts tagged <?= $tag->metaTitle ?>" caption="Blog" title-tag="h1">
 
             </copy-block>
         </div>
@@ -59,9 +59,9 @@ $posts = $viewModel->getPosts();
                     $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'post-list');
 
                     $postListBlock
-                        ->setViewModel($postListViewmodel)
-                        ->setViewModel($baseViewModel, 'base')
-                        ->setTemplate('Liquid_Blog::post/list.phtml');
+                            ->setViewModel($postListViewmodel)
+                            ->setViewModel($baseViewModel, 'base')
+                            ->setTemplate('Liquid_Blog::post/list.phtml');
                     echo $postListBlock->toHtml();
 
 

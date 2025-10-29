@@ -20,9 +20,8 @@ class ModularConfigSource implements ConfigSourceInterface
      *
      * @param string $path Format is scope type and scope code separated by slash: e.g. "type/code"
      * @return array
-     * @since 100.1.2
      */
-    public function get(string $path = ''):array
+    public function get(string $path = ''): array
     {
         $data = new DataObject($this->reader->read());
         if ($path !== '') {

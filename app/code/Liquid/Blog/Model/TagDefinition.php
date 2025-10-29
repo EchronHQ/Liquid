@@ -10,7 +10,7 @@ use Liquid\Core\Helper\DataMapper;
 class TagDefinition extends AbstractViewableEntity
 {
     public string $title_long = '';
-    protected string $controllerEndpoint = 'blog/tag/view/tag-id/';
+    protected string $controllerEndpoint = 'blog/tag/view/tag-id/:entity-id';
 
     public static function generate(int|string $id, array $data): static
     {

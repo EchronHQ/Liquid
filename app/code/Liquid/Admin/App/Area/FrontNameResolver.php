@@ -24,7 +24,7 @@ class FrontNameResolver implements FrontNameResolverInterface
      * Backend area code
      */
     public const string AREA_CODE = 'adminhtml';
-
+    private array $standardPorts = ['http' => '80', 'https' => '443'];
     private readonly string $defaultFrontName;
 
     public function __construct(
@@ -56,32 +56,33 @@ class FrontNameResolver implements FrontNameResolverInterface
         if ($this->segmentConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL)) {
             $backendUrl = $this->segmentConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL);
         } else {
-            $backendUrl = $this->config->getValue('web/unsecure/base_url');
+
+            $xmlPath = $this->request->isSecure() ? 'web/secure/base_url' : 'web/unsecure/base_url';
+
+            $backendUrl = $this->config->getValue($xmlPath);
             if ($backendUrl === null) {
-                $backendUrl = $this->segmentConfig->getValue('web/unsecure/base_url');
+                $backendUrl = $this->segmentConfig->getValue($xmlPath);
             }
         }
-        $host = (string)$this->request->getServer('HTTP_HOST', '');
-        $hostWithPort = $this->getHostWithPort($backendUrl);
-
-        return !($hostWithPort === null || $host === '') && stripos($hostWithPort, $host) !== false;
-    }
-
-    /**
-     * Get host with port
-     *
-     * @param string $url
-     * @return string|null
-     */
-    private function getHostWithPort(string $url): string|null
-    {
-        $this->uri->parse($url);
-        $scheme = $this->uri->getScheme();
-        $host = $this->uri->getHost();
-        $port = $this->uri->getPort();
-        if (!$port) {
-            $port = $this->standardPorts[$scheme] ?? null;
+        if ($backendUrl === '{{base_url}}') {
+            // TODO: temporary workaround
+            $backendUrl = 'http://localhost:8901/';
         }
-        return $port !== null ? $host . ':' . $port : $host;
+
+        $this->uri->parse($backendUrl);
+        $configuredHost = $this->uri->getHost();
+        if (!$configuredHost) {
+            return false;
+        }
+        $configuredPort = $this->uri->getPort() ?: ($this->standardPorts[$this->uri->getScheme()] ?? null);
+        $uri = ($this->request->isSecure() ? 'https' : 'http') . '://' . $this->request->getServer('HTTP_HOST');
+        $this->uri->parse($uri);
+        $host = $this->uri->getHost();
+        if ($configuredPort) {
+            $configuredHost .= ':' . $configuredPort;
+            $host .= ':' . ($this->uri->getPort() ?: $this->standardPorts[$this->uri->getScheme()]);
+        }
+
+        return \strcasecmp($configuredHost, $host) === 0;
     }
 }

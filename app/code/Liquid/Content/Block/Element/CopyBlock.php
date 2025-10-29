@@ -46,32 +46,9 @@ class CopyBlock extends AbstractBlock
         $this->types = $types;
     }
 
-    private function validateTypes(string|null $types): void
+    private static function replaceSpecialCharacters(string $input): string
     {
-        $allowedTypes = [
-            'center', 'right', 'gap-normal', 'gap-large',
-            'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua', 'card--theme-x',
-            'green', 'blue', 'yellow', 'purple', 'pink',
-            'detail', 'new', 'header',
-            'variant--section', 'variant--subsection', 'variant--detail',
-            'col--3', 'col--4', 'col--6', 'col--8', 'col--12',
-            'sm:col--3', 'sm:col--4', 'sm:col--6', 'sm:col--12',
-            'md:col--3', 'md:col--4', 'md:col--6', 'md:col--12',
-            'lg:col--3', 'lg:col--4', 'lg:col--6', 'lg:col--12',
-
-        ];
-
-
-        if (!empty($types)) {
-            $arrTypes = \explode(' ', $types);
-            foreach ($arrTypes as $type) {
-                if ($type !== '' && !\in_array($type, $allowedTypes)) {
-                    if ($this->logger !== null) {
-                        $this->logger->error('Invalid content block type "' . $type . '"');
-                    }
-                }
-            }
-        }
+        return str_replace(['/n'], ['<br/>'], $input);
     }
 
     public function setHeaderIcon(string|FrontendFileUrl $icon, string|null $style = null): void
@@ -115,11 +92,6 @@ class CopyBlock extends AbstractBlock
         $this->headerTitle = self::replaceSpecialCharacters($headerTitle);
         $this->headerTitleTag = $tag;
         $this->headerTitleId = $id;
-    }
-
-    private static function replaceSpecialCharacters(string $input): string
-    {
-        return str_replace(['/n'], ['<br/>'], $input);
     }
 
     public function setHeaderCaption(string $headerCaption): void
@@ -229,6 +201,34 @@ class CopyBlock extends AbstractBlock
         //            $this->profiler->profilerFinish('toHtml ' . $this->getNameInLayout());
         //        }
         return $output;
+    }
+
+    private function validateTypes(string|null $types): void
+    {
+        $allowedTypes = [
+            'center', 'right', 'gap-normal', 'gap-large',
+            'card', 'card-headerimage', 'card--paddingMedium', 'card--shadowNormal', 'card--theme-aqua', 'card--theme-x',
+            'green', 'blue', 'yellow', 'purple', 'pink',
+            'detail', 'new', 'header',
+            'variant--section', 'variant--subsection', 'variant--detail',
+            'col--3', 'col--4', 'col--6', 'col--8', 'col--12',
+            'sm:col--3', 'sm:col--4', 'sm:col--6', 'sm:col--12',
+            'md:col--3', 'md:col--4', 'md:col--6', 'md:col--12',
+            'lg:col--3', 'lg:col--4', 'lg:col--6', 'lg:col--12',
+
+        ];
+
+
+        if (!empty($types)) {
+            $arrTypes = \explode(' ', $types);
+            foreach ($arrTypes as $type) {
+                if ($type !== '' && !\in_array($type, $allowedTypes)) {
+                    if ($this->logger !== null) {
+                        $this->logger->warning('Invalid content block type "' . $type . '"', ['allowed' => $allowedTypes]);
+                    }
+                }
+            }
+        }
     }
 
 //    public function setAttributes($input): void

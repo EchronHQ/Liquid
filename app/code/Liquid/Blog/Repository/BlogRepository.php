@@ -118,7 +118,7 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
                 'seo_keywords' => '',
                 'published' => '2024-01-12 15:16:17',
                 'modified' => '2024-01-12 15:16:17',
-                'draft' => false,
+                'draft' => true,
                 'image' => 'image/blog/why-data-connectivity.jpg',
                 'category' => 'insights',
                 'tags' => ['attlaz-news'],

@@ -25,7 +25,7 @@ $category = $postViewModel->getPostCategory();
             <div class="blog-breadcrumbs-wrapper">
                 <div class="blog-breadcrumbs">
                     <a href="<?= $baseViewModel->getEntityUrl('blog') ?>">Blog</a> /
-                    <a href="<?= $baseViewModel->getResolver()->getUrl($category->getUrlPath()) ?>"><?= $category->metaTitle ?></a>
+                    <a href="<?= $baseViewModel->getUrl()->getUrl($category->getUrlPath()) ?>"><?= $category->metaTitle ?></a>
                     /
                     <span><?= $post->metaTitle ?></span>
                 </div>
@@ -54,11 +54,18 @@ $category = $postViewModel->getPostCategory();
                         Senior Content Marketing Specialist
                     </div>
                 </div>
-                <div class="blog-date-wrapper">
-                    <div class="bold">Published</div>
-                    <div><?= StringHelper::formatDate($post->publishDate) ?></div>
-                </div>
-                <div></div>
+                <?php
+                if (false) {
+                    ?>
+                    <div class="blog-date-wrapper">
+                        <div class="bold">Published</div>
+                        <div><?= StringHelper::formatDate($post->publishDate) ?></div>
+                    </div>
+                    <div></div>
+                    <?php
+                }
+                ?>
+
             </div>
 
 

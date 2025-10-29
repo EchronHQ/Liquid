@@ -46,7 +46,7 @@ class TagBar implements ArgumentInterface
         return $this->current !== null;
     }
 
-    public function setCurrent(AbstractViewableEntity $current): void
+    public function setCurrent(AbstractViewableEntity|null $current): void
     {
         $this->current = $current;
     }

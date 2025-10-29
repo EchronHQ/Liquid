@@ -11,7 +11,7 @@ class TermDefinition extends AbstractViewableEntity
 {
     public string $term;
     public string $termLong;
-    protected string $controllerEndpoint = 'blog/term/view/term-id/';
+    protected string $controllerEndpoint = 'blog/term/view/term-id/:entity-id';
     private array $useCaseCategoryIds = [];
 
     public static function generate(int|string $id, array $data): static

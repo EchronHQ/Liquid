@@ -9,15 +9,15 @@ use Liquid\Framework\View\Element\Template;
 
 class CopyBlockTag extends Template
 {
-    public const PROP_TITLE = 'title';
-    public const PROP_CAPTION = 'caption';
-    public const PROP_TYPES = 'types';
-    public const PROP_TITLE_TAG = 'title-tag';
-    public const PROP_ICON = 'icon';
-    public const PROP_ICON_STYLE = 'icon-style';
+    public const string PROP_TITLE = 'title';
+    public const string PROP_CAPTION = 'caption';
+    public const string PROP_TYPES = 'types';
+    public const string PROP_TITLE_TAG = 'title-tag';
+    public const string PROP_ICON = 'icon';
+    public const string PROP_ICON_STYLE = 'icon-style';
 //    public const PROP_CLASSES = 'classes';
 
-    public const PROPERTIES = [
+    public const array PROPERTIES = [
         self::PROP_TITLE,
         self::PROP_CAPTION,
         self::PROP_TYPES,
@@ -68,17 +68,6 @@ class CopyBlockTag extends Template
         return $block->toHtml();
     }
 
-    private function validateData(): void
-    {
-        $dataKeys = $this->getDataKeys();
-        foreach ($dataKeys as $dataKey) {
-            if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
-                $ex = new \Exception('');
-                $this->logger->warning('Copy Block Tag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey), 'info' => $this->getNameInLayout(), 'call stack' => $ex->getTraceAsString()]);
-            }
-        }
-    }
-
     public function getTypes(): string|null
     {
         return $this->getData(self::PROP_TYPES);
@@ -92,5 +81,16 @@ class CopyBlockTag extends Template
             $content = null;
         }
         return $content;
+    }
+
+    private function validateData(): void
+    {
+        $dataKeys = $this->getDataKeys();
+        foreach ($dataKeys as $dataKey) {
+            if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
+                $ex = new \Exception('');
+                $this->logger->warning('Copy Block Tag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey), 'info' => $this->getNameInLayout(), 'call stack' => $ex->getTraceAsString()]);
+            }
+        }
     }
 }

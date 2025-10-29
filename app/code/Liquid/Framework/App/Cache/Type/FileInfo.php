@@ -10,12 +10,12 @@ class FileInfo extends Tagged
     /**
      * Cache type code unique among all cache types
      */
-    public const TYPE_IDENTIFIER = 'file_info';
+    public const string TYPE_IDENTIFIER = 'file_info';
 
     /**
      * Cache tag used to distinguish the cache type from all other cache
      */
-    public const CACHE_TAG = 'FILE_INFO';
+    public const string CACHE_TAG = 'FILE_INFO';
 
 
     public function __construct(FrontendTypePool $cacheFrontendPool)

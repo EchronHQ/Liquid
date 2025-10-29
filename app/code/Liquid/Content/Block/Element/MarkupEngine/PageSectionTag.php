@@ -10,13 +10,13 @@ use Liquid\MarkupEngine\Model\TagInterface;
 
 class PageSectionTag extends Template implements TagInterface
 {
-    public const PROP_MAX_WIDTH = 'max-width';
-    public const PROP_BACKGROUND = 'background';
-    public const PROP_ARCH_TOP = 'arch-top';
-    public const PROP_ARCH_BOTTOM = 'arch-bottom';
-    public const PROP_TYPES = 'types';
+    public const string PROP_MAX_WIDTH = 'max-width';
+    public const string PROP_BACKGROUND = 'background';
+    public const string PROP_ARCH_TOP = 'arch-top';
+    public const string PROP_ARCH_BOTTOM = 'arch-bottom';
+    public const string PROP_TYPES = 'types';
 
-    public const PROPERTIES = [
+    public const array PROPERTIES = [
         self::PROP_MAX_WIDTH,
         self::PROP_BACKGROUND,
         self::PROP_ARCH_TOP,

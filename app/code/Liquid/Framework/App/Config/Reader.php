@@ -34,9 +34,9 @@ class Reader
         $result = [];
         foreach ($this->applicationConfigFiles as $configFile) {
             $configFilePath = $path . '/' . $configFile;
-            if (file_exists($configFilePath)) {
+            if (\file_exists($configFilePath)) {
                 $fileData = Yaml::parseFile($configFilePath);
-                if (!is_array($fileData)) {
+                if (!\is_array($fileData)) {
                     throw new RuntimeException("Invalid configuration file: '" . $configFilePath . "'");
                 }
                 if ($fileData) {

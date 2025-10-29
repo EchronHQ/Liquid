@@ -8,6 +8,7 @@
             <addScript>js/hero2.js</addScript>
 
             <addStyleSheet>css/styles.css</addStyleSheet>
+            <addStyleSheet>css/tailwind.css</addStyleSheet>
         </block>
         <block name="header" class="Liquid\Content\Block\Element\Navigation" template="html/site-header.phtml"/>
 

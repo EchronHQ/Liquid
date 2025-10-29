@@ -37,10 +37,11 @@ class Scopes implements ConfigTypeInterface
             $this->data = new DataObject($this->source->get());
         }
 
-        $patchChunks = explode('/', (string)$path);
+        $patchChunks = \explode('/', $path);
+
         if (isset($patchChunks[1])
-            && is_numeric($patchChunks[1])
-            && in_array($patchChunks[0], [ScopeType::WEBSITE, ScopeType::SEGMENT], true)
+            && \is_numeric($patchChunks[1])
+            && \in_array($patchChunks[0], [ScopeType::WEBSITE, ScopeType::SEGMENT], true)
         ) {
             $path = $this->convertIdPathToCodePath($patchChunks);
         }
@@ -66,7 +67,7 @@ class Scopes implements ConfigTypeInterface
     private function convertIdPathToCodePath(array $patchChunks): string
     {
         [$scopePool, $scopeId] = $patchChunks;
-        if (!isset($this->idCodeMap[$scopePool]) || !array_key_exists($scopeId, $this->idCodeMap[$scopePool])) {
+        if (!isset($this->idCodeMap[$scopePool]) || !\array_key_exists($scopeId, $this->idCodeMap[$scopePool])) {
             $scopeData = $this->data->getData($scopePool);
             foreach ((array)$scopeData as $scopeEntity) {
                 if (!isset($scopeEntity[$this->scopeIdField[$scopePool]])) {
@@ -84,6 +85,6 @@ class Scopes implements ConfigTypeInterface
             $patchChunks[1] = $this->idCodeMap[$scopePool][$scopeId];
         }
 
-        return implode('/', $patchChunks);
+        return \implode('/', $patchChunks);
     }
 }

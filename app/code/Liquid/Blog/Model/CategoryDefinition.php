@@ -11,7 +11,7 @@ class CategoryDefinition extends AbstractViewableEntity
 {
     public const TITLE_PREFIX = 'Blog - ';
     public string $title_long = '';
-    protected string $controllerEndpoint = 'blog/category/view/category-id/';
+    protected string $controllerEndpoint = 'blog/category/view/category-id/:entity-id';
 
     public static function generate(int|string $id, array $data): static
     {

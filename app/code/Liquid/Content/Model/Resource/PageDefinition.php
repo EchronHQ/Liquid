@@ -6,7 +6,7 @@ namespace Liquid\Content\Model\Resource;
 
 class PageDefinition extends AbstractViewableEntity
 {
-    protected string $controllerEndpoint = 'content/page/view/page-id/';
+    protected string $controllerEndpoint = 'content/page/view/page-id/:entity-id';
 
     public function __construct(
         int|string $id

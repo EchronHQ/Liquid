@@ -57,7 +57,7 @@ class AreaList
      */
     public function getCodes(): array
     {
-        return array_map(function ($area) {
+        return \array_map(static function ($area) {
             return $area['code'];
         }, $this->areas);
     }

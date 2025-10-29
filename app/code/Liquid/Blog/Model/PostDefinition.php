@@ -20,7 +20,7 @@ class PostDefinition extends AbstractViewableEntity
     public array $tagIds = [];
     public int $readDuration = 5;
     public bool $draft = true;
-    protected string $controllerEndpoint = 'blog/post/view/post-id';
+    protected string $controllerEndpoint = 'blog/post/view/post-id/:entity-id';
 
     public static function generate(int|string $id, array $data): static
     {
@@ -34,6 +34,8 @@ class PostDefinition extends AbstractViewableEntity
         $article->publisher = 'https://www.facebook.com/attlaz/';
 
         $dataMapper = new DataMapper($data);
+        parent::appendData($article, $dataMapper);
+
 
         $article->intro = $dataMapper->getProperty('intro');
         $article->categoryId = $dataMapper->getProperty('category', null);
@@ -42,7 +44,10 @@ class PostDefinition extends AbstractViewableEntity
 
         $article->draft = $dataMapper->getBooleanProperty('draft', true);
 
-        parent::appendData($article, $dataMapper);
+
+        $article->docCssClass = 'theme--light palette--chroma accent--cyan';
+
+
         $article->urlRewrites[] = 'blog/' . $article->urlKey;
         //        $notUsedProperties = $dataMapper->getNotUsedProperties();
         //        foreach ($notUsedProperties as $notUsedProperty) {

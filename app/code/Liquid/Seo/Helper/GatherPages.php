@@ -18,11 +18,11 @@ use Psr\Log\LoggerInterface;
 readonly class GatherPages
 {
     public function __construct(
-        private ModuleHelper                     $moduleHelper,
+        private ModuleHelper            $moduleHelper,
         private TemplateFileResolver    $templateFileResolver,
-        private FileHelper                       $fileHelper,
+        private FileHelper              $fileHelper,
         private AggregateEntityResolver $entityResolver,
-        private LoggerInterface                  $logger
+        private LoggerInterface         $logger
     )
     {
     }
@@ -47,8 +47,8 @@ readonly class GatherPages
         }
 
         // Sort pages by priority
-        usort($result, static function (AbstractViewableEntity $a, AbstractViewableEntity $b) {
-            return strcmp($b->priority->value, $a->priority->value);
+        \usort($result, static function (AbstractViewableEntity $a, AbstractViewableEntity $b) {
+            return \strcmp($b->priority->value, $a->priority->value);
         });
 
 

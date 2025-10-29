@@ -22,7 +22,7 @@ class Reader
     ];
 
     public function __construct(
-        private DirectoryList $directoryList
+        private readonly DirectoryList $directoryList
     )
     {
 
@@ -37,13 +37,13 @@ class Reader
         foreach ($this->applicationConfigFiles as $configFile) {
             $configFilePath = $path . '/' . $configFile;
 
-            if (file_exists($configFilePath)) {
+            if (\file_exists($configFilePath)) {
                 $fileData = Yaml::parseFile($configFilePath);
-                if (!is_array($fileData)) {
+                if (!\is_array($fileData)) {
                     throw new RuntimeException("Invalid configuration file: '" . $configFilePath . "'");
                 }
                 if ($fileData) {
-                    $result = array_replace_recursive($result, $fileData);
+                    $result = \array_replace_recursive($result, $fileData);
                 }
             }
 

@@ -35,7 +35,7 @@ class Reader
             }
         }
 
-        if (!count($fileList)) {
+        if (!\count($fileList)) {
             return [];
         }
 

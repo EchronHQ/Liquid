@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 
 class LinkTag extends \Liquid\Framework\View\Element\Template
 {
-    protected string|null $template = 'element/markupengine/link.phtml';
+    protected string|null $template = 'Liquid_Content::element/markupengine/link.phtml';
 
     public function __construct(
         Layout                          $layout,

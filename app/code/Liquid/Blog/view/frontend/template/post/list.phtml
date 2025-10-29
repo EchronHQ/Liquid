@@ -42,7 +42,7 @@ else:
         foreach ($posts as $post) {
             ?>
             <div class="col--12 sm:col--6 md:col--3 card card--shadowNormal">
-                <a href="<?= $baseViewModel->getResolver()->getUrl($post->getUrlPath()) ?>" class="blog-content-card">
+                <a href="<?= $baseViewModel->getUrl()->getUrl($post->getUrlPath()) ?>" class="blog-content-card">
                     <div class="blog-thumbnail-wrapper">
                         <?php if (!empty($post->image)) {
                             echo $baseViewModel->renderLazyLoad($post->image, $post->metaTitle, new AssetSizeInstruction(339, 187, AssetSizeInstructionCrop::Center));

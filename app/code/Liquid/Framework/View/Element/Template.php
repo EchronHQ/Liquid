@@ -64,16 +64,16 @@ class Template extends AbstractBlock implements BlockInterface
      */
     public function getViewModel(string $name = '', string|null $className = null): ArgumentInterface|null
     {
-        if (!array_key_exists($name, $this->viewModel)) {
+        if (!\array_key_exists($name, $this->viewModel)) {
             $this->logger->warning('View model `' . $name . '` not found', [
-                'available' => count($this->viewModel) === 0 ? '<none>' : array_keys($this->viewModel),
+                'available' => \count($this->viewModel) === 0 ? '<none>' : \array_keys($this->viewModel),
                 'block' => $this->getNameInLayout(),
             ]);
             return null;
         }
         $value = $this->viewModel[$name];
         if (($className !== null) && !$value instanceof $className) {
-            $this->logger->warning('View model `' . $name . '` expected to be `' . $className . '`, `' . get_class($value) . '` instead');
+            $this->logger->warning('View model `' . $name . '` expected to be `' . $className . '`, `' . \get_class($value) . '` instead');
         }
 
         return $value;
@@ -132,14 +132,14 @@ class Template extends AbstractBlock implements BlockInterface
     public function getModuleId(): string|null
     {
         if (!$this->_getData('module_id')) {
-            $className = get_class($this);
+            $className = \get_class($this);
 
-            $namespace = substr(
+            $namespace = \substr(
                 $className,
                 0,
                 (int)strpos($className, '\\' . 'Block' . '\\')
             );
-            $moduleId = str_replace('\\', '_', $namespace);
+            $moduleId = \str_replace('\\', '_', $namespace);
             // $data = ComponentFile::extractModule(get_class($this));
             $this->setData('module_id', $moduleId);
         }
@@ -219,7 +219,7 @@ class Template extends AbstractBlock implements BlockInterface
      */
     public function assign(string|array $key, mixed $value = null): self
     {
-        if (is_array($key)) {
+        if (\is_array($key)) {
             foreach ($key as $subKey => $subValue) {
                 $this->assign($subKey, $subValue);
             }

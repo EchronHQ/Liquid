@@ -55,7 +55,7 @@ class UrlRewrite extends AbstractSimpleObject
 
     public function setRequestPath(string $requestPath): self
     {
-        return $this->setData(self::REQUEST_PATH, ltrim($requestPath, '/'));
+        return $this->setData(self::REQUEST_PATH, \ltrim($requestPath, '/'));
     }
 
     public function getTargetPath(): string
@@ -65,7 +65,7 @@ class UrlRewrite extends AbstractSimpleObject
 
     public function setTargetPath(string $targetPath): self
     {
-        return $this->setData(self::TARGET_PATH, ltrim($targetPath, '/'));
+        return $this->setData(self::TARGET_PATH, \ltrim($targetPath, '/'));
     }
 
     public function getRedirectType(): UrlRewriteType

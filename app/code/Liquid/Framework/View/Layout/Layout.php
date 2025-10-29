@@ -27,17 +27,17 @@ use Psr\Log\LoggerInterface;
 
 class Layout extends XmlConfig
 {
-    public const CONTAINER_OPT_HTML_TAG = 'htmlTag';
-    public const CONTAINER_OPT_HTML_CLASS = 'htmlClass';
-    public const CONTAINER_OPT_HTML_ID = 'htmlId';
-    public const CONTAINER_OPT_LABEL = 'label';
+    public const string CONTAINER_OPT_HTML_TAG = 'htmlTag';
+    public const string CONTAINER_OPT_HTML_CLASS = 'htmlClass';
+    public const string CONTAINER_OPT_HTML_ID = 'htmlId';
+    public const string CONTAINER_OPT_LABEL = 'label';
     /**
      * Default cache life time
      */
-    private const DEFAULT_CACHE_LIFETIME = 31536000;
+    private const int DEFAULT_CACHE_LIFETIME = 31536000;
 
-    private const TYPE_CONTAINER = 'container';
-    private const TYPE_BLOCK = 'block';
+    private const string TYPE_CONTAINER = 'container';
+    private const string TYPE_BLOCK = 'block';
     private Builder|null $builder = null;
     /** @var AbstractBlock[] */
     private array $blocks = [];
@@ -247,6 +247,7 @@ class Layout extends XmlConfig
 
 
             $headBlockViewModel->addStyleSheet(new Stylesheet('css/styles.css'));
+            $headBlockViewModel->addStyleSheet(new Stylesheet('css/tailwind.css'));
 
             $navigationViewModel = $this->objectManager->create(\Liquid\Content\ViewModel\Navigation::class);
             $baseViewModel = $this->objectManager->create(\Liquid\Content\ViewModel\BaseViewModel::class);

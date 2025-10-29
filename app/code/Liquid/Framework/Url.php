@@ -178,7 +178,8 @@ class Url extends DataObject
      */
     public function getRouteUrl(string|null $routePath = null, array|null $routeParams = null): string
     {
-        if (\filter_var($routePath, FILTER_VALIDATE_URL)) {
+
+        if ($routePath !== null && $this->isUrl($routePath)) {
             return $routePath;
         }
 
@@ -200,7 +201,7 @@ class Url extends DataObject
         if ($routeParams === null) {
             $routeParams = [];
         }
-        return $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
+        return $this->getBaseUrl($routeParams) . $routePath;//$this->_getRoutePath($routeParams);
     }
 
     /**
@@ -224,6 +225,7 @@ class Url extends DataObject
             $routePieces = \explode('/', $data);
             $route = \array_shift($routePieces);
             if ('*' === $route) {
+                // Get action from request
                 $route = $this->request->getActionName();
             }
         }
@@ -231,19 +233,21 @@ class Url extends DataObject
 //        var_dump($routePieces);
         $this->_setRouteName($route);
 
-//        $controller = '';
-//        if (!empty($routePieces)) {
-//            $controller = array_shift($routePieces);
-//            if ('*' === $controller) {
-//                $controller = $this->request->getControllerName();
-//            }
-//        }
-//        $this->_setControllerName($controller);
+        $controller = '';
+        if (!empty($routePieces)) {
+            $controller = \array_shift($routePieces);
+            if ('*' === $controller) {
+                // Get controller from request
+                $controller = $this->request->getControllerName();
+            }
+        }
+        $this->_setControllerName($controller);
 
         $action = '';
         if (!empty($routePieces)) {
             $action = \array_shift($routePieces);
             if ('*' === $action) {
+                // Get action from request
                 $action = $this->request->getActionName();
             }
         }
@@ -347,17 +351,17 @@ class Url extends DataObject
         }
 
         $hasParams = (bool)$this->_getRouteParams();
-        $path = $this->_getActionName() . '/';
-//        if ($this->_getControllerName()) {
-//            $path .= $this->_getControllerName() . '/';
-//        } elseif ($hasParams) {
-//            $path .= self::DEFAULT_CONTROLLER_NAME . '/';
-//        }
-//        if ($this->_getActionName()) {
-//            $path .= $this->_getActionName() . '/';
-//        } elseif ($hasParams) {
-//            $path .= self::DEFAULT_ACTION_NAME . '/';
-//        }
+        $path = $this->_getRouteFrontName() . '/';
+        if ($this->_getControllerName()) {
+            $path .= $this->_getControllerName() . '/';
+        } elseif ($hasParams) {
+            $path .= 'index';// self::DEFAULT_CONTROLLER_NAME . '/';
+        }
+        if ($this->_getActionName()) {
+            $path .= $this->_getActionName() . '/';
+        } elseif ($hasParams) {
+            $path .= 'index';// self::DEFAULT_ACTION_NAME . '/';
+        }
 
         return $path;
     }
@@ -365,6 +369,24 @@ class Url extends DataObject
     protected function _getActionName(string|null $default = null): string|null
     {
         return $this->_getData('action_name') ? $this->_getData('action_name') : $default;
+    }
+
+    /**
+     * Set Controller Name
+     *
+     * Reset action name and route path if has change
+     *
+     * @param string $data
+     * @return $this
+     */
+    protected function _setControllerName(string $data): Url
+    {
+        if ($this->_getData('controller_name') == $data) {
+            return $this;
+        }
+        $this->unsetData('route_path')->unsetData('action_name');
+        $this->queryParamsResolver->unsetData('secure');
+        return $this->setData('controller_name', $data);
     }
 
     /**
@@ -380,17 +402,19 @@ class Url extends DataObject
      *
      * @return string
      */
-//    protected function _getRouteFrontName()
-//    {
-//        if (!$this->hasData('route_front_name')) {
+    protected function _getRouteFrontName(): string
+    {
+        // return '';
+        if (!$this->hasData('route_front_name')) {
 //            $frontName = $this->_routeConfig->getRouteFrontName(
 //                $this->_getRouteName(),
-//                $this->_scopeResolver->getAreaCode()
+//                $this->scopeResolver->getAreaCode()
 //            );
-//            $this->setData('route_front_name', $frontName);
-//        }
-//        return $this->_getData('route_front_name');
-//    }
+//           $this->setData('route_front_name', $frontName);
+            $this->setData('route_front_name', '');
+        }
+        return $this->_getData('route_front_name');
+    }
 
     /**
      * Retrieve route params
@@ -400,7 +424,7 @@ class Url extends DataObject
     protected function _getRouteParams(): array
     {
         $params = $this->routeParamsResolver->getRouteParams();
-        if (is_null($params)) {
+        if ($params === null) {
             return [];
         }
         return $params;
@@ -513,6 +537,7 @@ class Url extends DataObject
         }
 
         unset($routeParams['_nosid']);
+
         $url = $this->getRouteUrl($routePath, $routeParams);
 
         /**

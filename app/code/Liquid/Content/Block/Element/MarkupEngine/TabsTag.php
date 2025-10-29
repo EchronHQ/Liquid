@@ -32,7 +32,7 @@ class TabsTag extends Block
         /** @var BlockTag[] $subTags */
         $subTags = $x->processTags('<div>' . $content . '</div>');
         // TODO: why is it needed to reverse the array to get the right order again?
-        $subTags = array_reverse($subTags);
+        $subTags = \array_reverse($subTags);
 
         $viewModel = $this->objectManager->create(TabsControl::class);
         $viewModel->tabs = [];
@@ -63,7 +63,7 @@ class TabsTag extends Block
 
     private function isActive(BlockTag $subTag): bool
     {
-        if (!array_key_exists('active', $subTag->attributes)) {
+        if (!\array_key_exists('active', $subTag->attributes)) {
             return true;
         }
         return $subTag->attributes['active'] === true || $subTag->attributes['active'] === 'true';

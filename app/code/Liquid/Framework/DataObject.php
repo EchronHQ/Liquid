@@ -44,8 +44,8 @@ class DataObject
     {
         if ($key === null) {
             $this->setData([]);
-        } elseif (is_string($key)) {
-            if (isset($this->_data[$key]) || array_key_exists($key, $this->_data)) {
+        } elseif (\is_string($key)) {
+            if (isset($this->_data[$key]) || \array_key_exists($key, $this->_data)) {
                 unset($this->_data[$key]);
             }
         } elseif ($key === (array)$key) {
@@ -65,10 +65,10 @@ class DataObject
      */
     public function hasData(string $key = ''): bool
     {
-        if (empty($key) || !is_string($key)) {
+        if (empty($key) || !\is_string($key)) {
             return !empty($this->_data);
         }
-        return array_key_exists($key, $this->_data);
+        return \array_key_exists($key, $this->_data);
     }
 
     /**
@@ -114,7 +114,7 @@ class DataObject
      */
     public function getDataKeys(): array
     {
-        return array_keys($this->_data);
+        return \array_keys($this->_data);
     }
 
     /**
@@ -127,7 +127,7 @@ class DataObject
      */
     public function getDataByPath(string $path): mixed
     {
-        $keys = explode('/', (string)$path);
+        $keys = \explode('/', $path);
 
         $data = $this->_data;
         foreach ($keys as $key) {
@@ -186,7 +186,7 @@ class DataObject
         }
 
         $data = $this->_data[$key] ?? null;
-        if ($data === null && $key !== null && strpos($key, '/') !== false) {
+        if ($data === null && $key !== null && str_contains($key, '/')) {
             /* process a/b/c key as ['a']['b']['c'] */
             $data = $this->getDataByPath($key);
         }
@@ -194,8 +194,8 @@ class DataObject
         if ($index !== null) {
             if ($data === (array)$data) {
                 $data = isset($data[$index]) ? $data[$index] : null;
-            } elseif (is_string($data)) {
-                $data = explode(PHP_EOL, $data);
+            } elseif (\is_string($data)) {
+                $data = \explode(PHP_EOL, $data);
                 $data = isset($data[$index]) ? $data[$index] : null;
             } elseif ($data instanceof self) {
                 $data = $data->getData($index);

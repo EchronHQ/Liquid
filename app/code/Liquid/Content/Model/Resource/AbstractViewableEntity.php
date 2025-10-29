@@ -34,7 +34,7 @@ abstract class AbstractViewableEntity
     /** @var string[] */
     protected array $urlRewrites = [];
 
-    protected string $controllerEndpoint = 'content/page/view/page-id/';
+    protected string $controllerEndpoint = 'content/page/view/page-id/:entity-id';
     private string|null $requestPath = null;
 
     public function __construct(int|string $id)
@@ -94,7 +94,7 @@ abstract class AbstractViewableEntity
     protected static function appendData(self $definition, DataMapper $data): void
     {
         $urlKey = $data->getProperty('url_key', null);
-        if (\is_null($urlKey)) {
+        if ($urlKey === null) {
             throw new \Exception('Url key most be defined for page `' . $definition->id . '`');
         }
         $definition->urlKey = self::cleanupUrlKey($urlKey);
@@ -159,8 +159,7 @@ abstract class AbstractViewableEntity
      */
     public function getViewRoute(): string
     {
-        // TODO: use string interpolation
-        return \rtrim($this->controllerEndpoint, '/') . '/' . $this->id;
+        return \str_replace(':entity-id', $this->id, $this->controllerEndpoint);
     }
 
     public function getSeoTitle(): string

@@ -20,6 +20,10 @@ class ConfigSourceAggregated implements ConfigSourceInterface
 
     )
     {
+        /* Sort sources ASC from higher priority to lower */
+        \uasort($this->sources, static function ($firstItem, $secondItem) {
+            return ($firstItem['sortOrder'] <=> $secondItem['sortOrder']);
+        });
     }
 
     /**
@@ -36,16 +40,12 @@ class ConfigSourceAggregated implements ConfigSourceInterface
             return $this->data[$path];
         }
 
-        $this->sortSources();
-
-        foreach ($this->sources as $sourceConfig) {
+        foreach ($this->sources as $key => $sourceConfig) {
             /** @var ConfigSourceInterface $source */
             $source = $sourceConfig['source'];
 
-
-            $data = array_replace_recursive($data, $source->get($path));
+            $data = \array_replace_recursive($data, $source->get($path));
         }
-
         $this->excludedFields = [];
         $this->filterChain($path, $data);
 
@@ -78,15 +78,5 @@ class ConfigSourceAggregated implements ConfigSourceInterface
         }
     }
 
-    /**
-     * Sort sources ASC from higher priority to lower
-     *
-     * @return void
-     */
-    private function sortSources(): void
-    {
-        uasort($this->sources, static function ($firstItem, $secondItem) {
-            return ($firstItem['sortOrder'] <=> $secondItem['sortOrder']);
-        });
-    }
+
 }

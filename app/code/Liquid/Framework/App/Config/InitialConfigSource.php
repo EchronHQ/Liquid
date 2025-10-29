@@ -6,7 +6,7 @@ namespace Liquid\Framework\App\Config;
 use Liquid\Framework\DataObject;
 
 /**
- * Responsible for reading sources from files: config.dist.php, config.local.php, config.php
+ * Responsible for reading sources from files: config.dist.php, config.local.php, app/etc/config.yml
  */
 class InitialConfigSource implements ConfigSourceInterface
 {

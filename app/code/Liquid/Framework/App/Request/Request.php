@@ -27,6 +27,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     private bool $isMatched = false;
     private string|null $distroBaseUrl = null;
 
+    private string|null $controller = null;
     private string|null $route = null;
     private string|null $action;
 //    private function getUrlSegment(int $index): ?string
@@ -61,6 +62,16 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     )
     {
         parent::__construct();
+    }
+
+    /**
+     * Retrieve the controller name
+     *
+     * @return string
+     */
+    public function getControllerName()
+    {
+        return $this->controller;
     }
 
     /**

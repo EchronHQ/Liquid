@@ -50,7 +50,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
 
             PageDefinition::generate('platform', [
                 'url_key' => 'platform',
-                'template' => 'Liquid_Content::page/platform.phtml',
+                'template' => 'Liquid_Content::page/platform/platform.phtml',
                 'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Discover the Attlaz platform',
                 'seo_description' => 'Learn how Attlaz improve your internal data management',
@@ -62,7 +62,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
             PageDefinition::generate('why-attlaz', [
                 'url_key' => 'why-attlaz',
-                'template' => 'Liquid_Content::page/about/why-attlaz.phtml',
+                'template' => 'Liquid_Content::page/platform/why-attlaz.phtml',
                 'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Discover the Attlaz platform',
                 'seo_description' => 'Learn how Attlaz improve your internal data management',

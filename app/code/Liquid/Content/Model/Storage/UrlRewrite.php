@@ -32,15 +32,17 @@ class UrlRewrite extends AbstractUrlRewriteStorage implements UrlFinderInterface
             $viewableEntities = $this->entityResolver->getEntities();
             foreach ($viewableEntities as $viewableEntity) {
                 $entityUrlRewrites = $viewableEntity->getUrlRewrites();
-                if (count($entityUrlRewrites) > 0) {
+                if (\count($entityUrlRewrites) > 0) {
                     foreach ($entityUrlRewrites as $entityUrlRewrite) {
-                        if (!is_string($entityUrlRewrite)) {
+                        if (!\is_string($entityUrlRewrite)) {
                             var_dump($entityUrlRewrite);
                         }
 
+                        // echo $entityUrlRewrite . ' => ' . $viewableEntity->getViewRoute() . '<br/>';
+
                         $urlRewrite = new \Liquid\UrlRewrite\Model\Resource\UrlRewrite();
                         $urlRewrite->setEntityId($viewableEntity->id);
-                        $urlRewrite->setEntityType(get_class($viewableEntity));
+                        $urlRewrite->setEntityType(\get_class($viewableEntity));
                         $urlRewrite->setTargetPath($viewableEntity->getViewRoute());
                         $urlRewrite->setRedirectType(UrlRewriteType::INTERNAL);
                         $urlRewrite->setRequestPath($entityUrlRewrite);

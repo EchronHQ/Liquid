@@ -83,6 +83,7 @@ class ScopeConfig implements SegmentConfigInterface
     public function get(string $configType, string $path = '', array|int|string|bool|null $default = null): mixed
     {
         $result = null;
+
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
         }

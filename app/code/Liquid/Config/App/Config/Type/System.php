@@ -44,7 +44,7 @@ class System implements ConfigTypeInterface
      *
      * Is used to make sure that we don't try to load non-existing configuration scopes.
      *
-     * @var array
+     * @var array|null
      */
     private array|null $availableDataScopes = null;
 
@@ -86,15 +86,15 @@ class System implements ConfigTypeInterface
     private function getWithParts(string $path): array|int|string|bool|null
     {
 
-        $pathParts = explode('/', $path);
-        if (count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT->value) {
+        $pathParts = \explode('/', $path);
+        if (\count($pathParts) === 1 && $pathParts[0] !== ScopeInterface::SCOPE_DEFAULT->value) {
             if (!isset($this->data[$pathParts[0]])) {
                 $this->readData();
             }
 
             return $this->data[$pathParts[0]];
         }
-        $rawScopeType = array_shift($pathParts);
+        $rawScopeType = \array_shift($pathParts);
 
         $scopeType = $rawScopeType === '' ? null : ScopeType::from($rawScopeType);
         $scopeTypeKey = $scopeType === null ? null : $scopeType->value;
@@ -107,7 +107,7 @@ class System implements ConfigTypeInterface
 
             return $this->getDataByPathParts($this->data[$scopeTypeKey], $pathParts);
         }
-        $segmentId = array_shift($pathParts);
+        $segmentId = \array_shift($pathParts);
 
         ///    var_dump(['type' => $segmentType, 'segment' => $segmentId]);
         ///
@@ -169,7 +169,7 @@ class System implements ConfigTypeInterface
     /**
      * Load configuration data for a specified scope.
      *
-     * @param ScopeType $scopeType
+     * @param ScopeType|null $scopeType
      * @param string $scopeId
      * @return array
      */
@@ -192,7 +192,7 @@ class System implements ConfigTypeInterface
                         $this->availableDataScopes = $this->serializer->unserialize($serializedCachedData);
                     }
                 }
-                if (is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType->value][$scopeId])) {
+                if (\is_array($this->availableDataScopes) && !isset($this->availableDataScopes[$scopeType->value][$scopeId])) {
                     $scopeData = [$scopeType->value => [$scopeId => []]];
                 }
             } else {

@@ -363,7 +363,17 @@ class Navigation {
         if (menuItemWidth === undefined) {
             menuItemWidth = 0;
         }
-        const left: number = (menuItem.position().left + menuItemWidth) - (width / 2);
+        let left: number = (menuItem.position().left + menuItemWidth) - (width / 2);
+
+        const minLeft: number = 0;
+        if (left < minLeft) {
+            left = minLeft;
+        }
+
+        const maxWidth: number = window.outerWidth - left;
+        if (width > maxWidth) {
+            width = maxWidth;
+        }
 
         this.wrapperContainer
             .css('width', width + 'px')

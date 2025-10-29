@@ -12,6 +12,7 @@ class InitialConfigSource implements ConfigSourceInterface
 {
     public function get(string $path = ''): string|array
     {
+        die('Not implemented');
         // TODO: implement this
         return [];
     }

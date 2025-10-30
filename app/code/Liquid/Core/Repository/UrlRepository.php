@@ -52,7 +52,7 @@ class UrlRepository extends BaseRepository
     {
         if (!$this->urlRewritesLoaded) {
             $this->loadRewrites();
-        };
+        }
         foreach ($this->urlRewrites as $urlRewrite) {
             $rewrite = RequestRewriteHelper::rewrite($urlRewrite, $urlPath);
             if ($rewrite !== null) {

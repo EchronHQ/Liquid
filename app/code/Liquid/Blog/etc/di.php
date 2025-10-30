@@ -1,26 +1,32 @@
 <?php
 declare(strict_types=1);
+
+use Liquid\Blog\Model\Storage\EntityResolver;
+use Liquid\Blog\Model\Storage\UrlRewrite;
+use Liquid\Framework\App\Entity\AggregateEntityResolver;
+use Liquid\UrlRewrite\Model\AggregateUrlFinder;
+
 return [
     'types' => [
-        \Liquid\Framework\App\Entity\AggregateEntityResolver::class => [
+        AggregateEntityResolver::class => [
             'arguments' => [
                 'children' => [
                     'type' => 'array',
                     'value' => [
                         'blog' => [
-                            'class' => \Liquid\Blog\Model\Storage\EntityResolver::class,
+                            'class' => EntityResolver::class,
                         ],
                     ],
                 ],
             ],
         ],
-        \Liquid\UrlRewrite\Model\AggregateUrlFinder::class => [
+        AggregateUrlFinder::class => [
             'arguments' => [
                 'children' => [
                     'type' => 'array',
                     'value' => [
                         'blog' => [
-                            'class' => \Liquid\Blog\Model\Storage\UrlRewrite::class,
+                            'class' => UrlRewrite::class,
                         ],
                     ],
                 ],

@@ -8,12 +8,13 @@ use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Core\Helper\FileHelper;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\State;
+use Liquid\Framework\View\Element\Template;
 use Liquid\Framework\View\Element\Template\File\TemplateFileResolver;
 use Liquid\Framework\View\Layout\Layout;
 use Liquid\Framework\View\TemplateEngine;
 use Psr\Log\LoggerInterface;
 
-class LinkTag extends \Liquid\Framework\View\Element\Template
+class LinkTag extends Template
 {
     protected string|null $template = 'Liquid_Content::element/markupengine/link.phtml';
 

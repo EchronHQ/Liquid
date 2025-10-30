@@ -7,6 +7,7 @@ use Liquid\Content\Block\Html\Script;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Content\ViewModel\HtmlHead;
 use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Controller\ResultFactory;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
@@ -33,8 +34,8 @@ class PageHelper
 
         /** @var Template $headBlock */
         $headBlock = $this->layout->getBlock('head');
-        /** @var \Liquid\Content\ViewModel\HtmlHead $headViewModel */
-        $headViewModel = $headBlock->getViewModel('', \Liquid\Content\ViewModel\HtmlHead::class);
+        /** @var HtmlHead $headViewModel */
+        $headViewModel = $headBlock->getViewModel('', HtmlHead::class);
 
         if ($page->id === 'contact') {
             $headViewModel->addScript(new Script('js/contact.js'));

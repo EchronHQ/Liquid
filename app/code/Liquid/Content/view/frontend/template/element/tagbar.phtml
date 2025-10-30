@@ -2,13 +2,19 @@
 declare(strict_types=1);
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $viewModel \Liquid\Content\ViewModel\TagBar
- * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ * @var $this TemplateEngine
+ * @var $block Template
+ * @var $viewModel TagBar
+ * @var $baseViewModel BaseViewModel
  */
-$viewModel = $block->getViewModel('', \Liquid\Content\ViewModel\TagBar::class);
-$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Content\ViewModel\TagBar;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
+$viewModel = $block->getViewModel('', TagBar::class);
+$baseViewModel = $block->getViewModel('base', BaseViewModel::class);
 
 $tags = $viewModel->getTags();
 if (count($tags) > 0):

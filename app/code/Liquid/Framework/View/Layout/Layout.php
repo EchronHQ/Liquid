@@ -7,7 +7,9 @@ namespace Liquid\Framework\View\Layout;
 
 use Liquid\Content\Block\Html\Script;
 use Liquid\Content\Block\Html\Stylesheet;
+use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Content\ViewModel\HtmlHead;
+use Liquid\Content\ViewModel\Navigation;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Core\Model\Layout\Block;
 use Liquid\Framework\DataObject;
@@ -249,8 +251,8 @@ class Layout extends XmlConfig
             $headBlockViewModel->addStyleSheet(new Stylesheet('css/styles.css'));
             $headBlockViewModel->addStyleSheet(new Stylesheet('css/tailwind.css'));
 
-            $navigationViewModel = $this->objectManager->create(\Liquid\Content\ViewModel\Navigation::class);
-            $baseViewModel = $this->objectManager->create(\Liquid\Content\ViewModel\BaseViewModel::class);
+            $navigationViewModel = $this->objectManager->create(Navigation::class);
+            $baseViewModel = $this->objectManager->create(BaseViewModel::class);
             $siteHeaderBlock = $this->addBlock(Template::class, 'header', 'layout');
             $siteHeaderBlock->setViewModel($navigationViewModel, 'navigation')
                 ->setViewModel($baseViewModel, 'base')

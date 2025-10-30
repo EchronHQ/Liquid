@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Liquid\Framework\ObjectManager;
 
 use Liquid\Framework\Exception\ContextException;
+use function DI\autowire;
+use function DI\get;
 
 class Config
 {
@@ -115,7 +117,7 @@ class Config
          */
         $preferences = $this->preferences;
         foreach ($preferences as $for => $to) {
-            $output[$for] = \DI\get($to);
+            $output[$for] = get($to);
         }
         /**
          * Format types
@@ -141,7 +143,7 @@ class Config
             }
 
             //$output[$type] = \DI\autowire()->constructorParameter();
-            $output[$type] = \DI\autowire()->constructor(... $parameters);
+            $output[$type] = autowire()->constructor(... $parameters);
         }
         return $output;
     }
@@ -311,7 +313,7 @@ class Config
         $argumentValue = $argument['value'];
         // TODO: make this into a constant?
         if ($argumentType === 'object') {
-            return \DI\get($argumentValue);
+            return get($argumentValue);
         }
 
         if ($argumentType === self::$TYPE_ARRAY) {

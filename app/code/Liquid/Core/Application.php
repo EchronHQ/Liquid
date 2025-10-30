@@ -7,6 +7,7 @@ namespace Liquid\Core;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\AppInterface;
 use Liquid\Framework\App\AppMode;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\DirectoryList;
@@ -177,7 +178,7 @@ class Application
         if (isset($this->server[State::PARAM_MODE])) {
             $mode = $this->server[State::PARAM_MODE];
         } else {
-            $appConfig = $this->objectManager->get(\Liquid\Framework\App\Config\ScopeConfig::class);
+            $appConfig = $this->objectManager->get(ScopeConfig::class);
             $configMode = $appConfig->getValue(State::PARAM_MODE);
             if ($configMode) {
                 $mode = $configMode;

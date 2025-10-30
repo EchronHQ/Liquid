@@ -1,20 +1,36 @@
 <?php
 declare(strict_types=1);
 
+use Liquid\Content\App\Config\Type\Scopes;
+use Liquid\Content\Model\Resolver\Segment;
+use Liquid\Content\Model\Storage\EntityResolver;
+use Liquid\Content\Model\Storage\UrlRewrite;
+use Liquid\Framework\App\Area\AreaCode;
+use Liquid\Framework\App\Area\AreaList;
+use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Entity\AggregateEntityResolver;
+use Liquid\Framework\App\Router\BaseRouter;
+use Liquid\Framework\App\Router\FallbackRouter;
+use Liquid\Framework\App\Router\NoRouteHandler;
+use Liquid\Framework\App\Router\NoRouteHandlerList;
+use Liquid\Framework\App\Router\RouterList;
+use Liquid\Framework\App\Scope\ScopeResolverInterface;
+use Liquid\Framework\ObjectManager\Config;
+use Liquid\Framework\View\Layout\ReaderPool;
+use Liquid\UrlRewrite\Model\AggregateUrlFinder;
 
 return [
     'preferences' => [
-        \Liquid\Framework\App\Scope\ScopeResolverInterface::class => \Liquid\Content\Model\Resolver\Segment::class,
+        ScopeResolverInterface::class => Segment::class,
     ],
     'types' => [
-        \Liquid\Framework\App\Area\AreaList::class => [
+        AreaList::class => [
             'arguments' => [
                 'areas' => [
                     'type' => 'array',
                     'value' => [
                         'frontend' => [
-                            'code' => \Liquid\Framework\App\Area\AreaCode::Frontend,
+                            'code' => AreaCode::Frontend,
                             'frontName' => null,
                             'router' => 'standard',
                         ],
@@ -22,30 +38,30 @@ return [
                 ],
                 'defaultAreaCode' => [
                     'type' => 'const',
-                    'value' => \Liquid\Framework\App\Area\AreaCode::Frontend,
+                    'value' => AreaCode::Frontend,
                 ],
             ],
         ],
-        \Liquid\Framework\App\Router\RouterList::class => [
+        RouterList::class => [
             'arguments' => [
                 'routerList' => [
                     'type' => 'array',
                     'value' => [
                         'default' => [
                             'name' => 'default',
-                            'class' => \Liquid\Framework\App\Router\BaseRouter::class,
+                            'class' => BaseRouter::class,
                             'sortOrder' => 30,
                         ],
                         'fallback' => [
                             'name' => 'fallback',
-                            'class' => \Liquid\Framework\App\Router\FallbackRouter::class,
+                            'class' => FallbackRouter::class,
                             'sortOrder' => 100,
                         ],
                     ],
                 ],
             ],
         ],
-        \Liquid\Framework\View\Layout\ReaderPool::class => [
+        ReaderPool::class => [
             'arguments' => [
                 'readers' => [
                     'type' => 'array',
@@ -61,13 +77,13 @@ return [
 //                ],
             ],
         ],
-        \Liquid\UrlRewrite\Model\AggregateUrlFinder::class => [
+        AggregateUrlFinder::class => [
             'arguments' => [
                 'children' => [
                     'type' => 'array',
                     'value' => [
                         'contentitems' => [
-                            'class' => \Liquid\Content\Model\Storage\UrlRewrite::class,
+                            'class' => UrlRewrite::class,
                         ],
                     ],
                 ],
@@ -79,33 +95,33 @@ return [
                     'type' => 'array',
                     'value' => [
                         'pages' => [
-                            'class' => \Liquid\Content\Model\Storage\EntityResolver::class,
+                            'class' => EntityResolver::class,
                         ],
                     ],
                 ],
             ],
         ],
-        \Liquid\Framework\App\Router\NoRouteHandlerList::class => [
+        NoRouteHandlerList::class => [
             'arguments' => [
                 'handlerClassesList' => [
-                    'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_ARRAY,
+                    'type' => Config::$TYPE_ARRAY,
                     'value' => [
                         'default' => [
-                            'class' => \Liquid\Framework\App\Router\NoRouteHandler::class,
+                            'class' => NoRouteHandler::class,
                             'sortOrder' => 100,
                         ],
                     ],
                 ],
             ],
         ],
-        \Liquid\Framework\App\Config\ScopeConfig::class => [
+        ScopeConfig::class => [
             'arguments' => [
                 'types' => [
                     'type' => 'array',
                     'value' => [
                         'scopes' => [
-                            'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_OBJECT,
-                            'value' => \Liquid\Content\App\Config\Type\Scopes::class,
+                            'type' => Config::$TYPE_OBJECT,
+                            'value' => Scopes::class,
                         ],
                     ],
                 ],

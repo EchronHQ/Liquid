@@ -1,28 +1,35 @@
 <?php
 declare(strict_types=1);
+
+use Liquid\Admin\App\Area\FrontNameResolver;
+use Liquid\Admin\App\Router\NoRouteHandler;
+use Liquid\Framework\App\Area\AreaCode;
+use Liquid\Framework\App\Area\AreaList;
+use Liquid\Framework\App\Router\NoRouteHandlerList;
+
 return [
     'types' => [
-        \Liquid\Framework\App\Area\AreaList::class => [
+        AreaList::class => [
             'arguments' => [
                 'areas' => [
                     'type' => 'array',
                     'value' => [
                         'admin' => [
-                            'code' => \Liquid\Framework\App\Area\AreaCode::Admin,
-                            'frontNameResolver' => \Liquid\Admin\App\Area\FrontNameResolver::class,
+                            'code' => AreaCode::Admin,
+                            'frontNameResolver' => FrontNameResolver::class,
                             'router' => 'admin',
                         ],
                     ],
                 ],
             ],
         ],
-        \Liquid\Framework\App\Router\NoRouteHandlerList::class => [
+        NoRouteHandlerList::class => [
             'arguments' => [
                 'handlerClassesList' => [
                     'type' => 'array',
                     'value' => [
                         'admin' => [
-                            'class' => \Liquid\Admin\App\Router\NoRouteHandler::class,
+                            'class' => NoRouteHandler::class,
                             'sortOrder' => 10,
                         ],
                     ],

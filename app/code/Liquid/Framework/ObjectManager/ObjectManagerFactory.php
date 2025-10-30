@@ -83,7 +83,7 @@ class ObjectManagerFactory
                 ConfigLoader::class => [
                     'arguments' => [
                         ['name' => 'cache', 'type' => 'object', 'value' => \Liquid\Framework\App\Cache\Type\Config::class],
-                        ['name' => 'fileSystemReader', 'type' => 'object', 'value' => \Liquid\Framework\ObjectManager\Config\FileSystem::class],
+                        ['name' => 'fileSystemReader', 'type' => 'object', 'value' => Config\FileSystem::class],
                         ['name' => 'serializer', 'type' => 'object', 'value' => Serialize::class],
                     ],
                 ],

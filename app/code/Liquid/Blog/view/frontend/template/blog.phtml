@@ -3,15 +3,19 @@ declare(strict_types=1);
 
 
 use Liquid\Blog\Model\ViewModel\BlogIndexViewModel;
+use Liquid\Blog\Model\ViewModel\PostList;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
 
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
+ * @var $this TemplateEngine
+ * @var $block Template
  * @var $viewModel BlogIndexViewModel
  */
 $viewModel = $block->getViewModel('', BlogIndexViewModel::class);
-$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+$baseViewModel = $block->getViewModel('base', BaseViewModel::class);
 $posts = $viewModel->getPosts();
 
 ?>
@@ -40,11 +44,11 @@ $posts = $viewModel->getPosts();
 
                     <div class="column">
                         <?php
-                        /** @var \Liquid\Blog\Model\ViewModel\PostList $postListViewModel */
-                        $postListViewModel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class);
+                        /** @var PostList $postListViewModel */
+                        $postListViewModel = $baseViewModel->getObjectManager()->create(PostList::class);
                         $postListViewModel->setPosts($categoryPosts);
 
-                        $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'blog-list-cat-' . $category->id, ['data' => ['template' => 'Liquid_Blog::post/list.phtml']]);
+                        $postListBlock = $block->getLayout()->createBlock(Template::class, 'blog-list-cat-' . $category->id, ['data' => ['template' => 'Liquid_Blog::post/list.phtml']]);
                         $postListBlock->setViewModel($postListViewModel);
                         $postListBlock->setViewModel($baseViewModel, 'base');
                         echo $postListBlock->toHtml();

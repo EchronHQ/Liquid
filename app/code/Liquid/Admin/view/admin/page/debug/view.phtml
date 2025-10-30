@@ -2,11 +2,15 @@
 declare(strict_types=1);
 
 /**
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $this \Liquid\Framework\View\TemplateEngine
+ * @var $block Template
+ * @var $this TemplateEngine
  */
 
-$viewModel = $block->getViewModel('debug', \Liquid\Admin\ViewModel\DebugViewModel::class);
+use Liquid\Admin\ViewModel\DebugViewModel;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
+$viewModel = $block->getViewModel('debug', DebugViewModel::class);
 
 $entities = $viewModel->x();
 foreach ($entities as $entity) {

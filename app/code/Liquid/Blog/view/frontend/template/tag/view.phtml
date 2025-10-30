@@ -2,13 +2,21 @@
 declare(strict_types=1);
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $viewModel \Liquid\Blog\Model\ViewModel\Tag
- * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ * @var $this TemplateEngine
+ * @var $block Template
+ * @var $viewModel Tag
+ * @var $baseViewModel BaseViewModel
  */
-$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\Tag::class);
-$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+use Liquid\Blog\Model\ViewModel\PostList;
+use Liquid\Blog\Model\ViewModel\Tag;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Content\ViewModel\TagBar;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
+$viewModel = $block->getViewModel('', Tag::class);
+$baseViewModel = $block->getViewModel('base', BaseViewModel::class);
 
 $tag = $viewModel->getTag();
 $posts = $viewModel->getPosts();
@@ -37,10 +45,10 @@ $posts = $viewModel->getPosts();
                     /**
                      * Tagbar
                      */
-                    $categoriesTagBar = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'tags', ['data' => ['template' => 'Liquid_Content::element/tagbar.phtml']]);
+                    $categoriesTagBar = $block->getLayout()->createBlock(Template::class, 'tags', ['data' => ['template' => 'Liquid_Content::element/tagbar.phtml']]);
 
-                    /** @var $tagBarViewModel \Liquid\Content\ViewModel\TagBar */
-                    $tagBarViewModel = $baseViewModel->getObjectManager()->create(\Liquid\Content\ViewModel\TagBar::class);
+                    /** @var $tagBarViewModel TagBar */
+                    $tagBarViewModel = $baseViewModel->getObjectManager()->create(TagBar::class);
                     $tagBarViewModel->setTags($viewModel->getTags());
                     $tagBarViewModel->setCurrent($tag);
                     $tagBarViewModel->setAllTarget($baseViewModel->getResolver()->getUrl('blog'));
@@ -52,11 +60,11 @@ $posts = $viewModel->getPosts();
                     /**
                      * Posts
                      */
-                    /** @var \Liquid\Blog\Model\ViewModel\PostList $postListViewmodel */
-                    $postListViewmodel = $baseViewModel->getObjectManager()->create(\Liquid\Blog\Model\ViewModel\PostList::class);
+                    /** @var PostList $postListViewmodel */
+                    $postListViewmodel = $baseViewModel->getObjectManager()->create(PostList::class);
                     $postListViewmodel->setPosts($posts);
 
-                    $postListBlock = $block->getLayout()->createBlock(\Liquid\Framework\View\Element\Template::class, 'post-list');
+                    $postListBlock = $block->getLayout()->createBlock(Template::class, 'post-list');
 
                     $postListBlock
                             ->setViewModel($postListViewmodel)

@@ -2,10 +2,15 @@
 declare(strict_types=1);
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $viewModel \Liquid\Content\Block\Element\DemoCallToActionBlock
+ * @var $this TemplateEngine
+ * @var $block Template
+ * @var $viewModel DemoCallToActionBlock
  */
+
+use Liquid\Content\Block\Element\DemoCallToActionBlock;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
 $viewModel = $block->getViewModel();
 ?>
 

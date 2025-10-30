@@ -94,7 +94,7 @@ abstract class AbstractBlock extends DataObject implements BlockInterface
      * Retrieve child block HTML
      *
      * @param string $alias
-     * @param boolean $useCache
+     * @param bool $useCache
      * @return  string
      */
     public function getChildHtml(string $alias = '', bool $useCache = true): string

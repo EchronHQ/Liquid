@@ -19,8 +19,10 @@ use Liquid\Core\Helper\Resolver;
 use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Response\HttpResponseInterface;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Liquid\Framework\Output\Html;
 use Liquid\Framework\View\Element\Template;
 use Liquid\Framework\View\Layout\Layout;
+use Liquid\MarkupEngine\Model\Tags\RelatedBlogPostTag;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -171,7 +173,7 @@ class Page extends LayoutPage
         $this->markupEngine->registerTag('copy-block', CopyBlockTag::class);
         $this->markupEngine->registerTag('tabs', TabsTag::class);
         $this->markupEngine->registerTag('call-to-action', Template::class, ['template' => 'Liquid_Content::element/democalltoaction.phtml'], DemoCallToActionBlock::class);
-        $this->markupEngine->registerTag('blog-related', \Liquid\MarkupEngine\Model\Tags\RelatedBlogPostTag::class, ['template' => 'Liquid_Blog::related-posts-section.phtml']);
+        $this->markupEngine->registerTag('blog-related', RelatedBlogPostTag::class, ['template' => 'Liquid_Blog::related-posts-section.phtml']);
 
         $layoutOutput = $this->markupEngine->parse($layoutOutput);
 
@@ -193,7 +195,7 @@ class Page extends LayoutPage
     private function sanitizeHtml(string $html): string
     {
         if ($this->appConfig->getBoolValue('dev/minifyhtml')) {
-            return \Liquid\Framework\Output\Html::minify($html);
+            return Html::minify($html);
         }
         return $html;
 //

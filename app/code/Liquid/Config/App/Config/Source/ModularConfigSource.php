@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Liquid\Config\App\Config\Source;
 
 use Liquid\Framework\App\Config\ConfigSourceInterface;
+use Liquid\Framework\App\Config\Initial\Reader;
 use Liquid\Framework\DataObject;
 
 class ModularConfigSource implements ConfigSourceInterface
 {
 
     public function __construct(
-        private readonly \Liquid\Framework\App\Config\Initial\Reader $reader
+        private readonly Reader $reader
     )
     {
     }

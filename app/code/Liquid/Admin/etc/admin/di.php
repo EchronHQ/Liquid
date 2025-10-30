@@ -1,21 +1,26 @@
 <?php
 declare(strict_types=1);
 
+use Liquid\Admin\App\Router;
+use Liquid\Framework\App\Router\FallbackRouter;
+use Liquid\Framework\App\Router\RouterList;
+use Liquid\Framework\ObjectManager\Config;
+
 return [
     'types' => [
-        \Liquid\Framework\App\Router\RouterList::class => [
+        RouterList::class => [
             'arguments' => [
                 'routerList' => [
-                    'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_ARRAY,
+                    'type' => Config::$TYPE_ARRAY,
                     'value' => [
                         'admin' => [
                             'name' => 'admin',
-                            'class' => \Liquid\Admin\App\Router::class,
+                            'class' => Router::class,
                             'sortOrder' => 10,
                         ],
                         'default' => [
                             'name' => 'fallback',
-                            'class' => \Liquid\Framework\App\Router\FallbackRouter::class,
+                            'class' => FallbackRouter::class,
                             'sortOrder' => 100,
                         ],
                     ],

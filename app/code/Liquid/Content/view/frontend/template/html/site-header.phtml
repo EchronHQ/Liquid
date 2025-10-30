@@ -2,20 +2,30 @@
 declare(strict_types=1);
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $escaper \Liquid\Framework\Escaper
- * @var $segment \Liquid\Content\Helper\LocaleHelper
- * @var $logger \Psr\Log\LoggerInterface
+ * @var $this TemplateEngine
+ * @var $block Template
+ * @var $escaper Escaper
+ * @var $segment LocaleHelper
+ * @var $logger LoggerInterface
  */
-/** @var \Liquid\Content\ViewModel\BaseViewModel $viewModel */
+/** @var BaseViewModel $viewModel */
+
+use Liquid\Content\Helper\LocaleHelper;
+use Liquid\Content\Helper\ViewableEntity;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Content\ViewModel\Navigation;
+use Liquid\Framework\Escaper;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+use Psr\Log\LoggerInterface;
+
 $viewModel = $block->getViewModel('base');
-/** @var \Liquid\Content\ViewModel\Navigation $navigationViewModel */
+/** @var Navigation $navigationViewModel */
 $navigationViewModel = $block->getViewModel('navigation');
 
 $resolver = $viewModel->getResolver();
 
-$helper = $this->helper(\Liquid\Content\Helper\ViewableEntity::class);
+$helper = $this->helper(ViewableEntity::class);
 ?>
 <header class="site-header">
     <div class="container">

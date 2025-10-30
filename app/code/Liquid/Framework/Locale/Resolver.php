@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Framework\Locale;
 
 use Liquid\Framework\App\Config\SegmentConfigInterface;
+use Liquid\Framework\App\DeploymentConfig;
 
 class Resolver implements ResolverInterface
 {
@@ -23,7 +24,7 @@ class Resolver implements ResolverInterface
 
     public function __construct(
         private readonly SegmentConfigInterface                 $segmentConfig,
-        private readonly \Liquid\Framework\App\DeploymentConfig $deploymentConfig,
+        private readonly DeploymentConfig $deploymentConfig,
                                                                 $locale = null,
     )
     {

@@ -12,7 +12,7 @@ class XmlConfig
      *
      * @param string|null $path
      * @return XmlElement|bool
-     * @see \Liquid\Framework\Simplexml\XmlElement::descend
+     * @see XmlElement::descend
      */
     public function getNode(string|null $path = null): XmlElement|bool
     {

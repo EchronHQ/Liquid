@@ -2,19 +2,23 @@
 declare(strict_types=1);
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
+ * @var $this TemplateEngine
+ * @var $block Template
  */
 
+use Liquid\Blog\Model\ViewModel\PostViewModel;
 use Liquid\Content\Helper\StringHelper;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Asset\AssetSizeInstructionCrop;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
 
 
-/** @var \Liquid\Content\ViewModel\BaseViewModel $baseViewModel */
+/** @var BaseViewModel $baseViewModel */
 $baseViewModel = $block->getViewModel('base');
 
-$postViewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\PostViewModel::class);
+$postViewModel = $block->getViewModel('', PostViewModel::class);
 
 $post = $postViewModel->getPost();
 $category = $postViewModel->getPostCategory();

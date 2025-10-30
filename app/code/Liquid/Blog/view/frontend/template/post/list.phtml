@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Liquid\Blog\Model\ViewModel\PostList;
 use Liquid\Content\Block\Element\CopyBlock;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Content\Model\Asset\AssetSizeInstructionCrop;
@@ -11,10 +12,10 @@ use Liquid\Framework\View\TemplateEngine;
 /**
  * @var TemplateEngine $this
  * @var Template $block
- * @var \Liquid\Blog\Model\ViewModel\PostList $viewModel
+ * @var PostList $viewModel
  */
-$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\PostList::class);
-assert($viewModel instanceof \Liquid\Blog\Model\ViewModel\PostList);
+$viewModel = $block->getViewModel('', PostList::class);
+assert($viewModel instanceof PostList);
 $baseViewModel = $block->getViewModel('base', BaseViewModel::class);
 
 

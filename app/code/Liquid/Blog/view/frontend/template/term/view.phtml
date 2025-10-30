@@ -3,13 +3,19 @@ declare(strict_types=1);
 
 
 /**
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $viewModel \Liquid\Blog\Model\ViewModel\Term
- * @var $baseViewModel \Liquid\Content\ViewModel\BaseViewModel
+ * @var $this TemplateEngine
+ * @var $block Template
+ * @var $viewModel Term
+ * @var $baseViewModel BaseViewModel
  */
-$viewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\Term::class);
-$baseViewModel = $block->getViewModel('base', \Liquid\Content\ViewModel\BaseViewModel::class);
+
+use Liquid\Blog\Model\ViewModel\Term;
+use Liquid\Content\ViewModel\BaseViewModel;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
+$viewModel = $block->getViewModel('', Term::class);
+$baseViewModel = $block->getViewModel('base', BaseViewModel::class);
 
 $term = $viewModel->getTerm();
 ?>

@@ -1,9 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use Liquid\Framework\App\Area\AreaList;
+
 return [
     'types' => [
-        \Liquid\Framework\App\Area\AreaList::class => [
+        AreaList::class => [
             'arguments' => [
                 'areas' => [
                     'type' => 'array',

@@ -1,10 +1,15 @@
 <?php
 declare(strict_types=1);
 /**
- * @var $block \Liquid\Framework\View\Element\Template
- * @var $this \Liquid\Framework\View\TemplateEngine
- * @var $viewModel \Liquid\Content\Block\Element\FaqBlock
+ * @var $block Template
+ * @var $this TemplateEngine
+ * @var $viewModel FaqBlock
  */
+
+use Liquid\Content\Block\Element\FaqBlock;
+use Liquid\Framework\View\Element\Template;
+use Liquid\Framework\View\TemplateEngine;
+
 $viewModel = $block->getViewModel();
 
 $topics = $viewModel->getTopics();

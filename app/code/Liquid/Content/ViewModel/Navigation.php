@@ -44,67 +44,68 @@ class Navigation implements ArgumentInterface
                                 // 'icon' => 'asset/icons/menu/market-sentry.svg',
                                 'link' => $this->viewableEntityHelper->getUrl('why-attlaz'),
                             ],
-                            [
-                                'title' => 'Pricing',
-                                'description' => 'Find the best package for you.',
-                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('plans'),
-                            ],
+//                            [
+//                                'title' => 'Pricing',
+//                                'description' => 'Find the best package for you.',
+//                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('plans'),
+//                            ],
                         ],
                     ],
-//                    [
-//                        'title' => 'Key Capabilities',
-//                        'items' => [
-//                            [
-//                                'title' => 'Unified Data Integration Hub',
-////                                'description' => 'Streamline product distribution',
-//                                //  'icon' => 'asset/icons/menu/feed-management.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('integrations'),
-//                            ],
-//                            [
-//                                'title' => 'Connector Marketplace',
-////                                'description' => 'Track market dynamics',
-//                                //   'icon' => 'asset/icons/menu/market-sentry.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('platform/connector-marketplace'),
-//                            ],
-//                            [
-//                                'title' => 'Real-Time Monitoring',
-////                                'description' => 'Optimize inventory decisions',
-//                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('platform/real-time-monitoring'),
-//                            ],
-//                            [
-//                                'title' => 'Error Management',
-////                                'description' => 'Optimize inventory decisions',
-//                                //   'icon' => 'asset/icons/menu/inventory-management.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('platform/error-management'),
-//                            ],
-//                            [
-//                                'title' => 'Advanced Workflow Automation',
-////                                'description' => 'Optimize inventory decisions',
-//                                //  'icon' => 'asset/icons/menu/inventory-management.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('platform/workflow-automation'),
-//                            ],
+                    [
+                        'title' => 'Key Capabilities',
+                        'items' => [
+                            [
+                                'title' => 'Connector Marketplace',
+//                                'description' => 'Track market dynamics',
+                                //   'icon' => 'asset/icons/menu/market-sentry.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platforms'),
+                            ],
+                            [
+                                'title' => 'Unified Data Integration Hub',
+//                                'description' => 'Streamline product distribution',
+                                //  'icon' => 'asset/icons/menu/feed-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/integration-hub'),
+                            ],
+
+                            [
+                                'title' => 'Real-Time Monitoring',
+//                                'description' => 'Optimize inventory decisions',
+                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/real-time-monitoring'),
+                            ],
+                            [
+                                'title' => 'Error Management',
+//                                'description' => 'Optimize inventory decisions',
+                                //   'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/error-management'),
+                            ],
+                            [
+                                'title' => 'Advanced Workflow Automation',
+//                                'description' => 'Optimize inventory decisions',
+                                //  'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/workflow-automation'),
+                            ],
 //                            [
 //                                'title' => 'Cross-Application Connectivity',
 ////                                'description' => 'Optimize inventory decisions',
 //                                //'icon' => 'asset/icons/menu/inventory-management.svg',
 //                                'link' => $this->viewableEntityHelper->getUrl('platform/cross-application-connectivity'),
 //                            ],
-//                            [
-//                                'title' => 'Advanced Data Transformation & Quality Engine',
-////                                'description' => 'Optimize inventory decisions',
-//                                //'icon' => 'asset/icons/menu/inventory-management.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('platform/data-transformation-quality-engine'),
-//                            ],
+                            [
+                                'title' => 'Advanced Data Transformation & Quality Engine',
+//                                'description' => 'Optimize inventory decisions',
+                                //'icon' => 'asset/icons/menu/inventory-management.svg',
+                                'link' => $this->viewableEntityHelper->getUrl('platform/data-quality-engine'),
+                            ],
 //                            [
 //                                'title' => 'Adaptive Infrastructure',
 ////                                'description' => 'Optimize inventory decisions',
 //                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
 //                                'link' => $this->viewableEntityHelper->getUrl('platform/infrastructure'),
 //                            ],
-//                        ],
-//                    ],
+                        ],
+                    ],
                     [
                         'title' => 'Products',
                         'items' => [

@@ -8,6 +8,7 @@ use Liquid\Content\Helper\LocaleHelper;
 use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
+use Liquid\Content\Model\Resource\PageStatus;
 use Liquid\Core\Helper\IdHelper;
 use Liquid\Core\Repository\BaseRepository;
 use Liquid\Core\Repository\ViewableEntityRepository;
@@ -36,17 +37,18 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
                 'modified' => '2022-10-23 15:49:06',
                 'urlRewrites' => [''],
             ]),
-            PageDefinition::generate('plans', [
-                'url_key' => 'plans',
-                'template' => 'Liquid_Content::page/plans.phtml',
-                'doc_css_class' => 'theme--light palette--wintergreen accent--green',
-                'seo_title' => 'Pricing plans and editions',
-                'seo_description' => 'See what Attlaz plan fits to your needs',
-                'seo_keywords' => '',
-                'priority' => PageSitemapPriority::HIGH,
-                'modified' => '2023-05-03 11:32:00',
-                'urlRewrites' => ['plans'],
-            ]),
+//            PageDefinition::generate('plans', [
+//                'url_key' => 'plans',
+//                'template' => 'Liquid_Content::page/plans.phtml',
+//                'doc_css_class' => 'theme--light palette--wintergreen accent--green',
+//                'seo_title' => 'Pricing plans and editions',
+//                'seo_description' => 'See what Attlaz plan fits to your needs',
+//                'seo_keywords' => '',
+//                'priority' => PageSitemapPriority::HIGH,
+//                'status' => PageStatus::DRAFT,
+//                'modified' => '2023-05-03 11:32:00',
+//                'urlRewrites' => ['plans'],
+//            ]),
 
             PageDefinition::generate('platform', [
                 'url_key' => 'platform',
@@ -342,6 +344,76 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
         ];
 
+        $this->pages = [
+            ...$this->pages,
+            ...$this->getKeyCapabilities(),
+        ];
+    }
+
+    public function getKeyCapabilities(): array
+    {
+        return [
+            PageDefinition::generate('platform/real-time-monitoring', [
+                'url_key' => 'platform/real-time-monitoring',
+                'template' => 'Liquid_Content::page/platform/capability/real-time-monitoring.phtml',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+                'seo_title' => 'Discover the Attlaz platform',
+                'seo_description' => 'Learn how Attlaz improve your internal data management',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::HIGH,
+                'modified' => '2024-07-02 15:49:06',
+                'urlRewrites' => ['platform/real-time-monitoring'],
+
+            ]),
+            PageDefinition::generate('platform/error-management', [
+                'url_key' => 'platform/error-management',
+                'template' => 'Liquid_Content::page/platform/capability/error-management.phtml',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+                'seo_title' => 'Discover the Attlaz platform',
+                'seo_description' => 'Learn how Attlaz improve your internal data management',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::HIGH,
+                'modified' => '2024-07-02 15:49:06',
+                'urlRewrites' => ['platform/error-management'],
+
+            ]),
+            PageDefinition::generate('platform/integration-hub', [
+                'url_key' => 'platform/integration-hub',
+                'template' => 'Liquid_Content::page/platform/capability/integration-hub.phtml',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+                'seo_title' => 'Discover the Attlaz platform',
+                'seo_description' => 'Learn how Attlaz improve your internal data management',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::HIGH,
+                'modified' => '2024-07-02 15:49:06',
+                'urlRewrites' => ['platform/integration-hub'],
+
+            ]),
+            PageDefinition::generate('platform/workflow-automation', [
+                'url_key' => 'platform/workflow-automation',
+                'template' => 'Liquid_Content::page/platform/capability/data-quality-engine.phtml',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+                'seo_title' => 'Discover the Attlaz platform',
+                'seo_description' => 'Learn how Attlaz improve your internal data management',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::HIGH,
+                'modified' => '2024-07-02 15:49:06',
+                'urlRewrites' => ['platform/workflow-automation'],
+
+            ]),
+            PageDefinition::generate('platform/data-quality-engine', [
+                'url_key' => 'platform/data-quality-engine',
+                'template' => 'Liquid_Content::page/platform/capability/data-quality-engine.phtml',
+                'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
+                'seo_title' => 'Discover the Attlaz platform',
+                'seo_description' => 'Learn how Attlaz improve your internal data management',
+                'seo_keywords' => '',
+                'priority' => PageSitemapPriority::HIGH,
+                'modified' => '2024-07-02 15:49:06',
+                'urlRewrites' => ['platform/data-quality-engine'],
+
+            ]),
+        ];
     }
 
     public function getById(int|string $id): PageDefinition|null

@@ -5,7 +5,7 @@
             <addScript>js/vendor.js</addScript>
             <addScript>js/main.js</addScript>
             <addScript>js/hero.js</addScript>
-            <addScript>js/hero2.js</addScript>
+            <!--            <addScript>js/hero2.js</addScript>-->
 
             <addStyleSheet>css/styles.css</addStyleSheet>
             <addStyleSheet>css/tailwind.css</addStyleSheet>

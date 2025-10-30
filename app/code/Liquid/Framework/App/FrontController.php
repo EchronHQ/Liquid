@@ -121,7 +121,6 @@ class FrontController
 
                 } catch (NotFoundException $ex) {
 
-
                     $request->setPathInfo('content/noroute/index');
                     // echo $ex->getMessage() . '<br/>';
 //                    $request->initForward();

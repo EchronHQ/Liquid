@@ -36,7 +36,7 @@ class NotFound extends AbstractAction
         $pageId = '';
 
         $page = $this->pageRepository->getById($pageId);
-        if (\is_null($page)) {
+        if ($page === null) {
             $this->logger->warning('No page found with identifier', ['identifier' => $pageId]);
             throw new NotFoundException('Page not found');
         }

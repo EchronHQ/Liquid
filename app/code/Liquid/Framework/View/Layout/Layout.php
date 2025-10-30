@@ -229,8 +229,8 @@ class Layout extends XmlConfig
             $headBlock->setViewModel($headBlockViewModel)->setTemplate('Liquid_Content::html/head.phtml');
             $headBlockViewModel->addScript(new Script('js/vendor.js'));
             $headBlockViewModel->addScript(new Script('js/main.js'));
-            $headBlockViewModel->addScript(new Script('js/hero.js'));
-            $headBlockViewModel->addScript(new Script('js/hero2.js'));
+            // $headBlockViewModel->addScript(new Script('js/hero.js'));
+            // $headBlockViewModel->addScript(new Script('js/hero2.js'));
             // Load Sentry over CDN
             //            $sentryCDN = new Script('https://browser.sentry-cdn.com/7.51.0/bundle.tracing.replay.min.js');
             //            $sentryCDN->integrity = 'sha384-DulooquW3C+xZEn0I3jpaZGefuX4TQSKK9QIIODQaijckMg2g8P+n7k4PS7pY75o';

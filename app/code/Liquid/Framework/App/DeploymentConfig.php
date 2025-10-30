@@ -54,7 +54,7 @@ class DeploymentConfig
         }
         $result = $this->getByKey($key);
         if ($result === null) {
-            if (empty($this->flatData) || count($this->getAllEnvOverrides())) {
+            if (empty($this->flatData) || \count($this->getAllEnvOverrides())) {
                 $this->reloadData();
             }
             $result = $this->getByKey($key);

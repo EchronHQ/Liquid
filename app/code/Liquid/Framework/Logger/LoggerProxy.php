@@ -107,14 +107,18 @@ class LoggerProxy implements LoggerInterface
             $this->logger = new Logger('Attlaz Site');
 
             ErrorHandler::register($this->logger);
+
+
             /**
              * Slack handler
              */
-            if (false):
-                $slackHook = $deploymentConfig->getValue('logger.slack.webhook');
-                $slackChannel = $deploymentConfig->getValue('logger.slack.webhook');
-                $slackUsername = $deploymentConfig->getValue('logger.slack.webhook');
-                $slackMinLogLevel = $deploymentConfig->getValue('logger.slack.minloglevel', Level::Info->name);
+            if (true):
+                // TODO: read this from config (deployment config is not working!!!)
+                $slackHook = $deploymentConfig->getValue('logging/slack/webhook', null);
+                $slackChannel = $deploymentConfig->getValue('logging/slack/channel', null);
+                $slackUsername = $deploymentConfig->getValue('logging/slack/username', 'Liquid');
+                $slackMinLogLevel = $deploymentConfig->getValue('logging/slack/minloglevel', Level::Info->name);
+                // TODO: validate config, if not complete, don't enable
                 $slackHandler = new SlackWebhookHandler($slackHook, $slackChannel, $slackUsername, true, null, false, true);
                 $slackHandler->setLevel($slackMinLogLevel);
                 if ($this->enableDebug()) {
@@ -145,19 +149,19 @@ class LoggerProxy implements LoggerInterface
 
                 $client = new Client();
 
-                $attlazClientToken = $deploymentConfig->getValue('logger.attlaz.client_token', '');
+                $attlazClientToken = $deploymentConfig->getValue('logging/attlaz/client_token', '');
                 if ($attlazClientToken === '') {
-                    $attlazClientId = $deploymentConfig->getValue('logger.attlaz.client_id');
-                    $attlazClientSecret = $deploymentConfig->getValue('logger.attlaz.client_secret');
+                    $attlazClientId = $deploymentConfig->getValue('logging/attlaz/client_id');
+                    $attlazClientSecret = $deploymentConfig->getValue('logging/attlaz/client_secret');
                     $client->authWithClient($attlazClientId, $attlazClientSecret);
                 } else {
                     $client->authWithToken($attlazClientToken);
                 }
 
 
-                $attlazApiEndpoint = $deploymentConfig->getValue('logger.attlaz.endpoint');
+                $attlazApiEndpoint = $deploymentConfig->getValue('logging/attlaz/endpoint');
 
-                $attlazMinLogLevel = $deploymentConfig->getValue('logger.attlaz.minloglevel', Level::Info->name);
+                $attlazMinLogLevel = $deploymentConfig->getValue('logging/attlaz/minloglevel', Level::Info->name);
 
 
                 $client->setEndPoint($attlazApiEndpoint);

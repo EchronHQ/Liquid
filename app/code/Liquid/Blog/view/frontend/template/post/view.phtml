@@ -18,27 +18,36 @@ $postViewModel = $block->getViewModel('', \Liquid\Blog\Model\ViewModel\PostViewM
 
 $post = $postViewModel->getPost();
 $category = $postViewModel->getPostCategory();
+
+
+$showBreadcrumbs = false;
 ?>
 <page-header>
     <div class="row">
-        <div class="column">
-            <div class="blog-breadcrumbs-wrapper">
-                <div class="blog-breadcrumbs">
-                    <a href="<?= $baseViewModel->getEntityUrl('blog') ?>">Blog</a> /
-                    <a href="<?= $baseViewModel->getUrl()->getUrl($category->getUrlPath()) ?>"><?= $category->metaTitle ?></a>
-                    /
-                    <span><?= $post->metaTitle ?></span>
+
+        <div class="column mb-6">
+            <?php if ($showBreadcrumbs): ?>
+            <div class="column">
+                <div class="blog-breadcrumbs-wrapper">
+                    <div class="blog-breadcrumbs">
+                        <a href="<?= $baseViewModel->getEntityUrl('blog') ?>">Blog</a> /
+                        <a href="<?= $baseViewModel->getUrl()->getUrl($category->getUrlPath()) ?>"><?= $category->metaTitle ?></a>
+                        /
+                        <span><?= $post->metaTitle ?></span>
+                    </div>
                 </div>
+                <?php endif ?>
             </div>
-        </div>
-        <div class="column">
+
+
             <copy-block title="<?= $baseViewModel->getEscaper()->escapeHtmlAttribute($post->metaTitle) ?>"
                         title-tag="h1"></copy-block>
-        </div>
-        <div class="column">
             <div class="blog-header-image">
                 <?= $baseViewModel->renderLazyLoad($post->image, $post->metaTitle, new AssetSizeInstruction(1080, 485, AssetSizeInstructionCrop::Center, 50), false) ?>
             </div>
+        </div>
+        <div class="column">
+
         </div>
     </div>
 </page-header>
@@ -46,14 +55,7 @@ $category = $postViewModel->getPostCategory();
     <page-section style="no-padding">
         <div class="row">
             <div class="column col-1-1-1 info">
-                <div class="blog-author-wrapper">
-                    <div class="bold">
-                        Attlaz Team
-                    </div>
-                    <div>
-                        Senior Content Marketing Specialist
-                    </div>
-                </div>
+
                 <?php
                 if (false) {
                     ?>
@@ -73,8 +75,12 @@ $category = $postViewModel->getPostCategory();
         <div class="row">
             <div class="wrapper-sidebar">
                 <div class="sidebar-left">
-                    <div class="duration">
-                        Read duration
+                    <!--                    <div class="duration">-->
+                    <!--                        Read duration-->
+                    <!--                    </div>-->
+                    <div class="blog-author-wrapper">
+                        <div class="bold"><?= $post->author->name ?></div>
+                        <div class="light fs-small"><?= $post->author->role ?></div>
                     </div>
                     <div class="headers">
                         <div class="heading">
@@ -82,9 +88,9 @@ $category = $postViewModel->getPostCategory();
                         </div>
                         <ul>
                             <?php
-                            foreach ($postViewModel->getTitles() as $title) {
+                            foreach ($postViewModel->getPostAnchors() as $anchor) {
                                 ?>
-                                <li><a href="<?= $title['target'] ?>"><?= $title['label'] ?></a></li>
+                                <li><a href="<?= $anchor['target'] ?>"><?= $anchor['label'] ?></a></li>
                                 <?php
                             }
                             ?>

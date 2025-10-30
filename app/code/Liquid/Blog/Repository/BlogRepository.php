@@ -6,6 +6,7 @@ namespace Liquid\Blog\Repository;
 
 use Liquid\Blog\Helper\ReadingTime;
 use Liquid\Blog\Model\CategoryDefinition;
+use Liquid\Blog\Model\PostAuthor;
 use Liquid\Blog\Model\PostDefinition;
 use Liquid\Blog\Model\TagDefinition;
 use Liquid\Content\Helper\LocaleHelper;
@@ -67,11 +68,32 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
             //            ])
         ];
         $this->posts = [
+            PostDefinition::generate('halloween-2025', [
+                'url_key' => 'halloween-2025',
+                'template' => 'Liquid_Blog::post/page/2025-10-halloween.phtml',
+                'seo_title' => "Haunted by fragmented data sources?",
+                'seo_description' => "Stay on top of your data this Halloween with Attlaz’s bespoke data solution.",
+                'intro' => "Stay on top of your data this Halloween with Attlaz’s bespoke data solution.",
+                'seo_keywords' => '',
+                'published' => '2025-10-29 22:49:17',
+                'modified' => '2025-10-29 22:49:17',
+                'draft' => false,
+                'image' => 'image/blog/2025-10-halloween.png',
+                'category' => 'insights',
+                'author' => 'charlottegrigg',
+                'anchors' => [
+                    ['target' => '#advanced-workflow-tool', 'label' => 'Advanced Workflow Tool'],
+                    ['target' => '#real-time-monitoring', 'label' => 'Real-Time Monitoring'],
+                    ['target' => '#advanced-data-transformation', 'label' => 'Advanced Data Transformation'],
+                    ['target' => '#cloud-infrastructure', 'label' => 'Cloud Infrastructure'],
+                ],
+                'tags' => ['attlaz-news'],
+            ]),
             PostDefinition::generate('black-friday-2022-get-your-business-ready', [
                 'url_key' => 'black-friday-2022-get-your-business-ready',
                 'template' => 'Liquid_Blog::post/page/black-friday-2022-get-your-business-ready.phtml',
                 'seo_title' => "Are you ready for this year's Black Friday?",
-                'seo_description' => "For ecommerce platforms, Black Friday is the day of the year with the most traffic and the run-up to Christmas sales, make sur eyou are well-prepared.",
+                'seo_description' => "For ecommerce platforms, Black Friday is the day of the year with the most traffic and the run-up to Christmas sales, make sure you are well-prepared.",
                 'intro' => "For ecommerce platforms, Black Friday is the day of the year with the most traffic and the run-up to Christmas sales. Being well-prepared is essential for your business. Next to profits, it is also about the reputation of your business. A well-thought-out strategy can differentiate your success from failure.",
                 'seo_keywords' => '',
                 'published' => '2022-11-14 15:16:17',
@@ -396,6 +418,28 @@ class BlogRepository extends BaseRepository implements ViewableEntityRepository
     public function getEntities(): array
     {
         return \array_merge($this->pages, $this->posts, $this->tags, $this->categories);
+    }
+
+    public function getAutherById(string $id): PostAuthor|null
+    {
+        // Not in use
+//        if ($id === 'stijnd') {
+//            $author = new PostAuthor();
+//            $author->name = 'Stijn Duynslaeger';
+//            $author->function = '';
+//            $author->link = '';
+//
+//            return $author;
+//        }
+//        if ($id === 'charlottegrigg') {
+//            $author = new PostAuthor();
+//            $author->name = 'Charlotte Grigg';
+//            $author->function = 'Head of Growth?';
+//            $author->link = '';
+//
+//            return $author;
+//        }
+        return null;
     }
 
     private function isVisibleOnFrontend(PostDefinition $post): bool

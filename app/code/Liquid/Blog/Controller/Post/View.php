@@ -46,7 +46,7 @@ class View extends FrontendAction
     public function execute(): AbstractResult
     {
         $articlePage = $this->getArticleByRequest();
-        if (\is_null($articlePage)) {
+        if ($articlePage === null) {
             $this->logger->error('Unable to show blog post, post not found', ['request' => $this->getRequest()->getParams()]);
             throw new NotFoundException('Page not found');
 
@@ -58,7 +58,7 @@ class View extends FrontendAction
     private function getArticleByRequest(): PostDefinition|null
     {
         $postIdentifier = $this->getRequest()->getParam('post-id');
-        if (\is_null($postIdentifier)) {
+        if ($postIdentifier === null) {
             return null;
         }
         return $this->blogRepository->getByUrlKey($postIdentifier);

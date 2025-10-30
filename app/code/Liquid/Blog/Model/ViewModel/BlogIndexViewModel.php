@@ -79,14 +79,14 @@ class BlogIndexViewModel implements ArgumentInterface
 
     private function loadCategories(): void
     {
-        if (\is_null($this->categories)) {
+        if ($this->categories === null) {
             $this->categories = $this->blogRepository->getCategories();
         }
     }
 
     private function loadTags(): void
     {
-        if (\is_null($this->tags)) {
+        if ($this->tags === null) {
             $this->tags = $this->blogRepository->getTags();
         }
     }

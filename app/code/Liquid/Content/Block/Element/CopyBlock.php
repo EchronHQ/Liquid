@@ -48,7 +48,7 @@ class CopyBlock extends AbstractBlock
 
     private static function replaceSpecialCharacters(string $input): string
     {
-        return str_replace(['/n'], ['<br/>'], $input);
+        return \str_replace(['/n'], ['<br/>'], $input);
     }
 
     public function setHeaderIcon(string|FrontendFileUrl $icon, string|null $style = null): void
@@ -62,8 +62,8 @@ class CopyBlock extends AbstractBlock
 
                     $path = $this->resolver->getPath(Path::MEDIA, $icon);
 
-                    if (file_exists($path)) {
-                        $icon = file_get_contents($path);
+                    if (\file_exists($path)) {
+                        $icon = \file_get_contents($path);
                     } else {
                         $icon = $this->resolver->getAssetUrl($icon);
                     }
@@ -159,9 +159,9 @@ class CopyBlock extends AbstractBlock
             $output .= '    <div class="copy-header">';
 
             if ($this->headerIcon !== null) {
-                $output .= '<div class="copy-icon ' . (\is_null($this->headerIconStyle) ? '' : $this->headerIconStyle) . '">';
+                $output .= '<div class="copy-icon ' . ($this->headerIconStyle === null ? '' : $this->headerIconStyle) . '">';
 
-                if (is_string($this->headerIcon)):
+                if (\is_string($this->headerIcon)):
                     $output .= $this->headerIcon;
                 else:
                     $output .= '    <img loading="lazy" src="' . $this->headerIcon->url . '" alt="' . $this->headerTitle . '">';

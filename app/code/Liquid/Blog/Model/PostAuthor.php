@@ -6,5 +6,7 @@ namespace Liquid\Blog\Model;
 
 class PostAuthor
 {
-    public string $name;
+    public string $name = '';
+    public string $role = '';
+    public string $link = '';
 }

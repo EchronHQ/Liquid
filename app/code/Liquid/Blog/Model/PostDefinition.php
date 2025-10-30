@@ -20,6 +20,7 @@ class PostDefinition extends AbstractViewableEntity
     public array $tagIds = [];
     public int $readDuration = 5;
     public bool $draft = true;
+    public array|null $anchors = null;
     protected string $controllerEndpoint = 'blog/post/view/post-id/:entity-id';
 
     public static function generate(int|string $id, array $data): static
@@ -27,7 +28,16 @@ class PostDefinition extends AbstractViewableEntity
         $article = new PostDefinition($id);
 
         $author = new PostAuthor();
-        $author->name = 'Stijn Duynslaeger';
+        if (isset($data['author']) && $data['author'] === 'charlottegrigg') {
+            $author->name = 'Charlotte Grigg';
+            $author->role = 'Product Marketing Manager';
+            $author->link = '';
+        } else {
+            $author->name = 'Stijn Duynslaeger';
+            $author->role = 'CEO';
+            $author->link = '';
+        }
+
 
         $article->author = $author;
 
@@ -47,6 +57,7 @@ class PostDefinition extends AbstractViewableEntity
 
         $article->docCssClass = 'theme--light palette--chroma accent--cyan';
 
+        $article->anchors = $dataMapper->getArrayProperty('anchors', null);
 
         $article->urlRewrites[] = 'blog/' . $article->urlKey;
         //        $notUsedProperties = $dataMapper->getNotUsedProperties();

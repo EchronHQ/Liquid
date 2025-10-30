@@ -13,6 +13,7 @@ class CopyBlockTag extends Template
     public const string PROP_CAPTION = 'caption';
     public const string PROP_TYPES = 'types';
     public const string PROP_TITLE_TAG = 'title-tag';
+    public const string PROP_TITLE_ID = 'title-id';
     public const string PROP_ICON = 'icon';
     public const string PROP_ICON_STYLE = 'icon-style';
 //    public const PROP_CLASSES = 'classes';
@@ -22,6 +23,7 @@ class CopyBlockTag extends Template
         self::PROP_CAPTION,
         self::PROP_TYPES,
         self::PROP_TITLE_TAG,
+        self::PROP_TITLE_ID,
         self::PROP_ICON,
         self::PROP_ICON_STYLE,
 //        self::PROP_CLASSES,
@@ -45,10 +47,12 @@ class CopyBlockTag extends Template
             $title = $this->getData(self::PROP_TITLE);
             $titleTag = $this->getData(self::PROP_TITLE_TAG);
             if ($titleTag === null) {
-                $block->setHeaderTitle($title);
-            } else {
-                $block->setHeaderTitle($title, $titleTag);
+                $titleTag = 'h2';
             }
+            $titleId = $this->getData(self::PROP_TITLE_ID);
+
+            $block->setHeaderTitle($title, $titleTag, $titleId);
+
         }
         if ($this->hasData(self::PROP_CAPTION)) {
             $block->setHeaderCaption($this->getData(self::PROP_CAPTION));
@@ -87,7 +91,7 @@ class CopyBlockTag extends Template
     {
         $dataKeys = $this->getDataKeys();
         foreach ($dataKeys as $dataKey) {
-            if ($dataKey !== 'content' && !in_array($dataKey, self::PROPERTIES, true)) {
+            if ($dataKey !== 'content' && !\in_array($dataKey, self::PROPERTIES, true)) {
                 $ex = new \Exception('');
                 $this->logger->warning('Copy Block Tag: Unknown property `' . $dataKey . '` set', ['value' => $this->getData($dataKey), 'info' => $this->getNameInLayout(), 'call stack' => $ex->getTraceAsString()]);
             }

@@ -52,59 +52,59 @@ class Navigation implements ArgumentInterface
                             ],
                         ],
                     ],
-                    [
-                        'title' => 'Key Capabilities',
-                        'items' => [
-                            [
-                                'title' => 'Unified Data Integration Hub',
-//                                'description' => 'Streamline product distribution',
-                                //  'icon' => 'asset/icons/menu/feed-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('integrations'),
-                            ],
-                            [
-                                'title' => 'Connector Marketplace',
-//                                'description' => 'Track market dynamics',
-                                //   'icon' => 'asset/icons/menu/market-sentry.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/connector-marketplace'),
-                            ],
-                            [
-                                'title' => 'Real-Time Monitoring',
-//                                'description' => 'Optimize inventory decisions',
-                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/real-time-monitoring'),
-                            ],
-                            [
-                                'title' => 'Error Management',
-//                                'description' => 'Optimize inventory decisions',
-                                //   'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/error-management'),
-                            ],
-                            [
-                                'title' => 'Advanced Workflow Automation',
-//                                'description' => 'Optimize inventory decisions',
-                                //  'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/workflow-automation'),
-                            ],
-                            [
-                                'title' => 'Cross-Application Connectivity',
-//                                'description' => 'Optimize inventory decisions',
-                                //'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/cross-application-connectivity'),
-                            ],
-                            [
-                                'title' => 'Advanced Data Transformation & Quality Engine',
-//                                'description' => 'Optimize inventory decisions',
-                                //'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/data-transformation-quality-engine'),
-                            ],
-                            [
-                                'title' => 'Adaptive Infrastructure',
-//                                'description' => 'Optimize inventory decisions',
-                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('platform/infrastructure'),
-                            ],
-                        ],
-                    ],
+//                    [
+//                        'title' => 'Key Capabilities',
+//                        'items' => [
+//                            [
+//                                'title' => 'Unified Data Integration Hub',
+////                                'description' => 'Streamline product distribution',
+//                                //  'icon' => 'asset/icons/menu/feed-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('integrations'),
+//                            ],
+//                            [
+//                                'title' => 'Connector Marketplace',
+////                                'description' => 'Track market dynamics',
+//                                //   'icon' => 'asset/icons/menu/market-sentry.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/connector-marketplace'),
+//                            ],
+//                            [
+//                                'title' => 'Real-Time Monitoring',
+////                                'description' => 'Optimize inventory decisions',
+//                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/real-time-monitoring'),
+//                            ],
+//                            [
+//                                'title' => 'Error Management',
+////                                'description' => 'Optimize inventory decisions',
+//                                //   'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/error-management'),
+//                            ],
+//                            [
+//                                'title' => 'Advanced Workflow Automation',
+////                                'description' => 'Optimize inventory decisions',
+//                                //  'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/workflow-automation'),
+//                            ],
+//                            [
+//                                'title' => 'Cross-Application Connectivity',
+////                                'description' => 'Optimize inventory decisions',
+//                                //'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/cross-application-connectivity'),
+//                            ],
+//                            [
+//                                'title' => 'Advanced Data Transformation & Quality Engine',
+////                                'description' => 'Optimize inventory decisions',
+//                                //'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/data-transformation-quality-engine'),
+//                            ],
+//                            [
+//                                'title' => 'Adaptive Infrastructure',
+////                                'description' => 'Optimize inventory decisions',
+//                                // 'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('platform/infrastructure'),
+//                            ],
+//                        ],
+//                    ],
                     [
                         'title' => 'Products',
                         'items' => [
@@ -226,79 +226,79 @@ class Navigation implements ArgumentInterface
                             //                            ['title' => 'Platform status', 'link' => $this->getConfiguration()->getValue('status_url'), 'target' => '_blank', 'rel' => 'noopener'],
                         ],
                     ],
-                    [
-                        'title' => 'By use case',
-                        // TODO: make these items come from the use-case repository
-                        'items' => [
-                            [
-                                'title' => 'Digital Marketing',
-//                                'description' => 'Enhance your ecommerce',
-                                //   'icon' => 'asset/icons/menu/ecommerce.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('use-cases/digital-marketing'),
-                            ],
-                            [
-                                'title' => 'Ecommerce Marketing',
-//                                'description' => 'Streamline all your financial data',
-                                //   'icon' => 'asset/icons/menu/finance.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ecommerce-marketing'),
-                            ],
+//                    [
+//                        'title' => 'By use case',
+//                        // TODO: make these items come from the use-case repository
+//                        'items' => [
 //                            [
-//                                'title' => 'Expense Management',
-////                                'description' => 'Centralize all your data and application integrations',
-//                                //   'icon' => 'asset/icons/menu/it.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/expense-management'),
-//                            ],
-//
-//                            [
-//                                'title' => 'Financial Planning & Analysis',
-////                                'description' => 'Enable marketing automation',
-//                                //'icon' => 'asset/icons/menu/marketing.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/financial-planning'),
-//                            ],
-                            [
-                                'title' => 'Product Data Management',
-//                                'description' => 'Connect all your sales processes',
-                                // 'icon' => 'asset/icons/menu/sales.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-data-management'),
-                            ],
-//                            [
-//                                'title' => 'Product Management',
-////                                'description' => 'Connect all your sales processes',
-//                                //    'icon' => 'asset/icons/menu/sales.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-management'),
+//                                'title' => 'Digital Marketing',
+////                                'description' => 'Enhance your ecommerce',
+//                                //   'icon' => 'asset/icons/menu/ecommerce.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/digital-marketing'),
 //                            ],
 //                            [
-//                                'title' => 'Product Operations',
+//                                'title' => 'Ecommerce Marketing',
+////                                'description' => 'Streamline all your financial data',
+//                                //   'icon' => 'asset/icons/menu/finance.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ecommerce-marketing'),
+//                            ],
+////                            [
+////                                'title' => 'Expense Management',
+//////                                'description' => 'Centralize all your data and application integrations',
+////                                //   'icon' => 'asset/icons/menu/it.svg',
+////                                'link' => $this->viewableEntityHelper->getUrl('use-cases/expense-management'),
+////                            ],
+////
+////                            [
+////                                'title' => 'Financial Planning & Analysis',
+//////                                'description' => 'Enable marketing automation',
+////                                //'icon' => 'asset/icons/menu/marketing.svg',
+////                                'link' => $this->viewableEntityHelper->getUrl('use-cases/financial-planning'),
+////                            ],
+//                            [
+//                                'title' => 'Product Data Management',
 ////                                'description' => 'Connect all your sales processes',
 //                                // 'icon' => 'asset/icons/menu/sales.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-operations'),
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-data-management'),
+//                            ],
+////                            [
+////                                'title' => 'Product Management',
+//////                                'description' => 'Connect all your sales processes',
+////                                //    'icon' => 'asset/icons/menu/sales.svg',
+////                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-management'),
+////                            ],
+////                            [
+////                                'title' => 'Product Operations',
+//////                                'description' => 'Connect all your sales processes',
+////                                // 'icon' => 'asset/icons/menu/sales.svg',
+////                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-operations'),
+////                            ],
+////                            [
+////                                'title' => 'Product Usage',
+//////                                'description' => 'Connect all your sales processes',
+////                                // 'icon' => 'asset/icons/menu/sales.svg',
+////                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-usage'),
+////                            ],
+//                            [
+//                                'title' => 'Inventory Management',
+////                                'description' => 'Connect all your sales processes',
+//                                //  'icon' => 'asset/icons/menu/sales.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/inventory-management'),
 //                            ],
 //                            [
-//                                'title' => 'Product Usage',
+//                                'title' => 'Sales Channel Management',
 ////                                'description' => 'Connect all your sales processes',
 //                                // 'icon' => 'asset/icons/menu/sales.svg',
-//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/product-usage'),
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales-channel-management'),
 //                            ],
-                            [
-                                'title' => 'Inventory Management',
-//                                'description' => 'Connect all your sales processes',
-                                //  'icon' => 'asset/icons/menu/sales.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('use-cases/inventory-management'),
-                            ],
-                            [
-                                'title' => 'Sales Channel Management',
-//                                'description' => 'Connect all your sales processes',
-                                // 'icon' => 'asset/icons/menu/sales.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('use-cases/sales-channel-management'),
-                            ],
-                            [
-                                'title' => 'AI',
-//                                'description' => 'Connect all your sales processes',
-                                // 'icon' => 'asset/icons/menu/sales.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ai'),
-                            ],
-                        ],
-                    ],
+//                            [
+//                                'title' => 'AI',
+////                                'description' => 'Connect all your sales processes',
+//                                // 'icon' => 'asset/icons/menu/sales.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('use-cases/ai'),
+//                            ],
+//                        ],
+//                    ],
                     [
                         'title' => 'By application',
                         'items' => [

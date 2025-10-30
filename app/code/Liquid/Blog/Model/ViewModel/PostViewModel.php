@@ -86,22 +86,27 @@ class PostViewModel extends DataObject implements ArgumentInterface
 
     }
 
-    public function getTitles(): array
+    public function getPostAnchors(): array
     {
+        $postDefinition = $this->getPost();
+        if ($postDefinition->anchors === null) {
+            /**
+             * Detect anchors automatically (doesn't work with copy-blocks)
+             */
+            $matchCount = \preg_match_all("/<h.*?id=\"([^\"]*)\".*?>([^<]*)<\/h[^>]+>/", $this->getPostContent(), $headings);
 
 
-        $matchCount = preg_match_all("/<h.*?id=\"([^\"]*)\".*?>([^<]*)<\/h[^>]+>/", $this->getPostContent(), $headings);
+            $titles = [];
+            for ($i = 0; $i < $matchCount; $i++) {
+                $tag = $headings[0][$i];
+                $id = $headings[1][$i];
+                $title = $headings[2][$i];
 
-
-        $titles = [];
-        for ($i = 0; $i < $matchCount; $i++) {
-            $tag = $headings[0][$i];
-            $id = $headings[1][$i];
-            $title = $headings[2][$i];
-
-            $titles[] = ['target' => '#' . $id, 'label' => $title];
+                $titles[] = ['target' => '#' . $id, 'label' => $title];
+            }
+            return $titles;
         }
-        return $titles;
+        return $postDefinition->anchors;
     }
 
     public function getPostContent(): string

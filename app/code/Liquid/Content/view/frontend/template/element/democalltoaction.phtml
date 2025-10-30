@@ -14,11 +14,18 @@ $viewModel = $block->getViewModel();
         <div class="wrapper">
             <div class="row">
                 <div class="column col-2-2">
-                    <copy-block types="header" title="<?= $viewModel->getTitle() ?>" title-tag="div"></copy-block>
-                    <copy-block types="header" title="<?= $viewModel->getDescription() ?>" title-tag="div">
-                        <link href="<?= $viewModel->getCallToActionPage() ?>"
-                              types="button arrow"><?= $viewModel->getCallToActionLabel() ?></link>
+                    <copy-block types="header" title="<?= $viewModel->getTitle() ?>" title-tag="h4">
+                        <?= $viewModel->getDescription() ?>
+                        <div>
+                            <link href="<?= $viewModel->getCallToActionPage() ?>"
+                                  type="button" arrow="true">
+                                <?= $viewModel->getCallToActionLabel() ?>
+                            </link>
+                        </div>
                     </copy-block>
+                    <div>
+
+                    </div>
                 </div>
             </div>
         </div>

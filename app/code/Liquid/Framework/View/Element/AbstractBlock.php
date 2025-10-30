@@ -44,6 +44,7 @@ abstract class AbstractBlock extends DataObject implements BlockInterface
         if ($this->layout->getChildName($thisName, $alias)) {
             $this->unsetChild($alias);
         }
+        $blockName = '';
         if ($block instanceof self) {
             $blockName = $block->getNameInLayout();
         }

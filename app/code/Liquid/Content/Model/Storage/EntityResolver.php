@@ -20,12 +20,7 @@ class EntityResolver implements EntityResolverInterface
     {
         // TODO: implement this better (with caching, etc)
         $entities = $this->getEntities();
-        foreach ($entities as $entity) {
-            if ($entity->id === $entityId) {
-                return $entity;
-            }
-        }
-        return null;
+        return array_find($entities, fn(AbstractViewableEntity $entity) => $entity->id === $entityId);
     }
 
     public function getEntities(): array

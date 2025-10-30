@@ -106,41 +106,41 @@ class Navigation implements ArgumentInterface
 //                            ],
                         ],
                     ],
-                    [
-                        'title' => 'Products',
-                        'items' => [
-                            [
-                                'title' => 'Feed Management',
-                                'description' => 'Streamline product distribution',
-                                'icon' => 'asset/icons/menu/feed-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/feed-management'),
-                            ],
-                            [
-                                'title' => 'Competitor Monitoring',
-                                'description' => 'Track market dynamics',
-                                'icon' => 'asset/icons/menu/market-sentry.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/competitor-monitoring'),
-                            ],
-                            [
-                                'title' => 'Inventory Management',
-                                'description' => 'Optimize inventory decisions',
-                                'icon' => 'asset/icons/menu/inventory-management.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/inventory-management'),
-                            ],
-                            [
-                                'title' => 'Integrations',
-                                'description' => 'Connect business ecosystems',
-                                'icon' => 'asset/icons/menu/integrations.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/integrations'),
-                            ],
-                            [
-                                'title' => 'Automations',
-                                'description' => 'Simplify workflow processes',
-                                'icon' => 'asset/icons/menu/automations.svg',
-                                'link' => $this->viewableEntityHelper->getUrl('products/automations'),
-                            ],
-                        ],
-                    ],
+//                    [
+//                        'title' => 'Products',
+//                        'items' => [
+//                            [
+//                                'title' => 'Feed Management',
+//                                'description' => 'Streamline product distribution',
+//                                'icon' => 'asset/icons/menu/feed-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/feed-management'),
+//                            ],
+//                            [
+//                                'title' => 'Competitor Monitoring',
+//                                'description' => 'Track market dynamics',
+//                                'icon' => 'asset/icons/menu/market-sentry.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/competitor-monitoring'),
+//                            ],
+//                            [
+//                                'title' => 'Inventory Management',
+//                                'description' => 'Optimize inventory decisions',
+//                                'icon' => 'asset/icons/menu/inventory-management.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/inventory-management'),
+//                            ],
+//                            [
+//                                'title' => 'Integrations',
+//                                'description' => 'Connect business ecosystems',
+//                                'icon' => 'asset/icons/menu/integrations.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/integrations'),
+//                            ],
+//                            [
+//                                'title' => 'Automations',
+//                                'description' => 'Simplify workflow processes',
+//                                'icon' => 'asset/icons/menu/automations.svg',
+//                                'link' => $this->viewableEntityHelper->getUrl('products/automations'),
+//                            ],
+//                        ],
+//                    ],
 //                    [
 //                        'title' => 'Features',
 //                        'items' => [

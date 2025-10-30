@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Liquid\Content\ViewModel;
 
 use Liquid\Content\Block\Html\Picture;
+use Liquid\Content\Helper\ImageHelper;
 use Liquid\Content\Helper\LocaleHelper;
+use Liquid\Content\Helper\RandomImageHelper;
 use Liquid\Content\Helper\ViewableEntity;
 use Liquid\Content\Model\Asset\AssetSizeInstruction;
 use Liquid\Core\Helper\Resolver;
@@ -18,6 +20,8 @@ use Psr\Log\LoggerInterface;
 
 class BaseViewModel implements ArgumentInterface
 {
+
+
     public function __construct(
         private readonly Resolver               $resolver,
         private readonly Url                    $url,
@@ -26,6 +30,8 @@ class BaseViewModel implements ArgumentInterface
         private readonly Layout                 $layout,
         private readonly Escaper                $escaper,
         private readonly ViewableEntity         $viewableEntityHelper,
+        private readonly ImageHelper            $imageHelper,
+        private readonly RandomImageHelper      $randomImageHelper,
         private readonly SegmentConfigInterface $config,
         private readonly LoggerInterface        $logger,
     )
@@ -83,8 +89,8 @@ class BaseViewModel implements ArgumentInterface
 
     public function renderLazyLoad(string $assetFile, string $alt = '', AssetSizeInstruction|array|null $sizeInstruction = null, bool $lazyLoad = true): string
     {
-        if ($assetFile === 'random') {
-            $assetFile = 'image/placeholder.jpg';
+        if ($assetFile === RandomImageHelper::RANDOM_IMAGE) {
+            $assetFile = $this->randomImageHelper->getRandomFeatureImage();
         }
         $picture = $this->layout->createBlock(Picture::class);
         \assert($picture instanceof Picture);

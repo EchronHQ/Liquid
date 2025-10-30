@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Liquid\Content\Controller\Page;
 
 use Laminas\Http\Response as ResponseAlias;
-use Liquid\Content\Block\HtmlHeadBlock;
 use Liquid\Content\Helper\PageConfigHelper;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
@@ -48,7 +47,7 @@ class NotFound extends AbstractAction
     {
         $this->layout->runHandle('layout-1col');
 
-        /** @var HtmlHeadBlock $headBlock */
+
         $headBlock = $this->layout->getBlock('head');
 
 

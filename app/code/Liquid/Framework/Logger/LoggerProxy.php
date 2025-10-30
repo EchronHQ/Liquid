@@ -118,6 +118,7 @@ class LoggerProxy implements LoggerInterface
                 $slackChannel = $deploymentConfig->getValue('logging/slack/channel', null);
                 $slackUsername = $deploymentConfig->getValue('logging/slack/username', 'Liquid');
                 $slackMinLogLevel = $deploymentConfig->getValue('logging/slack/minloglevel', Level::Info->name);
+
                 // TODO: validate config, if not complete, don't enable
                 $slackHandler = new SlackWebhookHandler($slackHook, $slackChannel, $slackUsername, true, null, false, true);
                 $slackHandler->setLevel($slackMinLogLevel);
@@ -144,7 +145,7 @@ class LoggerProxy implements LoggerInterface
             //        $this->logger->pushHandler($cliHandler);
 
 
-            $attlazLogStreamId = $deploymentConfig->getValue('logger.attlaz.logstream_id', '');
+            $attlazLogStreamId = $deploymentConfig->getValue('logging/attlaz/logstream_id', '');
             if ($attlazLogStreamId !== '') {
 
                 $client = new Client();

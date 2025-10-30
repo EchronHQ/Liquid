@@ -97,7 +97,6 @@ class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
                 default:
                     throw new \InvalidArgumentException('Invalid base url type');
             }
-            var_dump($url);
             if ($url && str_contains($url, self::BASE_URL_PLACEHOLDER)) {
                 $url = \str_replace(self::BASE_URL_PLACEHOLDER, $this->request->getDistroBaseUrl(), $url);
             }

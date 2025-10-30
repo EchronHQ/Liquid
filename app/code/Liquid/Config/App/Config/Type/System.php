@@ -6,6 +6,7 @@ namespace Liquid\Config\App\Config\Type;
 use Liquid\Content\Model\ScopeType;
 use Liquid\Framework\App\Cache\CacheStateInterface;
 use Liquid\Framework\App\Config\ConfigTypeInterface;
+use Liquid\Framework\App\Config\Processor\PostProcessorInterface;
 use Liquid\Framework\App\Scope\ScopeInterface;
 use Liquid\Framework\Cache\FrontendInterface;
 use Liquid\Framework\Encryption\Encryptor;
@@ -49,11 +50,12 @@ class System implements ConfigTypeInterface
     private array|null $availableDataScopes = null;
 
     public function __construct(
-        private readonly SerializerInterface $serializer,
-        private readonly CacheStateInterface $cacheState,
-        private readonly FrontendInterface   $cache,
-        private readonly Encryptor           $encryptor,
-        private readonly SystemConfigReader  $reader
+        private readonly SerializerInterface    $serializer,
+        private readonly CacheStateInterface    $cacheState,
+        private readonly FrontendInterface      $cache,
+        private readonly Encryptor              $encryptor,
+        private readonly SystemConfigReader     $reader,
+        private readonly PostProcessorInterface $postProcessor
     )
     {
 
@@ -131,9 +133,9 @@ class System implements ConfigTypeInterface
     {
         $this->data = $this->reader->read();
 //        var_dump($this->data);
-//        $this->data = $this->postProcessor->process(
-//            $this->data
-//        );
+        $this->data = $this->postProcessor->process(
+            $this->data
+        );
 
         return $this->data;
     }

@@ -33,7 +33,7 @@ return [
         \Liquid\Config\App\Config\Source\ConfigSourceAggregated::class => [
             'arguments' => [
                 'sources' => [
-                    'type' => 'array',
+                    'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_ARRAY,
                     'value' => [
                         'modular' => [
                             'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_ARRAY,
@@ -77,6 +77,19 @@ return [
                 ],
             ],
         ],
+        \Liquid\Framework\App\Config\Processor\PostProcessorComposite::class => [
+            'arguments' => [
+                'processors' => [
+                    'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_ARRAY,
+                    'value' => [
+                        'placeholder' => [
+                            'type' => \Liquid\Framework\ObjectManager\Config::$TYPE_OBJECT,
+                            'value' => \Liquid\Content\Model\Config\Processor\Placeholder::class,
+                        ],
+                    ],
+                ],
+            ],
+        ],
         \Liquid\Framework\App\Config\InitialConfigSource::class => [
             'arguments' => [
 //                'cache' => [
@@ -92,5 +105,6 @@ return [
     ],
     'preferences' => [
         ConfigSourceInterface::class => \Liquid\Config\App\Config\Source\ConfigSourceAggregated::class,
+        \Liquid\Framework\App\Config\Processor\PostProcessorInterface::class => \Liquid\Framework\App\Config\Processor\PostProcessorComposite::class,
     ],
 ];

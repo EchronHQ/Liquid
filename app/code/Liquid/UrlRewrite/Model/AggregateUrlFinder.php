@@ -40,7 +40,7 @@ class AggregateUrlFinder implements UrlFinderInterface
             /** @var UrlFinderInterface $urlFinder */
             $urlFinder = $this->objectManager->get($child['class']);
             $rewrites = $urlFinder->findAllByData($data);
-            $result = array_merge($result, $rewrites);
+            $result = [...$result, ...$rewrites];
         }
         return $result;
     }

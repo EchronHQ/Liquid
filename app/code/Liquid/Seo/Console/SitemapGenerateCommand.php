@@ -61,7 +61,7 @@ class SitemapGenerateCommand extends Command
 
         GenerateSitemapHelper::store($sitemapXml, $this->resolver->getPath(Path::PUB, 'sitemap.xml'));
 
-        $output->writeln('Sitemap generated (' . count($entries) . ') entries');
+        $output->writeln('Sitemap generated (' . \count($entries) . ') entries');
         return Command::SUCCESS;
     }
 }

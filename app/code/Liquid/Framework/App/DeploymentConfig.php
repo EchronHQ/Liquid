@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App;
 
-use Echron\Tools\StringHelper;
 use Liquid\Content\Model\Locale;
 use Liquid\Framework\App\Config\Reader;
 use Liquid\Framework\Config\ConfigOptionsListConstants;
@@ -288,11 +287,12 @@ class DeploymentConfig
      * Data should be JSON encoded
      *
      * @return array
+     * @throws \JsonException
      */
     private function getEnvOverride(): array
     {
         $env = \getenv(self::OVERRIDE_KEY);
-        return !empty($env) ? (json_decode($env, true, 512, JSON_THROW_ON_ERROR) ?? []) : [];
+        return !empty($env) ? (\json_decode($env, true, 512, JSON_THROW_ON_ERROR) ?? []) : [];
     }
 
     /**
@@ -306,30 +306,30 @@ class DeploymentConfig
         return $this->data[$key] ?? null;
     }
 
-    private function automaticallyDetectSiteUrl(): string
-    {
-        // TODO: this is not good as
-        if ($this->isCLI()) {
-            $path = getcwd();
-            if ($path === '/var/www/html') {
-                return 'http://localhost:8900/';
-            }
-            if (StringHelper::contains($path, 'girasole')) {
-                return 'https://girasole.attlaz.com/';
-            }
-            return 'https://attlaz.com/';
-
-        }
-        $server = $_SERVER;
-        if (isset($server['HTTP_HOST'])) {
-            return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]/";
-        }
-        return 'http://localhost:8900/';
-    }
-
-    private function detectCurrentUrl(): string
-    {
-        $server = $_SERVER;
-        return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]$server[REQUEST_URI]";
-    }
+//    private function automaticallyDetectSiteUrl(): string
+//    {
+//        // TODO: this is not good as
+//        if ($this->isCLI()) {
+//            $path = getcwd();
+//            if ($path === '/var/www/html') {
+//                return 'http://localhost:8900/';
+//            }
+//            if (StringHelper::contains($path, 'girasole')) {
+//                return 'https://girasole.attlaz.com/';
+//            }
+//            return 'https://attlaz.com/';
+//
+//        }
+//        $server = $_SERVER;
+//        if (isset($server['HTTP_HOST'])) {
+//            return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]/";
+//        }
+//        return 'http://localhost:8900/';
+//    }
+//
+//    private function detectCurrentUrl(): string
+//    {
+//        $server = $_SERVER;
+//        return (isset($server['HTTPS']) && $server['HTTPS'] === 'on' ? "https" : "http") . "://$server[HTTP_HOST]$server[REQUEST_URI]";
+//    }
 }

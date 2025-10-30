@@ -41,14 +41,15 @@ class RuntimeConfigSource implements ConfigSourceInterface
             'default' => [
                 'web' => [
                     'unsecure' => [
-//                        'base_url' => 'http://localhost:8901/',
                         'base_url' => Segment::BASE_URL_PLACEHOLDER,
-                        'base_link_url' => Segment::BASE_URL_PLACEHOLDER,
+                        'base_link_url' => '{{unsecure_base_url}}',
                     ],
                     'secure' => [
-                        'use_in_frontend' => true,
                         'base_url' => Segment::BASE_URL_PLACEHOLDER,
-                        'base_link_url' => Segment::BASE_URL_PLACEHOLDER,
+                        'base_link_url' => '{{secure_base_url}}',
+
+                        'use_in_frontend' => true,
+                        'use_in_adminhtml' => true,
                     ],
                 ],
                 'admin' => [

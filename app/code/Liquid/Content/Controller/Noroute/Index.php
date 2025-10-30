@@ -84,15 +84,27 @@ class Index implements ActionInterface
 
     private function logPageNotFound(): void
     {
+        $requestUri = $this->request->getRequestUri();
+        /**
+         * Ignore if partially patched
+         */
+        $ignorePartialUrls = [
+            '/wp-content/',
+        ];
+        if (array_any($ignorePartialUrls, fn($ignorePartialUrl) => str_contains($requestUri, $ignorePartialUrl))) {
+            return;
+        }
+        /**
+         * Ignore if complete match
+         */
         $ignoreUrls = [
             '/.well-known/appspecific/com.chrome.devtools.json',
         ];
-        if (\in_array($this->request->getRequestUri(), $ignoreUrls)) {
+        if (\in_array($requestUri, $ignoreUrls)) {
             return;
         }
-        // TODO: filter certain unknown urls
         $this->logger->critical('Page not found', [
-            'Path info' => $this->request->getRequestUri(),
+            'Path info' => $requestUri,
         ]);
     }
 

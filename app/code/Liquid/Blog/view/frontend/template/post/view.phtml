@@ -47,7 +47,7 @@ $showBreadcrumbs = false;
             <copy-block title="<?= $baseViewModel->getEscaper()->escapeHtmlAttribute($post->metaTitle) ?>"
                         title-tag="h1"></copy-block>
             <div class="blog-header-image">
-                <?= $baseViewModel->renderLazyLoad($post->image, $post->metaTitle, new AssetSizeInstruction(1231, 553, AssetSizeInstructionCrop::Center, 50), false) ?>
+                <?= $baseViewModel->renderLazyLoad($post->image, $post->metaTitle, new AssetSizeInstruction(1231, 553, AssetSizeInstructionCrop::Center, 80), false) ?>
             </div>
         </div>
         <div class="column">

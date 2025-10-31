@@ -35,7 +35,13 @@ class BuildStatic extends Command
         $output->writeln('Update static deploy version');
         $this->staticContentHelper->updateStaticDeployedVersion();
         $output->writeln('Build static content');
-        \exec('npm run build');
+        \exec('npm run build', $outputLines);
+
+        foreach ($outputLines as $outputLine) {
+            $output->writeln($outputLine);
+        }
+
+        $output->writeln('Build static content - done');
         // TODO: If build complete, remove old build
 
         return Command::SUCCESS;

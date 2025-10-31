@@ -13,7 +13,10 @@ class BaseRepository
 
     private Sql|null $remoteService = null;
 
-    public function __construct(protected SqlFactory $sqlFactory, protected LocaleHelper $localeHelper)
+    public function __construct(
+        protected SqlFactory   $sqlFactory,
+        protected LocaleHelper $localeHelper
+    )
     {
 
     }

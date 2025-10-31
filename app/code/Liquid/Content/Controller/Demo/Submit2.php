@@ -4,30 +4,34 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Controller\Demo;
 
-use Laminas\Mail\Message;
-use Laminas\Mail\Transport\Smtp;
-use Laminas\Mail\Transport\SmtpOptions;
-use Laminas\Mime\Mime;
-use Laminas\Mime\Part;
 use Liquid\Content\Helper\RecaptchaHelper;
 use Liquid\Content\Repository\FormRepository;
-use Liquid\Framework\App\Action\AbstractAction;
+use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Route\Attribute\Route;
 use Liquid\Framework\Controller\AbstractResult;
+use Liquid\Framework\Email\SMTP\SMTPFactory;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
-class Submit2 extends AbstractAction
+#[Route('demo/submit', name: 'demo-submit')]
+class Submit2 implements ActionInterface
 {
 
 
     public function __construct(
         Context                                 $context,
         private readonly FormRepository         $formRepository,
-        private readonly ObjectManagerInterface $objectManager
+        private readonly SMTPFactory            $smtpFactory,
+        private readonly ObjectManagerInterface $objectManager,
+        private readonly Request                $request,
+        private readonly LoggerInterface        $logger,
     )
     {
-        parent::__construct($context);
 
 
     }
@@ -40,7 +44,7 @@ class Submit2 extends AbstractAction
 
     public function execute(): AbstractResult
     {
-        $request = $this->getRequest();
+        $request = $this->request;
         if (!$request->isAjax()) {
 
             // TODO: redirect to demo page or 404 page
@@ -72,6 +76,7 @@ class Submit2 extends AbstractAction
         ];
         $this->logger->info('New demo request', ['data' => $submittedData, 'ip' => $ip, 'date' => $date->format("Y-m-d H:i:s"), 'recaptcha' => $recaptchaScore]);
         try {
+            // TODO: re-enable this when everything is working
             $this->formRepository->create('demo', $submittedData, $ip, $recaptchaScore, $date);
         } catch (\Throwable $ex) {
             $this->logger->error('Unable to save form data', ['ex' => $ex]);
@@ -91,7 +96,7 @@ class Submit2 extends AbstractAction
             'success' => true,
         ];
 
-        $result = $this->objectManager->create(Result\Json::class);
+        $result = $this->objectManager->create(\Liquid\Framework\Controller\Result\Json::class);
         $result->setData($data);
         return $result;
 
@@ -108,41 +113,17 @@ class Submit2 extends AbstractAction
 
         $htmlMarkup = '<!doctype html><html lang="en"><body>' . $body . '</body></html>';
 
-        $html = new Part($htmlMarkup);
-        $html->type = Mime::TYPE_HTML;
-        $html->charset = 'utf-8';
-        $html->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
+        $email = new Email()
+            ->from(new Address('no-reply@attlaz.com', 'Attlaz'))
+            ->to('hello@attlaz.com')
+            ->html($htmlMarkup)
+            ->subject('Demo request');
 
-        $body = new \Laminas\Mime\Message();
-        $body->addPart($html);
-
-
-        $message = new Message();
-        $message->addFrom('no-reply@attlaz.com', 'Attlaz');
-        $message->addTo('hello@attlaz.com');
-        $message->setSubject('Demo request');
-        $message->setBody($body);
-
-        $contentTypeHeader = $message->getHeaders()->get('Content-Type');
-        //        $contentTypeHeader->setType('multipart/related');
-
-        $transport = new Smtp();
+        $smtp = $this->smtpFactory->create();
 
 
-        $options = new SmtpOptions([
-            'name' => 'AWS',
-            'host' => 'email-smtp.eu-west-1.amazonaws.com',
-            'port' => 587,
-            'connection_class' => 'plain',
-            'connection_config' => [
-                'username' => 'AKIAYCYQTLBXL6KZU3XW',
-                'password' => 'BDuCLGrQgDWBRWqx++HuHRuqleyV3p+mF+YplXam6O6q',
-                'ssl' => 'tls',
-            ],
-        ]);
-        $transport->setOptions($options);
+        $smtp->send($email);
 
-        $transport->send($message);
     }
 
 }

@@ -43,7 +43,7 @@ class DeploymentConfig
         return $x . '';
     }
 
-    public function getValue(string|null $key, string|null $defaultValue = null): mixed
+    public function getValue(string|null $key, string|int|null $defaultValue = null): mixed
     {
         if ($key === null) {
             if (empty($this->flatData)) {

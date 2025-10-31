@@ -14,17 +14,22 @@ class UrlRepository extends BaseRepository
     private array $urlRewrites = [];
     private bool $urlRewritesLoaded = false;
 
-    //    public function getAll(): array
-    //    {
-    //        $urls = $this->remoteService->fetchAll('SELECT * FROM url');
-    //
-    //        $result = [];
-    //
-    //        foreach ($urls as $url) {
-    //            $result[] = $this->parse($url);
-    //        }
-    //        return $result;
-    //    }
+    public function getTestFromDB(): array
+    {
+//        $urls = $this->getRemoteService()->fetchAll('SELECT * FROM url');
+//
+//
+//        var_dump($this->getRemoteService()->getName());
+//            $result = [];
+//
+//            foreach ($urls as $url) {
+//                $result[] = $this->parse($url);
+//            }
+//            return $result;
+        return [
+            'name' => $this->getRemoteService()->getName(),
+        ];
+    }
 
     //    public function getByRequest(string $request): Url|null
     //    {

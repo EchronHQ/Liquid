@@ -8,7 +8,6 @@ use Liquid\Content\Helper\LocaleHelper;
 use Liquid\Content\Model\Resource\AbstractViewableEntity;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\Resource\PageSitemapPriority;
-use Liquid\Content\Model\Resource\PageStatus;
 use Liquid\Core\Helper\IdHelper;
 use Liquid\Core\Repository\BaseRepository;
 use Liquid\Core\Repository\ViewableEntityRepository;
@@ -391,7 +390,7 @@ class PageRepository extends BaseRepository implements ViewableEntityRepository
             ]),
             PageDefinition::generate('platform/workflow-automation', [
                 'url_key' => 'platform/workflow-automation',
-                'template' => 'Liquid_Content::page/platform/capability/data-quality-engine.phtml',
+                'template' => 'Liquid_Content::page/platform/capability/workflow-automation.phtml',
                 'doc_css_class' => 'theme--light palette--pomegranate accent--purple',
                 'seo_title' => 'Discover the Attlaz platform',
                 'seo_description' => 'Learn how Attlaz improve your internal data management',

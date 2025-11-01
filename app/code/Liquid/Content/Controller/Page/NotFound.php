@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Liquid\Content\Controller\Page;
 
-use Laminas\Http\Response as ResponseAlias;
 use Liquid\Content\Helper\PageConfigHelper;
 use Liquid\Content\Model\Resource\PageDefinition;
 use Liquid\Content\Model\View\Page\PageConfig;
 use Liquid\Content\Repository\PageRepository;
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\Context;
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Exception\NotFoundException;
 use Liquid\Framework\View\Element\Template;
@@ -63,7 +63,7 @@ class NotFound extends AbstractAction
 
 
         $pageInstance = $this->getResultFactory()->create(Page::class);
-        $pageInstance->setHttpResponseCode(ResponseAlias::STATUS_CODE_404);
+        $pageInstance->setHttpResponseCode(HttpResponseCode::NOT_FOUND);
         return $pageInstance;
     }
 }

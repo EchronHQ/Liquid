@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\Controller;
 
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Response\HttpResponseInterface;
 use Liquid\Framework\App\Response\ResponseInterface;
 
 abstract class AbstractResult implements ResultInterface
 {
-    protected int|null $httpResponseCode = null;
+    protected HttpResponseCode|null $httpResponseCode = null;
     protected array $headers = [];
 
     protected int|null $statusHeaderCode = null;
@@ -27,7 +28,7 @@ abstract class AbstractResult implements ResultInterface
         return $this->render($response);
     }
 
-    public function setHttpResponseCode(int $httpCode): self
+    public function setHttpResponseCode(HttpResponseCode $httpCode): self
     {
         $this->httpResponseCode = $httpCode;
         return $this;

@@ -24,39 +24,14 @@ class FileType
         $filename = $this->getScheme() . $path;
 
         if (!$this->stateful) {
-            clearstatcache(false, $filename);
+            \clearstatcache(false, $filename);
         }
-        $result = @file_get_contents($filename, $useIncludePath, $context);
+        $result = @\file_get_contents($filename, $useIncludePath, $context);
 
         if (false === $result) {
             throw new FileSystemException('The contents from the "' . $path . '" file can\'t be read. ' . $this->getWarningMessage() . '.');
         }
         return $result;
-    }
-
-    /**
-     * Return path with scheme
-     *
-     * @param null|string $scheme
-     * @return string
-     */
-    private function getScheme(string|null $scheme = null): string
-    {
-        return $scheme ? $scheme . '://' : '';
-    }
-
-    /**
-     * Returns last warning message string
-     *
-     * @return string|null
-     */
-    protected function getWarningMessage(): string|null
-    {
-        $warning = error_get_last();
-        if ($warning && $warning['type'] === E_WARNING) {
-            return 'Warning!' . $warning['message'];
-        }
-        return null;
     }
 
     /**
@@ -69,7 +44,7 @@ class FileType
     public function search(string $pattern, string $path): array
     {
         if (!$this->stateful) {
-            clearstatcache();
+            \clearstatcache();
         }
         $globPattern = rtrim((string)$path, '/') . '/' . ltrim((string)$pattern, '/');
         $result = LaminasGlob::glob($globPattern, LaminasGlob::GLOB_BRACE);
@@ -100,19 +75,6 @@ class FileType
     }
 
     /**
-     * Fixes path separator.
-     *
-     * Utility method.
-     *
-     * @param string $path
-     * @return string
-     */
-    private function fixSeparator(string $path): string
-    {
-        return str_replace('\\', '/', $path);
-    }
-
-    /**
      * Retrieves relative path
      *
      * @param string $basePath
@@ -122,8 +84,8 @@ class FileType
     public function getRelativePath(string $basePath, string|null $path = null): string
     {
         $path = $path !== null ? $this->fixSeparator($path) : '';
-        if ($basePath === null || strpos($path, $basePath) === 0 || $basePath == $path . '/') {
-            $result = substr($path, strlen($basePath));
+        if ($basePath === null || str_starts_with($path, $basePath) || $basePath === $path . '/') {
+            $result = \substr($path, \strlen($basePath));
         } else {
             $result = $path;
         }
@@ -141,9 +103,9 @@ class FileType
     {
         $filename = $this->getScheme() . $path;
         if (!$this->stateful) {
-            clearstatcache(false, $filename);
+            \clearstatcache(false, $filename);
         }
-        $result = @file_exists($filename);
+        $result = @\file_exists($filename);
         if ($result === null) {
             throw new FileSystemException('An error occurred during "' . $this->getWarningMessage() . '" execution.');
         }
@@ -163,26 +125,26 @@ class FileType
         }
 
         //Check backslashes
-        $path = preg_replace(
+        $path = \preg_replace(
             '/\\\\+/',
             DIRECTORY_SEPARATOR,
             $path
         );
 
         //Removing redundant directory separators.
-        $path = preg_replace(
+        $path = \preg_replace(
             '/\\' . DIRECTORY_SEPARATOR . '\\' . DIRECTORY_SEPARATOR . '+/',
             DIRECTORY_SEPARATOR,
             $path
         );
 
-        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
-            return rtrim($path, DIRECTORY_SEPARATOR);
+        if (\strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
+            return \rtrim($path, DIRECTORY_SEPARATOR);
         }
 
-        $pathParts = explode(DIRECTORY_SEPARATOR, $path);
-        if (end($pathParts) == '.') {
-            $pathParts[count($pathParts) - 1] = '';
+        $pathParts = \explode(DIRECTORY_SEPARATOR, $path);
+        if (\end($pathParts) == '.') {
+            $pathParts[\count($pathParts) - 1] = '';
         }
         $realPath = [];
         foreach ($pathParts as $pathPart) {
@@ -190,12 +152,50 @@ class FileType
                 continue;
             }
             if ($pathPart == '..') {
-                array_pop($realPath);
+                \array_pop($realPath);
                 continue;
             }
             $realPath[] = $pathPart;
         }
 
-        return rtrim(implode(DIRECTORY_SEPARATOR, $realPath), DIRECTORY_SEPARATOR);
+        return \rtrim(\implode(DIRECTORY_SEPARATOR, $realPath), DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * Returns last warning message string
+     *
+     * @return string|null
+     */
+    protected function getWarningMessage(): string|null
+    {
+        $warning = \error_get_last();
+        if ($warning && $warning['type'] === E_WARNING) {
+            return 'Warning!' . $warning['message'];
+        }
+        return null;
+    }
+
+    /**
+     * Return path with scheme
+     *
+     * @param null|string $scheme
+     * @return string
+     */
+    private function getScheme(string|null $scheme = null): string
+    {
+        return $scheme ? $scheme . '://' : '';
+    }
+
+    /**
+     * Fixes path separator.
+     *
+     * Utility method.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function fixSeparator(string $path): string
+    {
+        return \str_replace('\\', '/', $path);
     }
 }

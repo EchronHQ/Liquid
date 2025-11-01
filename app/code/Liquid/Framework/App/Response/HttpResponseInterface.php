@@ -3,25 +3,22 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Response;
 
-use Laminas\Http\Header\HeaderInterface;
-use Laminas\Http\Response as HttpResponse;
-
 interface HttpResponseInterface extends ResponseInterface
 {
     /**
      * Set HTTP response code
      *
-     * @param int $code
+     * @param HttpResponseCode $code
      * @return self
      */
-    public function setHttpResponseCode(int $code): self;
+    public function setHttpResponseCode(HttpResponseCode $code): self;
 
     /**
      * Get HTTP response code
      *
-     * @return int
+     * @return HttpResponseCode
      */
-    public function getHttpResponseCode(): int;
+    public function getHttpResponseCode(): HttpResponseCode;
 
     /**
      * Set a header
@@ -42,9 +39,9 @@ interface HttpResponseInterface extends ResponseInterface
      * If header with specified name was not found returns false.
      *
      * @param string $name
-     * @return HeaderInterface|null
+     * @return string|null
      */
-    public function getHeader(string $name): HeaderInterface|null;
+    public function getHeader(string $name): string|null;
 
     /**
      * Remove header by name from header stack
@@ -64,12 +61,12 @@ interface HttpResponseInterface extends ResponseInterface
      *     $version = 1.1
      *     $phrase = 'Your response has been served'
      *
-     * @param int|string $httpCode
+     * @param HttpResponseCode $httpCode
      * @param null|int|string $version
      * @param null|string $phrase
      * @return self
      */
-    public function setStatusHeader(int|string $httpCode, null|int|string $version = null, string|null $phrase = null): self;
+    public function setStatusHeader(HttpResponseCode $httpCode, null|int|string $version = null, string|null $phrase = null): self;
 
     /**
      * Append the given string to the response body
@@ -95,8 +92,8 @@ interface HttpResponseInterface extends ResponseInterface
      * Sets Location header and response code. Forces replacement of any prior redirects.
      *
      * @param string $url
-     * @param int $code
+     * @param HttpResponseCode $code
      * @return self
      */
-    public function setRedirect(string $url, int $code = HttpResponse::STATUS_CODE_302): self;
+    public function setRedirect(string $url, HttpResponseCode $code = HttpResponseCode::STATUS_CODE_302): self;
 }

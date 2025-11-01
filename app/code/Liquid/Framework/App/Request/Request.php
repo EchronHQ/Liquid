@@ -8,10 +8,7 @@ namespace Liquid\Framework\App\Request;
 use Liquid\Framework\StringHelper;
 use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 
-/**
- * TODO: remove Laminas request dependency (or at least don't extend from it)
- */
-class Request extends \Laminas\Http\PhpEnvironment\Request
+class Request
 {
     public const int DEFAULT_HTTP_PORT = 80;
     public const int DEFAULT_HTTPS_PORT = 443;
@@ -56,12 +53,13 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
 //        }
 //        return $this->getUrlSegment(2);
 //    }
+    private readonly \Symfony\Component\HttpFoundation\Request $request;
 
     public function __construct(
         private readonly StringHelper $converter,
     )
     {
-        parent::__construct();
+        $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
     }
 
     /**
@@ -113,23 +111,26 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
 
     final public function getIp(): string
     {
-
-        if (!empty($this->getServer('HTTP_CLIENT_IP'))) {
-            //ip from share internet
-            $ip = $this->getServer('HTTP_CLIENT_IP');
-        } elseif (!empty($this->getServer('HTTP_X_FORWARDED_FOR'))) {
-            //ip pass from proxy
-            $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
-        } else {
-            $ip = $this->getServer('REMOTE_ADDR');
+        $ip = $this->request->getClientIp();
+        if (empty($ip)) {
+            $ip = $this->request->server->getString('REMOTE_ADDR');
         }
+//        if (!empty($this->getServer('HTTP_CLIENT_IP'))) {
+//            //ip from share internet
+//            $ip = $this->getServer('HTTP_CLIENT_IP');
+//        } elseif (!empty($this->getServer('HTTP_X_FORWARDED_FOR'))) {
+//            //ip pass from proxy
+//            $ip = $this->getServer('HTTP_X_FORWARDED_FOR');
+//        } else {
+//            $ip = $this->getServer('REMOTE_ADDR');
+//        }
         return $ip;
 
     }
 
     final public function isAjax(): bool
     {
-        return $this->isXmlHttpRequest();
+        return $this->request->isXmlHttpRequest();
     }
 
     /**
@@ -139,8 +140,8 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      */
     public function getFrontName(): string|null
     {
-        $pathParts = explode('/', trim($this->getPathInfo(), '/'));
-        return reset($pathParts);
+        $pathParts = \explode('/', \trim($this->getPathInfo(), '/'));
+        return \reset($pathParts);
     }
 
     final public function getPathInfo(): string
@@ -154,15 +155,15 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     final public function setPathInfo(string|null $pathInfo = null, UrlRewrite|null $rewrite = null): self
     {
         if ($pathInfo === null) {
-            $requestUri = $this->getRequestUri();
+            $requestUri = $this->request->getRequestUri();
 
             // Remove the query string from REQUEST_URI
-            $pos = strpos($requestUri, '?');
+            $pos = \strpos($requestUri, '?');
             if ($pos) {
-                $requestUri = substr($requestUri, 0, $pos);
+                $requestUri = \substr($requestUri, 0, $pos);
             }
-            $baseUrl = $this->getBaseUrl();
-            $pathInfo = substr($requestUri, strlen($baseUrl));
+            $baseUrl = $this->request->getBaseUrl();
+            $pathInfo = \substr($requestUri, \strlen($baseUrl));
             if (!empty($baseUrl) && $pathInfo === '/') {
                 $pathInfo = '';
             } elseif ($baseUrl === null) {
@@ -171,9 +172,9 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
             // TODO: do we need to be sure that pathInfo never starts with a slash or will this be the case anyway?
             //   $pathInfo = trim($pathInfo, '/');
 
-            $this->requestString = $pathInfo . ($pos !== false ? substr($requestUri, $pos) : '');
+            $this->requestString = $pathInfo . ($pos !== false ? \substr($requestUri, $pos) : '');
         }
-        $pathInfo = trim($pathInfo, '/');
+        $pathInfo = \trim($pathInfo, '/');
 
         $this->pathInfo = $pathInfo;
         if ($rewrite !== null) {
@@ -198,8 +199,8 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
     final public function getPathSegments(): array
     {
         $path = $this->getPathInfo();
-        $path = ltrim($path, '/');
-        return explode('/', $path);
+        $path = \ltrim($path, '/');
+        return \explode('/', $path);
     }
 
     final public function hasParam(string $key): bool
@@ -284,11 +285,12 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      */
     public function isSecure(): bool
     {
-        if ($this->immediateRequestSecure()) {
-            return true;
-        }
-        // return false;//$this->getSslOffloadHeader()
-        return $this->initialRequestSecure('X-Forwarded-Proto');
+        return $this->request->isSecure();
+//        if ($this->immediateRequestSecure()) {
+//            return true;
+//        }
+//        // return false;//$this->getSslOffloadHeader()
+//        return $this->initialRequestSecure('X-Forwarded-Proto');
     }
 
     /**
@@ -301,17 +303,21 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      */
     public function getHttpHost(bool $trimPort = true): string|null
     {
-        $httpHost = $this->getServer('HTTP_HOST');
-        /** Clean non UTF-8 characters */
-        $httpHost = mb_convert_encoding($httpHost, 'UTF-8');
-        if (empty($httpHost)) {
-            return null;
-        }
         if ($trimPort) {
-            $host = \explode(':', $httpHost);
-            return $host[0];
+            return $this->request->getHost();
         }
-        return $httpHost;
+        return $this->request->getHttpHost();
+//        $httpHost = $this->request->getHttpHost();
+//        /** Clean non UTF-8 characters */
+//        $httpHost = \mb_convert_encoding($httpHost, 'UTF-8');
+//        if (empty($httpHost)) {
+//            return null;
+//        }
+//        if ($trimPort) {
+//            $host = \explode(':', $httpHost);
+//            return $host[0];
+//        }
+//        return $httpHost;
     }
 
     /**
@@ -326,9 +332,9 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
         if ($this->distroBaseUrl !== null) {
             return $this->distroBaseUrl;
         }
-        $headerHttpHost = $this->getServer('HTTP_HOST', '');
+        $headerHttpHost = $this->request->getHttpHost();
         $headerHttpHost = $this->converter->cleanString($headerHttpHost);
-        $headerScriptName = $this->getServer('SCRIPT_NAME');
+        $headerScriptName = $this->request->getScriptName();
 
         if (isset($headerScriptName) && $headerHttpHost !== '') {
             if ($secure = $this->isSecure()) {
@@ -341,7 +347,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
             $host = $hostArr[0];
             $port = isset($hostArr[1])
             && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
-            $path = $this->getBasePath();
+            $path = $this->request->getBasePath();
 
             return $this->distroBaseUrl = $scheme . $host . $port . \rtrim($path, '/') . '/';
         }
@@ -353,12 +359,12 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      *
      * @return bool
      */
-    protected function immediateRequestSecure(): bool
-    {
-        $https = $this->getServer('HTTPS');
-        $headerServerPort = $this->getServer('SERVER_PORT');
-        return (!empty($https) && $https !== 'off') || $headerServerPort == 443;
-    }
+//    protected function immediateRequestSecure(): bool
+//    {
+//        $https = $this->request->isSecure() getServer('HTTPS');
+//        $headerServerPort = $this->getServer('SERVER_PORT');
+//        return (!empty($https) && $https !== 'off') || $headerServerPort == 443;
+//    }
 
     /**
      * In case there is a proxy server, checks if the initial request to the proxy was delivered over HTTPS
@@ -366,16 +372,16 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      * @param string $offLoaderHeader
      * @return bool
      */
-    protected function initialRequestSecure(string $offLoaderHeader): bool
-    {
-        // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
-        $offLoaderHeader = \str_replace('-', '_', \strtoupper($offLoaderHeader));
-        // Some webservers do not append HTTP_
-        $header = $this->getServer($offLoaderHeader);
-        // Apache appends HTTP_
-        $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
-        return !empty($offLoaderHeader) && ($header === 'https' || $httpHeader === 'https');
-    }
+//    protected function initialRequestSecure(string $offLoaderHeader): bool
+//    {
+//        // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
+//        $offLoaderHeader = \str_replace('-', '_', \strtoupper($offLoaderHeader));
+//        // Some webservers do not append HTTP_
+//        $header = $this->getServer($offLoaderHeader);
+//        // Apache appends HTTP_
+//        $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
+//        return !empty($offLoaderHeader) && ($header === 'https' || $httpHeader === 'https');
+//    }
 
     private function getParamAlias(string $key): string|null
     {

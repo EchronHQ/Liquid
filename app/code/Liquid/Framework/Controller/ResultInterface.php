@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\Controller;
 
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Response\ResponseInterface;
 
 interface ResultInterface
 {
     /**
-     * @param int $httpCode
+     * @param HttpResponseCode $httpCode
      * @return $this
      */
-    public function setHttpResponseCode(int $httpCode): self;
+    public function setHttpResponseCode(HttpResponseCode $httpCode): self;
 
     /**
      * Set a header

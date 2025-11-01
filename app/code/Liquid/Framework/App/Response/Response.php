@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\App\Response;
 
-use Laminas\Http\Header\HeaderInterface;
-use Laminas\Http\Headers;
-use Laminas\Http\Response as HttpResponse;
 use Liquid\Core\Model\Request\ResponseType;
 
-class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResponseInterface
+class Response implements HttpResponseInterface
 {
     public ResponseType $type;
+    protected HttpResponseCode $statusCode;
+    /** @var \Closure */
+    private $headersSentHandler;
 
+    private \Symfony\Component\HttpFoundation\Response $response;
 
     public function __construct()
     {
-        $this->setHeadersSentHandler(function ($response) {
+        $this->response = new \Symfony\Component\HttpFoundation\Response();
+
+        $this->headersSentHandler = static function ($response) {
             throw new \RuntimeException('Cannot send headers, headers already sent');
-        });
+        };
         // parent::__construct();
     }
 
     /**
      * @inheritdoc
      */
-    public function getHttpResponseCode(): int
+    public function getHttpResponseCode(): HttpResponseCode
     {
         return $this->statusCode;
 
@@ -38,18 +41,17 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function clearHeaders(): self
     {
-        $headers = $this->getHeaders();
-        if ($headers !== null) {
-            $headers->clearHeaders();
+        $headers = $this->response->headers->all();
+        foreach ($headers as $key => $header) {
+            $this->response->headers->remove($key);
         }
-
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function setRedirect(string $url, int $code = HttpResponse::STATUS_CODE_302): self
+    public function setRedirect(string $url, HttpResponseCode $code = HttpResponseCode::STATUS_CODE_302): self
     {
         $this->setHeader('Location', $url, true)
             ->setHttpResponseCode($code);
@@ -60,7 +62,7 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
     /**
      * @inheritdoc
      */
-    public function setHttpResponseCode(int $code): self
+    public function setHttpResponseCode(HttpResponseCode $code): self
     {
         $this->statusCode = $code;
         return $this;
@@ -71,13 +73,20 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function setHeader(string $name, string $value, bool $replace = false): self
     {
-        if ($replace) {
-            $this->clearHeader($name);
-        }
-        /** @var Headers $headers */
-        $headers = $this->getHeaders();
-        $headers->addHeaderLine($name, $value);
+//        if ($replace) {
+//            $this->clearHeader($name);
+//        }
+
+        $this->response->headers->set($name, $value, $replace);
+//        /** @var Headers $headers */
+//        $headers = $this->getHeaders();
+//        $headers->addHeaderLine($name, $value);
         return $this;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->response->headers->all();
     }
 
     /**
@@ -85,17 +94,18 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function clearHeader(string $name): self
     {
+        $this->response->headers->remove($name);
         /** @var Headers $headers */
-        $headers = $this->getHeaders();
-        if ($headers->has($name)) {
-            $headerValues = $headers->get($name);
-            if (!is_iterable($headerValues)) {
-                $headerValues = [$headerValues];
-            }
-            foreach ($headerValues as $headerValue) {
-                $headers->removeHeader($headerValue);
-            }
-        }
+//        $headers = $this->getHeaders();
+//        if ($headers->has($name)) {
+//            $headerValues = $headers->get($name);
+//            if (!is_iterable($headerValues)) {
+//                $headerValues = [$headerValues];
+//            }
+//            foreach ($headerValues as $headerValue) {
+//                $headers->removeHeader($headerValue);
+//            }
+//        }
 
         return $this;
     }
@@ -105,43 +115,52 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function sendResponse(): int|null
     {
-        $this->setHeadersSentHandler(function () {
-            echo 'headers already send';
-        });
-        $this->send();
+//        $this->setHeadersSentHandler(function () {
+//            echo 'headers already send';
+//        });
+        $this->response->sendHeaders();
+        $this->response->send();
         return null;
     }
 
     /**
      * @inheritdoc
      */
-    public function getHeader(string $name): HeaderInterface|null
+    public function getHeader(string $name): string|null
     {
-        $header = null;
-        $headers = $this->getHeaders();
-        if ($headers === null) {
+        // $header = null;
+
+        if (!$this->response->headers->has($name)) {
             return null;
         }
-        if ($headers->has($name)) {
-            $header = $headers->get($name);
-            if (is_iterable($header)) {
-                $header = $header[0];
-            }
-        }
+
+        $header = $this->response->headers->get($name);
+//        $header = $headers->get($name);
+//        if (is_iterable($header)) {
+//            $header = $header[0];
+//        }
+
         return $header;
     }
 
     /**
      * @inheritdoc
      */
-    public function setStatusHeader(int|string $httpCode, int|string|null $version = null, string|null $phrase = null): HttpResponseInterface
+    public function setStatusHeader(HttpResponseCode|string $httpCode, int|string|null $version = null, string|null $phrase = null): HttpResponseInterface
     {
-        $version = $version === null ? $this->detectVersion() : $version;
-        $phrase = $phrase === null ? $this->getReasonPhrase() : $phrase;
+        $version = $version === null ? $this->response->getProtocolVersion() : $version;
 
-        $this->setVersion($version);
+        //   $version = $version === null ? $this->detectVersion() : $version;
+        //   $phrase = $phrase === null ? $this->getReasonPhrase() : $phrase;
+
+
+        $this->response->setProtocolVersion($version);
+
         $this->setHttpResponseCode($httpCode);
-        $this->setReasonPhrase($phrase);
+
+        $this->response->setStatusCode($httpCode->value, $phrase);
+        //  $this->setReasonPhrase($phrase);
+
 
         return $this;
     }
@@ -151,8 +170,11 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function appendBody(string $value): HttpResponseInterface
     {
-        $body = $this->getContent();
-        $this->setContent($body . $value);
+        $body = $this->response->getContent();
+        if ($body === false) {
+            $body = '';
+        }
+        $this->response->setContent($body . $value);
         return $this;
     }
 
@@ -161,7 +183,7 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function setBody(string $value): HttpResponseInterface
     {
-        $this->setContent($value);
+        $this->response->setContent($value);
         return $this;
     }
 
@@ -172,7 +194,7 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpResp
      */
     public function clearBody(): self
     {
-        $this->setContent('');
+        $this->response->setContent(null);
         return $this;
     }
 }

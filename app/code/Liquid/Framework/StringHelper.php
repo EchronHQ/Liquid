@@ -18,6 +18,6 @@ class StringHelper
      */
     public function cleanString(string $string): string
     {
-        return mb_convert_encoding($string, self::ICONV_CHARSET);
+        return \mb_convert_encoding($string, self::ICONV_CHARSET);
     }
 }

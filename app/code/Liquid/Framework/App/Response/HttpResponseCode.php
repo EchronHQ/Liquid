@@ -5,6 +5,7 @@ namespace Liquid\Framework\App\Response;
 
 enum HttpResponseCode: int
 {
+    case STATUS_CODE_200 = 200;
     case STATUS_CODE_301 = 301;
     case STATUS_CODE_302 = 302;
     case STATUS_CODE_403 = 403;

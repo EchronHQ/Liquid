@@ -382,6 +382,15 @@ class Request
 //        $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
 //        return !empty($offLoaderHeader) && ($header === 'https' || $httpHeader === 'https');
 //    }
+    public function getServer($key)
+    {
+        return $this->request->server->get($key);
+    }
+
+    public function isHead(): bool
+    {
+        return $this->request->getMethod() === 'HEAD';
+    }
 
     private function getParamAlias(string $key): string|null
     {

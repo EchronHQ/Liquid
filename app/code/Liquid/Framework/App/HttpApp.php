@@ -5,6 +5,7 @@ namespace Liquid\Framework\App;
 
 use Liquid\Framework\App\Area\AreaList;
 use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\Response\ResponseInterface;
 use Liquid\Framework\ObjectManager\ConfigLoader;
@@ -34,7 +35,7 @@ class HttpApp implements AppInterface
 
         $result = $frontController->dispatch($this->request);
         $result->renderResult($this->response);
-        if ($this->request->isHead() && $this->response->getHttpResponseCode() === 200) {
+        if ($this->request->isHead() && $this->response->getHttpResponseCode() === HttpResponseCode::STATUS_CODE_200) {
             $this->handleHeadRequest();
         }
         return $this->response;

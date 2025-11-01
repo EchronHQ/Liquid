@@ -263,7 +263,7 @@ class HtmlHead implements ArgumentInterface
 
     public function isGoogleTagManagerEnabled(): bool
     {
-        return $this->config->getBoolValue('seo/googletagmanager/enabled') === true;
+        return $this->config->getBoolValue('seo/googletagmanager/enabled');
     }
 
     private function getFrontendBuildUrl(string $fileName): string

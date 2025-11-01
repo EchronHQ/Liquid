@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\Filesystem\Type;
 
-use Laminas\Stdlib\Glob as LaminasGlob;
+
 use Liquid\Framework\Exception\FileSystemException;
+use Liquid\Framework\Glob;
 
 class FileType
 {
@@ -46,11 +47,11 @@ class FileType
         if (!$this->stateful) {
             \clearstatcache();
         }
-        $globPattern = rtrim((string)$path, '/') . '/' . ltrim((string)$pattern, '/');
-        $result = LaminasGlob::glob($globPattern, LaminasGlob::GLOB_BRACE);
+        $globPattern = \rtrim((string)$path, '/') . '/' . \ltrim((string)$pattern, '/');
 
-        // var_dump($globPattern);
-        return is_array($result) ? $result : [];
+        $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
+
+        return \is_array($result) ? $result : [];
     }
 
     /**
@@ -138,7 +139,7 @@ class FileType
             $path
         );
 
-        if (\strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
+        if (!str_contains($path, DIRECTORY_SEPARATOR . '.')) {
             return \rtrim($path, DIRECTORY_SEPARATOR);
         }
 
@@ -174,6 +175,7 @@ class FileType
         }
         return null;
     }
+
 
     /**
      * Return path with scheme

@@ -8,6 +8,9 @@ use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
 class AggregateEntityResolver implements EntityResolverInterface
 {
+    // TODO: move caching mechanism to separate class so it can wrap around AggregateEntityResolver
+
+
     /**
      * @param array{class:string} $children
      */
@@ -20,6 +23,7 @@ class AggregateEntityResolver implements EntityResolverInterface
 
     public function getEntity(string $entityId): AbstractViewableEntity|null
     {
+
         foreach ($this->children as $child) {
             /** @var EntityResolverInterface $entityResolver */
             $entityResolver = $this->objectManager->get($child['class']);
@@ -36,6 +40,7 @@ class AggregateEntityResolver implements EntityResolverInterface
 
     public function getEntities(): array
     {
+
         $result = [];
         foreach ($this->children as $child) {
             /** @var EntityResolverInterface $entityResolver */
@@ -44,6 +49,7 @@ class AggregateEntityResolver implements EntityResolverInterface
                 throw new \Exception('Entity resolver must implement `' . EntityResolverInterface::class . '` interface');
             }
             $entities = $entityResolver->getEntities();
+            // TODO: validate that we don't have duplicate entity ids
             foreach ($entities as $entity) {
                 $result[] = $entity;
             }

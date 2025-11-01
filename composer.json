@@ -18,7 +18,6 @@
     "attlaz/attlaz-monolog": "^2.2.1",
     "attlaz/adapter-base": "^1.16.7",
     "symfony/mailer": "^7.3.4",
-    "laminas/laminas-http": "^2.22.0",
     "symfony/yaml": "^v7.3.3",
     "symfony/console": "^v7.3.3",
     "symfony/cache": "^v7.3.4",
@@ -27,13 +26,15 @@
     "thecodingmachine/safe": "^3.3.0",
     "matthiasmullie/minify": "^1.3.75",
     "voku/html-min": "^4.5.1",
+    "spatie/url": "^2.4",
     "ext-redis": "*",
     "ext-curl": "*",
     "ext-dom": "*",
     "ext-libxml": "*",
     "ext-simplexml": "*",
     "ext-gd": "*",
-    "ext-sodium": "*"
+    "ext-sodium": "*",
+    "symfony/http-foundation": "^7.3"
   },
   "replace": {
     "illuminate/view": "^8.20",

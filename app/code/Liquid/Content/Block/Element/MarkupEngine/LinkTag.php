@@ -58,7 +58,12 @@ class LinkTag extends Template
             return $link;
         }
 
-        $this->logger->warning('[Link] No href found');
+        $href = $this->getData('href');
+        if ($href !== null) {
+            return $href;
+        }
+
+        $this->logger->warning('[Link] No `page`, `link` or `href` found', ['data' => $this->getData(), 'n' => $this->getNameInLayout()]);
 
         return null;
     }

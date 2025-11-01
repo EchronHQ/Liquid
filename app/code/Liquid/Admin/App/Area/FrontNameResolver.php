@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Liquid\Admin\App\Area;
 
-use Laminas\Uri\Uri;
 use Liquid\Admin\App\Config;
 use Liquid\Framework\App\Area\FrontNameResolverInterface;
 use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\Url\UriParser;
 
 class FrontNameResolver implements FrontNameResolverInterface
 {
@@ -31,7 +31,7 @@ class FrontNameResolver implements FrontNameResolverInterface
         private readonly Config      $config,
         private readonly ScopeConfig $segmentConfig,
         private readonly Request     $request,
-        private readonly Uri         $uri,
+        private readonly UriParser   $uriParser,
         DeploymentConfig             $deploymentConfig,
     )
     {
@@ -69,18 +69,19 @@ class FrontNameResolver implements FrontNameResolverInterface
             $backendUrl = 'http://localhost:8901/';
         }
 
-        $this->uri->parse($backendUrl);
-        $configuredHost = $this->uri->getHost();
+        $uri = $this->uriParser->parse($backendUrl);
+        $configuredHost = $uri->getHost();
         if (!$configuredHost) {
             return false;
         }
-        $configuredPort = $this->uri->getPort() ?: ($this->standardPorts[$this->uri->getScheme()] ?? null);
-        $uri = ($this->request->isSecure() ? 'https' : 'http') . '://' . $this->request->getServer('HTTP_HOST');
-        $this->uri->parse($uri);
-        $host = $this->uri->getHost();
+        $configuredPort = $uri->getPort() ?: ($this->standardPorts[$uri->getScheme()] ?? null);
+        $uriString = ($this->request->isSecure() ? 'https' : 'http') . '://' . $this->request->getServer('HTTP_HOST');
+
+        $uri = $this->uriParser->parse($uriString);
+        $host = $uri->getHost();
         if ($configuredPort) {
             $configuredHost .= ':' . $configuredPort;
-            $host .= ':' . ($this->uri->getPort() ?: $this->standardPorts[$this->uri->getScheme()]);
+            $host .= ':' . ($uri->getPort() ?: $this->standardPorts[$uri->getScheme()]);
         }
 
         return \strcasecmp($configuredHost, $host) === 0;

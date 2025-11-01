@@ -51,7 +51,7 @@ class BaseViewModel implements ArgumentInterface
     {
         $url = $this->viewableEntityHelper->getUrl($entityIdentifier);
         if ($url === null) {
-            $this->logger->warning('Unable to get entity url for `' . $entityIdentifier . '`');
+            $this->logger->notice('Unable to get entity url for `' . $entityIdentifier . '`');
             return '';
         }
         return $url;

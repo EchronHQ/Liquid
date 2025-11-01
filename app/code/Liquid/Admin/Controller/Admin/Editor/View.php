@@ -7,6 +7,7 @@ namespace Liquid\Admin\Controller\Admin\Editor;
 
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\Controller\AbstractResult;
+use Liquid\Framework\View\Result\Page;
 
 class View extends AbstractAction
 {
@@ -21,7 +22,8 @@ class View extends AbstractAction
         //        $builder = new \PHPageBuilder\PHPageBuilder([]);
         //        $builder->handleRequest();
 
-
-        return $this->getResultFactory()->create(Page::class);
+        /** @var $page Page */
+        $page = $this->getResultFactory()->create(Page::class);
+        return $page;
     }
 }

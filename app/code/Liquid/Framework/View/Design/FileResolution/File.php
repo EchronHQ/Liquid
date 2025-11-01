@@ -83,7 +83,7 @@ class File
     private function checkFilePathAccess(string $fileName, string $filePath): bool
     {
         // Check if file name not contains any references '/./', '/../'
-        if (!$fileName || strpos(str_replace('\\', '/', $fileName), './') === false) {
+        if (!$fileName || \strpos(\str_replace('\\', '/', $fileName), './') === false) {
             return true;
         }
 

@@ -28,8 +28,8 @@ readonly class ResultFactory
         // TODO: validate type (check if match with known types)
 
         $resultInstance = $this->container->make($type);
-        if (!is_a($resultInstance, ResultInterface::class)) {
-            throw new ContextException(get_class($resultInstance) . ' is not instance of ResultInterface');
+        if (!\is_a($resultInstance, ResultInterface::class)) {
+            throw new ContextException(\get_class($resultInstance) . ' is not instance of ResultInterface');
         }
         return $resultInstance;
     }

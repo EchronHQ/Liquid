@@ -38,11 +38,11 @@ class NoRouteHandlerList
                 }
             }
 
-            asort($sortedHandlersList);
+            \asort($sortedHandlersList);
 
             //creating handlers
             $this->_handlers = [];
-            foreach (array_keys($sortedHandlersList) as $handlerInstance) {
+            foreach (\array_keys($sortedHandlersList) as $handlerInstance) {
                 $this->_handlers[] = $this->objectManager->create($handlerInstance);
             }
         }

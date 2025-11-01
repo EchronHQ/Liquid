@@ -73,7 +73,7 @@ class BaseRouter implements RouterInterface
             if (\is_numeric($actionName)) {
                 throw new ContextException('Numeric action names are no longer supported', ['module' => $moduleName, 'action' => $actionName]);
             }
-            if (!is_a($controller, AbstractAction::class, true)) {
+            if (!\is_a($controller, AbstractAction::class, true)) {
                 throw new ContextException('Controller must extend abstract action', ['module' => $moduleName, 'action' => $actionName]);
             }
 
@@ -119,14 +119,14 @@ class BaseRouter implements RouterInterface
     protected function parseRequest(Request $request): array
     {
         $output = [];
-        $path = trim($request->getPathInfo(), '/');
-        $params = explode('/', $path !== '' ? $path : $this->defaultPath);
+        $path = \trim($request->getPathInfo(), '/');
+        $params = \explode('/', $path !== '' ? $path : $this->defaultPath);
 
         // The first param is the area front name (for example admin code)
-        $output['areaFrontName'] = $this->requestHasAreaFrontName ? array_shift($params) : null;
+        $output['areaFrontName'] = $this->requestHasAreaFrontName ? \array_shift($params) : null;
 
 
-        $output['actionPath'] = implode('/', $params);
+        $output['actionPath'] = \implode('/', $params);
 
 //        foreach ($this->_requiredParams as $paramName) {
 //            $output[$paramName] = array_shift($params);

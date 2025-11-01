@@ -219,6 +219,6 @@ class LdData
 
     private function formatKey(string $input): string
     {
-        return strtolower(preg_replace('/[^a-z0-9 ]/i', '-', $input));
+        return \strtolower(\preg_replace('/[^a-z0-9 ]/i', '-', $input));
     }
 }

@@ -183,7 +183,7 @@ class Structure
      */
     public function processRemoveAssets(): self
     {
-        $this->assets = array_diff_key($this->assets, $this->removeAssets);
+        $this->assets = \array_diff_key($this->assets, $this->removeAssets);
         $this->removeAssets = [];
         return $this;
     }

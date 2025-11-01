@@ -65,11 +65,11 @@ class MarkupEngine
 
         if ($this->cacheTags && $tag->allowCache) { // Cache
             if ($this->customCacheTagClass !== null) {
-                $tag_data = call_user_func_array([$this->customCacheTagClass, 'getCache'], [$tag]);
+                $tag_data = \call_user_func_array([$this->customCacheTagClass, 'getCache'], [$tag]);
             } else {
-                $cache_file = $this->cacheDirectory . md5(serialize($tag));
-                if (is_file($cache_file) === true) {
-                    $tag_data = file_get_contents($cache_file);
+                $cache_file = $this->cacheDirectory . \md5(\serialize($tag));
+                if (\is_file($cache_file) === true) {
+                    $tag_data = \file_get_contents($cache_file);
                 }
             }
             if ($tag_data) {
@@ -90,9 +90,9 @@ class MarkupEngine
 
             if ($this->cacheTags === true && $tag->allowCache === true) {
                 if ($this->customCacheTagClass !== null) {
-                    call_user_func_array([$this->customCacheTagClass, 'cache'], [$tag, $tag_data]);
+                    \call_user_func_array([$this->customCacheTagClass, 'cache'], [$tag, $tag_data]);
                 } else {
-                    file_put_contents($this->cacheDirectory . md5(serialize($tag)), $tag_data, LOCK_EX);
+                    \file_put_contents($this->cacheDirectory . \md5(\serialize($tag)), $tag_data, LOCK_EX);
                 }
             }
         }
@@ -110,7 +110,7 @@ class MarkupEngine
         $PregMatch = '/' . $this->_searchReg . '/';
 
         /** @var false|int $matchCount */
-        $matchCount = preg_match_all($PregMatch, $subject, $matches, PREG_OFFSET_CAPTURE);
+        $matchCount = \preg_match_all($PregMatch, $subject, $matches, PREG_OFFSET_CAPTURE);
         /** @var string[][][] $matches */
         if (!$matchCount) {
             return null;
@@ -163,11 +163,11 @@ class MarkupEngine
         $tags = [];
 
         // Sets Open Pos to end of HTML ($source)
-        $eot = strlen($source);
+        $eot = \strlen($source);
 
 
         while ($eot !== null) {
-            $currentSource = substr($source, 0, $eot);    // Remaining HTML (moving Up)
+            $currentSource = \substr($source, 0, $eot);    // Remaining HTML (moving Up)
             $lastTag = $this->getLastTag($currentSource);       // Position of "Opener"
 
             if ($lastTag === null) { // No More Tags found
@@ -178,36 +178,36 @@ class MarkupEngine
             }
 
             // Tag found (start from last find)
-            $tagName = str_replace('<', '', $lastTag['x']);
+            $tagName = \str_replace('<', '', $lastTag['x']);
             $eot = $lastTag['pos'];
             $closer = "</$tagName>";
-            $currentSource = substr($source, $eot); // HTML from Last occurence till end or Last processed Tag
+            $currentSource = \substr($source, $eot); // HTML from Last occurence till end or Last processed Tag
             if ($currentSource !== '') {
 
 
-                $nextDom = strpos($currentSource, '<', 1); //Start of Next DOM Tag
-                $nextClosingTag = strpos($currentSource, '/' . '>'); //Close Bracket Loc
+                $nextDom = \strpos($currentSource, '<', 1); //Start of Next DOM Tag
+                $nextClosingTag = \strpos($currentSource, '/' . '>'); //Close Bracket Loc
 
                 if ($nextClosingTag !== false && $nextClosingTag < $nextDom) {
                     // Closing DOM is before the next DOM element (indicates <tag /> format)
                     $tagClosePosition = $nextClosingTag + 2; // Update TagClose to include />
                 } else {
                     // Traditional <tag></tag> format
-                    $tagCloseBeginning = strpos($currentSource, $closer);
+                    $tagCloseBeginning = \strpos($currentSource, $closer);
                     if ($tagCloseBeginning === false) {
                         $this->logger->warning('[MarkupEngine] close position for tag `' . $tagName . '` not found in `' . $currentSource . '`');
                         throw new \Exception('close position for tag `' . $tagName . '` not found.');
                     }
-                    $tagClosePosition = strpos($currentSource, '>', $tagCloseBeginning) + 1;
+                    $tagClosePosition = \strpos($currentSource, '>', $tagCloseBeginning) + 1;
 
                 }
 
-                $tag_source = substr($currentSource, 0, $tagClosePosition);
+                $tag_source = \substr($currentSource, 0, $tagClosePosition);
 
 
                 $tagData = $this->getTagData($tagName);
                 $tagClass = $tagData['class'];
-                if ($tagClass === null || !class_exists($tagClass) || !$this->objectManager->has($tagClass)) {
+                if ($tagClass === null || !\class_exists($tagClass) || !$this->objectManager->has($tagClass)) {
                     // TODO: is this desired behaviour?
                     $tag = new CustomTagConcrete($tag_source, $tagName, self::$engineInstanceId, count($tags));
 
@@ -231,7 +231,7 @@ class MarkupEngine
 
                 $this->tags[self::$engineInstanceId . '-' . count($tags)] = $tag;
                 $tags[] = $tag; // Append Tag (stdClass)
-                $source = substr($source, 0, $eot) . $tag->placeholder . substr($source, $eot + $tagClosePosition); // Update Source for next request
+                $source = \substr($source, 0, $eot) . $tag->placeholder . \substr($source, $eot + $tagClosePosition); // Update Source for next request
             } else {
                 $eot = null;
             }
@@ -281,7 +281,7 @@ class MarkupEngine
             //                continue;
             //            }
 
-            $hasBuried = preg_match_all('!------@@%([0-9\-]+)%@@------!', $tag->contentHtml, $info);
+            $hasBuried = \preg_match_all('!------@@%([0-9\-]+)%@@------!', $tag->contentHtml, $info);
 
 
             $containers = [];
@@ -299,11 +299,11 @@ class MarkupEngine
                     } elseif (!$this->tags[$tagIdentifier]->parsed) {
 
                         if ($this->tags[$tagIdentifier]->blockHtml !== null) {
-                            $blockHtml = preg_replace('/ delayed="true"/', '', $this->tags[$tagIdentifier]->blockHtml, 1);
+                            $blockHtml = \preg_replace('/ delayed="true"/', '', $this->tags[$tagIdentifier]->blockHtml, 1);
                             if ($tag->blockHtml !== null) {
-                                $tag->blockHtml = str_replace($containers[$key2], $blockHtml, $tag->blockHtml);
+                                $tag->blockHtml = \str_replace($containers[$key2], $blockHtml, $tag->blockHtml);
                             }
-                            $tag->contentHtml = str_replace($containers[$key2], $blockHtml, $tag->contentHtml);
+                            $tag->contentHtml = \str_replace($containers[$key2], $blockHtml, $tag->contentHtml);
                         }
                     } else {
                         $replacements[$key2] = $this->tags[$tagIdentifier]->parsedContent;
@@ -321,7 +321,7 @@ class MarkupEngine
 
             }
             if ($hasBuried > 0) {
-                $body = str_replace($containers, $replacements, $body);
+                $body = \str_replace($containers, $replacements, $body);
             }
 
 

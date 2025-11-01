@@ -15,13 +15,13 @@ class RouterList
         array                          $routerList
     )
     {
-        $this->routerList = array_filter(
+        $this->routerList = \array_filter(
             $routerList,
             static function ($item) {
                 return (!isset($item['disable']) || !$item['disable']) && $item['class'];
             }
         );
-        uasort($this->routerList, [$this, 'compareRoutersSortOrder']);
+        \uasort($this->routerList, [$this, 'compareRoutersSortOrder']);
     }
 
     /**
@@ -31,7 +31,7 @@ class RouterList
      */
     public function getRouterIds(): array
     {
-        return array_keys($this->routerList);
+        return \array_keys($this->routerList);
     }
 
     /**

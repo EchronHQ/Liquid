@@ -25,7 +25,7 @@ class SectionBlock extends Block
     public function setBackground(string $background): void
     {
         $availableBackgrounds = ['ocean', 'medium', 'desert'];
-        if (!in_array($background, $availableBackgrounds)) {
+        if (!\in_array($background, $availableBackgrounds)) {
             $this->logger->warning('[Section Block] Unknown background `' . $background . '`');
             return;
         }

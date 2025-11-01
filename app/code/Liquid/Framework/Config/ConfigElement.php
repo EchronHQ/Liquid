@@ -18,7 +18,7 @@ class ConfigElement
     private function mergeData(array $existingData, array $newData): array
     {
         foreach ($newData as $key => $value) {
-            if (is_numeric($key)) {
+            if (\is_numeric($key)) {
                 // TODO: should we allow numeric keys? this might lead to wrong merges
             }
             $existingNode = isset($existingData[$key]) ? $existingData[$key] : null;
@@ -48,10 +48,10 @@ class ConfigElement
 
     private function getNodeType(mixed $data): string
     {
-        if (is_string($data)) {
+        if (\is_string($data)) {
             return 'string';
         }
-        if (is_array($data)) {
+        if (\is_array($data)) {
             return 'array';
         }
         return '';

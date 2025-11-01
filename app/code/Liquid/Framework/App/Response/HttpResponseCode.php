@@ -10,4 +10,5 @@ enum HttpResponseCode: int
     case STATUS_CODE_302 = 302;
     case STATUS_CODE_403 = 403;
     case NOT_FOUND = 404;
+    case STATUS_CODE_500 = 500;
 }

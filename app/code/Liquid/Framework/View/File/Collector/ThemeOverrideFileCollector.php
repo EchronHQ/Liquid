@@ -57,7 +57,7 @@ class ThemeOverrideFileCollector implements ThemeFileCollectorInterface
             . $this->pathPatternHelper->translatePatternFromGlob($filePath) . "$#i";
         foreach ($files as $file) {
             $filename = $themeDir->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
+            if (!\preg_match($pattern, $filename, $matches)) {
                 continue;
             }
             $result[] = new File($filename, $matches['moduleName']);

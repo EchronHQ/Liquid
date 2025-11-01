@@ -26,7 +26,7 @@ class Json extends AbstractResult
     protected function render(ResponseInterface $response): AbstractResult
     {
         $response->setHeader('Content-Type', 'application/json', true);
-        $response->setContent($this->json);
+        $response->setBody($this->json);
         return $this;
     }
 }

@@ -59,7 +59,7 @@ class Repository
         if ($theme !== null) {
             // TODO: implement to fetch theme data
             $themeProvider = $this->objectManager->get(Theme\ThemeProvider::class);
-            if (is_numeric($theme) || is_string($theme)) {
+            if (\is_numeric($theme) || \is_string($theme)) {
                 $params['themeModel'] = $themeProvider->getThemeById($theme);
             } else {
                 $params['themeModel'] = $themeProvider->getThemeByFullPath($area->value . '/' . $theme);
@@ -73,7 +73,7 @@ class Repository
         }
 
         // Set module
-        if (!array_key_exists('module', $params)) {
+        if (!\array_key_exists('module', $params)) {
             $params['module'] = false;
         }
 
@@ -157,7 +157,7 @@ class Repository
     {
         $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
         $baseDirType = Path::STATIC_VIEW;
-        $id = implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
+        $id = \implode('|', [$baseDirType, $urlType, $secureKey, $area, $themePath, $locale]);
         if (!isset($this->fallbackContext[$id])) {
             $url = $this->baseUrl->getBaseUrl(['_type' => $urlType, '_secure' => $isSecure]);
             $this->fallbackContext[$id] = new AssetFileFallbackContext($url, $area, $themePath, $locale);

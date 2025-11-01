@@ -11,9 +11,9 @@ class Json implements SerializerInterface
      */
     public function serialize(float|int|bool|array|string|null $data): string|null
     {
-        $result = json_encode($data, JSON_THROW_ON_ERROR);
+        $result = \json_encode($data, JSON_THROW_ON_ERROR);
         if (false === $result) {
-            throw new \InvalidArgumentException("Unable to serialize value. Error: " . json_last_error_msg());
+            throw new \InvalidArgumentException("Unable to serialize value. Error: " . \json_last_error_msg());
         }
         return $result;
     }
@@ -24,10 +24,10 @@ class Json implements SerializerInterface
      */
     public function unserialize(string $string): string|int|float|bool|array|null
     {
-        $result = json_decode($string, true, 512, JSON_THROW_ON_ERROR);
+        $result = \json_decode($string, true, 512, JSON_THROW_ON_ERROR);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \InvalidArgumentException("Unable to unserialize value. Error: " . json_last_error_msg());
+        if (\json_last_error() !== JSON_ERROR_NONE) {
+            throw new \InvalidArgumentException("Unable to unserialize value. Error: " . \json_last_error_msg());
         }
         return $result;
     }

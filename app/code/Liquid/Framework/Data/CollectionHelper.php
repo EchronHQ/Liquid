@@ -8,10 +8,10 @@ class CollectionHelper
     public static function shuffleAndLimit(array $input, bool $shuffle, int|null $limit): array
     {
         if ($shuffle) {
-            shuffle($input);
+            \shuffle($input);
         }
         if ($limit !== null && count($input) > $limit) {
-            $input = array_slice($input, 0, $limit);
+            $input = \array_slice($input, 0, $limit);
         }
         return $input;
     }

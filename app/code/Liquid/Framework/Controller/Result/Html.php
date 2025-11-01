@@ -20,7 +20,7 @@ class Html extends AbstractResult
     {
         $response->setHeader('Content-Type', 'text/html', true);
         $response->setHeader('Content-Security-Policy', "default-src 'self'");
-        $response->setContent($this->html);
+        $response->setBody($this->html);
         return $this;
     }
 }

@@ -35,7 +35,7 @@ class DataStructure
     {
         $this->elements = $elements;
         foreach ($elements as $elementId => $element) {
-            if (is_numeric($elementId)) {
+            if (\is_numeric($elementId)) {
                 throw new RuntimeException(
                     "Element ID must not be numeric: '" . $elementId . "'.",
                 );
@@ -46,10 +46,10 @@ class DataStructure
                 $this->_assertArray($groups);
                 foreach ($groups as $groupName => $group) {
                     $this->_assertArray($group);
-                    if ($group !== array_flip($group)) {
+                    if ($group !== \array_flip($group)) {
                         throw new RuntimeException(
 
-                            '"' . var_export($group, true) . '" is an invalid format of "' . $groupName . '" group. Verify the format and try again.'
+                            '"' . \var_export($group, true) . '" is an invalid format of "' . $groupName . '" group. Verify the format and try again.'
 
 
                         );
@@ -90,12 +90,12 @@ class DataStructure
         if (isset($element[self::CHILDREN])) {
             $children = $element[self::CHILDREN];
             $this->_assertArray($children);
-            if ($children !== array_flip(array_flip($children))) {
+            if ($children !== \array_flip(\array_flip($children))) {
                 throw new RuntimeException(
 
-                    'The "' . var_export($children, true) . '" format of children is invalid. Verify and try again.');
+                    'The "' . \var_export($children, true) . '" format of children is invalid. Verify and try again.');
             }
-            foreach (array_keys($children) as $childId) {
+            foreach (\array_keys($children) as $childId) {
                 $this->_assertElementExists($childId);
                 if (!isset(
                         $this->elements[$childId][self::PARENT]
@@ -129,8 +129,8 @@ class DataStructure
      */
     private function _assertArray(mixed $value): void
     {
-        if (!is_array($value)) {
-            throw new RuntimeException("An array expected: " . var_export($value, true));
+        if (!\is_array($value)) {
+            throw new RuntimeException("An array expected: " . \var_export($value, true));
         }
     }
 
@@ -151,7 +151,7 @@ class DataStructure
 
         // rename references in children
         if (isset($this->elements[$oldId][self::CHILDREN])) {
-            foreach (array_keys($this->elements[$oldId][self::CHILDREN]) as $childId) {
+            foreach (\array_keys($this->elements[$oldId][self::CHILDREN]) as $childId) {
                 $this->_assertElementExists($childId);
                 $this->elements[$childId][self::PARENT] = $newId;
             }
@@ -171,7 +171,7 @@ class DataStructure
 
     protected function _getChildOffset(string $parentId, string $childId): int
     {
-        $index = array_search($childId, array_keys($this->getChildren($parentId)), true);
+        $index = \array_search($childId, \array_keys($this->getChildren($parentId)), true);
         if ($index === false) {
             throw new \Exception('The "' . $childId . '" is not a child of "' . $parentId . '".');
         }
@@ -235,7 +235,7 @@ class DataStructure
     {
         if (isset($this->elements[$parentId][self::CHILDREN])) {
 
-            $index = array_search($alias, $this->elements[$parentId][self::CHILDREN], true);
+            $index = \array_search($alias, $this->elements[$parentId][self::CHILDREN], true);
             if ($index !== false) {
                 return $index;
             }
@@ -257,7 +257,7 @@ class DataStructure
         if (isset($children[$elementId])) {
             throw new \Exception('The element "' . $elementId . '" is already a child of "' . $targetParentId . '".');
         }
-        if (in_array($alias, $children, true)) {
+        if (\in_array($alias, $children, true)) {
             throw new \Exception('The element "' . $targetParentId . '" can\'t have a child because "' . $targetParentId . '" already has a child with alias "' . $alias . '".');
         }
 
@@ -265,10 +265,10 @@ class DataStructure
         if (\is_null($offset)) {
             $offset = count($children);
         }
-        $this->elements[$targetParentId][self::CHILDREN] = array_merge(
-            array_slice($children, 0, $offset),
+        $this->elements[$targetParentId][self::CHILDREN] = \array_merge(
+            \array_slice($children, 0, $offset),
             [$elementId => $alias],
-            array_slice($children, $offset)
+            \array_slice($children, $offset)
         );
         $this->elements[$elementId][self::PARENT] = $targetParentId;
     }
@@ -284,9 +284,9 @@ class DataStructure
 
     protected function _generateAnonymousName(string $class): string
     {
-        $position = strpos($class, '\\Block\\');
-        $key = $position !== false ? substr($class, $position + 7) : $class;
-        $key = strtolower(trim($key, '_'));
+        $position = \strpos($class, '\\Block\\');
+        $key = $position !== false ? \substr($class, $position + 7) : $class;
+        $key = \strtolower(\trim($key, '_'));
 
         if (!isset($this->nameIncrement[$key])) {
             $this->nameIncrement[$key] = 0;
@@ -344,7 +344,7 @@ class DataStructure
     public function unsetElement(string $elementId, bool $recursive = true): bool
     {
         if (isset($this->elements[$elementId][self::CHILDREN])) {
-            foreach (array_keys($this->elements[$elementId][self::CHILDREN]) as $childId) {
+            foreach (\array_keys($this->elements[$elementId][self::CHILDREN]) as $childId) {
                 $this->_assertElementExists($childId);
                 if ($recursive) {
                     $this->unsetElement($childId, $recursive);

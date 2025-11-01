@@ -17,23 +17,23 @@ class Error
             if (isset($frame['args'])) {
                 $args = [];
                 foreach ($frame['args'] as $arg) {
-                    if (is_string($arg)) {
+                    if (\is_string($arg)) {
                         $args[] = "'" . $arg . "'";
-                    } elseif (is_array($arg)) {
+                    } elseif (\is_array($arg)) {
                         $args[] = "Array";
-                    } elseif (is_null($arg)) {
+                    } elseif (\is_null($arg)) {
                         $args[] = 'NULL';
-                    } elseif (is_bool($arg)) {
+                    } elseif (\is_bool($arg)) {
                         $args[] = ($arg) ? "true" : "false";
-                    } elseif (is_object($arg)) {
-                        $args[] = get_class($arg);
-                    } elseif (is_resource($arg)) {
-                        $args[] = get_resource_type($arg);
+                    } elseif (\is_object($arg)) {
+                        $args[] = \get_class($arg);
+                    } elseif (\is_resource($arg)) {
+                        $args[] = \get_resource_type($arg);
                     } else {
                         $args[] = $arg;
                     }
                 }
-                $args = implode(", ", $args);
+                $args = \implode(", ", $args);
             }
 
 
@@ -59,8 +59,8 @@ class Error
             if (count($ex->context) > 0) {
                 $html .= '<div style="padding-bottom:5px">';
                 foreach ($ex->context as $key => $value) {
-                    if (is_array($value)) {
-                        $value = json_encode($value);
+                    if (\is_array($value)) {
+                        $value = \json_encode($value);
                     }
                     $html .= '<div>' . $key . ': ' . $value . '</div>';
                 }
@@ -76,9 +76,9 @@ class Error
         /** Detect possible root path to hide it */
         foreach ($lines as $line) {
             if ($rootPath === null) {
-                $x = strpos($line['file'], 'vendor');
+                $x = \strpos($line['file'], 'vendor');
                 if ($x > 0) {
-                    $rootPath = substr($line['file'], 0, $x);
+                    $rootPath = \substr($line['file'], 0, $x);
                 }
             }
         }
@@ -89,10 +89,10 @@ class Error
             $html .= '<div>';
             $filePath = $line['file'];
             if ($rootPath !== null) {
-                $filePath = str_replace($rootPath, '/', $filePath);
+                $filePath = \str_replace($rootPath, '/', $filePath);
             }
 
-            $html .= sprintf(
+            $html .= \sprintf(
                 "<span style='color:#48d4fc'>#%s</span> %s(%s): %s%s%s(%s)\n",
                 $line['c'],
                 $filePath,

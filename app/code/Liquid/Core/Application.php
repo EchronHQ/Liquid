@@ -8,6 +8,7 @@ use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\AppInterface;
 use Liquid\Framework\App\AppMode;
 use Liquid\Framework\App\Config\ScopeConfig;
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\DirectoryList;
@@ -105,7 +106,7 @@ class Application
 
     public function run(AppInterface $application): void
     {
-        ini_set('memory_limit', '2048M');
+        \ini_set('memory_limit', '2048M');
         $this->profiler->profilerStart('Application:run');
 
 
@@ -147,7 +148,7 @@ class Application
 
 
                 echo Error::toHtml($ex);
-                http_response_code(500);
+                \http_response_code(500);
                 exit(1);
 //                die('xxx');
 //                return;
@@ -212,7 +213,7 @@ class Application
         /** @var Response $response */
         $response = $this->objectManager->get(Response::class);
         $response->clearHeaders();
-        $response->setHttpResponseCode(500);
+        $response->setHttpResponseCode(HttpResponseCode::STATUS_CODE_500);
         $response->setHeader('Content-Type', 'text/plain');
         if ($this->isDeveloperMode()) {
             // TODO: use helper to format error to html

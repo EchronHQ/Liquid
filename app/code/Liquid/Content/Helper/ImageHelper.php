@@ -77,7 +77,7 @@ readonly class ImageHelper
                     break;
                 case AssetSizeInstructionFilter::Blur:
                     $image->addFilter(function ($imageDesc) {
-                        imagefilter($imageDesc, IMG_FILTER_GAUSSIAN_BLUR);
+                        \imagefilter($imageDesc, IMG_FILTER_GAUSSIAN_BLUR);
                     });
                     break;
                 default:
@@ -99,7 +99,7 @@ readonly class ImageHelper
                 case AssetSizeInstructionType::PNG:
                     $convertToType = \IMAGETYPE_PNG;
                     // Between 0 (no compression) and 9
-                    $qualityForType = round($sizeInstruction->quality / 100 * 9);
+                    $qualityForType = \round($sizeInstruction->quality / 100 * 9);
                     break;
                 case AssetSizeInstructionType::WebP:
                     $convertToType = \IMAGETYPE_WEBP;
@@ -140,7 +140,7 @@ readonly class ImageHelper
             // Don't add image resolve because of circular dependencies
             // $font = $this->resolver->getPubPath() . 'frontend/asset/font/Gilroy/Gilroy-Regular.ttf';
             $font = '';
-            if (!file_exists($font)) {
+            if (!\file_exists($font)) {
                 die('nope');
             }
             //                $fontReference = imageloadfont($font);
@@ -177,8 +177,8 @@ readonly class ImageHelper
 
     public function getResizedFileName(string $source, AssetSizeInstruction $sizeInstruction): string
     {
-        $fileName = pathinfo($source, \PATHINFO_FILENAME);
-        $ext = pathinfo($source, PATHINFO_EXTENSION);
+        $fileName = \pathinfo($source, \PATHINFO_FILENAME);
+        $ext = \pathinfo($source, PATHINFO_EXTENSION);
 
         $arrHash = [];
         if ($sizeInstruction->maxWidth !== null && $sizeInstruction->maxHeight !== null) {
@@ -187,7 +187,7 @@ readonly class ImageHelper
 
 
         if ($sizeInstruction->crop !== AssetSizeInstructionCrop::None) {
-            $arrHash[] = 'c' . substr($sizeInstruction->crop->value, 0, 1);
+            $arrHash[] = 'c' . \substr($sizeInstruction->crop->value, 0, 1);
         }
 
 
@@ -218,7 +218,7 @@ readonly class ImageHelper
         // TODO: add crop method + background to hash
         $hash = '';
         if (count($arrHash) > 0) {
-            $hash = '-' . str_replace(':', '-', implode('-', $arrHash));
+            $hash = '-' . \str_replace(':', '-', \implode('-', $arrHash));
         }
 
         return $fileName . $hash . '.' . $ext;

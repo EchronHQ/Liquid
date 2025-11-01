@@ -36,7 +36,7 @@ class ResolveThemeFiles implements ResolveTypeInterface
      */
     public function getPatternDirs(array $params): array
     {
-        if (!array_key_exists('theme', $params) || !$params['theme'] instanceof Theme) {
+        if (!\array_key_exists('theme', $params) || !$params['theme'] instanceof Theme) {
             throw new \InvalidArgumentException(
                 'Parameter "theme" should be specified and should implement the theme interface.'
             );
@@ -55,7 +55,7 @@ class ResolveThemeFiles implements ResolveTypeInterface
 
                 $params = $this->getThemePubStaticDir($theme, $params);
 
-                $result = array_merge($result, $this->resolver->getPatternDirs($params));
+                $result = \array_merge($result, $this->resolver->getPatternDirs($params));
             }
             $theme = $theme->getParentTheme();
 
@@ -75,7 +75,7 @@ class ResolveThemeFiles implements ResolveTypeInterface
     {
         if (empty($params['theme_pubstatic_dir'])
             && isset($params['file'])
-            && pathinfo($params['file'], PATHINFO_EXTENSION) === 'css'
+            && \pathinfo($params['file'], PATHINFO_EXTENSION) === 'css'
         ) {
             $params['theme_pubstatic_dir'] = $this->directoryList->getPath(Path::STATIC_VIEW)
                 . '/' . $theme->getArea()->value

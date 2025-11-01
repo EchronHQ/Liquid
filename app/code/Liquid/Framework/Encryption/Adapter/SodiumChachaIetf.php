@@ -29,8 +29,8 @@ class SodiumChachaIetf
      */
     public function encrypt(string $data): string
     {
-        $nonce = random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
-        $cipherText = sodium_crypto_aead_chacha20poly1305_ietf_encrypt(
+        $nonce = \random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
+        $cipherText = \sodium_crypto_aead_chacha20poly1305_ietf_encrypt(
             (string)$data,
             $nonce,
             $nonce,
@@ -52,7 +52,7 @@ class SodiumChachaIetf
         $payload = mb_substr($data, SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES, null, '8bit');
 
         try {
-            $plainText = sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
+            $plainText = \sodium_crypto_aead_chacha20poly1305_ietf_decrypt(
                 $payload,
                 $nonce,
                 $nonce,

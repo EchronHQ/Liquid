@@ -10,11 +10,11 @@ class Response implements ResponseInterface
     /**
      * Success code
      */
-    public const SUCCESS = 0;
+    public const int SUCCESS = 0;
     /**
      * Error code
      */
-    public const ERROR = 255;
+    public const int ERROR = 255;
     /**
      * Status code
      * Possible values:

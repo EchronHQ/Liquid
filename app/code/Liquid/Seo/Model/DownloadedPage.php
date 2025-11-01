@@ -88,7 +88,7 @@ class DownloadedPage
         //                \var_dump((str_word_count(strip_tags($htmlContent), 1)));
         //                die('--');
         //            }
-        return count(array_unique(str_word_count($this->strippedHtmlContent, 1)));
+        return count(\array_unique(\str_word_count($this->strippedHtmlContent, 1)));
         // } catch (\Throwable $ex) {
         //            $this->logger->error('Unable to determine word count', ['ex' => $ex]);
         //}

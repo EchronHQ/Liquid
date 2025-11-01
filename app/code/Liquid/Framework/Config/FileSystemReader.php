@@ -55,7 +55,7 @@ class FileSystemReader
 
         $definitions = require $file;
 
-        if (!is_array($definitions)) {
+        if (!\is_array($definitions)) {
             throw new \Exception("File $file should return an array of definitions");
         }
         return $definitions;

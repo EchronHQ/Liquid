@@ -52,7 +52,7 @@ class HttpApp implements AppInterface
         // This means strlen might return the actual number of characters in a non-ascii string instead
         // of the number of bytes. Use mb_strlen explicitly with a single byte character encoding to ensure
         // that the content length is calculated in bytes.
-        $contentLength = mb_strlen($this->response->getContent(), '8bit');
+        $contentLength = mb_strlen($this->response->getBody(), '8bit');
         $this->response->clearBody();
         $this->response->setHeader('Content-Length', (string)$contentLength);
     }

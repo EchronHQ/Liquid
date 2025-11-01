@@ -15,8 +15,7 @@ class PathPatternHelper
     {
         $pattern = \str_replace(['\\?', '\\*'], ['[^/]', '[^/]*'], \preg_quote($path));
         $pattern = $this->translateGroupsFromGlob($pattern);
-        $pattern = $this->translateCharacterGroupsFromGlob($pattern);
-        return $pattern;
+        return $this->translateCharacterGroupsFromGlob($pattern);
     }
 
     /**

@@ -148,9 +148,9 @@ class Block extends AbstractBlock
         if (!$this->isValidTemplate($path)) {
             throw new \Exception('Invalid template: ' . $path);
         }
-        ob_start();
+        \ob_start();
         require $path;
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     final protected function isValidTemplate(string $path): bool

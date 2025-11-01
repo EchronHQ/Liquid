@@ -82,7 +82,7 @@ class Template extends AbstractBlock implements BlockInterface
     public function setViewModel(ArgumentInterface $viewModel, string $name = ''): self
     {
         if (isset($this->viewModel[$name])) {
-            $this->logger->warning('View model `' . $name . '` already set for template `' . $this->getNameInLayout() . '` (old: `' . get_class($this->viewModel[$name]) . '` new `' . get_class($viewModel) . '`)');
+            $this->logger->warning('View model `' . $name . '` already set for template `' . $this->getNameInLayout() . '` (old: `' . \get_class($this->viewModel[$name]) . '` new `' . \get_class($viewModel) . '`)');
         }
         $this->viewModel[$name] = $viewModel;
         return $this;
@@ -137,7 +137,7 @@ class Template extends AbstractBlock implements BlockInterface
             $namespace = \substr(
                 $className,
                 0,
-                (int)strpos($className, '\\' . 'Block' . '\\')
+                (int)\strpos($className, '\\' . 'Block' . '\\')
             );
             $moduleId = \str_replace('\\', '_', $namespace);
             // $data = ComponentFile::extractModule(get_class($this));

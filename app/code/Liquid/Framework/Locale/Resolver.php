@@ -59,7 +59,7 @@ class Resolver implements ResolverInterface
      */
     public function setLocale(string|null $locale = null): self
     {
-        if (is_string($locale)) {
+        if (\is_string($locale)) {
             $this->locale = $locale;
         } else {
             $this->locale = $this->getDefaultLocale();

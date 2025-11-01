@@ -83,9 +83,9 @@ class MergeLayoutProcessor
      */
     public function load(string|array $handles = []): self
     {
-        if (is_string($handles)) {
+        if (\is_string($handles)) {
             $handles = [$handles];
-        } elseif (!is_array($handles)) {
+        } elseif (!\is_array($handles)) {
             throw new RuntimeException('Invalid layout update handle');
         }
 
@@ -129,7 +129,7 @@ class MergeLayoutProcessor
      */
     public function addHandle(string|array $handleName): self
     {
-        if (is_array($handleName)) {
+        if (\is_array($handleName)) {
             foreach ($handleName as $name) {
                 $this->handles[$name] = 1;
             }
@@ -147,7 +147,7 @@ class MergeLayoutProcessor
     public function getCacheId(): string
     {
         $layoutCacheKeys = [];// $this->layoutCacheKey->getCacheKeys();
-        return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
+        return $this->generateCacheId(\md5(\implode('|', \array_merge($this->getHandles(), $layoutCacheKeys))));
     }
 
     /**
@@ -157,7 +157,7 @@ class MergeLayoutProcessor
      */
     public function getHandles(): array
     {
-        return array_keys($this->handles);
+        return \array_keys($this->handles);
     }
 
     /**
@@ -168,7 +168,7 @@ class MergeLayoutProcessor
      */
     public function addUpdate(string $update): self
     {
-        if (!in_array($update, $this->updates, true)) {
+        if (!\in_array($update, $this->updates, true)) {
             $this->updates[] = $update;
         }
         return $this;
@@ -199,7 +199,7 @@ class MergeLayoutProcessor
 
     public function addUpdate2(array $update): self
     {
-        if (!in_array($update, $this->updates, true)) {
+        if (!\in_array($update, $this->updates, true)) {
             $this->updates[] = $update;
         }
         return $this;
@@ -213,7 +213,7 @@ class MergeLayoutProcessor
     public function asString()
     {
         return '';
-        return implode('', $this->updates);
+        return \implode('', $this->updates);
     }
 
     /**
@@ -233,7 +233,7 @@ class MergeLayoutProcessor
      */
     public function asSimplexml(): LayoutElement
     {
-        $updates = trim($this->asString());
+        $updates = \trim($this->asString());
         $updates = '<?xml version="1.0"?>'
             . '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'
             . $updates
@@ -266,7 +266,7 @@ class MergeLayoutProcessor
 
     protected function _loadXmlString(string $xmlString): LayoutElement|null
     {
-        $result = simplexml_load_string($xmlString, LayoutElement::class);
+        $result = \simplexml_load_string($xmlString, LayoutElement::class);
         if ($result === false) {
             return null;
         }
@@ -340,17 +340,17 @@ class MergeLayoutProcessor
         //   var_dump($files);
 //        $theme = $this->_getPhysicalTheme($this->theme);
         $updateFiles = [];// $this->fileSource->getFiles($theme, '*.xml');
-        $updateFiles = array_merge($updateFiles, $this->layoutFileSource->getFiles($this->theme, '*.php'));
+        $updateFiles = \array_merge($updateFiles, $this->layoutFileSource->getFiles($this->theme, '*.php'));
 //        $useErrors = libxml_use_internal_errors(true);
 
         $layoutActions = new LayoutActions();
         foreach ($updateFiles as $file) {
             //    var_dump($file);
 
-            $handleName = basename($file->getFilename(), '.php');
+            $handleName = \basename($file->getFilename(), '.php');
             $actions = require $file->getFilename();
 
-            if (!is_array($actions)) {
+            if (!\is_array($actions)) {
                 throw new \Exception("File $file should return an array of definitions");
             }
             $layoutActions->add($handleName, $actions);
@@ -447,12 +447,12 @@ class MergeLayoutProcessor
             $updateXml = null;
 
             try {
-                $updateXml = is_string($update) ? $this->_loadXmlString($update) : false;
+                $updateXml = \is_string($update) ? $this->_loadXmlString($update) : false;
             } catch (\Exception $exception) {
                 // ignore invalid
             }
 
-            if ($updateXml && strtolower($updateXml->getName()) === 'update' && isset($updateXml['handle'])) {
+            if ($updateXml && \strtolower($updateXml->getName()) === 'update' && isset($updateXml['handle'])) {
                 $this->addHandle((string)$updateXml['handle']);
             }
         }

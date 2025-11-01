@@ -32,7 +32,7 @@ class Composite implements ResolveTypeInterface
     {
         $result = [];
         foreach ($this->rules as $rule) {
-            $result = array_merge($result, $rule->getPatternDirs($params));
+            $result = \array_merge($result, $rule->getPatternDirs($params));
         }
         return $result;
     }

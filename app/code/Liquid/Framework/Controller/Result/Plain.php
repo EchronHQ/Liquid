@@ -19,7 +19,7 @@ class Plain extends AbstractResult
     protected function render(HttpResponseInterface $response): self
     {
         $response->setHeader('Content-Type', 'text/plain', true);
-        $response->setContent($this->text);
+        $response->setBody($this->text);
         return $this;
     }
 }

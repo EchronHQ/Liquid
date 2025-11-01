@@ -48,7 +48,7 @@ class ViewFileSystem
      */
     public static function normalizePath(string $path): string
     {
-        $parts = $path !== null ? explode('/', $path) : [];
+        $parts = $path !== null ? \explode('/', $path) : [];
         $result = [];
 
         foreach ($parts as $part) {
@@ -56,12 +56,12 @@ class ViewFileSystem
                 if (!count($result) || ($result[count($result) - 1] === '..')) {
                     $result[] = $part;
                 } else {
-                    array_pop($result);
+                    \array_pop($result);
                 }
             } elseif ('.' !== $part) {
                 $result[] = $part;
             }
         }
-        return implode('/', $result);
+        return \implode('/', $result);
     }
 }

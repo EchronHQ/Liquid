@@ -112,7 +112,7 @@ class AppConfig
         if (empty($this->readerLoad) || empty($this->data) || empty($this->flatData)) {
             $this->readerLoad = $this->configReader->load();
         }
-        $this->data = array_replace(
+        $this->data = \array_replace(
             $this->readerLoad,
             $this->overrideData ?? []
         );
@@ -126,7 +126,7 @@ class AppConfig
      */
     private function getByKey(string|null $key): mixed
     {
-        if (array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
+        if (\array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';
         }
 

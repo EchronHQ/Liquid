@@ -43,7 +43,7 @@ class ThemeFileCollector implements ThemeFileCollectorInterface
         }
         $themeDir = new DirectoryRead(new FileType(), $themeAbsolutePath);
         $files = $themeDir->search($this->subDir . $filePath);
-        var_dump($files);
+        \var_dump($files);
         $result = [];
         foreach ($files as $file) {
 

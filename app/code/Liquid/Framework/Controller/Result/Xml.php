@@ -13,7 +13,7 @@ class Xml extends AbstractResult
     protected function render(HttpResponseInterface $response): self
     {
         $response->setHeader('Content-Type', 'application/xml', true);
-        $response->setContent($this->xml);
+        $response->setBody($this->xml);
         return $this;
     }
 

@@ -68,11 +68,11 @@ class FileType
         // basepath. so if the basepath starts at position 0 in the path, we
         // must not concatinate them again because path is already absolute.
         $path = $path !== null ? $path : '';
-        if ('' !== $basePath && strpos($path, (string)$basePath) === 0) {
+        if ('' !== $basePath && \strpos($path, (string)$basePath) === 0) {
             return $this->getScheme($scheme) . $path;
         }
 
-        return $this->getScheme($scheme) . $basePath . ltrim($this->fixSeparator($path), '/');
+        return $this->getScheme($scheme) . $basePath . \ltrim($this->fixSeparator($path), '/');
     }
 
     /**

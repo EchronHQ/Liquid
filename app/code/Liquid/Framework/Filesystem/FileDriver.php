@@ -28,9 +28,9 @@ class FileDriver
     {
         $filename = $this->getScheme() . $path;
         if (!$this->stateful) {
-            clearstatcache(false, $filename);
+            \clearstatcache(false, $filename);
         }
-        $result = @file_exists($filename);
+        $result = @\file_exists($filename);
         if ($result === null) {
             throw new FileSystemException('An error occurred during "' . $this->getWarningMessage() . '" execution.');
         }
@@ -53,7 +53,7 @@ class FileDriver
      */
     private function getWarningMessage(): string|null
     {
-        $warning = error_get_last();
+        $warning = \error_get_last();
         if ($warning && $warning['type'] === E_WARNING) {
             return 'Warning!' . $warning['message'];
         }

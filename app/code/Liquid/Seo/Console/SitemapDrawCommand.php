@@ -32,7 +32,7 @@ class SitemapDrawCommand extends Command
 //            if ($page->getUrlPath() === '') {
 //                $pathSegments = ['home'];
 //            } else {
-            $pathSegments = explode('/', 'home/' . $page->getUrlPath());
+            $pathSegments = \explode('/', 'home/' . $page->getUrlPath());
             //}
 
 
@@ -99,12 +99,12 @@ class SitemapDrawCommand extends Command
                 } else {
                     $pre = '├';
                 }
-                $pre = str_repeat("  ", $level) . ' ' . $pre;
+                $pre = \str_repeat("  ", $level) . ' ' . $pre;
             }
 
-            $x = strlen($childSegment->pathSegment) + strlen($pre);
+            $x = \strlen($childSegment->pathSegment) + \strlen($pre);
 
-            echo $pre . $childSegment->pathSegment . str_repeat(' ', 50 - $x) . ' ' . $childSegment->getTitle() . ' [' . $childSegment->getPath() . ']' . PHP_EOL;
+            echo $pre . $childSegment->pathSegment . \str_repeat(' ', 50 - $x) . ' ' . $childSegment->getTitle() . ' [' . $childSegment->getPath() . ']' . PHP_EOL;
             $i++;
 
             $this->output($childSegment, $level + 1);
@@ -147,7 +147,7 @@ class Segment
 
     public function hasChild(string $key): bool
     {
-        return array_key_exists($key, $this->children);
+        return \array_key_exists($key, $this->children);
     }
 
     public function getChild(string $key): Segment
@@ -160,7 +160,7 @@ class Segment
      */
     public function getChildren(): array
     {
-        return array_values($this->children);
+        return \array_values($this->children);
     }
 
     public function getPage(): AbstractViewableEntity|null

@@ -25,7 +25,7 @@ class ResolveModuleFiles implements ResolveTypeInterface
      */
     public function getPatternDirs(array $params): array
     {
-        if (!array_key_exists('module_name', $params)) {
+        if (!\array_key_exists('module_name', $params)) {
             throw new \InvalidArgumentException(
                 'Required parameter "module_name" is not specified.'
             );

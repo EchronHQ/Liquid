@@ -329,7 +329,7 @@ class Layout extends XmlConfig
             $block = $this->generateBlock($block, $name);
         }
 
-        $name = $this->structure->createStructuralElement($name, self::TYPE_BLOCK, $name ?: get_class($block));
+        $name = $this->structure->createStructuralElement($name, self::TYPE_BLOCK, $name ?: \get_class($block));
 
 
         if ($parentName) {

@@ -17,17 +17,16 @@ abstract class CustomTag
     // extensible items
     public array $attributes = [];
     // Defines if tag is <tag /> format
-    private bool $inlineClose = false;
-    // Used in defining tag format
-    private string $closingTag = '>';
     public bool $parsed = false;
+    // Used in defining tag format
     public string $parsedContent = '';
-    // Regex Search Pattern
-    private readonly string $tagSearch;
     public bool $disabled = false;
     public bool $allowCache = false;
+    // Regex Search Pattern
     public bool $cached = false;
-
+    private bool $inlineClose = false;
+    private string $closingTag = '>';
+    private readonly string $tagSearch;
 
     /**
      * Creates Markup Object
@@ -37,7 +36,7 @@ abstract class CustomTag
         $this->placeholder = '------@@%' . $instanceId . '-' . $tagIdentifier . '%@@------';
         $this->tag = $tag;
         $this->blockHtml = $strBody;
-        $this->name = strtolower(str_replace(__NAMESPACE__ . "\\", "", get_class($this)));
+        $this->name = \strtolower(\str_replace(__NAMESPACE__ . "\\", "", \get_class($this)));
         if (str_ends_with($strBody, '/>')) {
             $this->inlineClose = true;
             $this->closingTag = "\/>";
@@ -47,51 +46,7 @@ abstract class CustomTag
         $this->build($strBody);
     }
 
-    private function build(string $strBody): void
-    {
-
-
-        if (!str_starts_with($strBody, '<' . $this->tag)) {
-            $this->name = '___text';
-            $this->contentHtml = $this->blockHtml;
-            return;
-        }
-
-        if ($strBody[1] === '/') {
-            $this->name = '---ERROR---';
-            return;
-        }
-        $matches = [];
-        if (preg_match_all($this->tagSearch, $this->blockHtml, $matches) > 0) {
-            $attribute_string = $matches[2][0];
-            if (!$this->inlineClose) {
-                $begin_len = strlen($matches[0][0]);
-                $end_len = strlen("</" . $this->tag . ">");
-                $this->contentHtml = substr($strBody, $begin_len + 1, strlen($matches[0][0]) - $begin_len - $end_len);
-            }
-
-            //            $attributes = [];
-            if (preg_match_all("!([_\-A-Za-z0-9]*)(=\"|=\')([^\"|\']*)(\"|\')!is", $attribute_string, $attributes) > 0) {
-                foreach ($attributes[0] as $key => $row) {
-                    $this->attributes[$attributes[1][$key]] = $attributes[3][$key];
-                }
-                /** @todo: template engine */
-                /*if(isset($this->attributes['template']) === true)
-                {
-                    $template = $this->_options['template_directory'].$tag['name'].DIRECTORY_SEPARATOR.$this->attributes['template'].'.html';
-                    if(is_file($template) === false)
-                    {
-                        $this->attributes['_template'] = $template;
-                    }
-                    else
-                    {
-                        $this->attributes['template'] = $template;
-                    }
-                }*/
-            }
-        }
-        //        $this->attributes = (object)$this->attributes;
-    }
+    abstract public function render(): string;
 
 //    /**
 //     * Magic Method to return readonly properties
@@ -128,5 +83,49 @@ abstract class CustomTag
 //        die('Mageic isset ' . $var);
 //    }
 
-    abstract public function render(): string;
+    private function build(string $strBody): void
+    {
+
+
+        if (!str_starts_with($strBody, '<' . $this->tag)) {
+            $this->name = '___text';
+            $this->contentHtml = $this->blockHtml;
+            return;
+        }
+
+        if ($strBody[1] === '/') {
+            $this->name = '---ERROR---';
+            return;
+        }
+        $matches = [];
+        if (\preg_match_all($this->tagSearch, $this->blockHtml, $matches) > 0) {
+            $attribute_string = $matches[2][0];
+            if (!$this->inlineClose) {
+                $begin_len = \strlen($matches[0][0]);
+                $end_len = \strlen("</" . $this->tag . ">");
+                $this->contentHtml = \substr($strBody, $begin_len + 1, \strlen($matches[0][0]) - $begin_len - $end_len);
+            }
+
+            //            $attributes = [];
+            if (\\preg_match_all("!([_\-A-Za-z0-9]*)(=\"|=\')([^\"|\']*)(\"|\')!is", $attribute_string, $attributes) > 0) {
+                foreach ($attributes[0] as $key => $row) {
+                    $this->attributes[$attributes[1][$key]] = $attributes[3][$key];
+                }
+                /** @todo: template engine */
+                /*if(isset($this->attributes['template']) === true)
+                {
+                    $template = $this->_options['template_directory'].$tag['name'].DIRECTORY_SEPARATOR.$this->attributes['template'].'.html';
+                    if(is_file($template) === false)
+                    {
+                        $this->attributes['_template'] = $template;
+                    }
+                    else
+                    {
+                        $this->attributes['template'] = $template;
+                    }
+                }*/
+            }
+        }
+        //        $this->attributes = (object)$this->attributes;
+    }
 }

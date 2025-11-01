@@ -92,6 +92,6 @@ class ReaderPool implements ReaderInterface
      */
     public function getSupportedNodes(): array
     {
-        return array_keys($this->nodeReaders);
+        return \array_keys($this->nodeReaders);
     }
 }

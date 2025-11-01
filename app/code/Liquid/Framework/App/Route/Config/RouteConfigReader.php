@@ -56,6 +56,6 @@ class RouteConfigReader extends AttributeConfigReader
      */
     private function formatRoutePath(string $input): string
     {
-        return ltrim($input, '/');
+        return \ltrim($input, '/');
     }
 }

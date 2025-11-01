@@ -8,7 +8,7 @@ class ReadingTime
 {
     public static function estimateReadingTime(string $text, int $wordPerMinute = 250): int
     {
-        $totalWords = str_word_count($text);
-        return (int)floor($totalWords / $wordPerMinute);
+        $totalWords = \str_word_count($text);
+        return (int)\floor($totalWords / $wordPerMinute);
     }
 }

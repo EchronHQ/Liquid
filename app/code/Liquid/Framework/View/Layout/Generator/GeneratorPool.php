@@ -58,7 +58,7 @@ class GeneratorPool
         foreach ($generators as $generator) {
             if (!$generator instanceof GeneratorInterface) {
                 throw new \InvalidArgumentException(
-                    sprintf('Generator class must be an instance of %s', GeneratorInterface::class)
+                    \sprintf('Generator class must be an instance of %s', GeneratorInterface::class)
                 );
             }
             $this->generators[$generator->getType()] = $generator;
@@ -107,11 +107,11 @@ class GeneratorPool
     {
         //Schedule all element into nested structure
         while (false === $scheduledStructure->isStructureEmpty()) {
-            $this->helper->scheduleElement($scheduledStructure, $structure, key($scheduledStructure->getStructure()));
+            $this->helper->scheduleElement($scheduledStructure, $structure, \key($scheduledStructure->getStructure()));
         }
         $scheduledStructure->flushPaths();
         while (false === $scheduledStructure->isListToSortEmpty()) {
-            $this->reorderElements($scheduledStructure, $structure, key($scheduledStructure->getListToSort()));
+            $this->reorderElements($scheduledStructure, $structure, \key($scheduledStructure->getListToSort()));
         }
         foreach ($scheduledStructure->getListToMove() as $elementToMove) {
             $this->moveElementInStructure($scheduledStructure, $structure, $elementToMove);
@@ -220,7 +220,7 @@ class GeneratorPool
         bool                $isChild = false
     ): self
     {
-        $elementsToRemove = array_keys($structure->getChildren($elementName));
+        $elementsToRemove = \array_keys($structure->getChildren($elementName));
         $scheduledStructure->unsetElement($elementName);
         foreach ($elementsToRemove as $element) {
             $this->removeElement($scheduledStructure, $structure, $element, true);
@@ -241,7 +241,7 @@ class GeneratorPool
     protected function visibilityConditionsExistsIn(array $data): bool
     {
         return isset($data['attributes']) &&
-            array_key_exists('visibilityConditions', $data['attributes']) &&
+            \array_key_exists('visibilityConditions', $data['attributes']) &&
             !empty($data['attributes']['visibilityConditions']);
     }
 }

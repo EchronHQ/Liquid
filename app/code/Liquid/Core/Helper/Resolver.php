@@ -46,7 +46,7 @@ class Resolver
         $file = \ltrim($file, '\\/');
 
         if (str_starts_with($file, 'asset/')) {
-            $file = substr($file, strlen('asset/'));
+            $file = \substr($file, \strlen('asset/'));
         }
         return $this->getFrontendFileImageUrl('asset/' . $file, $size);
     }
@@ -242,7 +242,7 @@ class Resolver
         }
         // Copy file to cache location so we can see it!
 
-        $fileDir = $cacheLocation . '/' . dirname($file);
+        $fileDir = $cacheLocation . '/' . \dirname($file);
 
         if (!FileSystem::dirExists($fileDir)) {
             FileSystem::createDir($fileDir);

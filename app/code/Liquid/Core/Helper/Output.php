@@ -9,15 +9,15 @@ class Output
     public function escapeHtmlAttribute(string $input, bool $stripHtml = true): string
     {
         if ($stripHtml) {
-            $input = strip_tags($input);
+            $input = \strip_tags($input);
         }
         $input = $this->escapeTerms($input);
-        return htmlspecialchars($input, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+        return \htmlspecialchars($input, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
     }
 
     private function escapeTerms(string $input): string
     {
-        preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $input, $matches);
+        \preg_match_all('/\{TERM}(.*?)\{\/TERM}/s', $input, $matches);
 
         [$toReplace, $foundTerms] = $matches;
 
@@ -31,6 +31,6 @@ class Output
 
     public function jsonEncode(mixed $input): string
     {
-        return json_encode($input, JSON_THROW_ON_ERROR);
+        return \json_encode($input, JSON_THROW_ON_ERROR);
     }
 }

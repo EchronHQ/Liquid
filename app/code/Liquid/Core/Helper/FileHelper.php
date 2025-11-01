@@ -47,13 +47,13 @@ readonly class FileHelper
         $cacheKey = 'filedimensions-' . $path;
         if ($allowCache && $this->enableCache && $this->cache->test($cacheKey) !== null) {
             $value = $this->cache->load($cacheKey);
-            if (is_string($value)) {
+            if (\is_string($value)) {
                 return $this->serialize->unserialize($value);
             }
         }
 
 
-        $size = getimagesize($path);
+        $size = \getimagesize($path);
         if ($size === false) {
             return null;
         }
@@ -71,7 +71,7 @@ readonly class FileHelper
         $cacheKey = 'filecontent-' . $path;
         if ($allowCache && $this->cache->test($cacheKey) !== null) {
             $value = $this->cache->load($cacheKey);
-            if (is_string($value)) {
+            if (\is_string($value)) {
                 return $value;
             }
         }
@@ -90,12 +90,12 @@ readonly class FileHelper
         if ($allowCache && $this->cache->test($cacheKey) !== null) {
             $cachedResult = $this->cache->load($cacheKey);
 
-            if (is_string($cachedResult)) {
+            if (\is_string($cachedResult)) {
                 return \DateTime::createFromFormat('U', $cachedResult);
             }
         }
         if ($this->fileExist($path)) {
-            $rawResult = filemtime($path);
+            $rawResult = \filemtime($path);
             if ($rawResult === false) {
                 return null;
             }
@@ -111,7 +111,7 @@ readonly class FileHelper
 
     public function fileExist(string $path, bool $allowCache = true): bool
     {
-        $path = str_replace('//', '/', $path);
+        $path = \str_replace('//', '/', $path);
         $cacheKey = $this->cleanupPathForKey($path, self::KEY_PREFIX_FILE_EXIST);
         if ($allowCache && $this->enableCache) {
 
@@ -147,7 +147,7 @@ readonly class FileHelper
         if (!$overWriteIfExists && $this->fileExist($destination)) {
             throw new \Exception('Unable to copy file, destination already exist');
         }
-        $copied = copy($source, $destination);
+        $copied = \copy($source, $destination);
         if (!$copied) {
             throw new \Error('File not copied');
         }
@@ -155,7 +155,7 @@ readonly class FileHelper
 
     private function cleanupPathForKey(string $path, string $prefix = ''): string
     {
-        return $prefix . '-' . str_replace(['.'], [''], strtolower($path));
+        return $prefix . '-' . \str_replace(['.'], [''], \strtolower($path));
     }
 
 

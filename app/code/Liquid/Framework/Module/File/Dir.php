@@ -46,7 +46,7 @@ class Dir
         }
 
         if ($type) {
-            if (!in_array($type, self::ALLOWED_DIR_TYPES)) {
+            if (!\in_array($type, self::ALLOWED_DIR_TYPES)) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
             }
             $path .= '/' . $type;

@@ -50,16 +50,16 @@ class EventInvoker
         }
         if ($this->appState->getMode() === AppMode::Develop) {
             throw new \LogicException(
-                sprintf(
+                \sprintf(
                     'Observer "%s" must implement interface "%s"',
-                    get_class($object),
+                    \get_class($object),
                     ObserverInterface::class
                 )
             );
         }
-        $this->logger->warning(sprintf(
+        $this->logger->warning(\sprintf(
             'Observer "%s" must implement interface "%s"',
-            get_class($object),
+            \get_class($object),
             ObserverInterface::class
         ));
         return null;

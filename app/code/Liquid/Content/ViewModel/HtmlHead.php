@@ -87,7 +87,7 @@ class HtmlHead implements ArgumentInterface
 
         $inDevMode = true;
         // TODO: this need to be done somewhere else
-        $criticalCss = file_get_contents($filePath);// $this->getFileContent($filePath, !$inDevMode);
+        $criticalCss = \file_get_contents($filePath);// $this->getFileContent($filePath, !$inDevMode);
         if (!$criticalCss) {
             $this->logger->error('Unable to get Critical CSS from file');
             return '';
@@ -102,7 +102,7 @@ class HtmlHead implements ArgumentInterface
 
 
         if ($this->appState->getMode() === AppMode::Develop) {
-            $this->logger->debug('Critical CSS ' . strlen($criticalCss));
+            $this->logger->debug('Critical CSS ' . \strlen($criticalCss));
         }
         return '<style>' . $criticalCss . '</style>';
 

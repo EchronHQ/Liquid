@@ -93,9 +93,9 @@ class ScheduledStructureHelper
      */
     protected function _generateAnonymousName(string $class): string
     {
-        $position = strpos($class, '\\Block\\');
-        $key = $position !== false ? substr($class, $position + 7) : $class;
-        $key = strtolower(trim($key, '_'));
+        $position = \strpos($class, '\\Block\\');
+        $key = $position !== false ? \substr($class, $position + 7) : $class;
+        $key = \strtolower(\trim($key, '_'));
         return $key . $this->counter++;
     }
 
@@ -133,7 +133,7 @@ class ScheduledStructureHelper
         if ($scheduledStructure->hasStructureElement($name)) {
             $scheduledStructure->setStructureElementData($name, []);
             foreach ($scheduledStructure->getPaths() as $potentialChild => $childPath) {
-                if (0 === strpos($childPath ?? '', "{$path}/")) {
+                if (0 === \strpos($childPath ?? '', "{$path}/")) {
                     $scheduledStructure->unsetPathElement($potentialChild);
                     $scheduledStructure->unsetStructureElement($potentialChild);
                 }

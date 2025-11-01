@@ -26,10 +26,10 @@ class ResolveBasicFiles implements ResolveTypeInterface
     public function getPatternDirs(array $params): array
     {
         $pattern = $this->pattern ?? '';
-        if (preg_match_all('/<([a-zA-Z\_]+)>/', $pattern, $matches)) {
+        if (\preg_match_all('/<([a-zA-Z\_]+)>/', $pattern, $matches)) {
             foreach ($matches[1] as $placeholder) {
                 if (empty($params[$placeholder])) {
-                    if (in_array($placeholder, $this->optionalParams)) {
+                    if (\in_array($placeholder, $this->optionalParams)) {
                         return [];
                     } else {
                         throw new \InvalidArgumentException("Required parameter '{$placeholder}' was not passed");
@@ -39,7 +39,7 @@ class ResolveBasicFiles implements ResolveTypeInterface
                 if ($x instanceof \BackedEnum) {
                     $x = (string)$x->value;
                 }
-                $pattern = str_replace('<' . $placeholder . '>', $x, $pattern);
+                $pattern = \str_replace('<' . $placeholder . '>', $x, $pattern);
             }
         }
         return [$pattern];

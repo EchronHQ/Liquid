@@ -17,7 +17,7 @@ class FileIterator implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function rewind()
     {
-        reset($this->paths);
+        \reset($this->paths);
     }
 
     /**
@@ -28,7 +28,7 @@ class FileIterator implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function current()
     {
-        return current($this->paths);
+        return \current($this->paths);
 //        $fileRead = new Read(new FileType(), $this->key());
 //        return $fileRead->readAll();
     }
@@ -41,7 +41,7 @@ class FileIterator implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function key()
     {
-        return current($this->paths);
+        return \current($this->paths);
     }
 
     /**
@@ -52,7 +52,7 @@ class FileIterator implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function next()
     {
-        next($this->paths);
+        \next($this->paths);
     }
 
     /**

@@ -271,11 +271,11 @@ class Config
                     break;
 
                 default:
-                    var_dump($curConfig);
+                    \var_dump($curConfig);
                     die('--- wrong config? (unknown configuration key) ---');
-                    $key = ltrim($key, '\\');
-                    var_dump($key);
-                    var_dump($curConfig);
+                    $key = \ltrim($key, '\\');
+                    \var_dump($key);
+                    \var_dump($curConfig);
                     if (isset($curConfig['type'])) {
                         $this->virtualTypes[$key] = \ltrim($curConfig['type'], '\\');
                     }
@@ -289,7 +289,7 @@ class Config
                             $this->arguments[$key] = $curConfig['arguments'];
                         }
 
-                        var_dump($this->arguments);
+                        \var_dump($this->arguments);
                     }
 //                    if (isset($curConfig['shared'])) {
 //                        if (!$curConfig['shared']) {

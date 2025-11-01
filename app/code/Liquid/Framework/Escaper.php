@@ -276,7 +276,7 @@ class Escaper
     private function filterProhibitedTags(array $allowedTags): array
     {
         $notAllowedTags = \array_intersect(
-            \array_map('strtolower', $allowedTags),
+            \array_map('\strtolower', $allowedTags),
             $this->notAllowedTags
         );
 

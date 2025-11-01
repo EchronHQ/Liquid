@@ -141,7 +141,7 @@ class Page extends LayoutPage
      */
     protected function assignViewVar(array|string $key, mixed $value = null): self
     {
-        if (is_array($key)) {
+        if (\is_array($key)) {
             foreach ($key as $subKey => $subValue) {
                 $this->assignViewVar($subKey, $subValue);
             }
@@ -187,9 +187,9 @@ class Page extends LayoutPage
         $resultAttributes = [];
         $elementAttributes = $this->pageConfig->getElementAttributes($elementType);
         foreach ($elementAttributes as $name => $value) {
-            $resultAttributes[] = sprintf('%s="%s"', $name, $value);
+            $resultAttributes[] = \sprintf('%s="%s"', $name, $value);
         }
-        return implode(' ', $resultAttributes);
+        return \implode(' ', $resultAttributes);
     }
 
     private function sanitizeHtml(string $html): string

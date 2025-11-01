@@ -24,7 +24,9 @@ abstract class AbstractResult implements ResultInterface
      */
     final public function renderResult(ResponseInterface $response): self
     {
-        $this->applyHttpHeaders($response);
+        if ($response instanceof HttpResponseInterface) {
+            $this->applyHttpHeaders($response);
+        }
         return $this->render($response);
     }
 

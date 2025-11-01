@@ -79,8 +79,8 @@ class CachePool
     private function getCacheSettings(): array
     {
         $cacheInfo = $this->appConfig->getConfigData(self::KEY_CACHE);
-        if (null !== $cacheInfo && array_key_exists(self::KEY_STORAGE_CACHE, $cacheInfo)) {
-            return array_replace_recursive($this->storageSettings, $cacheInfo[self::KEY_STORAGE_CACHE]);
+        if (null !== $cacheInfo && \array_key_exists(self::KEY_STORAGE_CACHE, $cacheInfo)) {
+            return \array_replace_recursive($this->storageSettings, $cacheInfo[self::KEY_STORAGE_CACHE]);
         }
         return $this->storageSettings;
     }

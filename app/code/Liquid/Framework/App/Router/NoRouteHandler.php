@@ -26,7 +26,7 @@ class NoRouteHandler implements NoRouteHandlerInterface
         $noRoutePath = $this->config->getValue('web/default/no_route', null);
 
         if ($noRoutePath) {
-            $noRoute = explode('/', $noRoutePath);
+            $noRoute = \explode('/', $noRoutePath);
         } else {
             $noRoute = [];
         }

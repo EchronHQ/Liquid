@@ -27,7 +27,7 @@ class Filesystem
     public function getDirectoryRead(Path $directoryCode): DirectoryRead
     {
         $code = $directoryCode->name . '-file';
-        if (!array_key_exists($code, $this->readInstances)) {
+        if (!\array_key_exists($code, $this->readInstances)) {
             $path = $this->getDirPath($directoryCode);
 
             $this->readInstances[$code] = new DirectoryRead(new FileType(), $path);

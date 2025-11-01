@@ -59,10 +59,10 @@ class ConfigScope
     public function getAllScopes(): array
     {
         $codes = $this->areaList->getCodes();
-        $codes = array_map(static function (AreaCode $code) {
+        $codes = \array_map(static function (AreaCode $code) {
             return $code->value;
         }, $codes);
-        array_unshift($codes, 'global', 'primary');
+        \array_unshift($codes, 'global', 'primary');
 
         return $codes;
     }

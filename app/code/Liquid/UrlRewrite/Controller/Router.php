@@ -12,6 +12,7 @@ use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Action\ForwardAction;
 use Liquid\Framework\App\Action\RedirectAction;
 use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\Router\RouterInterface;
 use Liquid\Framework\Controller\Result\Forward;
@@ -58,7 +59,11 @@ class Router implements RouterInterface
         }
 
         $url = $this->resolver->getUrl($rewrite->getTargetPath());
-        $this->response->setRedirect($url, $rewrite->getRedirectType()->value);
+
+        // TODO: for internal rewrites the value is 0, so this code might crash
+        $httpRedirectCode = HttpResponseCode::from($rewrite->getRedirectType()->value);
+
+        $this->response->setRedirect($url, $httpRedirectCode);
         $request->setMatched(true);
 
         return $this->actionFactory->create(RedirectAction::class, ['redirect' => new Redirect($url, $rewrite->getRedirectType()->value)]);
@@ -67,6 +72,6 @@ class Router implements RouterInterface
 
     protected function getRewrite(string $requestPath, SegmentId $segmentId): UrlRewrite|null
     {
-        return $this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => ltrim($requestPath, '/'), UrlRewrite::SEGMENT_ID => $segmentId]);
+        return $this->urlFinder->findOneByData([UrlRewrite::REQUEST_PATH => \ltrim($requestPath, '/'), UrlRewrite::SEGMENT_ID => $segmentId]);
     }
 }

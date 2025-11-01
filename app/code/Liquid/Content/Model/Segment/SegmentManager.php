@@ -49,7 +49,7 @@ class SegmentManager
         }
 
         // TODO: what if we still don't find the segment? There should always be a default segment active
-        return is_string($segmentId)
+        return \is_string($segmentId)
             ? $this->segmentRepository->getByCode($segmentId)
             : $this->segmentRepository->getById($segmentId);
     }

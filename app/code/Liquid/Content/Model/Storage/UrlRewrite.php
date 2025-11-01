@@ -35,7 +35,7 @@ class UrlRewrite extends AbstractUrlRewriteStorage implements UrlFinderInterface
                 if (\count($entityUrlRewrites) > 0) {
                     foreach ($entityUrlRewrites as $entityUrlRewrite) {
                         if (!\is_string($entityUrlRewrite)) {
-                            var_dump($entityUrlRewrite);
+                            \var_dump($entityUrlRewrite);
                         }
 
                         // echo $entityUrlRewrite . ' => ' . $viewableEntity->getViewRoute() . '<br/>';

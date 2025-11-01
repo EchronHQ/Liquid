@@ -58,7 +58,7 @@ class Url
             $filterData = [
                 UrlRewrite::ENTITY_ID => $entity->id,
                 // TODO: this should be a property in the entity
-                UrlRewrite::ENTITY_TYPE => get_class($entity),
+                UrlRewrite::ENTITY_TYPE => \get_class($entity),
                 UrlRewrite::SEGMENT_ID => $segmentId,
                 UrlRewrite::REDIRECT_TYPE => 0,
             ];

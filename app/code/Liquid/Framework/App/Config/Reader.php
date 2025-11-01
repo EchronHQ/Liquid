@@ -40,7 +40,7 @@ class Reader
                     throw new RuntimeException("Invalid configuration file: '" . $configFilePath . "'");
                 }
                 if ($fileData) {
-                    $result = array_replace_recursive($result, $fileData);
+                    $result = \array_replace_recursive($result, $fileData);
                 }
             }
 

@@ -64,6 +64,7 @@ abstract class AbstractSimpleObject
      *
      * @param string $key
      * @return mixed|null
+     * @noinspection MagicMethodsValidityInspection
      */
     protected function _get(string $key): mixed
     {

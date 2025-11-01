@@ -14,7 +14,7 @@ class XmlHelper
     public function getXmlErrors(array|null $libXmlErrors = null): array
     {
         if ($libXmlErrors === null) {
-            $libXmlErrors = libxml_get_errors();
+            $libXmlErrors = \libxml_get_errors();
         }
         $errors = [];
         if (count($libXmlErrors)) {

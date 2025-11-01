@@ -176,7 +176,7 @@ class ScheduledStructure
      */
     public function getListToMove()
     {
-        return array_keys(array_intersect_key($this->scheduledElements, $this->scheduledMoves));
+        return \array_keys(\array_intersect_key($this->scheduledElements, $this->scheduledMoves));
     }
 
     /**
@@ -186,9 +186,9 @@ class ScheduledStructure
      */
     public function getListToRemove()
     {
-        return array_keys(array_intersect_key(
+        return \array_keys(\array_intersect_key(
             $this->scheduledElements,
-            array_merge($this->scheduledRemoves, $this->brokenParent)
+            \array_merge($this->scheduledRemoves, $this->brokenParent)
         ));
     }
 

@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Content\ViewModel;
+namespace Liquid\Content\ViewModel;
 
 use Liquid\Content\Model\Resource\AbstractViewableEntity;
-use Liquid\Content\ViewModel\BaseViewModel;
 use Liquid\Framework\View\Element\ArgumentInterface;
 
 class PageViewModel extends BaseViewModel implements ArgumentInterface

@@ -19,10 +19,10 @@ class ConfigData
         if ($path === null) {
             return $this->data;
         }
-        $keys = explode('/', $path);
+        $keys = \explode('/', $path);
         $data = $this->data;
         foreach ($keys as $key) {
-            if (is_array($data) && array_key_exists($key, $data)) {
+            if (\is_array($data) && \array_key_exists($key, $data)) {
                 $data = $data[$key];
             } else {
                 return $default;
@@ -39,6 +39,6 @@ class ConfigData
      */
     public function merge(array $config): void
     {
-        $this->data = array_replace_recursive($this->data, $config);
+        $this->data = \array_replace_recursive($this->data, $config);
     }
 }

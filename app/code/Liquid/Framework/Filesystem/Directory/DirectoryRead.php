@@ -27,7 +27,7 @@ class DirectoryRead
     protected function setPath(string $path): void
     {
         if (!empty($path)) {
-            $this->path = rtrim(str_replace('\\', '/', $path), '/') . '/';
+            $this->path = \rtrim(\str_replace('\\', '/', $path), '/') . '/';
         }
     }
 

@@ -33,19 +33,19 @@ class TemplateEngine
      */
     public function render(BlockInterface $block, string $fileName, array $dictionary = []): string
     {
-        ob_start();
+        \ob_start();
         try {
             $tmpBlock = $this->currentBlock;
             $this->currentBlock = $block;
-            $dictionary = array_merge($this->blockVariables, $dictionary);
-            extract($dictionary, EXTR_SKIP);
+            $dictionary = \array_merge($this->blockVariables, $dictionary);
+            \extract($dictionary, EXTR_SKIP);
             include $fileName;
             $this->currentBlock = $tmpBlock;
         } catch (\Throwable $exception) {
-            ob_end_clean();
+            \ob_end_clean();
             throw $exception;
         }
-        return ob_get_clean();
+        return \ob_get_clean();
     }
 
     /**

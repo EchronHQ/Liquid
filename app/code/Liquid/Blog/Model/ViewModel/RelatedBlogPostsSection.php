@@ -24,7 +24,7 @@ class RelatedBlogPostsSection implements ArgumentInterface
         $result = [];
         $blogPosts = $this->blogRepository->getPosts();
         $result = \array_merge($result, $blogPosts);
-        shuffle($result);
+        \shuffle($result);
         return \array_slice($result, 0, 4);
     }
 

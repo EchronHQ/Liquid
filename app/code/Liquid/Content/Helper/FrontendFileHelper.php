@@ -53,8 +53,8 @@ class FrontendFileHelper
     private function getKeyByFileName(string $file): string
     {
 
-        $fileName = pathinfo($file, \PATHINFO_BASENAME);
-        $extension = pathinfo($file, \PATHINFO_EXTENSION);
+        $fileName = \pathinfo($file, \PATHINFO_BASENAME);
+        $extension = \pathinfo($file, \PATHINFO_EXTENSION);
 
 
         $x = \strtok($fileName, '_');

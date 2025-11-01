@@ -36,13 +36,13 @@ class LayoutDataStructure extends DataStructure
      */
     public function reorderChildElement(string $parentName, string $childName, int|null $offsetOrSibling, bool $after = true): void
     {
-        if (is_numeric($offsetOrSibling)) {
-            $offset = abs((int)$offsetOrSibling) * ($after ? 1 : -1);
+        if (\is_numeric($offsetOrSibling)) {
+            $offset = \abs((int)$offsetOrSibling) * ($after ? 1 : -1);
             $this->reorderChild($parentName, $childName, $offset);
         } elseif (null === $offsetOrSibling) {
             $this->reorderChild($parentName, $childName, null);
         } else {
-            $children = array_keys($this->getChildren($parentName));
+            $children = \array_keys($this->getChildren($parentName));
             if ($this->getChildId($parentName, $offsetOrSibling) !== false) {
                 $offsetOrSibling = $this->getChildId($parentName, $offsetOrSibling);
             }
@@ -77,9 +77,9 @@ class LayoutDataStructure extends DataStructure
     {
         if ('-' === $needle) {
             if ($isLast) {
-                return array_pop($haystack);
+                return \array_pop($haystack);
             }
-            return array_shift($haystack);
+            return \array_shift($haystack);
         }
         return $needle;
     }

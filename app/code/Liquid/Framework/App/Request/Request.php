@@ -128,6 +128,11 @@ class Request
 
     }
 
+    final public function getHeaders(): array
+    {
+        return $this->request->headers->all();
+    }
+
     final public function isAjax(): bool
     {
         return $this->request->isXmlHttpRequest();
@@ -390,6 +395,48 @@ class Request
     public function isHead(): bool
     {
         return $this->request->getMethod() === 'HEAD';
+    }
+
+    public function getPost(string $key): mixed
+    {
+        return $this->request->get($key);
+    }
+
+    /**
+     * Returns the requested URI (path and query string).
+     *
+     * @return string The raw URI (i.e. not URI decoded)
+     */
+    public function getRequestUri(): string
+    {
+        return $this->request->getRequestUri();
+    }
+
+    /**
+     * Generates a normalized URI (URL) for the Request.
+     *
+     * @return string
+     */
+    public function getUri(): string
+    {
+        return $this->request->getUri();
+    }
+
+    // TODO: what is this?
+    public function getUserParams(): array
+    {
+        return [];
+    }
+
+    // TODO: what is this?
+    public function getUserParam(string $key): string|null
+    {
+        return null;
+    }
+
+    public function getQuery(): array
+    {
+        return $this->request->query->all();
     }
 
     private function getParamAlias(string $key): string|null

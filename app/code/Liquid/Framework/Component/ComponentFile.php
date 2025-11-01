@@ -30,7 +30,7 @@ class ComponentFile
         if (!$fileId || !str_contains($fileId, self::FILE_ID_SEPARATOR)) {
             return ['moduleId' => null, 'filePath' => $fileId];
         }
-        $result = explode(self::FILE_ID_SEPARATOR, $fileId, 2);
+        $result = \explode(self::FILE_ID_SEPARATOR, $fileId, 2);
         if (empty($result[0])) {
             throw new \RuntimeException('Scope separator "::" cannot be used without scope identifier.');
         }

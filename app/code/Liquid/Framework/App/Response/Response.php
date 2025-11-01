@@ -95,7 +95,6 @@ class Response implements HttpResponseInterface
     public function clearHeader(string $name): self
     {
         $this->response->headers->remove($name);
-        /** @var Headers $headers */
 //        $headers = $this->getHeaders();
 //        if ($headers->has($name)) {
 //            $headerValues = $headers->get($name);
@@ -176,6 +175,15 @@ class Response implements HttpResponseInterface
         }
         $this->response->setContent($body . $value);
         return $this;
+    }
+
+    public function getBody(): string
+    {
+        $body = $this->response->getContent();
+        if ($body === false) {
+            return '';
+        }
+        return $body;
     }
 
     /**

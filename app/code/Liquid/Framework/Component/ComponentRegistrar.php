@@ -25,11 +25,11 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     {
         if (isset(self::$paths[$type->name][$componentName])) {
             throw new \LogicException(
-                ucfirst($type->name) . ' \'' . $componentName . '\' from \'' . $path . '\' '
+                \ucfirst($type->name) . ' \'' . $componentName . '\' from \'' . $path . '\' '
                 . 'has been already defined in \'' . self::$paths[$type->name][$componentName] . '\'.'
             );
         }
-        self::$paths[$type->name][$componentName] = str_replace('\\', '/', $path);
+        self::$paths[$type->name][$componentName] = \str_replace('\\', '/', $path);
     }
 
     /**

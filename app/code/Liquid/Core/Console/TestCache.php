@@ -40,7 +40,7 @@ class TestCache extends Command
 
         $keys = $this->cache->getKeys();
 
-        $output->writeln('Cache keys: ' . (in_array($key, $keys, true) ? 'Ok' : 'Error'));
+        $output->writeln('Cache keys: ' . (\in_array($key, $keys, true) ? 'Ok' : 'Error'));
 
         $unset = $this->cache->unset($key);
         $output->writeln('Cache unset: ' . ($unset ? 'Ok' : 'Error'));

@@ -58,7 +58,7 @@ class ModuleHelper
     {
         $moduleData = null;
         $moduleConfigPath = $modulePath . '/etc/config.php';
-        if (file_exists($moduleConfigPath)) {
+        if (\file_exists($moduleConfigPath)) {
 
             $config = $this->readFile($moduleConfigPath);
 
@@ -73,16 +73,16 @@ class ModuleHelper
             // Set enable when value not set in config or value is set in config to true
             $moduleData->enabled = !isset($config['enabled']) || $config['enabled'] === true;
 
-            if (is_array($routes)) {
+            if (\is_array($routes)) {
 
                 $moduleData->routes = $routes;
                 foreach ($routes as $route => $paths) {
-                    if (!is_array($paths)) {
+                    if (!\is_array($paths)) {
                         throw new ContextException('Route paths should be array', ['module' => $moduleData->name, 'paths' => $paths]);
                     }
                 }
             }
-            if (is_array($viewableEntityRepositories)) {
+            if (\is_array($viewableEntityRepositories)) {
                 $moduleData->viewableEntityRepositories = $viewableEntityRepositories;
             }
             unset($config);
@@ -104,7 +104,7 @@ class ModuleHelper
 
         $definitions = require $file;
 
-        if (!is_array($definitions)) {
+        if (!\is_array($definitions)) {
             throw new \Exception("File $file should return an array of definitions");
         }
         return $definitions;

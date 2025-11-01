@@ -40,7 +40,7 @@ class LocaleRepository
     public function getAll(bool $activeOnly = false): array
     {
         if ($activeOnly) {
-            return array_filter($this->locales, static function (Locale $locale) {
+            return \array_filter($this->locales, static function (Locale $locale) {
                 return $locale->active;
             });
         }

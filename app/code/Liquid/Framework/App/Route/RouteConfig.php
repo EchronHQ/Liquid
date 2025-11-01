@@ -78,7 +78,7 @@ class RouteConfig
         $cachedRoutes = $this->cache->load($cacheId);
         if ($cachedRoutes) {
             $cachedRoutes = $this->serialize->unserialize($cachedRoutes);
-            if (is_array($cachedRoutes)) {
+            if (\is_array($cachedRoutes)) {
                 $this->routes[$scope->value] = $cachedRoutes;
                 // TODO: parse to objects
                 return $cachedRoutes;

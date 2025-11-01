@@ -70,15 +70,15 @@ abstract class AbstractViewableEntity
             }
         }
         if (!$hasTheme) {
-            var_dump($classes);
+            \var_dump($classes);
             throw new \Error('Theme is missing for `' . $id . '`');
         }
         if (!$hasPalette) {
-            var_dump($classes);
+            \var_dump($classes);
             throw new \Error('Palette is missing for `' . $id . '`');
         }
         if (!$hasAccent) {
-            var_dump($classes);
+            \var_dump($classes);
             throw new \Error('Accent is missing for `' . $id . '`');
         }
 

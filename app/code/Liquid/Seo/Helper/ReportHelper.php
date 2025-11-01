@@ -68,7 +68,7 @@ class ReportHelper
     public function generate(array $pages): array
     {
         // Sort pages by priority
-        usort($pages, static function (SitemapUrlEntry $a, SitemapUrlEntry $b) {
+        \usort($pages, static function (SitemapUrlEntry $a, SitemapUrlEntry $b) {
             return $b->priority <=> $a->priority;
         });
 

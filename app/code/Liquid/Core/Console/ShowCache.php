@@ -70,8 +70,8 @@ class ShowCache extends Command
     {
         $value = $item->get();
         // TODO: get datatype
-        if (is_array($value)) {
-            $value = json_encode($value);
+        if (\is_array($value)) {
+            $value = \json_encode($value);
         }
         $value = (string)$value;
         if (\strlen($value) > 100) {

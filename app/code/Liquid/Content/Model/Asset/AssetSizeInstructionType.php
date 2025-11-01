@@ -14,7 +14,7 @@ enum AssetSizeInstructionType: string
 
     public static function fromFile(string $file): self
     {
-        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        $ext = \pathinfo($file, PATHINFO_EXTENSION);
         switch ($ext) {
             case 'png':
                 return self::PNG;

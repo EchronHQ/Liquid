@@ -24,7 +24,7 @@ class ActionFactory
      */
     public function create(string $actionName, array $arguments = []): ActionInterface
     {
-        if (!is_subclass_of($actionName, ActionInterface::class)) {
+        if (!\is_subclass_of($actionName, ActionInterface::class)) {
             throw new \InvalidArgumentException(
                 'The action name provided is invalid. Verify the action name and try again.'
             );

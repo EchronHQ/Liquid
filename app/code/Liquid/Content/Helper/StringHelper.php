@@ -52,9 +52,9 @@ class StringHelper
         ];
         foreach ($finds as $query) {
             $lastPos = 0;
-            while (($lastPos = stripos($html, $query, $lastPos)) !== false) {
+            while (($lastPos = \stripos($html, $query, $lastPos)) !== false) {
                 $positions[] = $lastPos;
-                $lastPos += strlen($needle);
+                $lastPos += \strlen($needle);
             }
         }
 

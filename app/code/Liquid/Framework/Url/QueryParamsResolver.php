@@ -18,9 +18,9 @@ class QueryParamsResolver extends DataObject
         if (!$this->hasData('query')) {
             $query = '';
             $params = $this->getQueryParams();
-            if (is_array($params)) {
-                ksort($params);
-                $query = http_build_query($params, '', $escape ? '&amp;' : '&');
+            if (\is_array($params)) {
+                \ksort($params);
+                $query = \http_build_query($params, '', $escape ? '&amp;' : '&');
             }
             $this->setData('query', $query);
         }
@@ -71,9 +71,9 @@ class QueryParamsResolver extends DataObject
         if (!$this->hasData('query_params')) {
             $params = [];
             if ($this->_getData('query')) {
-                foreach (explode('&', $this->_getData('query')) as $param) {
-                    $paramArr = explode('=', $param);
-                    $params[$paramArr[0]] = urldecode($paramArr[1]);
+                foreach (\explode('&', $this->_getData('query')) as $param) {
+                    $paramArr = \explode('=', $param);
+                    $params[$paramArr[0]] = \urldecode($paramArr[1]);
                 }
             }
             $this->setData('query_params', $params);
@@ -107,7 +107,7 @@ class QueryParamsResolver extends DataObject
         }
 
         $params = $this->_getData('query_params');
-        if (!is_array($params)) {
+        if (!\is_array($params)) {
             $params = [];
         }
         foreach ($data as $param => $value) {

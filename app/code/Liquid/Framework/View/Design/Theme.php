@@ -41,7 +41,7 @@ class Theme extends DataObject
                 $result[] = $theme;
                 $theme = $theme->getParentTheme();
             }
-            $this->inheritanceSequence = array_reverse($result);
+            $this->inheritanceSequence = \array_reverse($result);
         }
         return $this->inheritanceSequence;
     }

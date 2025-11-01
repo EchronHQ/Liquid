@@ -108,7 +108,7 @@ class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
 
     public function getCurrentUrl(): string
     {
-        $requestString = $this->escaper->escapeUrl(ltrim($this->request->getRequestString(), '/'));
+        $requestString = $this->escaper->escapeUrl(\ltrim($this->request->getRequestString(), '/'));
         return $requestString;
     }
 

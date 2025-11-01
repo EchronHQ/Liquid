@@ -41,7 +41,7 @@ class ScopedData extends ConfigData
     protected function _loadScopedData(string $scope): void
     {
         if (false === isset($this->_loadedScopes[$scope])) {
-            if (false === in_array($scope, $this->_scopePriorityScheme, true)) {
+            if (false === \in_array($scope, $this->_scopePriorityScheme, true)) {
                 $this->_scopePriorityScheme[] = $scope;
             }
             foreach ($this->_scopePriorityScheme as $scopeCode) {

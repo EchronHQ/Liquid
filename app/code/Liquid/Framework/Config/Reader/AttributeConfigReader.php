@@ -38,14 +38,14 @@ class AttributeConfigReader implements ConfigReaderInterface
      */
     public function read(string|null $scope = null): array
     {
-        if (!class_exists($this->attributeClassName, true)) {
+        if (!\\class_exists($this->attributeClassName, true)) {
             throw new \RuntimeException('Unable to read configuration, class "' . $this->attributeClassName . '" does not exist');
         }
         // TODO: filter actions by scope
         $classNames = $this->getClassNames();
         $routes = [];
         foreach ($classNames as $className) {
-            if (!class_exists($className, true)) {
+            if (!\\class_exists($className, true)) {
                 $this->logger->error('[Attribute config reader] Invalid class "' . $className . '" (class does not seem to exist)');
             } else {
 
@@ -84,17 +84,17 @@ class AttributeConfigReader implements ConfigReaderInterface
         $actions = [];
         foreach ($this->modulesList->getCodes() as $moduleName) {
             $actionDir = $this->getModuleDir($this->moduleDirType, $moduleName);
-            if (!file_exists($actionDir)) {
+            if (!\\file_exists($actionDir)) {
                 continue;
             }
             $dirIterator = new \RecursiveDirectoryIterator($actionDir, FilesystemIterator::SKIP_DOTS);
             $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
-            $namespace = str_replace('_', '\\', $moduleName);
+            $namespace = \\str_replace('_', '\\', $moduleName);
             /** @var \SplFileInfo $file */
             foreach ($recursiveIterator as $file) {
-                $actionName = str_replace('/', '\\', str_replace($actionDir, '', $file->getPathname()));
-                $className = $namespace . "\\" . $this->moduleDirType . substr($actionName, 0, -4);
-                $actions[strtolower($className)] = $className;
+                $actionName = \\str_replace([$actionDir, '/'], ['', '\\'], $file->getPathname());
+                $className = $namespace . "\\" . $this->moduleDirType . \\substr($actionName, 0, -4);
+                $actions[\\strtolower($className)] = $className;
             }
         }
         return $actions;

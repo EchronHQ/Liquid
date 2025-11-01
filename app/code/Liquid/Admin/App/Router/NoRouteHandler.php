@@ -20,8 +20,8 @@ class NoRouteHandler implements NoRouteHandlerInterface
 
     public function process(Request $request): bool
     {
-        $requestPathParams = explode('/', trim($request->getPathInfo(), '/'));
-        $areaFrontName = array_shift($requestPathParams);
+        $requestPathParams = \explode('/', \trim($request->getPathInfo(), '/'));
+        $areaFrontName = \array_shift($requestPathParams);
 
         if ($areaFrontName === $this->frontNameResolver->getFrontName(true)) {
 //            $moduleName = $this->routeConfig->getRouteFrontName('adminhtml');

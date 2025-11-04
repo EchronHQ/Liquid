@@ -12,7 +12,7 @@ abstract class AbstractResult implements ResultInterface
     protected HttpResponseCode|null $httpResponseCode = null;
     protected array $headers = [];
 
-    protected int|null $statusHeaderCode = null;
+    protected HttpResponseCode|null $statusHeaderCode = null;
     protected string $statusHeaderVersion;
     protected string $statusHeaderPhrase;
 
@@ -37,12 +37,12 @@ abstract class AbstractResult implements ResultInterface
     }
 
     /**
-     * @param int $httpCode
+     * @param HttpResponseCode $httpCode
      * @param null|int|string $version
      * @param null|string $phrase
      * @return $this
      */
-    public function setStatusHeader(int $httpCode, int|string|null $version = null, string|null $phrase = null): self
+    public function setStatusHeader(HttpResponseCode $httpCode, int|string|null $version = null, string|null $phrase = null): self
     {
         $this->statusHeaderCode = $httpCode;
         $this->statusHeaderVersion = $version;

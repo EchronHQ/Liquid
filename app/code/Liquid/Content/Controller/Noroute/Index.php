@@ -7,6 +7,7 @@ use Liquid\Content\Helper\PageHelper;
 use Liquid\Content\Repository\PageRepository;
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Route\Attribute\Route;
 use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Controller\Result\Plain;
@@ -45,7 +46,7 @@ class Index implements ActionInterface
         $page = $pageHelper->getById('not-found');
         if ($page !== null) {
             $resultPage = $this->pageHelper->prepareResultPage($page);
-            $resultPage->setStatusHeader(404, '1.1', 'Not Found');
+            $resultPage->setStatusHeader(HttpResponseCode::NOT_FOUND, '1.1', 'Not Found');
             $resultPage->setHeader('Status', '404 File not found');
             $resultPage->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
             return $resultPage;
@@ -71,7 +72,7 @@ class Index implements ActionInterface
         $resultPage = $this->objectManager->create(Plain::class);
         $resultPage->setText('<div>Page not found</div><div>Request: ' . $this->request->getUri() . '</div>');
         //     if ($resultPage) {
-        $resultPage->setStatusHeader(404, '1.1', 'Not Found');
+        $resultPage->setStatusHeader(HttpResponseCode::NOT_FOUND, '1.1', 'Not Found');
         $resultPage->setHeader('Status', '404 File not found');
         $resultPage->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
 

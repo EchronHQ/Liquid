@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Framework\Controller\Result;
 
 
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Response\HttpResponseInterface;
 use Liquid\Framework\Controller\AbstractResult;
 
@@ -16,7 +16,7 @@ class Forward extends AbstractResult
     private array $params = [];
 
     public function __construct(
-        private readonly Request $request
+        private readonly HttpRequest $request
     )
     {
     }

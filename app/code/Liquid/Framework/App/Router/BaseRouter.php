@@ -6,7 +6,7 @@ namespace Liquid\Framework\App\Router;
 use Liquid\Core\Helper\PathMatcher;
 use Liquid\Framework\App\Action\AbstractAction;
 use Liquid\Framework\App\Action\ActionInterface;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Route\Route;
 use Liquid\Framework\App\Route\RouteConfig;
 use Liquid\Framework\Exception\ContextException;
@@ -41,13 +41,13 @@ class BaseRouter implements RouterInterface
 
     }
 
-    public function match(Request $request): ActionInterface|null
+    public function match(HttpRequest $request): ActionInterface|null
     {
         $params = $this->parseRequest($request);
         return $this->matchAction($request, $params);
     }
 
-    final public function getActionClassNew(Route $route, string $actionPath, Request $request): string|null
+    final public function getActionClassNew(Route $route, string $actionPath, HttpRequest $request): string|null
     {
         // echo '<div style="display:grid; grid-template-columns: 400px 400px auto; padding:16px 5px"><div>' . $route->path . '</div><div>' . $actionPath . '</div><div>' . (PathMatcher::matches($route->path, $actionPath) ? 'Y' : 'N') . '</div></div>';
         if (PathMatcher::matches($route->path, $actionPath)) {
@@ -113,10 +113,10 @@ class BaseRouter implements RouterInterface
 //        return $modules;
 //    }
     /**
-     * @param Request $request
+     * @param HttpRequest $request
      * @return array{areaFrontName: string, actionPath: string}
      */
-    protected function parseRequest(Request $request): array
+    protected function parseRequest(HttpRequest $request): array
     {
         $output = [];
         $path = \trim($request->getPathInfo(), '/');
@@ -140,12 +140,12 @@ class BaseRouter implements RouterInterface
     }
 
     /**
-     * @param Request $request
+     * @param HttpRequest $request
      * @param array{areaFrontName: string, actionPath: string} $params
      * @return ActionInterface|null
      * @throws \ReflectionException
      */
-    protected function matchAction(Request $request, array $params): ActionInterface|null
+    protected function matchAction(HttpRequest $request, array $params): ActionInterface|null
     {
 //        $moduleFrontName = $this->matchModuleFrontName($request, $params['moduleFrontName']);
 //        if (\is_null($moduleFrontName)) {
@@ -251,11 +251,11 @@ class BaseRouter implements RouterInterface
 
     /**
      * TODO: give the first section of the url a better name than "module"
-     * @param Request $request
+     * @param HttpRequest $request
      * @param string $param
      * @return string|null
      */
-    final protected function matchModuleFrontName(Request $request, string $param): string|null
+    final protected function matchModuleFrontName(HttpRequest $request, string $param): string|null
     {
         // get module name
         if ($param !== '') {
@@ -273,7 +273,7 @@ class BaseRouter implements RouterInterface
         return $moduleFrontName;
     }
 
-    final protected function matchActionPath(Request $request, string|null $param): string
+    final protected function matchActionPath(HttpRequest $request, string|null $param): string
     {
         if ($param === null || $param === '') {
             return '';
@@ -281,7 +281,7 @@ class BaseRouter implements RouterInterface
         return $param;
     }
 
-    protected function matchActionName(Request $request, string|null $param): string
+    protected function matchActionName(HttpRequest $request, string|null $param): string
     {
         if ($param === null || $param === '') {
             return '';

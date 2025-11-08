@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Framework;
 
 use Liquid\Framework\App\Config\ScopeConfig;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Scope\ScopeId;
 use Liquid\Framework\App\Scope\ScopeInterface;
 use Liquid\Framework\Serialize\Serializer\SerializerInterface;
@@ -25,7 +25,7 @@ class Url extends DataObject
         private readonly ScopeResolverInterface $scopeResolver,
         private readonly RouteParamsResolver    $routeParamsResolver,
         private readonly QueryParamsResolver    $queryParamsResolver,
-        private readonly Request                $request,
+        private readonly HttpRequest            $request,
         private readonly SerializerInterface    $serializer,
         private readonly Escaper                $escaper,
         private readonly LoggerInterface        $logger,
@@ -143,8 +143,8 @@ class Url extends DataObject
         $port = '';
         if (isset($httpHostWithPort[1])) {
             $defaultPorts = [
-                Request::DEFAULT_HTTP_PORT,
-                Request::DEFAULT_HTTPS_PORT,
+                HttpRequest::DEFAULT_HTTP_PORT,
+                HttpRequest::DEFAULT_HTTPS_PORT,
             ];
             /** Only add custom port to url when it's not a default one */
             if (!\in_array($httpHostWithPort[1], $defaultPorts, true)) {

@@ -8,7 +8,7 @@ use Liquid\Content\Helper\RecaptchaHelper;
 use Liquid\Content\Repository\FormRepository;
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Action\Context;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Route\Attribute\Route;
 use Liquid\Framework\Controller\AbstractResult;
 use Liquid\Framework\Email\SMTP\SMTPFactory;
@@ -28,7 +28,7 @@ class Submit2 implements ActionInterface
         private readonly FormRepository         $formRepository,
         private readonly SMTPFactory            $smtpFactory,
         private readonly ObjectManagerInterface $objectManager,
-        private readonly Request                $request,
+        private readonly HttpRequest            $request,
         private readonly LoggerInterface        $logger,
     )
     {

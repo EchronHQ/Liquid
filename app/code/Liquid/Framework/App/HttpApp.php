@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace Liquid\Framework\App;
 
 use Liquid\Framework\App\Area\AreaList;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
+use Liquid\Framework\App\Response\HttpResponse;
 use Liquid\Framework\App\Response\HttpResponseCode;
-use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\Response\ResponseInterface;
 use Liquid\Framework\ObjectManager\ConfigLoader;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
+
 
 class HttpApp implements AppInterface
 {
@@ -18,8 +19,9 @@ class HttpApp implements AppInterface
         private readonly ConfigLoader           $configLoader,
         private readonly AreaList               $areaList,
         private readonly State                  $state,
-        private readonly Request                $request,
-        private readonly Response               $response
+        private readonly HttpRequest            $request,
+        private readonly HttpResponse           $response,
+        private readonly ExceptionHandler       $exceptionHandler
     )
     {
 
@@ -39,6 +41,14 @@ class HttpApp implements AppInterface
             $this->handleHeadRequest();
         }
         return $this->response;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function catchException(\Liquid\Core\Application $bootstrap, \Exception $exception): bool
+    {
+        return $this->exceptionHandler->handle($bootstrap, $exception, $this->response, $this->request);
     }
 
     /**

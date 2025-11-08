@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace Liquid\Framework\App\Response;
 
 use Liquid\Core\Model\Request\ResponseType;
+use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
-class Response implements HttpResponseInterface
+class HttpResponse implements HttpResponseInterface
 {
     public ResponseType $type;
     protected HttpResponseCode $statusCode;
     /** @var \Closure */
-    private $headersSentHandler;
+    private \Closure $headersSentHandler;
 
-    private \Symfony\Component\HttpFoundation\Response $response;
+    private readonly BaseResponse $response;
 
     public function __construct()
     {
-        $this->response = new \Symfony\Component\HttpFoundation\Response();
+        $this->response = new BaseResponse();
 
-        $this->headersSentHandler = static function ($response) {
+        $this->headersSentHandler = static function (HttpResponse $response) {
             throw new \RuntimeException('Cannot send headers, headers already sent');
         };
         // parent::__construct();
@@ -59,12 +60,25 @@ class Response implements HttpResponseInterface
         return $this;
     }
 
+    public function sendHeaders(): self
+    {
+        if (\headers_sent()) {
+
+            ($this->headersSentHandler)($this);
+            return $this;
+
+        }
+        $this->response->sendHeaders($this->statusCode->value);
+        return $this;
+    }
+
     /**
      * @inheritdoc
      */
     public function setHttpResponseCode(HttpResponseCode $code): self
     {
         $this->statusCode = $code;
+        $this->response->setStatusCode($code->value);
         return $this;
     }
 
@@ -114,10 +128,7 @@ class Response implements HttpResponseInterface
      */
     public function sendResponse(): int|null
     {
-//        $this->setHeadersSentHandler(function () {
-//            echo 'headers already send';
-//        });
-        $this->response->sendHeaders();
+        $this->sendHeaders();
         $this->response->send();
         return null;
     }

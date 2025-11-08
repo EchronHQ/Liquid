@@ -4,16 +4,16 @@ declare(strict_types=1);
 namespace Liquid\Framework\App\Action;
 
 use Liquid\Framework\App\Config\ScopeConfig;
-use Liquid\Framework\App\Request\Request;
-use Liquid\Framework\App\Response\Response;
+use Liquid\Framework\App\Request\HttpRequest;
+use Liquid\Framework\App\Response\HttpResponse;
 use Liquid\Framework\Controller\ResultFactory;
 use Psr\Log\LoggerInterface;
 
 readonly class Context
 {
     public function __construct(
-        private Request         $request,
-        private Response        $response,
+        private HttpRequest     $request,
+        private HttpResponse    $response,
         private ResultFactory   $resultFactory,
         private ScopeConfig     $configuration,
         private LoggerInterface $logger
@@ -21,12 +21,12 @@ readonly class Context
     {
     }
 
-    public function getRequest(): Request
+    public function getRequest(): HttpRequest
     {
         return $this->request;
     }
 
-    public function getResponse(): Response
+    public function getResponse(): HttpResponse
     {
         return $this->response;
     }

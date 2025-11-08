@@ -8,7 +8,7 @@ namespace Liquid\Framework\App\Request;
 use Liquid\Framework\StringHelper;
 use Liquid\UrlRewrite\Model\Resource\UrlRewrite;
 
-class Request
+class HttpRequest
 {
     public const int DEFAULT_HTTP_PORT = 80;
     public const int DEFAULT_HTTPS_PORT = 443;

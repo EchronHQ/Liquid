@@ -11,9 +11,9 @@ use Liquid\Framework\App\Action\ActionFactory;
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Action\ForwardAction;
 use Liquid\Framework\App\Action\RedirectAction;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Response\HttpResponseCode;
-use Liquid\Framework\App\Response\Response;
+use Liquid\Framework\App\Response\HttpResponse;
 use Liquid\Framework\App\Router\RouterInterface;
 use Liquid\Framework\Controller\Result\Forward;
 use Liquid\Framework\Controller\Result\Redirect;
@@ -27,7 +27,7 @@ class Router implements RouterInterface
     public function __construct(
         private readonly UrlFinderInterface $urlFinder,
         private readonly SegmentManager     $segmentManager,
-        private readonly Response           $response,
+        private readonly HttpResponse       $response,
         private readonly Resolver           $resolver,
         private readonly LoggerInterface    $logger,
         private readonly ActionFactory      $actionFactory
@@ -36,7 +36,7 @@ class Router implements RouterInterface
 
     }
 
-    public function match(Request $request): ActionInterface|null
+    public function match(HttpRequest $request): ActionInterface|null
     {
         $rewrite = $this->getRewrite(
             $request->getPathInfo(),

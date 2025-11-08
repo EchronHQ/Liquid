@@ -6,7 +6,7 @@ namespace Liquid\Content\Controller\Noroute;
 use Liquid\Content\Helper\PageHelper;
 use Liquid\Content\Repository\PageRepository;
 use Liquid\Framework\App\Action\ActionInterface;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Response\HttpResponseCode;
 use Liquid\Framework\App\Route\Attribute\Route;
 use Liquid\Framework\Controller\AbstractResult;
@@ -21,7 +21,7 @@ class Index implements ActionInterface
 
     public function __construct(
 
-        private readonly Request                $request,
+        private readonly HttpRequest            $request,
         private readonly PageHelper             $pageHelper,
         private readonly LoggerInterface        $logger,
         private readonly ObjectManagerInterface $objectManager

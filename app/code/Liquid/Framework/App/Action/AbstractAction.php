@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Liquid\Framework\App\Action;
 
 use Liquid\Framework\App\Config\ScopeConfig;
-use Liquid\Framework\App\Request\Request;
-use Liquid\Framework\App\Response\Response;
+use Liquid\Framework\App\Request\HttpRequest;
+use Liquid\Framework\App\Response\HttpResponse;
 use Liquid\Framework\Controller\ResultFactory;
 use Liquid\Framework\Controller\ResultInterface;
 use Psr\Log\LoggerInterface;
@@ -16,8 +16,8 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractAction implements ActionInterface
 {
     protected readonly LoggerInterface $logger;
-    protected readonly Request $request;
-    protected readonly Response $response;
+    protected readonly HttpRequest $request;
+    protected readonly HttpResponse $response;
     private readonly ResultFactory $resultFactory;
     private readonly ScopeConfig $configuration;
 
@@ -32,12 +32,12 @@ abstract class AbstractAction implements ActionInterface
 
     abstract public function execute(): ResultInterface;
 
-    protected function getRequest(): Request
+    protected function getRequest(): HttpRequest
     {
         return $this->request;
     }
 
-    protected function getResponse(): Response
+    protected function getResponse(): HttpResponse
     {
         return $this->response;
     }

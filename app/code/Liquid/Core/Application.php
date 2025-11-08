@@ -8,22 +8,33 @@ use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\AppInterface;
 use Liquid\Framework\App\AppMode;
 use Liquid\Framework\App\Config\ScopeConfig;
+use Liquid\Framework\App\Response\HttpResponse;
 use Liquid\Framework\App\Response\HttpResponseCode;
-use Liquid\Framework\App\Response\Response;
 use Liquid\Framework\App\State;
 use Liquid\Framework\Filesystem\DirectoryList;
 use Liquid\Framework\ObjectManager\ObjectManagerFactory;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
-use Liquid\Framework\Output\Error;
 use Psr\Log\LoggerInterface;
 
 class Application
 {
+    /**
+     * Possible errors that can be triggered by the bootstrap
+     */
+    public const int ERR_MAINTENANCE = 901;
+    public const int ERR_IS_INSTALLED = 902;
+
     private ObjectManagerInterface $objectManager;
     private LoggerInterface|null $logger = null;
 //    private SegmentConfig $config;
 
     private readonly Profiler $profiler;
+    /**
+     * Bootstrap-specific error code that may have been set in runtime
+     *
+     * @var int
+     */
+    private int $errorCode = 0;
 
     public function __construct(
         ObjectManagerFactory    $factory,
@@ -72,16 +83,6 @@ class Application
         return new ObjectManagerFactory($dirList);
     }
 
-    /**
-     * Gets the current parameters
-     *
-     * @return array
-     */
-    public function getParams(): array
-    {
-        return $this->initParams;
-    }
-
 
 
 
@@ -104,68 +105,66 @@ class Application
 //
 //    }
 
+    /**
+     * Gets the current parameters
+     *
+     * @return array
+     */
+    public function getParams(): array
+    {
+        return $this->initParams;
+    }
+
     public function run(AppInterface $application): void
     {
         \ini_set('memory_limit', '2048M');
-        $this->profiler->profilerStart('Application:run');
 
 
         try {
-
-            $response = $application->launch();
-            $response->sendResponse();
-
-
-//            $this->beforeRun();
-//            /** @var Router $router */
-//            $router = $this->diContainer->get(Router::class);
-//
-//            /** @var Resolver $resolver */
-//            $resolver = $this->diContainer->get(Resolver::class);
-//
-//            $this->profiler->profilerStart('Application:initializeRouter');
-//            $router->initialize();
-//
-//            $pageRoutes = $router->getPageRoutes();
-//            $resolver->setPageRoutes($pageRoutes);
-//
-//            $this->profiler->profilerFinish('Application:initializeRouter');
-//
-//            $response = $router->execute();
-//
-//            $response->sendHeaders()->sendContent();
-        } catch (\Throwable $ex) {
-            $this->terminate($ex);
+            try {
+                $this->profiler->profilerStart('Application:run');
+                $response = $application->launch();
+                $response->sendResponse();
+                $this->profiler->profilerFinish('Application:run');
+            } catch (\Throwable $e) {
+                $this->profiler->profilerFinish('Application:run');
+                if (!$application->catchException($this, $e)) {
+                    throw $e;
+                }
 
 
-            if ($this->logger !== null) {
-                $this->logger->error('Unable to run application', ['ex' => $ex]);
+//                if ($this->logger !== null) {
+//                    $this->logger->error('Unable to run application', ['ex' => $ex]);
+//                }
+//
+//
+//                // Safe to file?
+//                if ($this->isDeveloperMode()) {
+//
+//
+//                    echo Error::toHtml($ex);
+//                    \http_response_code(500);
+//                    exit(1);
+////                die('xxx');
+////                return;
+//                }
+//
+//                // TODO: show error code + log error to file with same code
+//                throw $ex;
+
+
+                //throw $ex;
+            } finally {
+
+                if ($this->logger !== null && $this->isDeveloperMode()) {
+                    $this->profiler->output($this->logger);
+
+                }
             }
-
-
-            // Safe to file?
-            if ($this->isDeveloperMode()) {
-
-
-                echo Error::toHtml($ex);
-                \http_response_code(500);
-                exit(1);
-//                die('xxx');
-//                return;
-            }
-
-            // TODO: show error code + log error to file with same code
-            throw $ex;
-
-
-            //throw $ex;
-        } finally {
-            $this->profiler->profilerFinish('Application:run');
-            if ($this->logger !== null && $this->isDeveloperMode()) {
-                $this->profiler->output($this->logger);
-
-            }
+        } catch (\Throwable $e) {
+            $this->terminate($e);
         }
+
     }
 
     /**
@@ -196,10 +195,20 @@ class Application
                 throw new \InvalidArgumentException("The provided class doesn't implement AppInterface: {$type}");
             }
             return $application;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->terminate($e);
         }
         return null;
+    }
+
+    /**
+     * Getter for error code
+     *
+     * @return int
+     */
+    public function getErrorCode()
+    {
+        return $this->errorCode;
     }
 
     /**
@@ -210,8 +219,8 @@ class Application
      */
     protected function terminate(\Throwable $e): void
     {
-        /** @var Response $response */
-        $response = $this->objectManager->get(Response::class);
+        /** @var HttpResponse $response */
+        $response = $this->objectManager->get(HttpResponse::class);
         $response->clearHeaders();
         $response->setHttpResponseCode(HttpResponseCode::STATUS_CODE_500);
         $response->setHeader('Content-Type', 'text/plain');
@@ -219,6 +228,7 @@ class Application
             // TODO: use helper to format error to html
             $response->setBody('<pre>' . (string)$e . '<pre>');
         } else {
+            // TODO: create nicer
             $message = "An error has happened during application run. See exception log for details.\n";
             try {
                 if (!$this->objectManager) {
@@ -228,6 +238,11 @@ class Application
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
+
+            // TODO: use some kind of template rendering?
+            // TODO: this should only happen in the http app
+
+            //   $body = \file_get_contents($this->rootDir . '/vendor/echron/liquid/app/code/Liquid/Framework/Exception/templates/error.phtml');
             $response->setBody($message);
         }
         $response->sendResponse();
@@ -238,7 +253,6 @@ class Application
     {
         return $this->objectManager;
     }
-
 //    final protected function getConfig(): SegmentConfig
 //    {
 //        return $this->config;

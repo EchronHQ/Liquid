@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Framework\View\Layout;
 
 use Liquid\Core\Helper\Profiler;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\Event\Event;
 use Liquid\Framework\Event\EventManager;
 
@@ -16,7 +16,7 @@ class Builder
         private readonly Layout       $layout,
         private readonly Profiler     $profiler,
         private readonly EventManager $eventManager,
-        private readonly Request      $request
+        private readonly HttpRequest $request
     )
     {
         $this->layout->setBuilder($this);

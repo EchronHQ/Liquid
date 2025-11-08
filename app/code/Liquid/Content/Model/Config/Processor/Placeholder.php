@@ -9,14 +9,14 @@ namespace Liquid\Content\Model\Config\Processor;
 
 use Liquid\Framework\App\Config\Processor\PostProcessorInterface;
 use Liquid\Framework\App\DeploymentConfig;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 
 class Placeholder implements PostProcessorInterface
 {
     private string $urlPlaceholder = '{{base_url}}';
 
     public function __construct(
-        private readonly Request          $request,
+        private readonly HttpRequest      $request,
         private readonly DeploymentConfig $deploymentConfig
     )
     {

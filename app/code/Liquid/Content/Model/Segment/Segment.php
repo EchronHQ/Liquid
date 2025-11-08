@@ -5,7 +5,7 @@ namespace Liquid\Content\Model\Segment;
 
 use Liquid\Content\Model\ScopeType;
 use Liquid\Framework\App\Config\ScopeConfig;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Scope\ScopeInterface as AppScopeInterface;
 use Liquid\Framework\DataObject;
 use Liquid\Framework\Escaper;
@@ -43,7 +43,7 @@ class Segment extends DataObject implements AppScopeInterface, UrlScopeInterface
 
     public function __construct(
         private readonly ScopeConfig $config,
-        private readonly Request     $request,
+        private readonly HttpRequest $request,
         private readonly Filesystem  $filesystem,
         private readonly Url         $url,
         private readonly Escaper     $escaper,

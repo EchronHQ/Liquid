@@ -5,7 +5,7 @@ namespace Liquid\Framework\App\Router;
 
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Action\ForwardAction;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\Controller\Result\Forward;
 use Liquid\Framework\ObjectManager\ObjectManagerInterface;
 
@@ -19,7 +19,7 @@ class FallbackRouter implements RouterInterface
 
     }
 
-    public function match(Request $request): ActionInterface|null
+    public function match(HttpRequest $request): ActionInterface|null
     {
         foreach ($this->noRouteHandlerList->getHandlers() as $noRouteHandler) {
             if ($noRouteHandler->process($request)) {

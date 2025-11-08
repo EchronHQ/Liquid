@@ -11,8 +11,8 @@ use Liquid\Core\Repository\UrlRepository;
 use Liquid\Framework\App\Action\ActionInterface;
 use Liquid\Framework\App\Area\AreaList;
 use Liquid\Framework\App\Config\ScopeConfig;
-use Liquid\Framework\App\Request\Request;
-use Liquid\Framework\App\Response\Response;
+use Liquid\Framework\App\Request\HttpRequest;
+use Liquid\Framework\App\Response\HttpResponse;
 use Liquid\Framework\App\Router\RouterList;
 use Liquid\Framework\Controller\Result\NoAccess;
 use Liquid\Framework\Controller\ResultInterface;
@@ -30,7 +30,7 @@ class FrontController
      * @param Resolver $resolver
      * @param State $appState
      * @param AreaList $areaList
-     * @param Response $response
+     * @param HttpResponse $response
      * @param Profiler $profiler
      */
     public function __construct(
@@ -41,14 +41,14 @@ class FrontController
         private readonly Resolver        $resolver,
         private readonly State           $appState,
         private readonly AreaList        $areaList,
-        private readonly Response        $response,
+        private readonly HttpResponse    $response,
         private readonly Profiler        $profiler,
     )
     {
 
     }
 
-    public function dispatch(Request $request): ResultInterface
+    public function dispatch(HttpRequest $request): ResultInterface
     {
         if (!AccessHelper::hasAccess($request)) {
             $data = [
@@ -167,7 +167,7 @@ class FrontController
 //        return $notFoundAction->execute();
     }
 
-    private function processRequest(Request $request, ActionInterface $action): ResultInterface
+    private function processRequest(HttpRequest $request, ActionInterface $action): ResultInterface
     {
         $request->setMatched(true);
         // $this->response->setNoCacheHeaders();

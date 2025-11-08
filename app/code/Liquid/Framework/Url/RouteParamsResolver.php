@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Liquid\Framework\Url;
 
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\DataObject;
 use Liquid\Framework\Escaper;
 
 class RouteParamsResolver extends DataObject
 {
     public function __construct(
-        private readonly Request             $request,
+        private readonly HttpRequest         $request,
         private readonly QueryParamsResolver $queryParamsResolver,
         private readonly Escaper             $escaper,
         array                                $data = []

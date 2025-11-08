@@ -6,6 +6,8 @@ namespace Liquid\Framework\Encryption;
 use Liquid\Framework\App\DeploymentConfig;
 use Liquid\Framework\Config\ConfigOptionsListConstants;
 use Liquid\Framework\Encryption\Adapter\SodiumChachaIetf;
+use ParagonIE\Halite\Password;
+use ParagonIE\HiddenString\HiddenString;
 
 class Encryptor
 {
@@ -146,6 +148,25 @@ class Encryptor
             throw new \Exception('Not supported cipher version');
         }
         return $version;
+    }
+
+    public function getHash(string $password, bool $salt = false): string
+    {
+        if ($salt === false) {
+            return $this->hash($password);
+        }
+        return Password::hash(new HiddenString($password), $salt);
+    }
+
+
+    public function hash(string $data): string
+    {
+        return \hash_hmac(
+            'sha256',
+            $data,
+            $this->decodeKey($this->keys[$this->keyVersion]),
+            false
+        );
     }
 
     /**

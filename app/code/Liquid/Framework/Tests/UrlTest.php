@@ -10,7 +10,7 @@ use Liquid\Content\Model\SegmentResolver;
 use Liquid\Core\Helper\Profiler;
 use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\Config\SegmentConfigInterface;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Scope\ScopeCodeResolver;
 use Liquid\Framework\Escaper;
 use Liquid\Framework\ObjectManager\ObjectManager;
@@ -83,7 +83,7 @@ class UrlTest extends TestCase
         $queryParamsResolver = new QueryParamsResolver();
 
         $converter = new StringHelper();
-        $request = new Request($converter);
+        $request = new HttpRequest($converter);
         $escaper = new Escaper($logger);
         $routeParamsResolver = new RouteParamsResolver($request, $queryParamsResolver, $escaper);
 

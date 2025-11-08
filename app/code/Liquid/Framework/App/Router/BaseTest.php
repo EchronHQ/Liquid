@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Framework\App\Router;
 
 use DI\ContainerBuilder;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use PHPUnit\Framework\TestCase;
 
 class BaseTest extends TestCase
@@ -28,8 +28,8 @@ class BaseTest extends TestCase
                 '' => 'SomeClass',
             ],
         ];
-        $this->assertEquals('SomeClass', $this->base->getActionClassNew($module, '', new Request()));
-        $this->assertNull($this->base->getActionClassNew($module, 'NonExisting', new Request()));
+        $this->assertEquals('SomeClass', $this->base->getActionClassNew($module, '', new HttpRequest()));
+        $this->assertNull($this->base->getActionClassNew($module, 'NonExisting', new HttpRequest()));
     }
 
     public function testParametersBasic(): void
@@ -41,8 +41,8 @@ class BaseTest extends TestCase
                 ':paramB' => 'ClassForActionWithParam',
             ],
         ];
-        $this->assertEquals('ClassForActionA', $this->base->getActionClassNew($module, 'actionA', new Request()));
-        $this->assertEquals('ClassForActionWithParam', $this->base->getActionClassNew($module, 'paramForActionB', new Request()));
+        $this->assertEquals('ClassForActionA', $this->base->getActionClassNew($module, 'actionA', new HttpRequest()));
+        $this->assertEquals('ClassForActionWithParam', $this->base->getActionClassNew($module, 'paramForActionB', new HttpRequest()));
     }
 
     public function testParametersHierarchy(): void
@@ -56,7 +56,7 @@ class BaseTest extends TestCase
                 '' => 'ClassForOverview',
             ],
         ];
-        $this->assertEquals('ClassForActionById', $this->base->getActionClassNew($module, 'actionA', new Request()));
-        $this->assertEquals('ClassForCategoryById', $this->base->getActionClassNew($module, 'category/categoryA', new Request()));
+        $this->assertEquals('ClassForActionById', $this->base->getActionClassNew($module, 'actionA', new HttpRequest()));
+        $this->assertEquals('ClassForCategoryById', $this->base->getActionClassNew($module, 'category/categoryA', new HttpRequest()));
     }
 }

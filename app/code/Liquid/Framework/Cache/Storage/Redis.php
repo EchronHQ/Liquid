@@ -10,37 +10,28 @@ use Symfony\Component\Cache\CacheItem;
 
 class Redis implements StorageInterface
 {
-    private RedisAdapter $adapter;
+    private RedisAdapter|null $adapter = null;
 
-    public function __construct(string $host, int $port, string|null $password = null)
+    public function __construct(
+        private readonly string      $host,
+        private readonly int         $port,
+        private readonly string|null $password = null
+    )
     {
-        if (!\class_exists(\Redis::class)) {
-            // TODO: log this
-            return;
-        }
-        $client = new \Redis();
-        $client->connect($host, $port);
-
-        if (!empty($password)) {
-            $client->auth($password);
-        }
-
-
-        $this->adapter = new RedisAdapter($client);
 
 
     }
 
     public function test(string $identifier): int|null
     {
-        $item = $this->adapter->getItem($identifier);
+        $item = $this->getAdapter()->getItem($identifier);
         // TODO: 0 is not the correct expiry time, can we get it with the meta data?
         return $item->isHit() ? 0 : null;
     }
 
     public function load(string $identifier): string|null
     {
-        $item = $this->adapter->getItem($identifier);
+        $item = $this->getAdapter()->getItem($identifier);
         if ($item->isHit()) {
             return $item->get();
         }
@@ -53,20 +44,43 @@ class Redis implements StorageInterface
         $item->set($data);
         $item->tag($tags);
         $item->expiresAfter($lifeTime);
-        return $this->adapter->save($item);
+        return $this->getAdapter()->save($item);
     }
 
     public function remove(string $identifier): bool
     {
-        return $this->adapter->delete($identifier);
+        return $this->getAdapter()->delete($identifier);
     }
 
     public function clean(CacheCleanMode $mode = CacheCleanMode::All, array $tags = []): bool
     {
         if ($mode === CacheCleanMode::All) {
-            return $this->adapter->clear();
+            return $this->getAdapter()->clear();
         }
         // TODO: this needs further implementation with tags
         throw new \RuntimeException('Redis->clean needs further implementation');
+    }
+
+    private function getAdapter(): RedisAdapter
+    {
+        if ($this->adapter === null) {
+            if (!\class_exists(\Redis::class)) {
+                // TODO: log this
+                throw new \Exception('Redis class not found (is Redis extension installed?)');
+            }
+            throw new \Exception('This is going wrong!!');
+
+            $client = new \Redis();
+            $client->connect($this->host, $this->port);
+
+            if (!empty($this->password)) {
+                $client->auth($this->password);
+            }
+
+
+            $this->adapter = new RedisAdapter($client);
+
+        }
+        return $this->adapter;
     }
 }

@@ -7,7 +7,7 @@ use Liquid\Admin\App\Config;
 use Liquid\Framework\App\Area\FrontNameResolverInterface;
 use Liquid\Framework\App\Config\ScopeConfig;
 use Liquid\Framework\App\DeploymentConfig;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\Url\UriParser;
 
 class FrontNameResolver implements FrontNameResolverInterface
@@ -30,7 +30,7 @@ class FrontNameResolver implements FrontNameResolverInterface
     public function __construct(
         private readonly Config      $config,
         private readonly ScopeConfig $segmentConfig,
-        private readonly Request     $request,
+        private readonly HttpRequest $request,
         private readonly UriParser   $uriParser,
         DeploymentConfig             $deploymentConfig,
     )

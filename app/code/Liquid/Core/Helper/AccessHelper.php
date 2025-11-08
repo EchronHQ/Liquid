@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Liquid\Core\Helper;
 
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 
 class AccessHelper
 {
-    public static function hasAccess(Request $request): bool
+    public static function hasAccess(HttpRequest $request): bool
     {
 
         //        if ($request->getArea() === Area::Frontend) {

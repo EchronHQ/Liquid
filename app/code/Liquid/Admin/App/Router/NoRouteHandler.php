@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Liquid\Admin\App\Router;
 
 use Liquid\Admin\App\Area\FrontNameResolver;
-use Liquid\Framework\App\Request\Request;
+use Liquid\Framework\App\Request\HttpRequest;
 use Liquid\Framework\App\Router\NoRouteHandlerInterface;
 
 class NoRouteHandler implements NoRouteHandlerInterface
@@ -18,7 +18,7 @@ class NoRouteHandler implements NoRouteHandlerInterface
 
     }
 
-    public function process(Request $request): bool
+    public function process(HttpRequest $request): bool
     {
         $requestPathParams = \explode('/', \trim($request->getPathInfo(), '/'));
         $areaFrontName = \array_shift($requestPathParams);

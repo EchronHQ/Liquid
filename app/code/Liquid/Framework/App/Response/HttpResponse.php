@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
 class HttpResponse implements HttpResponseInterface
 {
     public ResponseType $type;
-    protected HttpResponseCode $statusCode;
+    protected HttpResponseCode $statusCode = HttpResponseCode::STATUS_CODE_200;
     /** @var \Closure */
     private \Closure $headersSentHandler;
 

@@ -100,8 +100,12 @@ class ErrorProcessor
 
     private function getFile(string $path, array $data = []): string
     {
-        \ob_start();
-        require $path;
-        return \ob_get_clean();
+        if (\file_exists($path)) {
+            \ob_start();
+            require $path;
+            return \ob_get_clean();
+        }
+        return '';
+
     }
 }

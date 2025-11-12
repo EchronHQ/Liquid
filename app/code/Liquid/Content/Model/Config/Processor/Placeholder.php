@@ -47,7 +47,7 @@ class Placeholder implements PostProcessorInterface
     {
         if (\is_string($value) && \preg_match('/{{(.*)}}.*/', $value, $matches)) {
             $placeholder = $matches[1];
-            if ($placeholder === 'unsecure_base_url' || $placeholder === 'secure_base_url' || str_contains($value, $this->urlPlaceholder)) {
+            if ($placeholder === 'unsecure_base_url' || $placeholder === 'secure_base_url' || \str_contains($value, $this->urlPlaceholder)) {
                 return $placeholder;
             }
         }
@@ -101,12 +101,12 @@ class Placeholder implements PostProcessorInterface
             }
             if ($url) {
                 $value = \str_replace('{{' . $placeholder . '}}', $url, $value);
-            } elseif (str_contains($value, $this->urlPlaceholder)) {
+            } elseif (\str_contains($value, $this->urlPlaceholder)) {
                 $distroBaseUrl = $this->request->getDistroBaseUrl();
 
                 $value = \str_replace($this->urlPlaceholder, $distroBaseUrl, $value);
             }
-
+            // TODO: this can lead to an endless loop ...
             if (null !== $this->getPlaceholder($value)) {
                 $value = $this->_processPlaceholders($value, $data);
             }

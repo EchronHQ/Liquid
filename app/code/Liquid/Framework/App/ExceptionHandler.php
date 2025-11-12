@@ -26,14 +26,14 @@ class ExceptionHandler
      * Handles exception of HTTP web application
      *
      * @param Application $bootstrap
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param HttpResponse $response
      * @param HttpRequest $request
      * @return bool
      */
     public function handle(
         Application  $bootstrap,
-        \Exception   $exception,
+        \Throwable   $exception,
         HttpResponse $response,
         HttpRequest  $request
     ): bool
@@ -55,7 +55,7 @@ class ExceptionHandler
      */
     private function handleDeveloperMode(
         Application  $bootstrap,
-        \Exception   $exception,
+        \Throwable   $exception,
         HttpResponse $response
     ): bool
     {
@@ -87,13 +87,13 @@ class ExceptionHandler
      * Handler for bootstrap errors
      *
      * @param Application $bootstrap
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param HttpResponse $response
      * @return bool
      */
     private function handleBootstrapErrors(
         Application  $bootstrap,
-        \Exception   &$exception,
+        \Throwable   &$exception,
         HttpResponse $response
     ): bool
     {
@@ -117,13 +117,13 @@ class ExceptionHandler
     /**
      * Handler for session errors
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param HttpResponse $response
      * @param HttpRequest $request
      * @return bool
      */
     private function handleSessionException(
-        \Exception   $exception,
+        \Throwable   $exception,
         HttpResponse $response,
         HttpRequest  $request
     ): bool
@@ -139,10 +139,10 @@ class ExceptionHandler
     /**
      * Handler for application initialization errors
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @return bool
      */
-    private function handleInitException(\Exception $exception, HttpResponse $response): bool
+    private function handleInitException(\Throwable $exception, HttpResponse $response): bool
     {
         if ($exception instanceof InitException) {
             $this->logger->critical($exception);
@@ -156,10 +156,10 @@ class ExceptionHandler
      * Handle for any other errors
      *
      * @param Application $bootstrap
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @return bool
      */
-    private function handleGenericReport(Application $bootstrap, \Exception $exception, HttpResponse $response): bool
+    private function handleGenericReport(Application $bootstrap, \Throwable $exception, HttpResponse $response): bool
     {
         $reportData = [
             $exception->getMessage(),
@@ -189,12 +189,12 @@ class ExceptionHandler
      * If not installed, try to redirect to installation wizard
      *
      * @param Application $bootstrap
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param HttpResponse $response
      * @return void
      * @throws \Exception
      */
-    private function redirectToSetup(Application $bootstrap, \Exception $exception, HttpResponse $response): void
+    private function redirectToSetup(Application $bootstrap, \Throwable $exception, HttpResponse $response): void
     {
         $newMessage = $exception->getMessage() . "\nNOTE: Liquid is not installed" . "\n";
 

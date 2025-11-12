@@ -23,8 +23,8 @@ interface AppInterface
      * - false: exception has not been handled - pass the control to Bootstrap
      *
      * @param Application $bootstrap
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @return bool
      */
-    public function catchException(Application $bootstrap, \Exception $exception);
+    public function catchException(Application $bootstrap, \Throwable $exception);
 }

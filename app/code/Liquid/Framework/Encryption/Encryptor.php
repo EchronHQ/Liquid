@@ -47,7 +47,7 @@ class Encryptor
     {
         // load all possible keys
         $this->keys = \preg_split('/\s+/s', \trim($deploymentConfig->getValueString(self::PARAM_CRYPT_KEY)));
-        $this->keyVersion = count($this->keys) - 1;
+        $this->keyVersion = \count($this->keys) - 1;
     }
 
     /**

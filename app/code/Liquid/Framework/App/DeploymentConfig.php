@@ -18,8 +18,8 @@ class DeploymentConfig
     private array $data = [];
     private AppMode|null $mode = null;
     private array $readerLoad = [];
-    private array $envOverrides = [];
-    private array $flatData = [];
+    private array|null $envOverrides = null;
+    private array|null $flatData = null;
 
     public function __construct(
         private readonly Reader $configReader,
@@ -39,21 +39,24 @@ class DeploymentConfig
 
     public function getValueString(string $key, string|null $default = null): string
     {
-        $x = $this->getValue($key, $default);
-        return $x . '';
+        return $this->getValue($key, $default) . '';
     }
 
     public function getValue(string|null $key, string|int|null $defaultValue = null): mixed
     {
         if ($key === null) {
-            if (empty($this->flatData)) {
+            if ($this->flatData === null) {
                 $this->reloadData();
             }
             return $this->flatData;
         }
+        $x = new \Exception('a');
+
+//        echo $key . PHP_EOL;
+//        echo $x->getTraceAsString() . PHP_EOL;
         $result = $this->getByKey($key);
         if ($result === null) {
-            if (empty($this->flatData) || \count($this->getAllEnvOverrides())) {
+            if ($this->flatData === null || $this->envOverrides === null) {
                 $this->reloadData();
             }
             $result = $this->getByKey($key);
@@ -182,8 +185,11 @@ class DeploymentConfig
      * @param string|null $key
      * @return mixed|null
      */
-    private function getByKey(?string $key)
+    private function getByKey(string|null $key): mixed
     {
+        if ($this->flatData === null) {
+            return null;
+        }
         if (\array_key_exists($key, $this->flatData) && $this->flatData[$key] === null) {
             return '';
         }
@@ -247,7 +253,8 @@ class DeploymentConfig
      */
     private function getAllEnvOverrides(): array
     {
-        if (empty($this->envOverrides)) {
+        if ($this->envOverrides === null) {
+            $this->envOverrides = [];
             // allow reading values from env variables by convention
             // LIQUID_DC_{path}, like db/connection/default/host =>
             // can be overwritten by LIQUID_DC_DB__CONNECTION__DEFAULT__HOST

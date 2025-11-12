@@ -76,7 +76,7 @@ class CliApp implements AppInterface
         return $this->response;
     }
 
-    public function catchException(\Liquid\Core\Application $bootstrap, \Exception $exception): bool
+    public function catchException(\Liquid\Core\Application $bootstrap, \Throwable $exception): bool
     {
         return false;
     }

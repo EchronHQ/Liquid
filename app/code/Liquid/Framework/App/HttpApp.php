@@ -46,7 +46,7 @@ class HttpApp implements AppInterface
     /**
      * @inheritdoc
      */
-    public function catchException(\Liquid\Core\Application $bootstrap, \Exception $exception): bool
+    public function catchException(\Liquid\Core\Application $bootstrap, \Throwable $exception): bool
     {
         return $this->exceptionHandler->handle($bootstrap, $exception, $this->response, $this->request);
     }

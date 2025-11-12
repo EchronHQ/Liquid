@@ -19,7 +19,7 @@ class RouteParamsResolver extends DataObject
         parent::__construct($data);
     }
 
-    public function setRouteParams(array $data, $unsetOldParams = true)
+    public function setRouteParams(array $data, bool $unsetOldParams = true): self
     {
         if (isset($data['_type'])) {
             $this->setData('type', $data['_type']);

@@ -66,9 +66,8 @@ class FrontNameResolver implements FrontNameResolverInterface
         }
         if ($backendUrl === '{{base_url}}') {
             // TODO: temporary workaround
-            $backendUrl = 'http://localhost:8901/';
+            throw new \Exception('Backend url not configured');
         }
-
         $uri = $this->uriParser->parse($backendUrl);
         $configuredHost = $uri->getHost();
         if (!$configuredHost) {

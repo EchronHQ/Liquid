@@ -25,7 +25,6 @@ class Application
     public const int ERR_IS_INSTALLED = 902;
 
     private ObjectManagerInterface $objectManager;
-    private LoggerInterface|null $logger = null;
 //    private SegmentConfig $config;
 
     private readonly Profiler $profiler;
@@ -119,7 +118,6 @@ class Application
     {
         \ini_set('memory_limit', '2048M');
 
-
         try {
             try {
                 $this->profiler->profilerStart('Application:run');
@@ -131,36 +129,12 @@ class Application
                 if (!$application->catchException($this, $e)) {
                     throw $e;
                 }
-
-
-//                if ($this->logger !== null) {
-//                    $this->logger->error('Unable to run application', ['ex' => $ex]);
-//                }
-//
-//
-//                // Safe to file?
-//                if ($this->isDeveloperMode()) {
-//
-//
-//                    echo Error::toHtml($ex);
-//                    \http_response_code(500);
-//                    exit(1);
-////                die('xxx');
-////                return;
-//                }
-//
-//                // TODO: show error code + log error to file with same code
-//                throw $ex;
-
-
-                //throw $ex;
             } finally {
-
-                if ($this->logger !== null && $this->isDeveloperMode()) {
-                    $this->profiler->output($this->logger);
-
+                if ($this->isDeveloperMode()) {
+                    $this->profiler->output($this->objectManager->get(LoggerInterface::class));
                 }
             }
+
         } catch (\Throwable $e) {
             $this->terminate($e);
         }
